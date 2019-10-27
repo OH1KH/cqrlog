@@ -245,7 +245,7 @@ begin
   if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
       Begin
          ShowMessage('Open log can not be deleted!' +
-           sLineBreak + 'Switch logs fist or delete log before opening it!' );
+           sLineBreak + 'Switch logs first or delete log before opening it!' );
       exit;
       end;
   if dmData.qLogList.Fields[0].AsInteger = 1 then
