@@ -2258,7 +2258,7 @@ object frmDBConnect: TfrmDBConnect
     object btnDisconnect: TButton
       AnchorSideTop.Control = chkAutoConn
       AnchorSideTop.Side = asrBottom
-      Left = 202
+      Left = 203
       Height = 33
       Top = 147
       Width = 90

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process;
 
 type
 
@@ -72,7 +72,7 @@ type
   private
     RemoteMySQL : Boolean;
     AskForDB    : Boolean;
-
+    function Mysql_safe_running: boolean;
     procedure SaveLogin;
     procedure LoadLogin;
     procedure UpdateGridFields;
@@ -94,6 +94,35 @@ uses dData, dUtils, fNewLog, fDXCluster,fNewQSO;
 
 { TfrmDBConnect }
 
+function TfrmDBConnect.Mysql_safe_running: boolean;
+var
+  res       : Byte;
+  SearchRec : TSearchRec;
+  f         : TextFile;
+  pid       : String = '';
+  pidfile   : String = '';
+  p         : TProcess;
+begin
+  res := FindFirst(dmData.DataDir + '*.pid', faAnyFile, SearchRec);
+  while Res = 0 do
+  begin
+    if dmData.DebugLevel>=1 then Writeln(dmData.DataDir + SearchRec.Name);
+    if FileExists(dmData.DataDir + SearchRec.Name) then
+    begin
+      pidfile := dmData.DataDir + SearchRec.Name;
+      AssignFile(f,pidfile);
+      Reset(f);
+      ReadLn(f,pid); //get process id from <computer-name.pid>
+      pid := Trim(pid);
+      CloseFile(f);
+      break
+    end;
+    Res := FindNext(SearchRec)
+  end;
+  FindClose(SearchRec);
+
+  Result := pid <> '';
+end;
 procedure TfrmDBConnect.EnableButtons;
 begin
   btnOpenLog.Enabled   := True;
@@ -369,13 +398,16 @@ begin
 end;
 
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
+var
+   MyYes : boolean;
 begin
-  //writeln('OpenFromMenu:',OpenFromMenu);
   if chkSaveToLocal.Checked then
   begin
     if RemoteMySQL then
     begin
-      if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
+      if not Mysql_safe_running then
+         MyYes := Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes;
+      if MyYes then
       begin
         if  OpenFromMenu then  //close existing log
          Begin
@@ -384,13 +416,16 @@ begin
           frmNewQSO.SaveSettings;
           dmData.CloseDatabases;
           frmNewQSO.DBServerChanged :=True;
-          RemoteMySQL :=false;
-          OpenFromMenu:=false;
-          SaveLogin;
-          LoadLogin;
+          end;
+        RemoteMySQL :=false;
+        OpenFromMenu:=false;
+        SaveLogin;
+        LoadLogin;
+        if not Mysql_safe_running then
+         Begin
+          dmData.StartMysqldProcess;
+          Sleep(3000);
          end;
-        dmData.StartMysqldProcess;
-        Sleep(3000);
         btnConnectClick(nil)
       end
       else begin
@@ -401,21 +436,24 @@ begin
     end;
     grbLogin.Visible := False
   end
-  else
+  else     // not chkSaveToLocal.Checked
   begin
-    if  OpenFromMenu then  //close existing log
+     if  OpenFromMenu then  //close existing log
          Begin
             frmDXCluster.StopAllConnections;
             frmNewQSO.CloseAllWindows;
             frmNewQSO.SaveSettings;
             dmData.CloseDatabases;
             frmNewQSO.DBServerChanged :=True;
-            RemoteMySQL :=True;
-            OpenFromMenu:=false;
-            SaveLogin;
-            LoadLogin;
          end;
-    grbLogin.Visible := True
+
+     RemoteMySQL :=True;
+     OpenFromMenu:=false;
+     SaveLogin;
+
+     LoadLogin;
+
+     grbLogin.Visible := True
   end
 end;
 
