@@ -3,6 +3,7 @@ object frmDBConnect: TfrmDBConnect
   Height = 587
   Top = 186
   Width = 357
+  Anchors = [akLeft]
   Caption = 'Database connection'
   ClientHeight = 587
   ClientWidth = 357

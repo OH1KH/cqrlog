@@ -151,76 +151,6 @@ begin
   dbgrdLogs.Columns[1].DisplayName := 'Log name'
 end;
 
-procedure TfrmDBConnect.SaveLogin;
-var
-  ini : TIniFile;
-begin
-  ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
-  try
-    if not chkSaveToLocal.Checked then
-    begin
-      ini.WriteBool('Login','SaveToLocal',False);
-      ini.WriteString('Login','Server',edtServer.Text);
-      ini.WriteString('Login','Port',edtPort.Text);
-      ini.WriteString('Logini','User',edtUser.Text);
-
-      if chkSavePass.Checked then
-        ini.WriteString('Login','Pass',edtPass.Text)
-      else
-        ini.WriteString('Login','Pass','');
-
-      ini.WriteBool('Login','SavePass',chkSavePass.Checked);
-      ini.WriteBool('Login','AutoConnect',chkAutoConn.Checked)
-    end
-    else
-      ini.WriteBool('Login','SaveToLocal',True)
-  finally
-    ini.Free
-  end
-end;
-
-procedure TfrmDBConnect.LoadLogin;
-var
-  ini : TIniFile;
-begin
-  ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
-  try
-    if ini.ReadBool('Login','SaveTolocal',True) then
-    begin
-      edtServer.Text         := '127.0.0.1';
-      edtPort.Text           := '64000';
-      edtUser.Text           := 'cqrlog';
-      edtPass.Text           := 'cqrlog';
-      tmrAutoConnect.Enabled := True;
-      chkAutoConn.Checked    := True;
-      chkSaveToLocal.Checked := True;
-      chkSaveToLocalClick(nil);
-      RemoteMySQL  := False
-    end
-    else begin
-      chkSaveToLocal.Checked := False;
-      grbLogin.Visible     := True;
-      edtServer.Text       := ini.ReadString('Login','Server','127.0.0.1');
-      edtPort.Text         := ini.ReadString('Login','Port','3306');
-      edtUser.Text         := ini.ReadString('Logini','User','');
-      chkSavePass.Checked  := ini.ReadBool('Login','SavePass',False);
-
-        if chkSavePass.Checked then
-        edtPass.Text := ini.ReadString('Login','Pass','')
-      else
-        edtPass.Text := ini.ReadString('Login','Pass','');
-
-        chkAutoConn.Checked := ini.ReadBool('Login','AutoConnect',False);
-      chkSavePassChange(nil);
-      if (chkAutoConn.Checked) and (chkAutoConn.Enabled) then
-        tmrAutoConnect.Enabled := True;
-      RemoteMySQL  := True
-    end;
-    chkAutoOpen.Checked := ini.ReadBool('Login','AutoOpen',False);
-  finally
-    ini.Free
-  end
-end;
 
 procedure TfrmDBConnect.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
@@ -265,7 +195,7 @@ begin
     dmData.CheckForDatabases;
     UpdateGridFields;
     EnableButtons;
-    OpenDefaultLog
+    OpenDefaultLog;
   end
 end;
 
@@ -397,64 +327,139 @@ begin
     chkAutoConn.Enabled := False
 end;
 
-procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
+procedure TfrmDBConnect.SaveLogin;
 var
-   MyYes : boolean = false;
+  ini : TIniFile;
 begin
+  ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
+  try
+    ini.WriteBool('Login','SaveToLocal',chkSaveToLocal.Checked);
+
+    if not chkSaveToLocal.Checked then
+    begin
+      ini.WriteString('Login','Server',edtServer.Text);
+      ini.WriteString('Login','Port',edtPort.Text);
+      ini.WriteString('Logini','User',edtUser.Text);
+
+      if chkSavePass.Checked then
+        ini.WriteString('Login','Pass',edtPass.Text)
+      else
+        ini.WriteString('Login','Pass','');
+
+      ini.WriteBool('Login','SavePass',chkSavePass.Checked);
+      ini.WriteBool('Login','AutoConnect',chkAutoConn.Checked)
+    end;
+
+  finally
+    ini.Free
+  end
+end;
+
+procedure TfrmDBConnect.LoadLogin;
+var
+  ini : TIniFile;
+begin
+  ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
+  try
+    if ini.ReadBool('Login','SaveTolocal',True) then
+    begin
+      edtServer.Text         := '127.0.0.1';
+      edtPort.Text           := '64000';
+      edtUser.Text           := 'cqrlog';
+      edtPass.Text           := 'cqrlog';
+      tmrAutoConnect.Enabled := True;
+      chkAutoConn.Checked    := True;
+      chkSaveToLocal.Checked := True;
+      chkSaveToLocalClick(nil);
+      RemoteMySQL  := False
+    end
+    else begin
+      chkSaveToLocal.Checked := False;
+      grbLogin.Visible     := True;
+      edtServer.Text       := ini.ReadString('Login','Server','127.0.0.1');
+      edtPort.Text         := ini.ReadString('Login','Port','3306');
+      edtUser.Text         := ini.ReadString('Logini','User','');
+      chkSavePass.Checked  := ini.ReadBool('Login','SavePass',False);
+
+        if chkSavePass.Checked then
+        edtPass.Text := ini.ReadString('Login','Pass','')
+      else
+        edtPass.Text := ini.ReadString('Login','Pass','');
+
+        chkAutoConn.Checked := ini.ReadBool('Login','AutoConnect',False);
+      chkSavePassChange(nil);
+      if (chkAutoConn.Checked) and (chkAutoConn.Enabled) then
+        tmrAutoConnect.Enabled := True;
+      RemoteMySQL  := True
+    end;
+    chkAutoOpen.Checked := ini.ReadBool('Login','AutoOpen',False);
+  finally
+    ini.Free
+  end
+end;
+procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
+
+procedure FromMenu_CloseExist;
+          begin
+           if  OpenFromMenu then
+            Begin
+                    frmDXCluster.StopAllConnections;
+                    frmNewQSO.CloseAllWindows;
+                    frmNewQSO.SaveSettings;
+                    dmData.CloseDatabases;
+                    frmNewQSO.DBServerChanged :=True;
+            end;
+          end;
+//------------------------------------------
+begin
+  SaveLogin;  //saves the new value of  chkSaveToLocal   first
+
   if chkSaveToLocal.Checked then
   begin
-    if RemoteMySQL then
+    if RemoteMySQL then //coming from remote server
     begin
       if not Mysql_safe_running then
-         MyYes := Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes;
+       if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes
+           then
+              Begin
+                dmData.StartMysqldProcess;
+                Sleep(3000);
+             end
+             else
+             begin      //deny mysql_safe start , return to remote server
+              chkSaveToLocal.Checked := False;
+              grbLogin.Visible       := True;
+              exit
+            end;
 
-      if MyYes then
-      begin
-        if  OpenFromMenu then  //close existing log
-         Begin
-          frmDXCluster.StopAllConnections;
-          frmNewQSO.CloseAllWindows;
-          frmNewQSO.SaveSettings;
-          dmData.CloseDatabases;
-          frmNewQSO.DBServerChanged :=True;
-          end;
+        FromMenu_CloseExist;  //close existing log, if open
         RemoteMySQL :=false;
         OpenFromMenu:=false;
-        SaveLogin;
-        LoadLogin;
-        if not Mysql_safe_running then
-         Begin
-          dmData.StartMysqldProcess;
-          Sleep(3000);
-         end;
+        edtServer.Text         := '127.0.0.1';
+        edtPort.Text           := '64000';
+        edtUser.Text           := 'cqrlog';
+        edtPass.Text           := 'cqrlog';
+        tmrAutoConnect.Enabled := True;
+        chkAutoConn.Checked    := True;
         btnConnectClick(nil)
-      end
-      else begin
-        chkSaveToLocal.Checked := False;
-        grbLogin.Visible       := True;
-        exit
-      end
     end;
     grbLogin.Visible := False
   end
   else     // not chkSaveToLocal.Checked
   begin
-     if  OpenFromMenu then  //close existing log
-         Begin
-            frmDXCluster.StopAllConnections;
-            frmNewQSO.CloseAllWindows;
-            frmNewQSO.SaveSettings;
-            dmData.CloseDatabases;
-            frmNewQSO.DBServerChanged :=True;
-         end;
-
+     FromMenu_CloseExist; //close existing log, if open
      RemoteMySQL :=True;
      OpenFromMenu:=false;
-     chkSavePass.Checked:=false;
-     edtPort.Text:='';
+      edtServer.Text       := '127.0.0.1';
+      edtPort.Text         := '3306';
+      edtUser.Text         := 'cqrlog';
+      chkSavePass.Checked  := False;
+      chkAutoOpen.Checked  := False;
+      edtPass.Text         := '';
+     Savelogin;
+     sleep(200);
      btnDisconnectClick(nil);
-     SaveLogin;
-
+     sleep(200);
      LoadLogin;
 
      grbLogin.Visible := True

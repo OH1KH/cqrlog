@@ -1384,11 +1384,21 @@ begin
 end;
 
 procedure TfrmNewQSO.CloseAllWindows;
+var
+  i : integer;
 begin
   //SaveGrid;
-  tmrRadio.Enabled := False;
-  tmrEnd.Enabled   := False;
-  tmrStart.Enabled := False;
+  //stop ALL timers in case to be sure
+   tmrRadio.Enabled := False;
+   tmrEnd.Enabled   := False;
+   tmrStart.Enabled := False;
+   tmrESC.Enabled := False;
+   tmrFldigi.Enabled := False;
+   tmrRotor.Enabled := False;
+   tmrUploadAll.Enabled := False;
+   tmrWsjtx.Enabled := False;
+   tmrWsjtSpd.Enabled := False;
+   tmrN1MM.Enabled := False;
 
   if Assigned(cqrini) then
   begin
