@@ -399,7 +399,7 @@ end;
 
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
 var
-   MyYes : boolean;
+   MyYes : boolean = false;
 begin
   if chkSaveToLocal.Checked then
   begin
@@ -407,6 +407,7 @@ begin
     begin
       if not Mysql_safe_running then
          MyYes := Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes;
+
       if MyYes then
       begin
         if  OpenFromMenu then  //close existing log
@@ -449,6 +450,9 @@ begin
 
      RemoteMySQL :=True;
      OpenFromMenu:=false;
+     chkSavePass.Checked:=false;
+     edtPort.Text:='';
+     btnDisconnectClick(nil);
      SaveLogin;
 
      LoadLogin;
