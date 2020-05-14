@@ -1,3 +1,11 @@
+This branch is broken!
+At some point merging the master changes it has deleted the work of converting rtty to data mode.
+I think the work is not lost, but one must pick it from branch history. (Too much work....)
+I tried to do one rescue barnch "rtty_back1" but Im not sure was it from right point of branch.
+
+
+
+
 What is CQRLOG?
 ---------------
 
