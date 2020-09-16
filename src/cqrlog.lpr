@@ -23,8 +23,8 @@ uses
   fRbnServer, fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
-  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fProgress,
-  fDOKStat, fCabrilloExport;
+  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc,
+  fDOKStat, fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, fProgress;
 var
   Splash : TfrmSplash;
 
@@ -72,7 +72,6 @@ begin
   Application.CreateForm(Tfrmxfldigi, frmxfldigi);
   Application.CreateForm(TdmMembership, dmMembership);
   Application.CreateForm(TdmSatellite, dmSatellite);
-  Application.CreateForm(TfrmProgress, frmProgress);
 
   Splash.Update;
   application.ProcessMessages;
