@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil,
-  Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, LResources, IniFiles;
+  Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, LResources, IniFiles, LCLType;
 
 type
 
@@ -29,6 +29,7 @@ type
     BandLabel: TLabel;
     ZooMap: TImage;
     procedure BandSelectorChange(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure LocMapChangeBounds(Sender: TObject);
     procedure LocMapClick(Sender: TObject);
@@ -724,12 +725,21 @@ begin
   if (BandSelector.ItemIndex >= 0) then UpdateGridData;
 end;
 
-
-
 procedure TfrmWorkedGrids.BandSelectorChange(Sender: TObject);
 Begin
     UpdateGridData;
 end;
+
+procedure TfrmWorkedGrids.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
+end;
+
 procedure TfrmWorkedGrids.UpdateGridData;
 begin
     if not ZooMap.Visible then DrawFullMap else DrawSubMap;

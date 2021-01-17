@@ -103,6 +103,8 @@ type TRigControl = class
     procedure SetCurrVFO(vfo : TVFO);
     procedure SetModePass(mode : TRigMode);
     procedure SetFreqKHz(freq : Double);
+    procedure SetSplit(up:integer);
+    procedure DisableSplit;
     procedure ClearRit;
     procedure Restart;
     procedure PwrOn;
@@ -110,6 +112,7 @@ type TRigControl = class
     procedure PwrStBy;
     procedure PttOn;
     procedure PttOff;
+    procedure UsrCmd(cmd:String);
 end;
 
 implementation
@@ -258,6 +261,15 @@ procedure TRigControl.ClearRit;
 begin
   RigCommand.Add('J 0')
 end;
+procedure TRigControl.SetSplit(up:integer);
+Begin
+  RigCommand.Add('Z '+IntToStr(up));
+  RigCommand.Add('U XIT 1');
+end;
+procedure TRigControl.DisableSplit;
+Begin
+  RigCommand.Add('U XIT 0');
+end;
 procedure TRigControl.PttOn;
 begin
   RigCommand.Add('T 1')
@@ -277,6 +289,10 @@ end;
 procedure TRigControl.PwrStBy;
 begin
   RigCommand.Add(#$87+' 2')
+end;
+procedure TRigControl.UsrCmd(cmd:String);
+begin
+  RigCommand.Add(cmd)
 end;
 function TRigControl.GetCurrVFO  : TVFO;
 begin

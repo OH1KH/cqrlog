@@ -393,8 +393,8 @@ begin
     BufDebug('Array gives '+INtToStr(length(sgMonitor.Cells[8,sgMonitor.row]))+' :',
              HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
   end;
-  frmNewQSO.GetCallInfo(DblClickCall);
   SendReply(HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
+  frmNewQSO.GetCallInfo(DblClickCall,CurMode,sgMonitor.Cells[1,sgMonitor.row]);
 end;
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -1018,10 +1018,10 @@ var
     tmr: integer;
 begin
   tmrCqPeriod.Enabled := False;
-  tmr := 60000;
+  tmr := 40000;   // tmr about 2/3 of period time
   case CurMode of
-       'FT8': tmr := 15000;
-       'FT4': tmr := 8000;
+       'FT8': tmr := 10000;
+       'FT4': tmr := 5000;
   end;
   tmrCqPeriod.Interval := tmr;
   if LocalDbg then Writeln('Period timer set to: ',tmr);

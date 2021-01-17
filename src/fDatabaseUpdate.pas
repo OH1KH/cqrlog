@@ -13,19 +13,21 @@ type
   { TfrmDatabaseUpdate }
 
   TfrmDatabaseUpdate = class(TForm)
-    btnCancel: TButton;
-    pnlQRZ:    TPanel;
-    tmrQRZ:    TTimer;
+    btnCancel        : TButton;
+    pnlQRZ           : TPanel;
+    tmrQRZ           : TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure tmrQRZTimer(Sender: TObject);
   private
+    found             : boolean; //found interrupted previous update's last id
     procedure QRZupdate;
   public
-    id_cqrlog_main: Integer;
-    NameFromLog : Boolean;
+    id_cqrlog_main    : LongInt;
+    Selected          : boolean;
+    NameFromLog       : Boolean;
     procedure SynCallBook;
   end;
 
@@ -43,9 +45,10 @@ implementation
 {$R *.lfm}
 
 { TfrmDatabaseUpdate }
-uses dUtils, dData, uMyIni;
+uses dUtils, dData, uMyIni, fMain;
 
 var
+  CanCancelAtStart  : boolean;
   CancelUpdate: boolean;
   CloseW:  boolean;
 
@@ -307,6 +310,7 @@ end;
 procedure TfrmDatabaseUpdate.FormCreate(Sender: TObject);
 begin
   c_running := False;
+  found:=false;
 end;
 
 procedure TfrmDatabaseUpdate.FormDestroy(Sender: TObject);
@@ -319,25 +323,54 @@ procedure TfrmDatabaseUpdate.FormShow(Sender: TObject);
 begin
   CloseW := False;
   CancelUpdate := False;
+  CanCancelAtStart:=false;
   dmUtils.LoadFontSettings(self);
-  tmrQRZ.Enabled := True;
   // I have to do this horrible workaround because sometimes window after show
   // doesn't get focus. Why??
   if cqrini.ReadBool('Callbook','HamQTH',True) then
     Caption := 'Updating data from HamQTH.com'
   else
-    Caption := 'Updating data from qrz.com'
+    Caption := 'Updating data from qrz.com';
+
+   if Selected then
+       pnlQRZ.Caption := 'Updating selected QSOs'
+      else
+        if dmData.IsFilter then
+          pnlQRZ.Caption := 'Updating filtered QSOs'
+         else
+             Begin
+              pnlQRZ.Caption := 'Really update ALL '+IntToStr(dmData.GetQSOCount)+' QSOs?';
+              tmrQRZ.Interval:=5000;
+              CanCancelAtStart:=True;
+             end;
+  pnlQRZ.Repaint;
+  tmrQRZ.Enabled := True;
 end;
 
 procedure TfrmDatabaseUpdate.btnCancelClick(Sender: TObject);
 begin
-  CancelUpdate := True;
+  if CanCancelAtStart then
+   Begin
+      c_running := False;
+      frmDatabaseUpdate.Close;
+      dmData.RefreshMainDatabase();
+   end
+  else
+   CancelUpdate := True;
 end;
 
 procedure TfrmDatabaseUpdate.tmrQRZTimer(Sender: TObject);
 begin
   tmrQRZ.Enabled := False;
+  CanCancelAtStart:=false;
   QRZupdate;
+  if not found then    //this should close cancelled update
+   Begin
+      btnCancel.Click;
+      frmDatabaseUpdate.Close;
+      c_running := False;
+      dmData.RefreshMainDatabase();
+   end;
 end;
 
 procedure TfrmDatabaseUpdate.SynCallBook;
@@ -360,19 +393,25 @@ end;
 
 procedure TfrmDatabaseUpdate.QRZupdate;
 var
-  QRZ:   TQRZThread;
-  found: boolean = False;
+  QRZ     :   TQRZThread;
+  i       :   integer;
 begin
   if not c_running then
   begin
     c_running := True;
     CloseW  := False;
     CancelUpdate := False;
+
+    //without this update happens only to 500 QSOs loaded in QSO list view
+    i:= pos('LIMIT',uppercase (dmData.qCallBook.SQL.Text));
+    if i>0 then  dmData.qCallBook.SQL.Text:=copy(dmData.qCallBook.SQL.Text,1,i-1);
+
     if dmData.DebugLevel >= 1 then
       Writeln(dmData.qCallBook.SQL.Text);
-    dmData.qCallBook.Open();
+    if not Selected then dmData.qCallBook.Open();
     dmData.qCallBook.First;
-    if id_cqrlog_main > -1 then
+
+    if (id_cqrlog_main > -1) then
     begin
       while not dmData.qCallBook.EOF do
       begin
@@ -383,9 +422,18 @@ begin
         end;
         dmData.qCallBook.Next
       end;
+
       if not found then
-        exit
+      Begin
+        pnlQRZ.Caption := 'Previously canceled update breakpoint not found!';
+        pnlQRZ.Repaint;
+        Application.ProcessMessages;
+        sleep(5000);
+        exit  //here returns from QTZupdate, does not return from database update.Goes back to ONtmrQRZ
+      end;
     end;
+
+    found:=true;      //if id_cqrlog_main has been -1 make here true
     QRZ := TQRZThread.Create(True);
     QRZ.Start
   end

@@ -1,0 +1,69 @@
+object frmChangeOperator: TfrmChangeOperator
+  Left = 657
+  Height = 108
+  Top = 416
+  Width = 236
+  HorzScrollBar.Page = 239
+  VertScrollBar.Page = 88
+  ActiveControl = edtOperator
+  AutoSize = True
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  BorderWidth = 10
+  Caption = 'Change operator'
+  ClientHeight = 108
+  ClientWidth = 236
+  Position = poMainFormCenter
+  LCLVersion = '2.0.2.0'
+  object lblEnterOperator: TLabel
+    Left = 8
+    Height = 17
+    Top = 8
+    Width = 120
+    Caption = 'Enter your operator:'
+    ParentColor = False
+  end
+  object edtOperator: TEdit
+    AnchorSideTop.Control = lblEnterOperator
+    AnchorSideTop.Side = asrBottom
+    Left = 8
+    Height = 34
+    Top = 27
+    Width = 216
+    BorderSpacing.Top = 2
+    MaxLength = 20
+    OnChange = edtOperatorChange
+    OnKeyPress = edtOperatorKeyPress
+    TabOrder = 0
+  end
+  object btnOK: TButton
+    AnchorSideTop.Control = edtOperator
+    AnchorSideTop.Side = asrBottom
+    Left = 8
+    Height = 41
+    Top = 71
+    Width = 64
+    AutoSize = True
+    BorderSpacing.Top = 10
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    Constraints.MinWidth = 64
+    OnClick = btnOKClick
+    TabOrder = 1
+  end
+  object btnStorno: TButton
+    AnchorSideTop.Control = edtOperator
+    AnchorSideTop.Side = asrBottom
+    Left = 160
+    Height = 41
+    Top = 71
+    Width = 68
+    AutoSize = True
+    BorderSpacing.Top = 10
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

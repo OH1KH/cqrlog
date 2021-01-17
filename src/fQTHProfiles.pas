@@ -75,6 +75,7 @@ begin
 
   dbgrdProfiles.Columns[0].Visible := False;
   //dbgrdProfiles.Columns[6].Visible := False
+  btnEdit.Enabled:=(dmData.qProfiles.RecordCount <> 0);
 end;
 
 procedure TfrmQTHProfiles.LocateProfile(profile : String);
@@ -135,7 +136,7 @@ begin
     exit;
   end;
 
-  if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+  if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
   begin
     exit;
   end;

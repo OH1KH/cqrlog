@@ -389,6 +389,7 @@ type
     procedure acWASCfmExecute(Sender: TObject);
     procedure acDOKCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
@@ -734,7 +735,7 @@ begin
     if dbgrdMain.SelectedRows.Count < 1 then
     begin
       if Application.MessageBox('Do you really want to delete this QSO?',
-        'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
+        'Question ...', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) in [idNo, idCancel] then
         exit;
       dmData.qCQRLOG.DisableControls;
       try
@@ -760,7 +761,7 @@ begin
     else
     begin
       if Application.MessageBox('Do you really want to delete selected QSOs?',
-        'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
+        'Question ...', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) in [idNo, idCancel] then
         exit;
       dmData.qCQRLOG.DisableControls;
       try
@@ -812,7 +813,12 @@ begin
   begin
     mnuDoNotSendClick(nil);
     key := 0
-  end
+  end;
+   if ((Shift = [ssCtrl]) and (key = VK_H)) then
+  begin
+    ShowHelp;
+    key := 0
+  end;
 end;
 
 procedure TfrmMain.mnuOQRSClick(Sender : TObject);
@@ -940,33 +946,72 @@ end;
 
 procedure TfrmMain.acDatabaseUpdateExecute(Sender: TObject);
 var
-  lastid: integer;
+  lastid: LongInt;
   prenames : Boolean = False;
+  Selected : Boolean;
+  i        : integer;
+  aid      : Array of LongInt;
+
 begin
   if Application.MessageBox('Do you really want to run database update?',
-    'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+    'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
     exit;
   lastid := cqrini.ReadInteger('CallBook', 'LastId', -1);
+  Selected:=dbgrdMain.SelectedRows.Count > 0;
+  
+  if Selected then
+    begin
+      SetLength(aid,frmMain.dbgrdMain.SelectedRows.Count);
+      for i := 0 to frmMain.dbgrdMain.SelectedRows.Count-1 do
+      begin
+        dmData.qCQRLOG.GotoBookmark(Pointer(frmMain.dbgrdMain.SelectedRows.Items[i]));
+        aid[i] := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+        if dmData.DebugLevel >= 1 then Writeln('Selected id: ',dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger)
+      end;
+      dmData.qCallBook.SQL.Text:= 'SELECT * FROM view_cqrlog_main_by_qsodate where id_cqrlog_main in (';
+      for i:=0 to Length(aid)-1 do
+       Begin
+        dmData.qCallBook.SQL.Text:= dmData.qCallBook.SQL.Text+IntToStr(aid[i]);
+         if i  < Length(aid)-1 then
+            dmData.qCallBook.SQL.Text:= dmData.qCallBook.SQL.Text + ','
+          else
+            dmData.qCallBook.SQL.Text:= dmData.qCallBook.SQL.Text + ')';
+       end;
+    dmData.qCallBook.Open();
+    dmData.qCallBook.First;
+    end;
+
   if lastid > -1 then
   begin
     if Application.MessageBox(
       'It looks like last update were canceled. Do you want to continue from last position?',
-      'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
-      lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+      'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
+      Begin
+      if Selected then lastid := dmData.qCallBook.FieldByName('id_cqrlog_main').AsInteger
+       else lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger
+      end;
     cqrini.WriteInteger('CallBook', 'LastId', -1)
   end
   else
-    lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+   Begin
+    dmData.qCQRLOG.First; //without this only the last qso of filtered selection is updated
+    if Selected then lastid := dmData.qCallBook.FieldByName('id_cqrlog_main').AsInteger
+       else lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger
+   end;
 
   if Application.MessageBox('Update names from previous QSOs?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
     prenames := True;
 
   frmDatabaseUpdate := TfrmDatabaseUpdate.Create(self);
   try
+    frmDatabaseUpdate.Selected := Selected;
     frmDatabaseUpdate.id_cqrlog_main   := lastid;
     frmDatabaseUpdate.NameFromLog := prenames;
-    dmData.QCallBook.SQL.Clear;
-    dmData.QCallBook.SQL.Text     := dmData.qCQRLOG.SQL.Text;
+    if not Selected then
+      Begin
+       dmData.QCallBook.SQL.Clear;
+       dmData.QCallBook.SQL.Text     := dmData.qCQRLOG.SQL.Text;
+      end;
     frmDatabaseUpdate.ShowModal
   finally
     frmDatabaseUpdate.Free
@@ -1000,7 +1045,7 @@ procedure TfrmMain.acGroupEditExecute(Sender: TObject);
 begin
   with TfrmGroupEdit.Create(self) do
   try
-    Selected := dbgrdMain.SelectedRows.Count > 1;
+    Selected := dbgrdMain.SelectedRows.Count > 0;
     ShowModal
   finally
     Free
@@ -1087,7 +1132,7 @@ begin
            'This could cause that you won''t have more callsigns on one label and ' +
            'only last 500 QSO will be printed.'+LineEnding+LineEnding+
            'Do you want to continue?';
-    if Application.MessageBox(PChar(msg),'Warning ...',mb_YesNo + mb_IconWarning) = idNo then
+    if Application.MessageBox(PChar(msg),'Warning ...',mb_YesNo + mb_IconWarning) in [idNo, idCancel] then
       exit
   end;
   with TfrmExLabelPrint.Create(self) do
@@ -1122,7 +1167,7 @@ end;
 procedure TfrmMain.acSelAllExecute(Sender: TObject);
 begin
   if application.MessageBox('Do you really want to select all records?',
-    'Question ...', mb_ok + mb_YesNo) = idNo then
+    'Question ...', mb_ok + mb_YesNo) in [idNo, idCancel] then
     exit;
   try
     dbgrdMain.SelectedRows.Clear;
@@ -1220,6 +1265,16 @@ begin
     ShowModal
   finally
     Free
+  end
+end;
+
+procedure TfrmMain.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
   end
 end;
 
@@ -1379,12 +1434,12 @@ end;
 procedure TfrmMain.acRemoveDupesExecute(Sender: TObject);
 begin
   if Application.MessageBox('PLEASE MAKE A BACKUP FIRST! THIS FUNCTION MAY DELETE QSO FROM YOUR LOG!'+LineEnding+LineEnding+
-       'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion) = idYes then
+       'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) = idYes then
   begin
     if cqrini.ReadBool('OnlineLog','HaUP',False)  or cqrini.ReadBool('OnlineLog','ClUP',False) or cqrini.ReadBool('OnlineLog','HrUP',False) then
     begin
       if Application.MessageBox('It seems you are using online log upload. First, please go to Online log menu and click to  "Mark all QSO as uploaded to all logs".'+
-                              LineEnding + LineEnding + 'Do you want to continue?','Question...', mb_YesNo+mb_IconQuestion) = idNo then
+                              LineEnding + LineEnding + 'Do you want to continue?','Question...', mb_YesNo+mb_IconQuestion) in [idNo, idCancel] then
         exit
     end;
     with TfrmImportProgress.Create(self) do
@@ -1785,7 +1840,7 @@ end;
 procedure TfrmMain.acAddQSLMgrsExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to find qsl managers for these QSOs?',
-    'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+    'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
     exit;
 
   with TfrmImportProgress.Create(self) do
@@ -2332,6 +2387,7 @@ begin
   ChangeVis('STX_STRING',cqrini.ReadBool('Columns', 'ContMsgSent', False));
   ChangeVis('SRX_STRING',cqrini.ReadBool('Columns', 'ContMsgRcvd', False));
   ChangeVis('DOK',cqrini.ReadBool('Columns', 'DarcDok', False));
+  ChangeVis('OPERATOR',cqrini.ReadBool('Columns', 'Operator', False));
 end;
 
 procedure TfrmMain.MarkQSLSend(symbol: string);

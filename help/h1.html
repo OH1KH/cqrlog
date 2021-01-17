@@ -26,7 +26,7 @@
     </tbody>
 </table>
 <br>
-<div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>Preferences</strong></h2>
 <div align=justify>The first step you need is to set up your log preferences. From the
@@ -57,7 +57,7 @@
         <li><a href="h1.html#ch2">fldigi interface</a></li>
         <li><a href="fldxml.html">fldigi XmlRpc remote</a></li>
         <li><a href="h1.html#ch2b">wsjt-x interface</a></li>        
-        <li><a href="h1.html#ch2c">N1MM interface</a></li>        
+        <li><a href="h1.html#ch2c">ADIF interface</a></li>        
         <li><a href="h1.html#ch3">Exit & Auto backup</a></li>
         <li><a href="h1.html#ch4">External viewers</a></li>
         <li><a href="h1.html#ch5">Callbook support</a></li>
@@ -226,6 +226,18 @@
     Very often it is much better to specify only serial speed and leave other options as default.
     Default value means that the settings from HamLib will be used.<br>
     <br>
+    <strong>User defined TRXControl buttons</strong> can be defined here. First column is button name shown (4char max) and second column is command to execute. Definition can consist one, or several in queue, rigctld commands or if definition starts with word
+    <strong> run </strong> it can be a program or script name with full path.
+    <br><ul> <li>
+    <strong>Note:</strong> Rigctld supports raw command <strong>W</strong>. Parameter for it is the rig cat command in bytes. Prefix<strong> \0x</strong> must be added for Hex values. Usr1 command in picture activates Icom IC7300 first voice memory play.
+    </li> <li>
+    <strong>Note:</strong> To run program or script it's name with full path must be entered. If file is command script then first line of it must tell what it is written for. If it is bash command script it's first line must be
+    <strong>#!/bin/bash </strong> if not, button definition must have <strong>run /bin/bash /tmp/my_test.sh</strong> to tell that bash is used to call the script.
+    </li> <li>
+    <strong>Note:</strong> Several rigctld commands can be written in same button definition. Usr3 command in picture  moves rig to 7.1MHz and then sets LSB mode with 2400Hz bandwidth.
+    </li><br> <li>
+    <strong>Note:  There is NO feedback from commands to cqrlog !</strong>
+    </li></ul>
     <strong>Switch only between mode related memories</strong> if this option is cheched, only memories related to
     current
     operating mode will be used. E.g. you are on CW right now, CQRLOG will switch only between memories with CW mode.
@@ -238,10 +250,16 @@
     The default frequencies which the radio tunes if you click a band button in the 'TRX control'
     panel can be changed to your preferences. The mode is switched in accordance to the band plan,
     there is actually a separate set of default frequencies for each CW, SSB, RTTY, AM and FM modes.
-    Click the 'Change default frequencies' button and set up frequencies of your choice.
+    Click the 'Change default frequencies' button and set up frequencies of your choice.<br><br>
+    <strong>Split settings</strong><br>
+    Split TX operation is made by using rig's XIT feature if rig supports it. Then there is no need to set both vfos for qso, just one and do the splitting with XIT. 
+    <br>Split is activated from NewQSO with keys Ctrl-1 ... Ctrl-9.
+    <br>Ctrl-0 will disable XIT. 
+    <br>Ctrl-9 has a random value 0-990Hz that is added to setting if split is up. If split is down it is subtracted.<br>
+    
 </div>
 <br>
-<img src=img/h100.png border=0><br>
+<img src=img/h100.png border=0> <img src=img/h100b.png border=0><br>
 
 <a name=ah7b><h2><strong>ROT Control</strong></h2></a>
 <img src=img/h10b.png border=0><br><br>
@@ -343,7 +361,8 @@ This is also possible with "notify-send". The display duration is set in ms (-t 
 </p>
 <p>
 <strong>Show country name in the DX cluster spot</strong> - next to every spot, you will se the coutry name of the DX station<br>
-<strong>Send these commands to telnet DXCluster when connected</strong> - one or several commands with comma separated can be sent to DXCluster after connect is initialized.<br>
+<strong>Send these commands to telnet DXCluster when connected</strong> - one or several commands with comma separated can be sent to DXCluster after connect is initialized.
+ If your command(s) have space(s) between, like "<strong>acc/spot by_zone 14,15,16 and not (on hf/data or on hf/rtty)</strong>" it is recommended to close each command between double quotes.<br>
 <strong>Connect to DX cluster after program startup</strong> - after log is opened, cqrlog will connect to your default cluster. Please remember that
 username and password(if needed) have to be filled in the cluster list.
 </p>
@@ -600,7 +619,8 @@ There are no known dependencies issues.<br><br>
     Setting wsjt-x interface is mainly same as setting fldigi. How ever communication is done via UDP frames and so the IP address and Port must be specified.
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2237</strong> for port. These are set in wsjt-x settings/reporting and if changed there, must also to be changed here.
     <br>
-    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even<b> 0.0.0.0</b> when cqrlog listens all transmits from every wsjt-x in network.
+
     <br><br>You can also use a multicast address for both <b>wsjt-x/settings/Reporting/UDP Server</b> and <b>cqrlog/preferences/fldigi/wsjt interface/wsjt addr</b>. Cqrlog will handle ip addresses starting with "239." as multicast addresses.
     <br>With multicast you are able to run several programs listening to wsjt-x udp broadcasts at same time. To start with multicast try multicast group address "239.255.0.0" for both cqrlog and wsjt-x (and also other programs needed to listen wsjt-x)
     <br><br>
@@ -611,21 +631,21 @@ There are no known dependencies issues.<br><br>
     WB4 can be handy when working <strong>ARRL International Grid Chase </strong>or <strong>ARRL RTTY-FT8</strong> like contests if one does not like to create separate log for that purpose.
     <br><br><img src="img/h101b.png"><br><br>
     Pressing calendar icon is easy way to set date. Double click on selected date closes calendar and sets the date. Pressing ESC closes calendar, but does not set date. Date can also be typed in manually.
-    <br><br>
     <a name=ch2c></a>
-    <h2><strong>N1MM interface</strong></h2>
-    Setting of N1MM interface is similar as wsjt-x interface. Only IP address and PORT have to be set if they are not defaults.
+    <h2><strong>ADIF interface</strong></h2>
+    Setting of ADIF interface is similar as wsjt-x interface. Only IP address and PORT have to be set if they are not defaults.
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2333</strong> for port. These are set in wsjt-x, or js8call, settings/reporting and if changed there, must also to be changed here.
     <br>
     Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    That is an easy choice because it works in all cases, even when running applications in different virtual machine of same PC. Just remember to open firewall for UPD port that is used.
+<br><br>
+    At WSJT-X 2.1.0 settings ADIF remote is renamed to "Secondary UDP server (deprecated)" and it is reported to be removed completely in future. Because of that it is now possible to set cqrlog's ADIF port to wsjt-x UDP server port number. WSJT-X 2.1.x UDP frames contain message #12 that
+     includes log information in ADIF format and ADIF remote can now parse that from binary data if you do not like to have monitoring properties (using wsjt remote) but want just qso logging (using ADIF remote).
     <br><br>
-    At WSJT-X 2.1.0 settings N1MM remote is renamed to "Secondary UDP server (deprecated)" and it is reported to be removed completely in future. Because of that it is now possible to set cqrlog's N1MM port to wsjt-x UDP server port number. WSJT-X 2.1.x UDP frames contain message #12 that
-     includes log information in ADIF format and N1MM remote can now parse that from binary data if you do not like to have monitoring properties (using wsjt remote) but want just qso logging (using N1MM remote).
-    <br><br>
-    N1MM remote has now better support for QRZ/HamQTH info fetch. If this is not allowed in preferences, or if there is no reponse from Web max waiting time (timeout)  is 5 seconds (You can not remove this property, so be patient. You can not have new qso for logging during 5 seconds!).
+    ADIF remote has now better support for QRZ/HamQTH info fetch. If this is not allowed in preferences, or if there is no reponse from Web max waiting time (timeout)  is 5 seconds (You can not remove this property, so be patient. You can not have new qso for logging during 5 seconds!).
     <br>While having qso you can write some notes like Name, QTH, Comment to QSO, etc. to NewQSO and it will saved with qso data during next wsjt-x "log qso/OK" event. They will not be overwritten by possible Qrz/HamQth info.
     <br><br>
-    <strong>NOTE !!</strong> Wstx- does not send contest -name, -number and -string in ADIF logging datagram. Contest exchanges are placed to regular rst_s and rst_r strings. So cqrlog can not fill proper contest columns when logging is done with ADIF datagram using N1MM remote. 
+    <strong>NOTE !!</strong> Wstx- does not send contest -name, -number and -string in ADIF logging datagram. Contest exchanges are placed to regular rst_s and rst_r strings. So cqrlog can not fill proper contest columns when logging is done with ADIF datagram using ADIF remote. 
     <br><br>
     
     <a name=ch3><h2><strong>Exit & Auto backup</strong></h2></a>
@@ -667,15 +687,25 @@ There are no known dependencies issues.<br><br>
       <li><strong>Login:</strong> - your user name to log in to RBN. It's usually your own callsign.</li>
       <li><strong>Watch for:</strong> the callsign you are watching for, also usually your own callsign. 
        If you leave this field empty, every spot will be shown on the grayline map.</li>
-      <li><strong>Auto connect after start</strong> - check this option if you want to autoconnect
-    to RBN when the program starts, you won't have to worry about it and CQRLOG will do
-    it for you automatically.<br>This checkbox affects to <strong>both</strong> Grayline RBN and RBN monitor (text list) </li>
       <li><strong>Signal strength</strong> How strong you are will be clear very quickly when you look
     at the map with the dots in different colours. Which colour will be used can be set here.</li>
+      <li><strong>After window opens</strong> - check these options if you want to autoconnect
+    to RBN when the Grayline and/or RBN Monitor window opens. If you have closed cqrlog with window(s) open they will open at next program start
+    and so also connection is made.</li>
+    <ul>
+      <li><strong>Autoconnect RBN Grayline</strong> connects Grayline map to RBN.</li>
+      <li><strong>Autoconnect RBN Monitor</strong> connects RBN Monitor to RBN. See: <a href="./h31.html">Operation/RBN monitor</a></li>
+      <li><strong>Link Grayline to RBN Monitor.</strong> links Grayline to same connection as RBN Monitor uses and does not allow to create a new connection to Grayline itself. This is usefull with QT5 widgets compiled version as there the direct Grayline RBN connection does not work. It also saves one connection in all cases as the same RBN connection can be used for both Grayline dotting and RBN Monitor listing.
+      <br>Linking alone does not start Grayline dotting. Connection to RBN must be done either here with <strong>Autoconnect RBN Monitor</strong> or <strong>manually</strong> at RBM Monitor window side.</li>
+      <strong>Note:</strong> Even when linked, Grayline dotting and RBN Monitor listing both uses their own settings what call(s) to follow.
+      <br><strong>Note:</strong> "Connect RBN Grayline" and "Link Grayline to RBN Monitor" are alternatives. You can not select both of them at same time.</li>
+    </ul>
       <li><strong>Delete old information after XX seconds</strong> The dots won't stay on the map forever.
     180 seconds (3 minutes) is a good default value. Please note, it also depends on the band,
     if you change band, dots will always be deleted. All data is band related.</li>
-    </ul><br>
+    </ul>
+    <br><br>
+    <img src="img/h1114b.png"><br><br>
     <a name=ch7><h2><strong>Online log upload support</strong></h2></a>
     CQRLOG supports online log upload to <a href="http://HamQTH.com">HamQTH</a>,
     <a href="https://secure.clublog.org/loginform.php">ClubLog.org</a> and
@@ -687,7 +717,7 @@ There are no known dependencies issues.<br><br>
     which will inform you about upload progress.
     <strong>Upload QSO data immediately after save, update or delete</strong> means that every
     insert/update or delete will be uploaded automatically. But if you change something in
-    QSO list window with hot keys e.g. CTRL+S, CTRL+W etc. and/or download data
+    QSO list window with hot keys e.g. Ctrl-S, Ctrl-W etc. and/or download data
     from eQSL/LoTW, changes won't be uploaded. All will be uploaded after you save/delete QSO
     or if you choose Online log and Upload to all online logs menu.<br>
 

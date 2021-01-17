@@ -187,7 +187,10 @@ var
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
                      srx, stx_string, srx_string, contestname, Darc_Dok : String);
 
+  var
+     station_callsign : String;
   begin
+    station_callsign := cqrini.ReadString('Station', 'Call', '');
     leng := 0;
     if ExDate then
     begin
@@ -210,6 +213,9 @@ var
         SaveTag(tmp,leng);
       end;
     end;
+
+    SaveTag(dmUtils.StringToADIF('<STATION_CALLSIGN', station_callsign), leng);
+
     if ExCall then
       SaveTag(dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(call)),leng);
     if ExMode then
@@ -302,7 +308,10 @@ var
       if dmUtils.IsLocOK(MyLoc) then
         SaveTag(dmUtils.StringToADIF('<MY_GRIDSQUARE',dmUtils.StdFormatLocator(MyLoc)),leng);
    if ExOperator then
-      SaveTag(dmUtils.StringToADIF('<OPERATOR',cqrini.ReadString('Station', 'Call', '')),leng);
+   begin
+      if (Op <> '') and (Op <> station_callsign) then
+         SaveTag(dmUtils.StringToADIF('<OPERATOR', Op) ,leng);
+   end;
    if ExDistance then
     begin
       dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(MyLoc),Loc,qrb,qrc);
@@ -400,7 +409,10 @@ var
              SaveTag(dmUtils.StringToADIF('<SAT_MODE', dmSatellite.GetSatMode(Freq, RxFreq)),leng);
        end;
     if (ExRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
-       SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
+       begin
+         SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
+         SaveTag(dmUtils.StringToADIF('<BAND_RX',dmUtils.GetAdifBandFromFreq(RxFreq)),leng);
+       end;
     if (ExDarcDok and (Darc_Dok <> '')) then
        SaveTag(dmUtils.StringToADIF('<DARC_DOK',Darc_Dok),leng);
 
@@ -519,7 +531,7 @@ begin   //TfrmExportProgress
                  Source.Fields[17].AsString,  //waz
                  Source.Fields[18].AsString, //loc
                  Source.Fields[19].AsString, //myloc
-                 cqrini.ReadString('Station', 'Call', ''), //operator
+                 Source.FieldByName('operator').AsString, //operator
                  Source.Fields[20].AsString, //county
                  Source.Fields[21].AsString, //award
                  Source.Fields[22].AsString, //remarks
@@ -771,12 +783,9 @@ var
 
     if ExOperator then
     begin
-      tmp := cqrini.ReadString('Station', 'Call', '');
-      if tmp = '' then
-        Op := '&nbsp;'
-      else
-        Op := tmp;
-      Writeln(f,SetData('WOperator', '10' ,tmp));
+      if (Op = '') then
+         Op := '&nbsp;';
+      Writeln(f,SetData( 'WOperator', '10',Op));
     end;
 
     if ExDistance then
@@ -1308,7 +1317,7 @@ begin
                Source.Fields[17].AsString,  //waz
                Source.Fields[18].AsString, //loc
                Source.Fields[19].AsString, //myloc
-               cqrini.ReadString('Station', 'Call', ''), //operator
+               Source.FieldByName('operator').AsString, //operator
                Source.Fields[20].AsString, //county
                Source.Fields[21].AsString, //award
                Source.Fields[22].AsString, //remarks

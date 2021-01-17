@@ -1,22 +1,4 @@
-{*
-todo:
 
-DONE -Contest name:  Use same predefined list as is used in contest form's contest name
-DONE -QSO print: let user design format mask (often published with contest rules)
-DONE REMOVED -Points counting:  consider giving up that. Claimed score is not needed (only nice to know)
-DONE -Add warning:  If preferences/station/contest info is not filled
-DONE - use form font size routines at formcreate (or show)
-DONE - save/load export settings
-DONE - write /tmp/CabReject.log for rejected qsos
-DONE- clear unused code and debugs
-- status counts to help manual score counting:
-    + worked countries
-    + worked qsos by continents,
-    + count of different entries in excange1 & exhange2 (if entry is loc count by 4 char)
-    ADDED SETTING + count for user defined country (perhaps)
-- help button works, but help itself needs now refreshing up to date
-- test test test
-*}
 unit fCabrilloExport;
 
 {$mode objfpc}{$H+}
@@ -49,6 +31,7 @@ type
     btnCabBrowse: TButton;
     btCabSave: TButton;
     btCabLoad: TButton;
+    chkUpCase: TCheckBox;
     chkCabInfoSrst: TCheckBox;
     chkCabInfoRrst: TCheckBox;
     cmbCabInfoREx1: TComboBox;
@@ -400,8 +383,9 @@ type
 var
   f,r        : TextFile;
   tmp        : String;
-  mycall,call: String;
-  myloc, loc : String;
+  mycall,call,
+  myloc, loc,
+  mycountry  : String;
   myname     : String;
   mailingaddress, zipcity : String;
   email      : String;
@@ -415,6 +399,8 @@ var
   category_band: String;
   category_mode: String;
   address: TStringArray;
+  Operators : TStringList;
+  OpString : String;
 
   UsrCountryCount       : integer = 0;
   TotalCountryList      : TStringList;
@@ -435,7 +421,7 @@ begin
   date := dmUtils.GetDateTime(0);
   mycall := cqrini.ReadString('Station','Call','');
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-  adif := dmDXCC.id_country(mycall,date,pfx,cont,country,itu,waz,posun,lat,long);
+  mycountry := dmDXCC.GetCountry(mycall, date);
   myloc  := cqrini.ReadString('Station','LOC','');
   if length(myloc) = 4 then myloc := myloc +'ll';
   myname := cqrini.ReadString('Station','Name','');
@@ -444,6 +430,8 @@ begin
   address := zipcity.Split(' ');
   email := cqrini.ReadString('Station','Email','');
   club := cqrini.ReadString('Station','Club','');
+  Operators := TStringList.Create;
+  OpString := '';
 
   if (( mailingaddress ='') or (zipcity='') or (email='')) then
    begin
@@ -573,6 +561,8 @@ begin
                               inc(Continents[6].QsoCount);  //here not total, but different count
                             end;
                          end;
+      if (dmData.qCQRLOG.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.qCQRLOG.FieldByName('operator').AsString) < 0) then
+         Operators.Add(dmData.qCQRLOG.FieldByName('operator').AsString);
 
       tmp:= 'QSO: '+
             Format('%5s', [CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' '+
@@ -619,6 +609,7 @@ begin
 
              if (cmbCabTailTxCount.Text<>'') then tmp:=tmp+' '+Format('%1s',[ cmbCabTailTxCount.Text]);
 
+      if chkUpCase.Checked then tmp:=UpperCase(tmp);
       s.Add(tmp);
 
       inc(i);
@@ -636,6 +627,14 @@ begin
     lblCabDone.Visible := True;
     CloseFile(r);
   end;
+
+  for j:=0 to pred(Operators.Count) do
+  begin
+     OpString := OpString+Operators[j];
+     if (j >= 0) then
+        OpString:=OpString+', '
+  end;
+  OpString := OpString + '@' + UpperCase(cqrini.ReadString('Station', 'Call', ''));
 
   //Check mode result before writing header
   case category_mode of
@@ -658,7 +657,10 @@ begin
     Writeln(f,'CREATED-BY: CQRLOG '+dmData.VersionString);
     Writeln(f,'CONTEST: '+cmbCabContestName.Text);
     Writeln(f,'CALLSIGN: '+mycall);
-    Writeln(f,'CATEGORY-OPERATOR: SINGLE-OP');  // Only single op supported currently
+    if (Operators.Count > 0) then
+       Writeln(f,'CATEGORY-OPERATOR: MULTI-OP')
+    else
+       Writeln(f,'CATEGORY-OPERATOR: SINGLE-OP');
     Writeln(f,'CATEGORY-BAND: '+category_band);
     Writeln(f,'CATEGORY-MODE: '+category_mode);
     Writeln(f,'CATEGORY-POWER: '+CabrilloPower(cmbCabPower.ItemIndex));
@@ -667,14 +669,16 @@ begin
     Writeln(f,'GRID-LOCATOR: '+UPcase(myloc)); //non standard upcase required
     Writeln(f,'LOCATION: '+edtCabLocation.Text);
     Writeln(f,'CLAIMED-SCORE: ');
-    Writeln(f,'SPECIFIC: ');
+    // Writeln(f,'SPECIFIC: ');   // Unknown Cabrillo Tag (DF2ET 26.10.2020)
     Writeln(f,'CLUB: '+club);
+    if (Operators.Count > 0) then
+       Writeln(f,'OPERATORS: '+OpString);
     Writeln(f,'NAME: '+myname);
     Writeln(f,'ADDRESS: '+mailingaddress);
     Writeln(f,'ADDRESS-CITY: '+address[1]);
-    Writeln(f,'ADDRESS-COUNTRY: '+country);
+    Writeln(f,'ADDRESS-COUNTRY: '+mycountry);
     Writeln(f,'ADDRESS-STATE-PROVINCE: ');
-    Writeln(f,'ADDRESS-POSTAL-CODE: '+address[0]);
+    Writeln(f,'ADDRESS-POSTALCODE: '+address[0]);
     Writeln(f,'EMAIL: '+email);
     Writeln(f,'SOAPBOX:'+edtCabSoapBox.Text);
 
@@ -766,6 +770,8 @@ begin
 
       filini.WriteInteger('CabrilloExport','TxCount',cmbCabTailTxCount.ItemIndex);
       filini.WriteInteger('CabrilloExport','CountryToCount',CountryToCount);
+
+      filini.WriteBool('CabrilloExport','UseUpCase',chkUpCase.Checked);
     finally
       filini.Free
     end;
@@ -803,6 +809,8 @@ var
 
         CountryToCount:= filini.ReadInteger('CabrilloExport','CountryToCount',0);
         if ( CountryToCount > 0) then  edtCabCountC.Text:= dmDXCC.PfxFromADIF(CountryToCount);
+
+        chkUpCase.Checked:=filini.ReadBool('CabrilloExport','UseUpCase',true);
     finally
       filini.Free
     end

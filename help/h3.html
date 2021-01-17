@@ -26,7 +26,7 @@
     </tbody>
 </table>
 <br>
-<div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>Maintenance</strong></h2>
 <div style="text-align: justify;">
@@ -40,7 +40,7 @@
     <br>If pure ASCII charcters are found the usual tag format is used. Like &lt;QTH:4&gt;Pori
     <br>Every time special UTF8 character is found in tags, where specification allows, UTF8 printing routines are used and the _INTL suffix is added.
     <br>At import side tags with suffix _INTL are read with UTF8 routines. Without _INTL with normal ASCII routines. This makes importing backward compatible with old cqrlog exports that have set tag lenght wrong if there has been special UTF8 characters in tag data.<br><br>
-    Go to QSO list (Ctrl+O on the main logging screen or File -> Show QSO list from the menu).
+    Go to QSO list (Ctrl-O on the main logging screen or File -> Show QSO list from the menu).
     <br><br>
     <img src="img/h39.png" border="0"><br><br>
     From the menu <strong>here</strong> choose File -> Import -> ADIF.<br><br>
@@ -99,7 +99,8 @@
     some statistics from exported qsos to help manual counting of claimed score.<br><br>
     For export  <b>Qso list/filter/create</b> or <b>Qso list/filter/Contest filter </b>has to be set to select qsos to be exported.<br>
     If you used <b>Qso list/filter/Contest filter </b> you can press button <b>Frm Flt</b> to get contest name from filtered result.
-    <br><br>QSO-line header follows most used layout and can not be modified, except <b>width of callsign space</b> that affects both calls (my&amp;wkd).<br>
+    <br><br>QSO-line header follows most used layout and can not be modified, except <b>width of callsign space</b> that affects both calls (my&amp;wkd).
+    <br><b>Use UpCase letters for all QSO records</b> is defaut checked and converts QSO lines to upper case. Mainly changes exchange messages if they have been written with low case letters. This setting can be saved to log settings file.<br>
     Info sent and rcvd can be modified using selections. Some contests do not use <b>reports, they can be omitted from checbox.</b><br>
     Exchange1 and Exchange2 can contain data by  selected by selectors with <b>given space width</b> 1-99. If empty they are ignored.<br>
     <B>TX count</b> is the transmitter count at the end of line. It can also be empty and so ingnored<br>
@@ -202,7 +203,7 @@
     Since version 0.8.0 CQRLOG uses its own QSL Manager database in a very simple, plain
     text format (CSV, semicolon separated). The update is very simple. The automated update
     checks the availability of a new version, downloads and unpacks the tar.gz file if
-    available. The new version must be imported - go to QSO list (Ctrl+O or from menu
+    available. The new version must be imported - go to QSO list (Ctrl-O or from menu
     <em>File -> Show QSO list</em>) and choose the <em>File -> Import -> Import
     qsl managers database</em>.<br><br>
     A manual update is also possible if you download a recent version from the CQRLOG site

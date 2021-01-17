@@ -31,6 +31,7 @@ object frmChangeLocator: TfrmChangeLocator
     Top = 27
     Width = 216
     BorderSpacing.Top = 2
+    MaxLength = 6
     OnChange = edtLocatorChange
     OnKeyPress = edtLocatorKeyPress
     TabOrder = 0
