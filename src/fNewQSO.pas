@@ -6073,8 +6073,6 @@ begin
         dbgrdQSOBefore.Columns[i].Visible := False;
       if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSO_DXCC' then
         dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'PROFILE' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
       if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'ID_CQRLOG_MAIN' then
         dbgrdQSOBefore.Columns[i].Visible := False;
       if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'IDCALL' then
