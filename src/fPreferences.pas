@@ -129,6 +129,7 @@ type
     chkRBNLink: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
     chkRot2AzMinMax: TCheckBox;
+    chkProfileNr: TCheckBox;
     chkShowOwnPos: TCheckBox;
     chkDistance: TCheckBox;
     chkSTX: TCheckBox;
@@ -1278,6 +1279,7 @@ begin
   cqrini.WriteBool('Columns', 'Propagation', chkPropagation.Checked);
   cqrini.WriteBool('Columns', 'SatelliteName', chkSatellite.Checked);
   cqrini.WriteBool('Columns', 'RXFreq', chkRXFreq.Checked);
+  cqrini.WriteBool('Columns', 'ProfileNr', chkProfileNr.Checked);
   cqrini.WriteBool('Columns', 'ContestName', chkContestName.Checked);
   cqrini.WriteBool('Columns', 'STX', chkSTX.Checked);
   cqrini.WriteBool('Columns', 'SRX', chkSRX.Checked);
@@ -2790,6 +2792,7 @@ begin
   chkPropagation.Checked := cqrini.ReadBool('Columns', 'Propagation', False);
   chkSatellite.Checked := cqrini.ReadBool('Columns', 'SatelliteName', False);
   chkRXFreq.Checked := cqrini.ReadBool('Columns', 'RXFreq', False);
+  chkProfileNr.Checked := cqrini.ReadBool('Columns', 'ProfileNr', False);
   chkContestName.Checked := cqrini.ReadBool('Columns', 'ContestName', False);
   chkSTX.Checked := cqrini.ReadBool('Columns', 'STX', False);
   chkSRX.Checked := cqrini.ReadBool('Columns', 'SRX', False);

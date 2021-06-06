@@ -1532,10 +1532,14 @@ object frmPreferences: TfrmPreferences
         TabOrder = 45
       end
       object chkDarcDok: TCheckBox
-        Left = 307
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkSRX_str
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 421
-        Width = 88
+        Top = 422
+        Width = 96
+        BorderSpacing.Top = 3
         Caption = 'DARC DOK'
         TabOrder = 46
       end
@@ -1549,6 +1553,18 @@ object frmPreferences: TfrmPreferences
         Width = 83
         Caption = 'Operator'
         TabOrder = 47
+      end
+      object chkProfileNr: TCheckBox
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkRXFreq
+        AnchorSideTop.Side = asrBottom
+        Left = 163
+        Height = 23
+        Top = 419
+        Width = 87
+        BorderSpacing.Top = 3
+        Caption = 'Profile Nr'
+        TabOrder = 48
       end
     end
     object tabBands: TTabSheet

@@ -2205,8 +2205,6 @@ procedure TfrmMain.ShowFields;
         dbgrdMain.Columns[i].Visible := False;
       if UpperCase(dbgrdMain.Columns[i].DisplayName) = 'QSO_DXCC' then
         dbgrdMain.Columns[i].Visible := False;
-      if UpperCase(dbgrdMain.Columns[i].DisplayName) = 'PROFILE' then
-        dbgrdMain.Columns[i].Visible := False;
       if UpperCase(dbgrdMain.Columns[i].DisplayName) = 'ID_CQRLOG_MAIN' then
         dbgrdMain.Columns[i].Visible := False;
       if UpperCase(dbgrdMain.Columns[i].DisplayName) = 'IDCALL' then
@@ -2364,6 +2362,7 @@ begin
   ChangeVis('PWR', cqrini.ReadBool('Columns', 'Power', False));
   ChangeVis('DXCC_REF', cqrini.ReadBool('Columns', 'DXCC', False));
   ChangeVis('REMARKS', cqrini.ReadBool('Columns', 'Remarks', False));
+  ChangeVis('PROFILE', cqrini.ReadBool('Columns', 'ProfileNr', False));
   ChangeVis('WAZ', cqrini.ReadBool('Columns', 'WAZ', False));
   ChangeVis('ITU', cqrini.ReadBool('Columns', 'ITU', False));
   ChangeVis('STATE', cqrini.ReadBool('Columns', 'State', False));
