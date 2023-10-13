@@ -2063,7 +2063,7 @@ end;
 procedure TfrmMain.acExADIFExecute(Sender: TObject);
 begin
   dlgSave.DefaultExt := '.adi';
-  dlgSave.Filter     := 'ADIF|*.adi;*.ADI';
+  dlgSave.Filter     := 'ADIF|*.adi;*.ADI|All files|*';
   if dlgSave.Execute then
   begin
     ShowWidths:=false;
@@ -2077,7 +2077,10 @@ begin
 
     with TfrmExportProgress.Create(self) do
     try
-      FileName   := dlgSave.FileName;
+      if pos('.',dlgSave.FileName)=0 then
+         FileName:=dlgSave.FileName+'.adi'
+       else
+         FileName:=dlgSave.FileName;
       ExportType := 0;
       ShowModal
     finally
@@ -2091,7 +2094,7 @@ end;
 procedure TfrmMain.acExHTMLExecute(Sender: TObject);
 begin
   dlgSave.DefaultExt := '.html';
-  dlgSave.Filter     := 'html|*.html;*.HTML';
+  dlgSave.Filter     := 'html|*.html;*.HTML|All files|*';
 
   if dlgSave.Execute then
   begin
@@ -2106,7 +2109,10 @@ begin
 
     with TfrmExportProgress.Create(self) do
     try
-      FileName   := dlgSave.FileName;
+      if pos('.',dlgSave.FileName)=0 then
+         FileName:=dlgSave.FileName+'.html'
+       else
+         FileName:=dlgSave.FileName;
       ExportType := 1;
       ShowModal
     finally
@@ -2127,7 +2133,7 @@ end;
 
 procedure TfrmMain.acImportADIFExecute(Sender: TObject);
 begin
-  dlgOpen.Filter     := 'ADIF|*.adi;*.ADI;*.adif;*.ADIF';
+  dlgOpen.Filter     := 'ADIF|*.adi;*.ADI;*.adif;*.ADIF|All files|*';
   dlgOpen.DefaultExt := '.adi';
   if dlgOpen.Execute then
   begin

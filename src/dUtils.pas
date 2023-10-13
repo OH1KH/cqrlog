@@ -61,6 +61,7 @@ const
      'FT4',   'FST4', 'FSK441','PSK125','PSK63', 'WSPR',  'PSK250','ROS',   'DIGITALVOICE');
 
   cMaxBandsCount = 31; //True count of bands. (loops have 0..MaxBandsCount-1)
+                       //when you change this check also frmContest.CommonStatus.ContestBandPtr
   cBands: array[0..30] of string[10] =
     ('2190M', '630M', '160M', '80M'  , '60M','40M'  , '30M', '20M'  , '17M' , '15M' ,
      '12M'  , '10M' , '5M'  , '6M'   , '8M' ,'4M'   , '2M' , '1.25M', '70CM', '33CM',

@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, Menus, Spin, strutils, fscp;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, Menus, Spin, Grids,
+  strutils, fscp, iniFiles;
 
 type
 
@@ -38,6 +39,7 @@ type
     edtSRX: TEdit;
     edtSRXStr: TEdit;
     gbStatus: TGroupBox;
+    lblStatusSettings: TLabel;
     lblQSOSince: TLabel;
     lblRate10: TLabel;
     lblRate60: TLabel;
@@ -56,7 +58,24 @@ type
     lblMSGr: TLabel;
     lblNRs: TLabel;
     btnHelp : TSpeedButton;
-    mnuReSetAll: TMenuItem;
+    Band_070: TMenuItem;
+    Band_160: TMenuItem;
+    Load: TMenuItem;
+    Band_023: TMenuItem;
+    mnuModeRelated: TMenuItem;
+    mnuReSetAllHF: TMenuItem;
+    mnuReSetAllVHF: TMenuItem;
+    OpenDialog1: TOpenDialog;
+    Save: TMenuItem;
+    Band_2: TMenuItem;
+    Band_4: TMenuItem;
+    Band_6: TMenuItem;
+    Band_10: TMenuItem;
+    Band_15: TMenuItem;
+    Band_20: TMenuItem;
+    Band_40: TMenuItem;
+    Band_80: TMenuItem;
+    mnuReSetAllCounters: TMenuItem;
     mnuExit: TMenuItem;
     mnuQSOcount: TMenuItem;
     mnuDXQSOCount: TMenuItem;
@@ -82,9 +101,13 @@ type
     rbDupeCheck: TRadioButton;
     rbNoMode4Dupe: TRadioButton;
     rbIgnoreDupes: TRadioButton;
+    SaveDialog1: TSaveDialog;
     sbContest: TStatusBar;
+    Separator1: TMenuItem;
+    Separator2: TMenuItem;
     spCQperiod: TSpinEdit;
     spCQrepeat: TSpinEdit;
+    sgStatus: TStringGrid;
     tmrScore: TTimer;
     tmrCQ: TTimer;
     tmrESC2: TTimer;
@@ -101,14 +124,12 @@ type
     procedure chkSPClick(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
+    procedure cmbContestNameEnter(Sender: TObject);
     procedure cmbContestNameExit(Sender: TObject);
     procedure edtRSTrEnter(Sender: TObject);
     procedure lblCqFreqClick(Sender: TObject);
-    procedure mnuReSetAllClick(Sender: TObject);
-    procedure mnuCountyrCountAllClick(Sender: TObject);
-    procedure mnuDXCountryCountClick(Sender: TObject);
-    procedure mnuDXCountryListClick(Sender: TObject);
-    procedure mnuDXQSOCountClick(Sender: TObject);
+    procedure LoadClick(Sender: TObject);
+    procedure mnuReSetAllCountersClick(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -127,12 +148,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnHelpClick(Sender : TObject);
     procedure gbStatusClick(Sender: TObject);
-    procedure mnuMsgMultipCountClick(Sender: TObject);
-    procedure mnuMsgMultipListClick(Sender: TObject);
-    procedure mnuOwnCountryCountClick(Sender: TObject);
-    procedure mnuOwnCountryListClick(Sender: TObject);
     procedure mnuQSOcountClick(Sender: TObject);
     procedure mnuGridClick(Sender: TObject);
+    procedure mnuReSetAllHFClick(Sender: TObject);
+    procedure mnuReSetAllVHFClick(Sender: TObject);
     procedure mnyIOTAClick(Sender: TObject);
     procedure mnuStateClick(Sender: TObject);
     procedure mnuCountyClick(Sender: TObject);
@@ -141,6 +160,7 @@ type
     procedure mnuCommentClick(Sender: TObject);
     procedure mnuNameClick(Sender: TObject);
     procedure rbIgnoreDupesChange(Sender: TObject);
+    procedure SaveClick(Sender: TObject);
     procedure spCQperiodChange(Sender: TObject);
     procedure tmrCQTimer(Sender: TObject);
     procedure tmrESC2Timer(Sender: TObject);
@@ -170,6 +190,7 @@ type
     procedure SendFmemory(key:word);
     function CheckDupe(call:string):boolean;
     procedure CQstart(start:boolean);
+    procedure ChangeStatusPop(Sender: TObject);
   public
     { public declarations }
     procedure SaveSettings;
@@ -640,7 +661,14 @@ begin
   SetTabOrders;
 end;
 
+procedure TfrmContest.cmbContestNameEnter(Sender: TObject);
+begin
+  tmrScore.Enabled:=False;
+end;
+
 procedure TfrmContest.cmbContestNameExit(Sender: TObject);
+var
+   f: integer;
 begin
     cmbContestName.Text:= ExtractWord(1,cmbContestName.Text,['|']);
 
@@ -648,13 +676,17 @@ begin
        begin
          UseStatus:=-1; //no Contest name, noStatus
          mStatus.Clear;
+         sgStatus.Visible:=False;
+         gbStatus.Visible:=False;
          Exit;
        end;
+    gbStatus.Visible:=True;
 
     if ((pos('MWC',uppercase(cmbContestName.Text))>0)
     or (pos('OK1WC',uppercase(cmbContestName.Text))>0)) then
       Begin
         UseStatus:=1; //OK1WC memorial contest
+        lblStatusSettings.Visible:=False;
         MWCStatus;
         Exit;
       end;
@@ -662,6 +694,7 @@ begin
     if (pos('NAC',uppercase(cmbContestName.Text))>0) then
       Begin
         UseStatus:=2; //Nordic V,U,SHF activity contest
+        lblStatusSettings.Visible:=False;
         NACStatus;
         Exit;
       end;
@@ -677,6 +710,10 @@ begin
      }
 
      UseStatus:=0;  //Common status display for contests where name does not fit to any above
+     lblStatusSettings.Visible:=True;
+     for f:=10 to 20 do
+      sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
+     tmrScore.Enabled:=True;
      CommonStatus;
 end;
 
@@ -787,12 +824,20 @@ begin
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
   QsoSince:=0;
+  sgStatus.Cells[0,1]:='QSOs';
+  sgStatus.Cells[0,2]:='DXs';
+  sgStatus.Cells[0,3]:='Ctrys';
+  sgStatus.Cells[0,4]:='DXCtrys';
+  sgStatus.Cells[0,5]:='OwnCtrys';
+  sgStatus.Cells[0,6]:='MMults';
+  sgStatus.ColWidths[0]:=80;
 end;
 procedure TfrmContest.SaveSettings;
 var
   f       :integer;
 begin
   dmUtils.SaveWindowPos(frmContest);
+  cqrini.WriteString('frmContest', 'ContestName', cmbContestName.Text);
 
   cqrini.WriteBool('frmContest', 'TabAll', chkTabAll.Checked);
   cqrini.WriteBool('frmContest', 'ShowHint', chkHint.Checked);
@@ -816,11 +861,31 @@ begin
 
   cqrini.WriteString('frmContest', 'STX', edtSTX.Text);
   cqrini.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
-  cqrini.WriteString('frmContest', 'ContestName', cmbContestName.Text);
+
   cqrini.WriteBool('frmContest', 'SP', chkSP.Checked);
 
-  for f:=0 to 8 do
-     cqrini.WriteBool('frmContest', 'CommonStatus'+IntToStr(f),popCommonStatus.Items[f].Checked);
+  cqrini.WriteBool('frmContest', 'mnuQSOcount',mnuQSOcount.Checked);
+  cqrini.WriteBool('frmContest', 'mnuDXQSOCount',mnuDXQSOCount.Checked);
+  cqrini.WriteBool('frmContest', 'mnuCountyrCountAll',mnuCountyrCountAll.Checked);
+  cqrini.WriteBool('frmContest', 'mnuDXCountryCount',mnuDXCountryCount.Checked);
+  cqrini.WriteBool('frmContest', 'mnuDXCountryList',mnuDXCountryList.Checked);
+  cqrini.WriteBool('frmContest', 'mnuDXCountryList',mnuDXCountryList.Checked);
+  cqrini.WriteBool('frmContest', 'mnuOwnCountryList',mnuOwnCountryList.Checked);
+  cqrini.WriteBool('frmContest', 'mnuMsgMultipCount',mnuMsgMultipCount.Checked);
+  cqrini.WriteBool('frmContest', 'mnuMsgMultipList',mnuMsgMultipList.Checked);
+  cqrini.WriteBool('frmContest', 'mnuModeRelated',mnuModeRelated.Checked);
+  cqrini.WriteBool('frmContest', 'Band_160',Band_160.Checked);
+  cqrini.WriteBool('frmContest', 'Band_80',Band_80.Checked);
+  cqrini.WriteBool('frmContest', 'Band_40',Band_40.Checked);
+  cqrini.WriteBool('frmContest', 'Band_20',Band_20.Checked);
+  cqrini.WriteBool('frmContest', 'Band_15',Band_15.Checked);
+  cqrini.WriteBool('frmContest', 'Band_10',Band_10.Checked);
+  cqrini.WriteBool('frmContest', 'Band_6',Band_6.Checked);
+  cqrini.WriteBool('frmContest', 'Band_4',Band_4.Checked);
+  cqrini.WriteBool('frmContest', 'Band_2',Band_2.Checked);
+  cqrini.WriteBool('frmContest', 'Band_070',Band_070.Checked);
+  cqrini.WriteBool('frmContest', 'Band_023',Band_023.Checked);
+
 
 end;
 procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -845,31 +910,55 @@ begin
   frmNewQSO.gbContest.Visible := true;
   dmUtils.LoadWindowPos(frmContest);
 
-  chkTabAll.Checked := cqrini.ReadBool('frmContest', 'TabAll', False);
-  chkHint.Checked := cqrini.ReadBool('frmContest', 'ShowHint', True);
-  spCQperiod.Value:=cqrini.ReadInteger('frmContest','CQperiod',5000);
-  spCQrepeat.Value:=cqrini.ReadInteger('frmContest','CQrepeat',1);
+  cmbContestName.Text       := cqrini.ReadString('frmContest', 'ContestName', '');
 
-  rbDupeCheck.Checked := cqrini.ReadBool('frmContest', 'DupeCheck', True);
-  rbNoMode4Dupe.Checked := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
-  rbIgnoreDupes.Checked := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
-  DupeFromDate:= cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01');
-  chkMarkDupe.Checked:= cqrini.ReadBool('frmContest', 'MarkDupe', True);
+  chkTabAll.Checked         := cqrini.ReadBool('frmContest', 'TabAll', False);
+  chkHint.Checked           := cqrini.ReadBool('frmContest', 'ShowHint', True);
+  spCQperiod.Value          :=cqrini.ReadInteger('frmContest','CQperiod',5000);
+  spCQrepeat.Value          :=cqrini.ReadInteger('frmContest','CQrepeat',1);
 
-  chkSpace.Checked := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
-  chkTrueRST.Checked := cqrini.ReadBool('frmContest', 'TrueRST', False);
-  chkNRInc.Checked := cqrini.ReadBool('frmContest', 'NRInc', False);
-  chkQsp.Checked := cqrini.ReadBool('frmContest', 'QSP', False);
-  chkNoNr.Checked := cqrini.ReadBool('frmContest', 'NoNR', False);
-  chkLoc.Checked := cqrini.ReadBool('frmContest', 'Loc', False);
-  chkLoc.Caption:=cqrini.ReadString('frmContest','MsgIsStr','MSG is Grid');
-  MsgIs:=cqrini.ReadInteger('frmContest','MsgIs',1); //defaults to MSG is Grid
-  chkSP.Checked := cqrini.ReadBool('frmContest', 'SP', False);
+  rbDupeCheck.Checked       := cqrini.ReadBool('frmContest', 'DupeCheck', True);
+  rbNoMode4Dupe.Checked     := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
+  rbIgnoreDupes.Checked     := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
+  DupeFromDate              := cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01');
+  chkMarkDupe.Checked       := cqrini.ReadBool('frmContest', 'MarkDupe', True);
 
-  edtSTX.Text := cqrini.ReadString('frmContest', 'STX', '');
-  edtSTXStr.Text := cqrini.ReadString('frmContest', 'STXStr', '');
+  chkSpace.Checked          := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
+  chkTrueRST.Checked        := cqrini.ReadBool('frmContest', 'TrueRST', False);
+  chkNRInc.Checked          := cqrini.ReadBool('frmContest', 'NRInc', False);
+  chkQsp.Checked            := cqrini.ReadBool('frmContest', 'QSP', False);
+  chkNoNr.Checked           := cqrini.ReadBool('frmContest', 'NoNR', False);
+  chkLoc.Checked            := cqrini.ReadBool('frmContest', 'Loc', False);
+  chkLoc.Caption            :=cqrini.ReadString('frmContest','MsgIsStr','MSG is Grid');
+  MsgIs                     :=cqrini.ReadInteger('frmContest','MsgIs',1); //defaults to MSG is Grid
+  chkSP.Checked             := cqrini.ReadBool('frmContest', 'SP', False);
+
+  edtSTX.Text               := cqrini.ReadString('frmContest', 'STX', '');
+  edtSTXStr.Text            := cqrini.ReadString('frmContest', 'STXStr', '');
 
   popSetMsg.Items[MsgIs].Checked:=true;
+
+  mnuQSOcount.Checked       :=cqrini.ReadBool('frmContest', 'mnuQSOcount',True);
+  mnuDXQSOCount.Checked     :=cqrini.ReadBool('frmContest', 'mnuDXQSOCount',True);
+  mnuCountyrCountAll.Checked:=cqrini.ReadBool('frmContest', 'mnuCountyrCountAll',True);
+  mnuDXCountryCount.Checked :=cqrini.ReadBool('frmContest', 'mnuDXCountryCount',True);
+  mnuDXCountryList.Checked  :=cqrini.ReadBool('frmContest', 'mnuDXCountryList',True);
+  mnuDXCountryList.Checked  :=cqrini.ReadBool('frmContest', 'mnuDXCountryList',True);
+  mnuOwnCountryList.Checked :=cqrini.ReadBool('frmContest', 'mnuOwnCountryList',True);
+  mnuMsgMultipCount.Checked :=cqrini.ReadBool('frmContest', 'mnuMsgMultipCount',True);
+  mnuMsgMultipList.Checked  :=cqrini.ReadBool('frmContest', 'mnuMsgMultipList',True);
+  mnuModeRelated.Checked    :=cqrini.ReadBool('frmContest', 'mnuModeRelated',True);
+  Band_160.Checked          :=cqrini.ReadBool('frmContest', 'Band_160',True);
+  Band_80.Checked           :=cqrini.ReadBool('frmContest', 'Band_80',True);
+  Band_40.Checked           :=cqrini.ReadBool('frmContest', 'Band_40',True);
+  Band_20.Checked           :=cqrini.ReadBool('frmContest', 'Band_20',True);
+  Band_15.Checked           :=cqrini.ReadBool('frmContest', 'Band_15',True);
+  Band_10.Checked           :=cqrini.ReadBool('frmContest', 'Band_10',True);
+  Band_6.Checked            :=cqrini.ReadBool('frmContest', 'Band_6',True);
+  Band_4.Checked            :=cqrini.ReadBool('frmContest', 'Band_4',True);
+  Band_2.Checked            :=cqrini.ReadBool('frmContest', 'Band_2',True);
+  Band_070.Checked          :=cqrini.ReadBool('frmContest', 'Band_070',True);
+  Band_023.Checked          :=cqrini.ReadBool('frmContest', 'Band_023',True);
 
   InitInput;
 
@@ -885,9 +974,6 @@ begin
   MWC40:=0;
   MWC80:=0;
 
-  for f:=0 to 8 do
-       popCommonStatus.Items[f].Checked:=cqrini.ReadBool('frmContest', 'CommonStatus'+IntToStr(f), True);
-
   MyAdif:= dmDXCC.id_country(cqrini.ReadString('Station', 'Call', ''), Now(), Mypfx, Mycont,  Mycountry, MyWAZ, Myposun, MyITU, Mylat, Mylong);
   mnuOwnCountryCount.Caption:=Mycont+' country count';
   mnuOwnCountryList.Caption:=Mycont+' country list';
@@ -898,6 +984,7 @@ begin
   tmrCQ.Interval:=spCQperiod.Value;
   CQcount:=0;
   chkSPClick(nil); //to set the right color to TX labels
+  sgStatus.Visible:=False;
 end;
 
 procedure TfrmContest.MsgIsPopChk(nr:integer);
@@ -915,72 +1002,180 @@ end;
 
 procedure TfrmContest.gbStatusClick(Sender: TObject);
 begin
+    if UseStatus<>0 then exit;
     popCommonStatus.PopUp;
 end;
 
-procedure TfrmContest.mnuQSOcountClick(Sender: TObject);   //0
-begin
-    popCommonStatus.Items[0].Checked:= not popCommonStatus.Items[0].Checked;
-    popCommonStatus.PopUp;
+procedure TfrmContest.mnuQSOcountClick(Sender: TObject);   //This works for all selections
+var
+   f:integer;
+   p:TPoint;
+Begin
+  p:=popCommonStatus.PopupPoint;
+  TMenuitem(Sender).checked:= not TMenuitem(Sender).checked;
+  for f:=10 to 20 do                                            //redefine sgStatus grid's band columns visible
+     sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
+  popCommonStatus.PopUp(p.x,p.y);
+  //frmContest.Left,frmContest.Top);
 end;
 
-procedure TfrmContest.mnuDXQSOCountClick(Sender: TObject); //1
-begin
-    popCommonStatus.Items[1].Checked:= not popCommonStatus.Items[1].Checked;
-    popCommonStatus.PopUp;
-end;
-procedure TfrmContest.mnuCountyrCountAllClick(Sender: TObject); //2
-begin
-    popCommonStatus.Items[2].Checked:= not popCommonStatus.Items[2].Checked;
-    popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuDXCountryCountClick(Sender: TObject); //3
-begin
-    popCommonStatus.Items[3].Checked:= not popCommonStatus.Items[3].Checked;
-    popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuDXCountryListClick(Sender: TObject); //4
-begin
-    popCommonStatus.Items[4].Checked:= not popCommonStatus.Items[4].Checked;
-    popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuOwnCountryCountClick(Sender: TObject); //5
-begin
-   popCommonStatus.Items[5].Checked:= not popCommonStatus.Items[5].Checked;
-   popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuOwnCountryListClick(Sender: TObject);  //6
-begin
-   popCommonStatus.Items[6].Checked:= not popCommonStatus.Items[6].Checked;
-   popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuMsgMultipCountClick(Sender: TObject);  //7
-begin
-   popCommonStatus.Items[7].Checked:= not popCommonStatus.Items[7].Checked;
-   popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuMsgMultipListClick(Sender: TObject);  //8
-begin
-    popCommonStatus.Items[8].Checked:= not popCommonStatus.Items[8].Checked;
-    popCommonStatus.PopUp;
-end;
-
-procedure TfrmContest.mnuReSetAllClick(Sender: TObject);
+procedure TfrmContest.mnuReSetAllCountersClick(Sender: TObject);     //9
 var
     f: integer;
     b: boolean;
-begin
+    p:TPoint;
+Begin
+  p:=popCommonStatus.PopupPoint;
   b:= not popCommonStatus.Items[0].Checked;
   for f:=0 to 8 do
     popCommonStatus.Items[f].Checked:=b;
-  popCommonStatus.PopUp;
+  popCommonStatus.PopUp(p.x,p.y);
 end;
+
+procedure TfrmContest.mnuReSetAllHFClick(Sender: TObject);
+var
+    f: integer;
+    b: boolean;
+    p:TPoint;
+Begin
+  p:=popCommonStatus.PopupPoint;
+   b:= not popCommonStatus.Items[10].Checked;
+   for f:=10 to 15 do
+    begin
+     popCommonStatus.Items[f].Checked:=b;
+     sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
+    end;
+  popCommonStatus.PopUp(p.x,p.y);
+end;
+
+procedure TfrmContest.mnuReSetAllVHFClick(Sender: TObject);
+var
+    f: integer;
+    b: boolean;
+    p:TPoint;
+Begin
+  p:=popCommonStatus.PopupPoint;
+   b:= not popCommonStatus.Items[16].Checked;
+   for f:=16 to 20 do
+     begin
+      popCommonStatus.Items[f].Checked:=b;
+      sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
+     end;
+   popCommonStatus.PopUp(p.x,p.y);
+end;
+
+procedure TfrmContest.SaveClick(Sender: TObject);            //11
+var
+  CTST : TIniFile;
+  f:integer;
+begin
+  SaveDialog1.InitialDir := dmData.HomeDir;
+  if SaveDialog1.Execute then
+  begin
+    if pos('.',SaveDialog1.FileName)=0 then
+            SaveDialog1.FileName:=SaveDialog1.FileName+'.ctst'; //in case no extension
+    CTST := TIniFile.Create(SaveDialog1.FileName);
+    try
+      CTST.WriteString('frmContest', 'ContestName', cmbContestName.Text);
+
+      CTST.WriteBool('frmContest', 'TabAll', chkTabAll.Checked);
+      CTST.WriteBool('frmContest', 'ShowHint', chkHint.Checked);
+      CTST.WriteInteger('frmContest','CQperiod',spCQperiod.Value);
+      CTST.WriteInteger('frmContest','CQrepeat',spCQrepeat.Value);
+
+      CTST.WriteBool('frmContest', 'DupeCheck', rbDupeCheck.Checked);
+      CTST.WriteBool('frmContest', 'NoMode4Dupe', rbNoMode4Dupe.Checked);
+      CTST.WriteBool('frmContest', 'IgnoreDupes', rbIgnoreDupes.Checked);
+      CTST.WriteString('frmContest', 'DupeFrom', DupeFromDate);
+      CTST.WriteBool('frmContest', 'MarkDupe', chkMarkDupe.Checked);
+
+      CTST.WriteBool('frmContest', 'SpaceIsTab', chkSpace.Checked);
+      CTST.WriteBool('frmContest', 'TrueRST', chkTrueRST.Checked);
+      CTST.WriteBool('frmContest', 'NRInc', chkNRInc.Checked);
+      CTST.WriteBool('frmContest', 'QSP', chkQsp.Checked);
+      CTST.WriteBool('frmContest', 'NoNR', chkNoNr.Checked);
+      CTST.WriteBool('frmContest', 'Loc', chkLoc.Checked);
+      CTST.WriteString('frmContest','MsgIsStr',chkLoc.Caption);
+      CTST.WriteInteger('frmContest','MsgIs',MsgIs);
+
+      CTST.WriteString('frmContest', 'STX', edtSTX.Text);
+      CTST.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
+      CTST.WriteString('frmContest', 'ContestName', cmbContestName.Text);
+      CTST.WriteBool('frmContest', 'SP', chkSP.Checked);
+
+      CTST.WriteBool('frmContest', 'mnuQSOcount',mnuQSOcount.Checked);
+      CTST.WriteBool('frmContest', 'mnuDXQSOCount',mnuDXQSOCount.Checked);
+      CTST.WriteBool('frmContest', 'mnuCountyrCountAll',mnuCountyrCountAll.Checked);
+      CTST.WriteBool('frmContest', 'mnuDXCountryCount',mnuDXCountryCount.Checked);
+      CTST.WriteBool('frmContest', 'mnuDXCountryList',mnuDXCountryList.Checked);
+      CTST.WriteBool('frmContest', 'mnuDXCountryList',mnuDXCountryList.Checked);
+      CTST.WriteBool('frmContest', 'mnuOwnCountryList',mnuOwnCountryList.Checked);
+      CTST.WriteBool('frmContest', 'mnuMsgMultipCount',mnuMsgMultipCount.Checked);
+      CTST.WriteBool('frmContest', 'mnuMsgMultipList',mnuMsgMultipList.Checked);
+      CTST.WriteBool('frmContest', 'mnuModeRelated',mnuModeRelated.Checked);
+      CTST.WriteBool('frmContest', 'Band_160',Band_160.Checked);
+      CTST.WriteBool('frmContest', 'Band_80',Band_80.Checked);
+      CTST.WriteBool('frmContest', 'Band_40',Band_40.Checked);
+      CTST.WriteBool('frmContest', 'Band_20',Band_20.Checked);
+      CTST.WriteBool('frmContest', 'Band_15',Band_15.Checked);
+      CTST.WriteBool('frmContest', 'Band_10',Band_10.Checked);
+      CTST.WriteBool('frmContest', 'Band_6',Band_6.Checked);
+      CTST.WriteBool('frmContest', 'Band_4',Band_4.Checked);
+      CTST.WriteBool('frmContest', 'Band_2',Band_2.Checked);
+      CTST.WriteBool('frmContest', 'Band_070',Band_070.Checked);
+      CTST.WriteBool('frmContest', 'Band_023',Band_023.Checked);
+
+
+      CTST.UpdateFile;
+    finally
+      FreeAndNil(CTST);
+    end;
+  end;
+end;
+
+
+procedure TfrmContest.LoadClick(Sender: TObject);          //12
+  var
+  CTST : TIniFile;
+  f    : integer;
+begin
+ OpenDialog1.InitialDir := dmData.HomeDir;
+ if OpenDialog1.Execute then
+ begin
+   CTST := TIniFile.Create(OpenDialog1.FileName);
+   try
+      mnuQSOcount.Checked       := CTST.ReadBool('frmContest', 'mnuQSOcount',True);
+      mnuDXQSOCount.Checked     :=CTST.ReadBool('frmContest', 'mnuDXQSOCount',True);
+      mnuCountyrCountAll.Checked:=CTST.ReadBool('frmContest', 'mnuCountyrCountAll',True);
+      mnuDXCountryCount.Checked :=CTST.ReadBool('frmContest', 'mnuDXCountryCount',True);
+      mnuDXCountryList.Checked  :=CTST.ReadBool('frmContest', 'mnuDXCountryList',True);
+      mnuDXCountryList.Checked  :=CTST.ReadBool('frmContest', 'mnuDXCountryList',True);
+      mnuOwnCountryList.Checked :=CTST.ReadBool('frmContest', 'mnuOwnCountryList',True);
+      mnuMsgMultipCount.Checked :=CTST.ReadBool('frmContest', 'mnuMsgMultipCount',True);
+      mnuMsgMultipList.Checked  :=CTST.ReadBool('frmContest', 'mnuMsgMultipList',True);
+      mnuModeRelated.Checked    :=CTST.ReadBool('frmContest', 'mnuModeRelated',True);
+      Band_160.Checked          :=CTST.ReadBool('frmContest', 'Band_160',True);
+      Band_80.Checked           :=CTST.ReadBool('frmContest', 'Band_80',True);
+      Band_40.Checked           :=CTST.ReadBool('frmContest', 'Band_40',True);
+      Band_20.Checked           :=CTST.ReadBool('frmContest', 'Band_20',True);
+      Band_15.Checked           :=CTST.ReadBool('frmContest', 'Band_15',True);
+      Band_10.Checked           :=CTST.ReadBool('frmContest', 'Band_10',True);
+      Band_6.Checked            :=CTST.ReadBool('frmContest', 'Band_6',True);
+      Band_4.Checked            :=CTST.ReadBool('frmContest', 'Band_4',True);
+      Band_2.Checked            :=CTST.ReadBool('frmContest', 'Band_2',True);
+      Band_070.Checked          :=CTST.ReadBool('frmContest', 'Band_070',True);
+      Band_023.Checked          :=CTST.ReadBool('frmContest', 'Band_023',True);
+   finally
+     FreeAndNil(CTST);
+   end;
+ end;
+end;
+
+procedure TfrmContest.ChangeStatusPop(Sender: TObject);
+ Begin
+  TMenuitem(Sender).checked:= not TMenuitem(Sender).checked;
+  popCommonStatus.PopUp;
+ end;
 
 procedure TfrmContest.mnuNameClick(Sender: TObject);
 begin
@@ -1043,7 +1238,6 @@ procedure TfrmContest.rbIgnoreDupesChange(Sender: TObject);
 begin
   btDupChkStart.Visible:=not(rbIgnoreDupes.Checked);
 end;
-
 procedure TfrmContest.tmrESC2Timer(Sender: TObject);
 begin
   EscTimes := 0; //time for counts passed
@@ -1095,7 +1289,6 @@ Begin
   frmContest.SetFocus;
   edtCall.SetFocus;
 
-  cmbContestNameExit(nil);   //updates status view
   ClearStatusBar;
 end;
 
@@ -1274,7 +1467,8 @@ var
    M             : char;
    bands         : array [1..2] of string=('80M','40M');
 Begin
-    mStatus.Clear;
+   sgStatus.Visible:=False;
+   mStatus.Clear;
     for band:=2 downto 1 do
       begin
        try
@@ -1341,7 +1535,7 @@ var
     LOCList,
     distance: string;
 Begin
-
+    sgStatus.Visible:=False;
     QSOs:=0;
     LOCs:=0;
     MaxQRB:=0;
@@ -1442,38 +1636,78 @@ var
   DXList,
   SRXSList,
   MyCountList     : string;
-  ContestBandPtr  : array[0..10] of byte = (2,3,5,7,9,11,12,13,14,16,18);  // 160M to 23cm  Points to dUtils.cBands
+  ContestBandPtr  : array[0..10] of byte =
+   // contest bands 160M to 23cm  Points to dUtils.cBands [0..30]
+   // 160M  80M  40M  20M  15M  10M   6M    4M    2M    0,7M   0,23M
+      (2,    3,   5,   7,   9,  11,   13,   15,   16,    18,    20);
   b               : byte;
-  MsgMpSum        : integer;
 
+//-------------------------------------------------------------------------
+  procedure ByBandsStatus(UseRow:integer;SqlToUse,SqlColumn:string);
+  var
+    f : integer;
+
+  Begin
+      For f:=0 to 10 do
+        begin
+          dmData.CQ.Close;
+          if dmData.trCQ.Active then dmData.trCQ.Rollback;
+          if dmData.DebugLevel >=1 then
+                                   writeln(popCommonStatus.Items[f+10].Caption);
+          if  popCommonStatus.Items[f+10].Checked then
+           begin
+              dmData.CQ.SQL.Text := SqlToUse + ' AND band='+QuotedStr(dUtils.cBands[ContestBandPtr[f]]);
+              if mnuModeRelated.Checked then
+                     dmData.CQ.SQL.Text := dmData.CQ.SQL.Text+' AND mode='+QuotedStr(frmNewQso.cmbMode.Text);
+              if dmData.DebugLevel >=1 then
+                                     Writeln(dmData.CQ.SQL.Text);
+              dmData.CQ.Open();
+              sgStatus.Cells[f+2,UseRow]:=dmData.CQ.FieldByName(SqlColumn).AsString;
+           end;
+        end;
+  end;
+
+//--------------------------------------------------------------------------
 
  Begin
     DXList:='';
     MyCountList:='';
-
+    sgStatus.Visible:=True;
     mStatus.Clear;
 
     if popCommonStatus.Items[0].Checked or popCommonStatus.Items[2].Checked  then
      Begin
-        //total counts  of QSOs, countries and message multipliers
+        //total counts  of QSOs and countries + band & mode counts
         //--------------------------------------------------------------
-        dmData.CQ.Close;
-        if dmData.trCQ.Active then dmData.trCQ.Rollback;
-        dmData.CQ.SQL.Text :=
-           'SELECT COUNT(callsign) AS QSOs, COUNT(DISTINCT(adif)) AS Countries,'+
-           'COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
-             QuotedStr(cmbContestName.Text);
-
-        if dmData.DebugLevel >=1 then
-                                     Writeln(dmData.CQ.SQL.Text);
-        dmData.CQ.Open();
-
-        AllQsos:= dmData.CQ.FieldByName('QSOs').AsInteger;
         if popCommonStatus.Items[0].Checked then
-           mStatus.Lines.Add('QSO count: '+ dmData.CQ.FieldByName('QSOs').AsString);
+           Begin
+            dmData.CQ.Close;
+            if dmData.trCQ.Active then dmData.trCQ.Rollback;
+            dmData.CQ.SQL.Text :=
+               'SELECT COUNT(callsign) AS QSOs '+'FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text);
+
+             if dmData.DebugLevel >=1 then
+                                         Writeln(dmData.CQ.SQL.Text);
+             dmData.CQ.Open();
+             AllQsos:= dmData.CQ.FieldByName('QSOs').AsInteger;
+             sgStatus.Cells[1,1]:=dmData.CQ.FieldByName('QSOs').AsString;
+             ByBandsStatus(1,dmData.CQ.SQL.Text,'QSOs');
+           end;
 
         if popCommonStatus.Items[2].Checked then
-           mStatus.Lines.Add('Country count (all): '+dmData.CQ.FieldByName('Countries').AsString);
+            Begin
+            dmData.CQ.Close;
+            if dmData.trCQ.Active then dmData.trCQ.Rollback;
+            dmData.CQ.SQL.Text :=
+               'SELECT COUNT(DISTINCT(adif)) AS Countries '+'FROM cqrlog_main WHERE contestname='+QuotedStr(cmbContestName.Text);
+
+            if dmData.DebugLevel >=1 then
+                                         Writeln(dmData.CQ.SQL.Text);
+             dmData.CQ.Open();
+             sgStatus.Cells[1,3]:=dmData.CQ.FieldByName('Countries').AsString;
+             ByBandsStatus(3,dmData.CQ.SQL.Text,'Countries');
+            end;
+
       end;
 
     //DX QSO count
@@ -1488,7 +1722,8 @@ var
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      mStatus.Lines.Add('DX QSO count: '+ dmData.CQ.FieldByName('DXs').AsString);
+      sgStatus.Cells[1,2]:=dmData.CQ.FieldByName('DXs').AsString;
+      ByBandsStatus(2,dmData.CQ.SQL.Text,'DXs');
     end;
 
     //DX country count
@@ -1503,7 +1738,8 @@ var
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      mStatus.Lines.Add('DX Country count : '+dmData.CQ.FieldByName('DXCntrs').AsString);
+      sgStatus.Cells[1,4]:=dmData.CQ.FieldByName('DXCntrs').AsString;
+      ByBandsStatus(4,dmData.CQ.SQL.Text,'DXCntrs');
     end;
 
      //list of DX country prefixes
@@ -1544,7 +1780,9 @@ var
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      mStatus.Lines.Add(mycont+' Country count : '+dmData.CQ.FieldByName('MYCntrs').AsString);
+      sgStatus.Cells[0,5]:= mycont+'Ctrys';
+      sgStatus.Cells[1,5]:= dmData.CQ.FieldByName('MYCntrs').AsString;
+      ByBandsStatus(5,dmData.CQ.SQL.Text,'MYCntrs');
     end;
 
      //list of own continent country prefixes
@@ -1578,25 +1816,19 @@ var
     if popCommonStatus.Items[7].Checked then
      begin
       SRXSList:='';
-      MsgMpSum:=0;
-      for b:=0 to 10 do
         begin
             dmData.CQ.Close;
               if dmData.trCQ.Active then dmData.trCQ.Rollback;
               dmData.CQ.SQL.Text :=
                  'SELECT COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
-                   QuotedStr(cmbContestName.Text)+ ' AND band='+QuotedStr(dUtils.cBands[ContestBandPtr[b]])+
-                   ' AND srx_string<>""';
+                   QuotedStr(cmbContestName.Text)+' AND srx_string<>""';
 
               if dmData.DebugLevel >=1 then
                                            Writeln(dmData.CQ.SQL.Text);
             dmData.CQ.Open();
-            MsgMpSum:= MsgMpSum+dmData.CQ.FieldByName('Msgs').AsInteger;
-            if dmData.CQ.FieldByName('Msgs').AsInteger > 0 then
-               SRXSList:=SRXSList+dUtils.cBands[ContestBandPtr[b]]+'='+dmData.CQ.FieldByName('Msgs').AsString+', ';
            end;
-         mStatus.Lines.Add('Msg multipliers total='+IntToStr(MsgMpSum));
-         mStatus.Lines.Add('-'+copy(SRXSList,1,length(SRXSList)-2));
+         sgStatus.Cells[1,6]:=dmData.CQ.FieldByName('Msgs').AsString;
+         ByBandsStatus(6,dmData.CQ.SQL.Text,'Msgs');
         end;
 
     //list of different srx_strings (msg multipliers)
@@ -1631,6 +1863,7 @@ var
     dmData.CQ.Close;
    Rates;
 end;
+
 procedure  TfrmContest.Rates;
 Begin
   if AllQsos>0 then

@@ -1,13 +1,13 @@
 object frmContest: TfrmContest
-  Left = 378
-  Height = 367
-  Top = 156
-  Width = 685
+  Left = 473
+  Height = 636
+  Top = 164
+  Width = 827
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
-  ClientHeight = 367
-  ClientWidth = 685
+  ClientHeight = 636
+  ClientWidth = 827
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
@@ -115,7 +115,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblMSGr
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 588
+    Left = 730
     Height = 30
     Top = 107
     Width = 80
@@ -294,7 +294,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = btSave
     AnchorSideTop.Side = asrBottom
-    Left = 588
+    Left = 730
     Height = 30
     Top = 139
     Width = 80
@@ -308,7 +308,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 657
+    Left = 799
     Height = 25
     Hint = 'Help'
     Top = 11
@@ -370,7 +370,7 @@ object frmContest: TfrmContest
     AnchorSideRight.Side = asrBottom
     Left = 130
     Height = 34
-    Hint = 'Contestname, choose ADIF contest_id via combobox '#10'or type free text max 40 characters.'#10'Recommended to add contest year(week/month/day) if several'#10'contests are kept in same log. Helps Contest filter usage'#10'.'#10'If contest name combo box has name "Status" view is updated by '#10'CommonStatus rules. User can adjust that view.'#10'There are also predefined strings that cause contest specific '#10'Status displayed'
+    Hint = 'Contestname, choose ADIF contest_id via combobox '#10'or type free text max 40 characters.'#10'Recommended to add contest year(week/month/day) if several'#10'contests are kept in same log. Helps Contest filter usage'#10'.'#10'If contest name combo box has any name "Status" view is updated by '#10'CommonStatus rules. User can adjust rules by click of "Settings" below "Status".'#10'There are also predefined strings (nw MWC,OK1WC,NAC) that cause contest specific '#10'Status displayed if they appear in contest name.'
     Top = 6
     Width = 432
     Anchors = [akTop, akRight]
@@ -605,6 +605,7 @@ object frmContest: TfrmContest
       'YUDXC'
     )
     MaxLength = 40
+    OnEnter = cmbContestNameEnter
     OnExit = cmbContestNameExit
     ParentShowHint = False
     ShowHint = True
@@ -650,8 +651,8 @@ object frmContest: TfrmContest
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 19
-    Top = 348
-    Width = 685
+    Top = 617
+    Width = 827
     Panels = <    
       item
         Text = '0'
@@ -741,7 +742,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = rbDupeCheck
     AnchorSideTop.Side = asrCenter
-    Left = 588
+    Left = 730
     Height = 30
     Top = 185
     Width = 80
@@ -777,7 +778,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrCenter
     Left = 346
     Height = 23
-    Hint = 'When cheked form is in Search and Pounce mode where operator'#10'needs to launch all memory contents using function keys (F1-F9)'#10'With CW Messages this means "S&P(default)" set of memories.'#10'.'#10'When NOT checked message F2 is launched when cursor enters to'#10'one of RSTr, NRr or MSGr (F2 must be defined by operator)'#10'In case of duplicate call is found message F3 is launced instead'#10'of F2 when cursor leaves CALL column (F3 must be defined by operator)'#10'When QSO is saved  message F4 is lauched. (F4 must be defined by operator)'#10'With CW Messages this means "Run" set of memories.'#10'.'#10'When S&P checkbox changes state also CW message sets are switched.'#10'.'#10'CW messages can be stopped with one 1xESC key as usual.'#10#10'Suggestions for CW "Run" set message macros (NewQSO/File/CW messages):'#10'F1 = cq %mc test    (%mc is station call)'#10'F2 = %c %xrs          (%c call  %xrs sends CALL+ RST+STX+STXStr in short form.)'#10'F3 = %c QSO'#10'F4 = tu %mc test'
+    Hint = 'When cheked form is in Search and Pounce mode where operator'#10'needs to launch all memory contents using function keys (F1-F9)'#10'With CW Messages this means "S&P(default)" set of memories.'#10'.'#10'When NOT checked S&P, message F2 is launched when cursor enters to'#10'one of RSTr, NRr or MSGr (F2 must be defined by operator)'#10'In case of duplicate call is found message F3 is launced instead'#10'of F2 when cursor leaves CALL column (F3 must be defined by operator)'#10'When QSO is saved  message F4 is lauched. (F4 must be defined by operator)'#10'With CW Messages this means "Run" set of memory texts.'#10'.'#10'When S&P checkbox changes state also CW message sets are switched.'#10'.'#10'CW messages can be stopped with one 1xESC key as usual.'#10#10'Suggestions for CW "Run" set message macros (NewQSO/File/CW messages):'#10'F1 = cq %mc test    (%mc is station call)'#10'F2 = %c %xrs          (%c call  %xrs sends CALL+ RST+STX+STXStr in short form.)'#10'F3 = %c QSO'#10'F4 = tu %mc test'
     Top = 158
     Width = 52
     Caption = 'S&&P'
@@ -795,33 +796,32 @@ object frmContest: TfrmContest
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = sbContest
     Left = 6
-    Height = 130
+    Height = 399
     Top = 218
-    Width = 673
+    Width = 815
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 6
     BorderSpacing.Right = 6
     Caption = 'Status'
-    ClientHeight = 112
-    ClientWidth = 671
+    ClientHeight = 381
+    ClientWidth = 813
     TabOrder = 25
     OnClick = gbStatusClick
     object mStatus: TMemo
       AnchorSideLeft.Control = gbStatus
-      AnchorSideTop.Control = gbStatus
+      AnchorSideTop.Control = lblStatusSettings
+      AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = gbStatus
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = gbStatus
       AnchorSideBottom.Side = asrBottom
       Left = 3
-      Height = 91
-      Hint = 'Shows status of contest.'#10'If contest has any name common status counting is used. That'#10'includes QSO counts for all, dx and own continent with lists of'#10'DX and own continent prefixes.'#10'Also received messages are counted and listed allowing msg'#10'multiplier count.'#10'Use can control these with left click of mouse pointing between'#10'text "Status" and status display area'#10'.'#10'Currently if there are contest names that include "mwc"or "ok1wc"'#10'and "nac" those statuses are counted by MWC or NAC rules'#10'.'#10'Update is done evey time QSO is saved or 2xESC is pressed.'
-      Top = 18
-      Width = 665
-      Anchors = [akTop, akLeft, akRight, akBottom]
+      Height = 168
+      Hint = 'Shows status of contest.'#10'If contest has any name Common Status counting is used. That'#10'includes QSO counts for all, dx and own continent with lists of'#10'DX and own continent prefixes. There is also band based counting'#10'in grid that user can adjust. '#10'Also received messages are counted and listed allowing msg'#10'multiplier count.'#10'Use can control these with left click of mouse pointing "Settings"'#10'text of "Status" display area'#10'.'#10'Currently if there are contest names that include "mwc"or "ok1wc"'#10'and "nac" those statuses are counted by MWC or NAC rules'#10'.'#10'Update is done by timer on every 5 seconds.'
+      Top = 17
+      Width = 807
+      Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 3
-      BorderSpacing.Top = 18
       BorderSpacing.Right = 3
       BorderSpacing.Bottom = 3
       ParentShowHint = False
@@ -830,6 +830,74 @@ object frmContest: TfrmContest
       ShowHint = True
       TabOrder = 0
       TabStop = False
+    end
+    object sgStatus: TStringGrid
+      AnchorSideLeft.Control = gbStatus
+      AnchorSideTop.Control = mStatus
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = gbStatus
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = gbStatus
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 193
+      Top = 188
+      Width = 813
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      ColCount = 13
+      Columns = <      
+        item
+          Title.Caption = 'All'
+          Width = 64
+        end      
+        item
+          Title.Caption = '160'
+        end      
+        item
+          Title.Caption = '80'
+        end      
+        item
+          Title.Caption = '40'
+        end      
+        item
+          Title.Caption = '20'
+        end      
+        item
+          Title.Caption = '15'
+        end      
+        item
+          Title.Caption = '10'
+        end      
+        item
+          Title.Caption = '6'
+        end      
+        item
+          Title.Caption = '4'
+        end      
+        item
+          Title.Caption = '2'
+        end      
+        item
+          Title.Caption = '070'
+        end      
+        item
+          Title.Caption = '023'
+        end>
+      RowCount = 7
+      TabOrder = 1
+    end
+    object lblStatusSettings: TLabel
+      AnchorSideLeft.Control = gbStatus
+      AnchorSideTop.Control = gbStatus
+      Left = 6
+      Height = 17
+      Hint = 'Click this for settings of Common status display.'#10'Pop up menu is opened and you can select what items are displayed for'#10'selected bands.'#10'-'#10'There is also select for taking current rig mode account when filling band grid.'#10'When selected only rig mode qsos are counted, otherwise all qsos independed'#10'of mode used.'#10'-'#10'Contest and Common status can also be saved/loaded via this popup.'#10'So user can define settings for specific contest and save them for future.'
+      Top = 0
+      Width = 53
+      BorderSpacing.Left = 6
+      Caption = 'Settings'
+      ParentColor = False
+      OnClick = gbStatusClick
     end
   end
   object chkMarkDupe: TCheckBox
@@ -1117,46 +1185,117 @@ object frmContest: TfrmContest
     object mnuDXQSOCount: TMenuItem
       Caption = 'DX QSO count'
       Checked = True
-      OnClick = mnuDXQSOCountClick
+      OnClick = mnuQSOcountClick
     end
     object mnuCountyrCountAll: TMenuItem
       Caption = 'Country count all'
       Checked = True
-      OnClick = mnuCountyrCountAllClick
+      OnClick = mnuQSOcountClick
     end
     object mnuDXCountryCount: TMenuItem
       Caption = 'DX country count'
       Checked = True
-      OnClick = mnuDXCountryCountClick
+      OnClick = mnuQSOcountClick
     end
     object mnuDXCountryList: TMenuItem
       Caption = 'DX country list'
       Checked = True
-      OnClick = mnuDXCountryListClick
+      OnClick = mnuQSOcountClick
     end
     object mnuOwnCountryCount: TMenuItem
       Caption = 'Own country count'
       Checked = True
-      OnClick = mnuOwnCountryCountClick
+      OnClick = mnuQSOcountClick
     end
     object mnuOwnCountryList: TMenuItem
       Caption = 'Own country list'
       Checked = True
-      OnClick = mnuOwnCountryListClick
+      OnClick = mnuQSOcountClick
     end
     object mnuMsgMultipCount: TMenuItem
       Caption = 'Msg multip count'
       Checked = True
-      OnClick = mnuMsgMultipCountClick
+      OnClick = mnuQSOcountClick
     end
     object mnuMsgMultipList: TMenuItem
       Caption = 'Msg multip list'
       Checked = True
-      OnClick = mnuMsgMultipListClick
+      OnClick = mnuQSOcountClick
     end
-    object mnuReSetAll: TMenuItem
-      Caption = 'Re/Set All'
-      OnClick = mnuReSetAllClick
+    object Separator1: TMenuItem
+      Caption = '-'
+      Checked = True
+    end
+    object Band_160: TMenuItem
+      Caption = 'Band_160'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_80: TMenuItem
+      Caption = 'Band_80'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_40: TMenuItem
+      Caption = 'Band_40'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_20: TMenuItem
+      Caption = 'Band_20'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_15: TMenuItem
+      Caption = 'Band_15'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_10: TMenuItem
+      Caption = 'Band_10'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_6: TMenuItem
+      Caption = 'Band_6'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_4: TMenuItem
+      Caption = 'Band_4'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_2: TMenuItem
+      Caption = 'Band_2'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_070: TMenuItem
+      Caption = 'Band_070'
+      OnClick = mnuQSOcountClick
+    end
+    object Band_023: TMenuItem
+      Caption = 'Band_023'
+      OnClick = mnuQSOcountClick
+    end
+    object Separator2: TMenuItem
+      Caption = '-'
+    end
+    object mnuModeRelated: TMenuItem
+      Caption = 'Mode related count'
+      OnClick = mnuQSOcountClick
+    end
+    object mnuReSetAllCounters: TMenuItem
+      Caption = 'Re/Set All counters'
+      OnClick = mnuReSetAllCountersClick
+    end
+    object mnuReSetAllHF: TMenuItem
+      Caption = 'Re/Set all HF'
+      OnClick = mnuReSetAllHFClick
+    end
+    object mnuReSetAllVHF: TMenuItem
+      Caption = 'Re/Set all VHF'
+      OnClick = mnuReSetAllVHFClick
+    end
+    object Save: TMenuItem
+      Caption = 'Save'
+      OnClick = SaveClick
+    end
+    object Load: TMenuItem
+      Caption = 'Load'
+      OnClick = LoadClick
     end
     object mnuExit: TMenuItem
       Caption = 'Exit  (Esc key)'
@@ -1170,8 +1309,25 @@ object frmContest: TfrmContest
     Top = 264
   end
   object tmrScore: TTimer
+    Interval = 5000
     OnTimer = tmrScoreTimer
     Left = 624
+    Top = 264
+  end
+  object OpenDialog1: TOpenDialog
+    Title = 'Open Contest settings file'
+    DefaultExt = '.ctst'
+    Filter = 'Contest settings|*.ctst|All files|*'
+    Options = [ofPathMustExist, ofFileMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
+    Left = 680
+    Top = 264
+  end
+  object SaveDialog1: TSaveDialog
+    Title = 'Save Contest settings as'
+    DefaultExt = '.ctst'
+    Filter = 'Contest settings|*.ctst|All files|*'
+    Options = [ofOverwritePrompt, ofPathMustExist, ofEnableSizing, ofViewDetail]
+    Left = 736
     Top = 264
   end
 end
