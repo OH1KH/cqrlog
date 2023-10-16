@@ -1927,32 +1927,5 @@ Begin
     end;   // AllQsos>0
     dmData.CQ.Close;
 end;
-{procedure TfrmContest.sgStatusPrepareCanvas(sender: TObject; aCol, aRow: Integer;aState: TGridDrawState);
-var
-  i: Integer;
-begin
 
-  if not(sender is TStringGrid) then Exit;
-                                                //fit this excample to count grid
-  // Background of the search row is moneygreen
-  if (aRow = 1) and (aCol > 0) then
-    (sender as TStringGrid).Canvas.Brush.Color := clMoneyGreen;
-
-  // If search cell has text, change the cell color to red
-  if (aRow = 1) and (sgStatus.Cells[aCol, aRow] <> '') then
-    (sender as TStringGrid).Canvas.Brush.Color := clAqua;
-
-  // Highlight selected column's header with green
-  if (aRow = 0) and (aCol = sgStatus.Col) then
-    (sender as TStringGrid).Canvas.Brush.Color := clGreen;
-
-  // Background of search result cells is yellow
-  for i := Low(Results) to High(Results) do
-    if (Results[i].Col = aCol) and (Results[i].Row = aRow) then
-    begin
-      (sender as TStringGrid).Canvas.Brush.Color := clYellow;
-      Exit; // Exit immediately after found, to improve performance
-    end;
-
-end;}
 end.
