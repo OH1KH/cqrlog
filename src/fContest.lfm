@@ -885,6 +885,7 @@ object frmContest: TfrmContest
         end>
       RowCount = 7
       TabOrder = 1
+      OnPrepareCanvas = sgStatusPrepareCanvas
     end
     object lblStatusSettings: TLabel
       AnchorSideLeft.Control = gbStatus

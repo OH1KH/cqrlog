@@ -161,6 +161,8 @@ type
     procedure mnuNameClick(Sender: TObject);
     procedure rbIgnoreDupesChange(Sender: TObject);
     procedure SaveClick(Sender: TObject);
+    procedure sgStatusPrepareCanvas(Sender: TObject; aCol, aRow: Integer;
+      aState: TGridDrawState);
     procedure spCQperiodChange(Sender: TObject);
     procedure tmrCQTimer(Sender: TObject);
     procedure tmrESC2Timer(Sender: TObject);
@@ -174,6 +176,7 @@ type
       QsoRate10,
       QsoRate60,
       QsoSince        : integer;
+
     procedure SetActualReportForModeFromRadio;
     procedure InitInput;
     procedure ChkSerialNrUpd(IncNr: boolean);
@@ -221,7 +224,10 @@ var
   FmemorySent: Boolean;  //for semiAuto sending
 
   CQcount   : integer;
-
+  ContestBandPtr  : array[0..10] of byte =
+   // contest bands 160M to 23cm  Points to dUtils.cBands [0..30]
+   // 160M  80M  40M  20M  15M  10M   6M    4M    2M    0,7M   0,23M
+      (2,    3,   5,   7,   9,  11,   13,   15,   16,    18,    20);
 
 implementation
 
@@ -1133,6 +1139,23 @@ begin
   end;
 end;
 
+procedure TfrmContest.sgStatusPrepareCanvas(Sender: TObject; aCol,aRow: Integer; aState: TGridDrawState);
+var
+  f:integer;
+begin
+   for f:=0 to 10 do
+    Begin
+     if dUtils.cBands[ContestBandPtr[f]] = dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) then
+       Break;  //found current band
+    end;
+   if dUtils.cBands[ContestBandPtr[f]] <> dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) then
+       exit;   //not in contest band list
+   if (aCol = f+2) and ((aRow >= 1) and (aRow <= 6)) then
+     begin
+      sgStatus.Canvas.Brush.Color := clYellow;
+     end;
+end;
+
 
 procedure TfrmContest.LoadClick(Sender: TObject);          //12
   var
@@ -1636,10 +1659,6 @@ var
   DXList,
   SRXSList,
   MyCountList     : string;
-  ContestBandPtr  : array[0..10] of byte =
-   // contest bands 160M to 23cm  Points to dUtils.cBands [0..30]
-   // 160M  80M  40M  20M  15M  10M   6M    4M    2M    0,7M   0,23M
-      (2,    3,   5,   7,   9,  11,   13,   15,   16,    18,    20);
   b               : byte;
 
 //-------------------------------------------------------------------------
@@ -1908,5 +1927,32 @@ Begin
     end;   // AllQsos>0
     dmData.CQ.Close;
 end;
+{procedure TfrmContest.sgStatusPrepareCanvas(sender: TObject; aCol, aRow: Integer;aState: TGridDrawState);
+var
+  i: Integer;
+begin
 
+  if not(sender is TStringGrid) then Exit;
+                                                //fit this excample to count grid
+  // Background of the search row is moneygreen
+  if (aRow = 1) and (aCol > 0) then
+    (sender as TStringGrid).Canvas.Brush.Color := clMoneyGreen;
+
+  // If search cell has text, change the cell color to red
+  if (aRow = 1) and (sgStatus.Cells[aCol, aRow] <> '') then
+    (sender as TStringGrid).Canvas.Brush.Color := clAqua;
+
+  // Highlight selected column's header with green
+  if (aRow = 0) and (aCol = sgStatus.Col) then
+    (sender as TStringGrid).Canvas.Brush.Color := clGreen;
+
+  // Background of search result cells is yellow
+  for i := Low(Results) to High(Results) do
+    if (Results[i].Col = aCol) and (Results[i].Row = aRow) then
+    begin
+      (sender as TStringGrid).Canvas.Brush.Color := clYellow;
+      Exit; // Exit immediately after found, to improve performance
+    end;
+
+end;}
 end.
