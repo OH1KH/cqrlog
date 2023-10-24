@@ -1139,6 +1139,7 @@ var
   int  : integer;
   KeyType: TKeyType;
 begin
+  btnCancel.Enabled:=True;
   cqrini.SetCache(True);
   cqrini.WriteString('Station', 'Call', edtCall.Text);
   cqrini.WriteString('Station', 'Name', edtName.Text);
@@ -1724,6 +1725,11 @@ end;
 
 procedure TfrmPreferences.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
+  if btnCancel.enabled=False then
+                             Begin
+                                 canClose:=false;
+                                 Exit;
+                             end;
   dmUtils.SaveWindowPos(self);
   cqrini.WriteInteger('Pref', 'ActPageIdx', pgPreferences.ActivePageIndex);
 end;
@@ -2163,7 +2169,9 @@ var
 begin
   frmConfigStorage := TfrmConfigStorage.Create(nil);
   try
-    frmConfigStorage.ShowModal
+    //if this is done OK preferences must be closed by OK, not with Cancel, to take effect.
+    if frmConfigStorage.ShowModal=MrOk then
+                         btnCancel.Enabled:=false;                ;
   finally
     FreeAndNil(frmConfigStorage)
   end

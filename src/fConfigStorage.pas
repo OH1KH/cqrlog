@@ -185,6 +185,7 @@ begin
     Sections := Sections + 'WindowSize,Window,Grayline,';
   if cmbStoreColumnSize.ItemIndex>0 then
     Sections := Sections + 'ColumnSize,';
+  cqrini.lini.Clear;
   cqrini.WriteString('ConfigStorage','Items',Sections);
   cqrini.LoadLocalSectionsList;
   ModalResult := mrOK
