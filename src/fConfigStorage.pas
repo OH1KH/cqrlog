@@ -168,9 +168,9 @@ begin
   if cmbStoreLoTW.ItemIndex>0 then
     Sections := Sections + 'LoTW,';
   if cmbStoreCWInterface.ItemIndex>0 then
-    Sections := Sections + 'CW,CW1,CW2,CW3,CW4,CW5,CW6';
+    Sections := Sections + 'CW,CW1,CW2,CW3,CW4,CW5,CW6,';
   if cmbStoreFldigiInterface.ItemIndex>0 then
-    Sections := Sections + 'fldigi,wsjt,n1mm';
+    Sections := Sections + 'fldigi,wsjt,n1mm,';
   if cmbStoreAutoBackup.ItemIndex>0 then
     Sections := Sections + 'Backup,';
   if cmbStoreExtViewers.ItemIndex>0 then
@@ -185,7 +185,6 @@ begin
     Sections := Sections + 'WindowSize,Window,Grayline,';
   if cmbStoreColumnSize.ItemIndex>0 then
     Sections := Sections + 'ColumnSize,';
-  cqrini.lini.Clear;
   cqrini.WriteString('ConfigStorage','Items',Sections);
   cqrini.LoadLocalSectionsList;
   ModalResult := mrOK
