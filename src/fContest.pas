@@ -474,9 +474,9 @@ begin
   if dmData.DebugLevel >= 1 then
     Writeln('input finale');
   ChkSerialNrUpd(chkNRInc.Checked);
-  initInput;
   QsoSince:=0;
   tmrScore.Enabled:=true;
+  initInput;
 end;
 
 procedure TfrmContest.btClearAllClick(Sender: TObject);
@@ -966,8 +966,6 @@ begin
   Band_070.Checked          :=cqrini.ReadBool('frmContest', 'Band_070',True);
   Band_023.Checked          :=cqrini.ReadBool('frmContest', 'Band_023',True);
 
-  InitInput;
-
   sbContest.Panels[0].Width := 450;
   sbContest.Panels[1].Width := 65;
   sbContest.Panels[2].Width := 65;
@@ -991,6 +989,8 @@ begin
   CQcount:=0;
   chkSPClick(nil); //to set the right color to TX labels
   sgStatus.Visible:=False;
+
+  InitInput;
 end;
 
 procedure TfrmContest.MsgIsPopChk(nr:integer);
@@ -1308,11 +1308,11 @@ Begin
   EscTimes := 0;
 
   SetTabOrders;
+  ClearStatusBar;
   frmContest.ShowOnTop;
   frmContest.SetFocus;
   edtCall.SetFocus;
 
-  ClearStatusBar;
 end;
 
 procedure TfrmContest.ChkSerialNrUpd(IncNr: boolean);   // do we need serial nr inc
