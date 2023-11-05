@@ -5789,6 +5789,20 @@ begin
 
   if ((Shift = [ssCtrl]) and (key = VK_F2)) then
   begin
+    if fViewQSO then
+      begin
+        if (not (fViewQSO or fEditQSO or cbOffline.Checked)) then
+        tmrRadio.Enabled := True;
+        btnSave.Enabled  := True;
+        for i:=0 to ComponentCount-1 do
+        begin
+          if (frmNewQSO.Components[i] is TEdit) then
+             (frmNewQSO.Components[i] As TEdit).ReadOnly := False;
+        end;
+        edtDate.ReadOnly  := False;
+        mComment.ReadOnly := False;
+        edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
+      end;
     Caption := dmUtils.GetNewQSOCaption('New QSO');
     fViewQSO := False;
     fEditQSO := False;
