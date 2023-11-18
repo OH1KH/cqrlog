@@ -39,7 +39,6 @@ type
     edtSRX: TEdit;
     edtSRXStr: TEdit;
     gbStatus: TGroupBox;
-    lblStatusSettings: TLabel;
     lblQSOSince: TLabel;
     lblRate10: TLabel;
     lblRate60: TLabel;
@@ -161,6 +160,8 @@ type
     procedure mnuNameClick(Sender: TObject);
     procedure rbIgnoreDupesChange(Sender: TObject);
     procedure SaveClick(Sender: TObject);
+    procedure sgStatusMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure sgStatusPrepareCanvas(Sender: TObject; aCol, aRow: Integer;
       aState: TGridDrawState);
     procedure spCQperiodChange(Sender: TObject);
@@ -692,7 +693,6 @@ begin
     or (pos('OK1WC',uppercase(cmbContestName.Text))>0)) then
       Begin
         UseStatus:=1; //OK1WC memorial contest
-        lblStatusSettings.Visible:=False;
         MWCStatus;
         Exit;
       end;
@@ -700,7 +700,6 @@ begin
     if (pos('NAC',uppercase(cmbContestName.Text))>0) then
       Begin
         UseStatus:=2; //Nordic V,U,SHF activity contest
-        lblStatusSettings.Visible:=False;
         NACStatus;
         Exit;
       end;
@@ -709,14 +708,13 @@ begin
     //if you create a Status procedure you can call it here
     if (pos('xxxx',uppercase(cmbContestName.Text))>0) then
       Begin
-        UseStatus:=3; //Next ststus counting procedure
+        UseStatus:=3; //Next status counting procedure to be #3
         xxxxStatus;
         Exit;
       end;
      }
 
      UseStatus:=0;  //Common status display for contests where name does not fit to any above
-     lblStatusSettings.Visible:=True;
      for f:=10 to 20 do
       sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
      tmrScore.Enabled:=True;
@@ -830,6 +828,7 @@ begin
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
   QsoSince:=0;
+  sgStatus.Cells[0,0]:='Settings';
   sgStatus.Cells[0,1]:='QSOs';
   sgStatus.Cells[0,2]:='DXs';
   sgStatus.Cells[0,3]:='Ctrys';
@@ -1008,8 +1007,7 @@ end;
 
 procedure TfrmContest.gbStatusClick(Sender: TObject);
 begin
-    if UseStatus<>0 then exit;
-    popCommonStatus.PopUp;
+
 end;
 
 procedure TfrmContest.mnuQSOcountClick(Sender: TObject);   //This works for all selections
@@ -1137,6 +1135,16 @@ begin
       FreeAndNil(CTST);
     end;
   end;
+end;
+
+procedure TfrmContest.sgStatusMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var w,h:integer;
+begin
+  w:=sgStatus.ColWidths[0];
+  h:=sgStatus.RowHeights[0];
+  if ( (x<w) and (y<h) and (UseStatus=0) ) then
+     popCommonStatus.PopUp;
 end;
 
 procedure TfrmContest.sgStatusPrepareCanvas(Sender: TObject; aCol,aRow: Integer; aState: TGridDrawState);

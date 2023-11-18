@@ -807,18 +807,16 @@ object frmContest: TfrmContest
     ClientHeight = 381
     ClientWidth = 813
     TabOrder = 25
-    OnClick = gbStatusClick
     object mStatus: TMemo
       AnchorSideLeft.Control = gbStatus
-      AnchorSideTop.Control = lblStatusSettings
-      AnchorSideTop.Side = asrBottom
+      AnchorSideTop.Control = gbStatus
       AnchorSideRight.Control = gbStatus
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
       Left = 3
       Height = 168
       Hint = 'Shows status of contest.'#10'If contest has any name Common Status counting is used. That'#10'includes QSO counts for all, dx and own continent with lists of'#10'DX and own continent prefixes. There is also band based counting'#10'in grid that user can adjust. '#10'Also received messages are counted and listed allowing msg'#10'multiplier count.'#10'Use can control these with left click of mouse pointing "Settings"'#10'text of "Status" display area'#10'.'#10'Currently if there are contest names that include "mwc"or "ok1wc"'#10'and "nac" those statuses are counted by MWC or NAC rules'#10'.'#10'Update is done by timer on every 5 seconds.'
-      Top = 17
+      Top = 0
       Width = 807
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 3
@@ -840,8 +838,8 @@ object frmContest: TfrmContest
       AnchorSideBottom.Control = gbStatus
       AnchorSideBottom.Side = asrBottom
       Left = 0
-      Height = 193
-      Top = 188
+      Height = 210
+      Top = 171
       Width = 813
       Anchors = [akTop, akLeft, akRight, akBottom]
       ColCount = 13
@@ -885,20 +883,8 @@ object frmContest: TfrmContest
         end>
       RowCount = 7
       TabOrder = 1
+      OnMouseUp = sgStatusMouseUp
       OnPrepareCanvas = sgStatusPrepareCanvas
-    end
-    object lblStatusSettings: TLabel
-      AnchorSideLeft.Control = gbStatus
-      AnchorSideTop.Control = gbStatus
-      Left = 6
-      Height = 17
-      Hint = 'Click this for settings of Common status display.'#10'Pop up menu is opened and you can select what items are displayed for'#10'selected bands.'#10'-'#10'There is also select for taking current rig mode account when filling band grid.'#10'When selected only rig mode qsos are counted, otherwise all qsos independed'#10'of mode used.'#10'-'#10'Contest and Common status can also be saved/loaded via this popup.'#10'So user can define settings for specific contest and save them for future.'
-      Top = 0
-      Width = 53
-      BorderSpacing.Left = 6
-      Caption = 'Settings'
-      ParentColor = False
-      OnClick = gbStatusClick
     end
   end
   object chkMarkDupe: TCheckBox
@@ -1310,7 +1296,7 @@ object frmContest: TfrmContest
     Top = 264
   end
   object tmrScore: TTimer
-    Interval = 5000
+    Interval = 3000
     OnTimer = tmrScoreTimer
     Left = 624
     Top = 264
