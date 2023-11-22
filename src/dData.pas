@@ -25,7 +25,7 @@ uses
 const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 19;
-  cDB_COMN_VER = 6;
+  cDB_COMN_VER = 7;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -2787,6 +2787,25 @@ begin
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
       end;
+
+       if old_version < 7 then
+      begin
+        Q1.SQL.Text := 'DROP TABLE IF EXISTS  cqrlog_common.states';
+        //if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'CREATE TABLE cqrlog_common.states ( id_states INT AUTO_INCREMENT PRIMARY KEY,'
+                      +'callsign VARCHAR(20) NOT NULL, call_qth VARCHAR(60)DEFAULT "",'
+                      +'call_state VARCHAR(4) DEFAULT "")';
+        //if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'CREATE INDEX callsign ON cqrlog_common.states(callsign)';
+        //if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+      end;
+
 
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
