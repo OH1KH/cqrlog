@@ -2803,7 +2803,7 @@ begin
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         Q1.SQL.Text := 'CREATE INDEX callsign ON cqrlog_common.states(callsign)';
-        //if fDebugLevel>=1 then
+        if fDebugLevel>=1 then
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         cqrini.DeleteKey('MonWsjtx', 'FCC_Addr');  //delete old key if exist

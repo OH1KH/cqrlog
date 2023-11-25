@@ -52,6 +52,7 @@ type
     tbmyAlrt: TToggleBox;
     tbFollow: TToggleBox;
     tbTCAlert: TToggleBox;
+    tmrStartupDone: TTimer;
     tmrUSDB: TTimer;
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
@@ -94,6 +95,7 @@ type
     procedure tbmyAlrtChange(Sender: TObject);
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
+    procedure tmrStartupDoneTimer(Sender: TObject);
     procedure tmrUSDBTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
   private
@@ -766,7 +768,7 @@ var
   i,c                :integer;
 begin
   cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
-  if chkUState.Checked then
+  if chkUState.Checked  then;
     Begin
       if LocalDbg then  Writeln('State check activated');
       SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
@@ -1012,6 +1014,13 @@ begin
   end;
   sgMonitor.Repaint;
 end;
+
+procedure TfrmMonWsjtx.tmrStartupDoneTimer(Sender: TObject);
+begin   //post actions after window has opened.
+   tmrStartupDone.Enabled:=False;
+   chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
+end;
+
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
 begin
   tmrFollow.Enabled := False;
@@ -1122,7 +1131,6 @@ begin
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
-  chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
   SetAllbitmaps;
   edtFollow.Font.Name := sgMonitor.Font.Name;
   edtFollow.Font.Size := sgMonitor.Font.Size;
@@ -1147,7 +1155,7 @@ begin
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
         LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
-
+  tmrStartupDone.Enabled:=True;    //post actions
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -2212,7 +2220,7 @@ Var
   sz : integer;
 begin
   tmrUSDB.Enabled:=False;
-
+   chkUState.Enabled:= false;
           if DProcess <> nil then
               if LocalDbg then Writeln('Dprocess running');
 
@@ -2253,7 +2261,6 @@ case  DPstarted of
                  Application.ProcessMessages;
                end;
                CloseUSDBProcess;
-               //chkUState.Checked:=True; //causes recall
               end;
           end;
 end;
@@ -2262,9 +2269,9 @@ procedure  TfrmMonWsjtx.BuildUSDBState;
 var
   s,t: string;
   p,r: longint;
-
+  l    :integer;
 begin
-  r:=0; p:=0;
+  r:=0; p:=0; l:=0;
   if not FileExists(dmData.HomeDir+C_STATE_SOURCE) then
    Begin  //failed download
     CanCloseUSDBProcess:=true;
@@ -2275,11 +2282,11 @@ begin
   CanCloseUSDBProcess:=false;
   tmrUSDB.Enabled:=True;
   DPstarted:=3;
-  frmProgress.Show;
+  frmProgress.ShowOnTop;
   frmProgress.DoInit(350,1);
   frmProgress.DoStep('Abt 1,5M calls takes a while...');
   Application.ProcessMessages;
-
+  sleep(100);
 
   AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
    try
@@ -2287,10 +2294,14 @@ begin
     if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
 
     try
-       try
-          //drop old table here
+        try
+         //drop old table here
           if dmData.trQstate.Active then dmData.trQstate.Rollback;
           dmData.trQstate.StartTransaction;
+            dmData.Qstate.SQL.Text := 'DROP INDEX IF EXISTS callsign ON cqrlog_common.states;';
+            if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
+            dmData.Qstate.ExecSQL;
+
           dmData.Qstate.SQL.Text := 'truncate table cqrlog_common.states';
           if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
           dmData.Qstate.ExecSQL;
@@ -2306,31 +2317,35 @@ begin
     finally
       if dmData.trQstate.Active then dmData.trQstate.Rollback;
     end;
+    dmData.Qstate.SQL.Text := 'insert into cqrlog_common.states (callsign,call_qth,call_state) values ';
 
-    while not eof(tfIn) do
-    begin
-     readln(tfIn, s);
-
-     if r > 4999 then
-      Begin
-       p:=p+r;
-       r:=0;
-       frmProgress.DoStep(IntToStr(p)+' callsigns added...');
-       Application.ProcessMessages;
-      end;
-
+    try
+     while not eof(tfIn) do
+     begin
+      readln(tfIn, s);
       if s<>'' then
       begin
        //unfortunately qth names in file may contain ' or " chars, replace them with space
         s:=StringReplace(s,#39,' ',[rfReplaceAll]);
         s:=StringReplace(s,'"',' ',[rfReplaceAll]);
-       try
+        s:=StringReplace(s,'|',#39+#44+#39,[rfReplaceAll]);
         try
-           dmData.Qstate.SQL.Text := 'insert into cqrlog_common.states (callsign,call_qth,call_state) values '
-                                    +'('+#39+StringReplace(s,'|',#39+#44+#39,[rfReplaceAll])+#39+')';
+           dmData.Qstate.SQL.Text := dmData.Qstate.SQL.Text
+                                    +'('+#39+s+#39+')';
 
-          inc(r);
-          dmData.Qstate.ExecSQL;
+          inc(r);inc(l);
+          if l<500 then
+                      Begin
+                        dmData.Qstate.SQL.Text := dmData.Qstate.SQL.Text+',';
+                      end
+                else
+                      Begin
+                        l:=0;
+                        Application.ProcessMessages;
+                        dmData.Qstate.ExecSQL;
+                        dmData.Qstate.SQL.Text := 'insert into cqrlog_common.states (callsign,call_qth,call_state) values ';
+                      end;
+
         except
           on E : Exception do
           begin
@@ -2340,12 +2355,26 @@ begin
             exit;
           end
         end
-       finally
-           dmData.trQstate.Commit;
-          if dmData.trQstate.Active then dmData.trQstate.Rollback;
-       end
-      end;
-    end;
+       end;  // if s
+       if r > 4999 then
+                    Begin
+                     p:=p+r;
+                     r:=0;
+                     frmProgress.DoStep(IntToStr(p)+' callsigns added...');
+                    end;
+      end;   //while
+      finally
+            if l>0 then
+                Begin
+                 dmData.Qstate.SQL.Text:= copy(dmData.Qstate.SQL.Text,1,length(dmData.Qstate.SQL.Text)-2); //remove last comma
+                 dmData.Qstate.ExecSQL;
+                end;
+            dmData.Qstate.SQL.Text :='CREATE INDEX callsign ON cqrlog_common.states(callsign)';
+            if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
+            dmData.Qstate.ExecSQL;
+            dmData.trQstate.Commit;
+            if dmData.trQstate.Active then dmData.trQstate.Rollback;
+         end
    except
     on E: EInOutError do
      writeln('File handling error occurred. Details: ', E.Message);
@@ -2432,6 +2461,7 @@ var
      writeln('Error Details: ', E.Message);
     end;
    frmProgress.hide;
+   Application.ProcessMessages;
 end;
 Procedure  TfrmMonWsjtx.CloseUSDBProcess;
 begin
@@ -2446,6 +2476,7 @@ begin
   frmProgress.Hide;
   DPstarted:=0;
   tmrUSDB.Enabled:=False;
+  chkUState.Enabled:=True;
   end;
 end;
 Procedure  TfrmMonWsjtx.USDBProcessFailed;
@@ -2458,12 +2489,12 @@ begin
 end;
 procedure  TfrmMonWsjtx.BuildUSDBStateDump;
 Begin
-
+//this could be faster but needs attention on mysql running as safe thread or external server
 //first drop table
 
 //Then make mysqldump from empty table
 
-//then add usdbdata to dump file
+//then add fixed usdbraw to dump file
 
 //then do mysql import from fixed dump file
 

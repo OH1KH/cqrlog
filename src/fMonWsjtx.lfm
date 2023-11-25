@@ -638,4 +638,11 @@ object frmMonWsjtx: TfrmMonWsjtx
     Left = 104
     Top = 144
   end
+  object tmrStartupDone: TTimer
+    Enabled = False
+    Interval = 2000
+    OnTimer = tmrStartupDoneTimer
+    Left = 288
+    Top = 144
+  end
 end
