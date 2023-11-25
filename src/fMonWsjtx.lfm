@@ -12,7 +12,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnDropFiles = FormDropFiles
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.6.0'
   object pnlAlert: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
@@ -72,8 +72,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 239
-      Height = 33
-      Top = 6
+      Height = 34
+      Top = 5
       Width = 100
       BorderSpacing.Bottom = 4
       OnEnter = EditAlertEnter
@@ -176,8 +176,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideRight.Control = pnlFollow
       AnchorSideRight.Side = asrBottom
       Left = 155
-      Height = 33
-      Top = 6
+      Height = 34
+      Top = 5
       Width = 419
       Align = alCustom
       Anchors = [akTop, akLeft, akRight]
@@ -194,8 +194,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 72
-      Height = 33
-      Top = 6
+      Height = 34
+      Top = 5
       Width = 80
       BorderSpacing.Left = 3
       OnEnter = edtFollowCallEnter
@@ -226,7 +226,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Side = asrBottom
     Left = 52
-    Height = 15
+    Height = 17
     Top = 34
     Width = 479
     BorderSpacing.Top = 5
@@ -393,13 +393,13 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
     Left = 60
-    Height = 31
+    Height = 32
     Top = 0
-    Width = 462
+    Width = 463
     AutoSize = True
     BorderWidth = 3
-    ClientHeight = 31
-    ClientWidth = 462
+    ClientHeight = 32
+    ClientWidth = 463
     TabOrder = 5
     Visible = False
     OnClick = pnlSelectsClick
@@ -411,7 +411,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 100
       Height = 23
-      Top = 4
+      Top = 5
       Width = 56
       BorderSpacing.Top = 6
       BorderSpacing.Right = 1
@@ -428,7 +428,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 157
       Height = 23
-      Top = 4
+      Top = 5
       Width = 55
       BorderSpacing.Top = 6
       Caption = 'nTxt'
@@ -443,7 +443,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 49
       Height = 23
-      Top = 4
+      Top = 5
       Width = 49
       BorderSpacing.Top = 6
       BorderSpacing.Right = 2
@@ -459,7 +459,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 212
       Height = 23
-      Top = 4
+      Top = 5
       Width = 54
       BorderSpacing.Top = 6
       Caption = 'Map'
@@ -474,9 +474,9 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 266
       Height = 23
-      Top = 4
-      Width = 49
-      Caption = 'sTx'
+      Top = 5
+      Width = 50
+      Caption = 'sTX'
       OnChange = chkStopTxChange
       TabOrder = 4
     end
@@ -485,7 +485,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlSelects
       AnchorSideBottom.Side = asrCenter
-      Left = 315
+      Left = 316
       Height = 23
       Top = 4
       Width = 49
@@ -499,9 +499,9 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlSelects
       AnchorSideTop.Side = asrCenter
-      Left = 366
+      Left = 367
       Height = 23
-      Top = 4
+      Top = 5
       Width = 44
       Caption = 'Dx'
       TabOrder = 5
@@ -513,8 +513,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 422
-      Height = 15
+      Left = 423
+      Height = 17
       Top = 8
       Width = 36
       BorderSpacing.Left = 12
@@ -529,7 +529,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 4
-      Height = 15
+      Height = 17
       Top = 8
       Width = 33
       BorderSpacing.Right = 12
@@ -631,9 +631,10 @@ object frmMonWsjtx: TfrmMonWsjtx
     Left = 224
     Top = 144
   end
-  object tmrFCC: TTimer
+  object tmrUSDB: TTimer
     Enabled = False
-    OnTimer = tmrFCCTimer
+    Interval = 100
+    OnTimer = tmrUSDBTimer
     Left = 104
     Top = 144
   end

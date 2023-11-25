@@ -373,18 +373,20 @@ procedure TfrmDBConnect.btnOpenLogClick(Sender: TObject);
 var
   ini : TIniFile;
 begin
+  Panel2.Enabled:=False;
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
+   begin
     ini.WriteBool('Login','AutoOpen',chkAutoOpen.Checked);
     ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger);
     if chkAutoOpen.Checked then
       ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger)
     else
       ini.WriteInteger('Login','LastOpenedLog',dmData.qLogList.Fields[0].AsInteger)
+   end;
   finally
     ini.Free
   end;
-
   UpdateConnectionInfoDatabaseName(dmData.qLogList.Fields[0].AsInteger);
 
   if not OpenFromMenu then
@@ -392,6 +394,7 @@ begin
     dmData.LogName := dmData.qLogList.Fields[1].AsString;
     dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger)
   end;
+  Panel2.Enabled:=True;
   ModalResult    := mrOK
 end;
 

@@ -62,6 +62,7 @@ type
     mQ: TSQLQuery;
     Q2: TSQLQuery;
     CQ: TSQLQuery;
+    Qstate: TSQLQuery;
     qFreqMemGrid: TSQLQuery;
     qFreqs: TSQLQuery;
     trFreqMemGrid: TSQLTransaction;
@@ -93,6 +94,7 @@ type
     qRbnMon: TSQLQuery;
     qFreqMem: TSQLQuery;
     trCQ: TSQLTransaction;
+    trQstate: TSQLTransaction;
     trW: TSQLTransaction;
     trWorkedContests: TSQLTransaction;
     W1: TSQLQuery;
@@ -2791,25 +2793,26 @@ begin
        if old_version < 7 then
       begin
         Q1.SQL.Text := 'DROP TABLE IF EXISTS  cqrlog_common.states';
-        //if fDebugLevel>=1 then
+        if fDebugLevel>=1 then
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         Q1.SQL.Text := 'CREATE TABLE cqrlog_common.states ( id_states INT AUTO_INCREMENT PRIMARY KEY,'
                       +'callsign VARCHAR(20) NOT NULL, call_qth VARCHAR(60)DEFAULT "",'
                       +'call_state VARCHAR(4) DEFAULT "")';
-        //if fDebugLevel>=1 then
+        if fDebugLevel>=1 then
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         Q1.SQL.Text := 'CREATE INDEX callsign ON cqrlog_common.states(callsign)';
         //if fDebugLevel>=1 then
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
+        cqrini.DeleteKey('MonWsjtx', 'FCC_Addr');  //delete old key if exist
       end;
-
 
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-      Q1.ExecSQL
+      Q1.ExecSQL;
+
     except
       on E : Exception do
       begin

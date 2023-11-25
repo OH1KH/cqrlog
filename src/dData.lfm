@@ -1070,4 +1070,20 @@ object dmData: TdmData
     Left = 440
     Top = 552
   end
+  object Qstate: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = QBeforeOpen
+    Transaction = trQ
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 800
+    Top = 80
+  end
+  object trQstate: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 800
+    Top = 144
+  end
 end
