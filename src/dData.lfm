@@ -155,7 +155,7 @@ object dmData: TdmData
       '            call_qth VARCHAR(60)DEFAULT '''','
       '            call_state VARCHAR(4) DEFAULT '''''
       ');'
-      'CREATE INDEX callsign ON states(callsign);'
+      'CREATE UNIQUE INDEX callsign ON states(callsign);'
       ''
       'CREATE TABLE db_version'
       '('

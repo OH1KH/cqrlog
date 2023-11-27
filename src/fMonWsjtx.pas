@@ -2296,12 +2296,6 @@ begin
     try
         try
          //drop old table here
-          if dmData.trQstate.Active then dmData.trQstate.Rollback;
-          dmData.trQstate.StartTransaction;
-            dmData.Qstate.SQL.Text := 'DROP INDEX IF EXISTS callsign ON cqrlog_common.states;';
-            if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
-            dmData.Qstate.ExecSQL;
-
           dmData.Qstate.SQL.Text := 'truncate table cqrlog_common.states';
           if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
           dmData.Qstate.ExecSQL;
@@ -2317,7 +2311,8 @@ begin
     finally
       if dmData.trQstate.Active then dmData.trQstate.Rollback;
     end;
-    dmData.Qstate.SQL.Text := 'insert into cqrlog_common.states (callsign,call_qth,call_state) values ';
+    //unfortunately W1NR data has same duplicates as FCC's file l_amat.zip. We need use "replace" not "insert"
+    dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_qth,call_state) values ';
 
     try
      while not eof(tfIn) do
@@ -2343,7 +2338,7 @@ begin
                         l:=0;
                         Application.ProcessMessages;
                         dmData.Qstate.ExecSQL;
-                        dmData.Qstate.SQL.Text := 'insert into cqrlog_common.states (callsign,call_qth,call_state) values ';
+                        dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_qth,call_state) values ';
                       end;
 
         except
@@ -2360,7 +2355,7 @@ begin
                     Begin
                      p:=p+r;
                      r:=0;
-                     frmProgress.DoStep(IntToStr(p)+' callsigns added...');
+                     frmProgress.DoStep(IntToStr(p)+' lines read...');
                     end;
       end;   //while
       finally
@@ -2369,9 +2364,6 @@ begin
                  dmData.Qstate.SQL.Text:= copy(dmData.Qstate.SQL.Text,1,length(dmData.Qstate.SQL.Text)-2); //remove last comma
                  dmData.Qstate.ExecSQL;
                 end;
-            dmData.Qstate.SQL.Text :='CREATE INDEX callsign ON cqrlog_common.states(callsign)';
-            if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
-            dmData.Qstate.ExecSQL;
             dmData.trQstate.Commit;
             if dmData.trQstate.Active then dmData.trQstate.Rollback;
          end
