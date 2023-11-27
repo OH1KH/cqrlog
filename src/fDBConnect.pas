@@ -422,21 +422,44 @@ begin
   begin
     if RemoteMySQL then
     begin
-      if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
+     if dmData.MySqlLocalRunning then
       begin
+        edtServer.Text         := '127.0.0.1';
+        edtPort.Text           := '64000';
+        edtUser.Text           := 'cqrlog';
+        edtPass.Text           := 'cqrlog';
+        btnConnectClick(nil);
+        RemoteMySQL  := False;
+      end
+     else
+      begin
+      if Application.MessageBox('Local database is not running. Do you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
+       begin
         dmData.StartMysqldProcess;
         Sleep(3000);
-        btnConnectClick(nil)
-      end
-      else begin
+        edtServer.Text         := '127.0.0.1';
+        edtPort.Text           := '64000';
+        edtUser.Text           := 'cqrlog';
+        edtPass.Text           := 'cqrlog';
+        btnConnectClick(nil);
+        RemoteMySQL  := False;
+       end
+      else
+       begin
         chkSaveToLocal.Checked := False;
         grbLogin.Visible       := True;
         exit
-      end
-    end;
-    grbLogin.Visible := False
+      end;
+     end;
+   end;
+   grbLogin.Visible := False
   end
-  else  begin
+  else
+  begin
+    btnDisconnectClick(nil);
+    RemoteMySQL  := True;
+    chkAutoConn.Checked:=False;
+    chkSavePass.Checked:=False;
     grbLogin.Visible := True
   end
 end;

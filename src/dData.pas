@@ -201,7 +201,7 @@ type
     RbnMonCon    : TSQLConnection;
     LogUploadCon : TSQLConnection;
     dbDXC        : TSQLConnection;
-
+    MySqlLocalRunning : boolean ;
     eQSLUsers : Array of ShortString;
     CallArray : Array of String[20];
     IsFilterSQL : String; //String that is created with Filter settings. Isvalid if isfilter is valid, no cleanups.
@@ -1106,6 +1106,7 @@ begin
   IsSFilter    := False;
   fDLLSSLName  := '';
   fDLLUtilName := '';
+  MySqlLocalRunning :=false;
 
   fDebugLevel := GetDebugLevel;
 
@@ -3452,6 +3453,7 @@ begin
   if dmData.DebugLevel>=1 then Writeln('MySQLProcess.Executable: ',MySQLProcess.Executable,' Parameters: ',MySQLProcess.Parameters.Text);
   MySQLProcess.Execute;
 
+  MySqlLocalRunning:= MySQLProcess.Running;
   if MainCon.Connected then
     MainCon.Connected := False;
 
