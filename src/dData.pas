@@ -2399,14 +2399,14 @@ end;
 procedure TdmData.LoadMasterSCP;
 var
   i   : LongInt=1;
-  l   : longint;
   f   : TextFile;
+  l   : LongInt;
   tmp : String;
 begin
   if FileExists(fHomeDir+'MASTER.SCP') then
   begin
-    l:=80000;
-    SetLength(aSCP,l);
+    l := Length(aSCP);
+    if fDebugLevel>=1 then WriteLn('loading master.scp into aSCP[',l,']');
     AssignFile(f,fHomeDir+'MASTER.SCP');
     Reset(f);
     while not eof(f) do
@@ -2417,16 +2417,19 @@ begin
         Continue;
       if tmp[1]='#' then //skip comments
         Continue;
+
+      if i>l then  // avoid buffer overflow - check before you write!
+      begin
+        l := l + 1000; // increment array size by 1k
+        if fDebugLevel>=1 then WriteLn('incrementing array to size ',l);
+        SetLength(aSCP, l);
+      end;
+
       aSCP[i-1] := tmp;
       inc(i);
-      if (l-i<1000) then
-       begin
-        l:=l+10000;
-        SetLength(aSCP,l)
-       end;
     end;
     CloseFile(f);
-    SetLength(aSCP,i);
+    SetLength(aSCP,i);  // truncate the array to the actual length we read
     if fDebugLevel>=1 then Writeln('Loaded ',i,' SCP calls')
   end
 end;

@@ -146,7 +146,6 @@ type
     function StrToHexStr(const S: string): string;
     procedure CloseUSDBProcess;
     procedure USDBProcessFailed;
-    procedure BuildUSDBStateDump;
     { public declarations }
   end;
 
@@ -2222,7 +2221,7 @@ begin
   tmrUSDB.Enabled:=False;
    chkUState.Enabled:= false;
           if DProcess <> nil then
-              if LocalDbg then Writeln('Dprocess running');
+              //if LocalDbg then Writeln('Dprocess running');
 
 case  DPstarted of
           1: begin
@@ -2232,13 +2231,13 @@ case  DPstarted of
                 frmProgress.lblInfo.Caption:= 'Loading '+IntToStr(sz)+'M';
                 frmProgress.DoPos(sz);
                 Application.ProcessMessages;
-                if LocalDbg then Writeln('Loading file');
+                //if LocalDbg then Writeln('Loading file');
                 tmrUSDB.Enabled:=True;
               end
           end;
 
           2: begin
-               if LocalDbg then Writeln('Doing gunzip ... ');
+               //if LocalDbg then Writeln('Doing gunzip ... ');
                frmProgress.lblInfo.Caption:= 'Gunzip ...';
                frmProgress.DoJump(1);
                Application.ProcessMessages;
@@ -2296,7 +2295,13 @@ begin
     try
         try
          //drop old table here
+          dmData.Qstate.SQL.Text := 'DROP INDEX IF EXISTS callsign ON cqrlog_common.states';
+          if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
+          dmData.Qstate.ExecSQL;
           dmData.Qstate.SQL.Text := 'truncate table cqrlog_common.states';
+          if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
+          dmData.Qstate.ExecSQL;
+          dmData.Qstate.SQL.Text := 'CREATE UNIQUE INDEX callsign ON states(callsign)';
           if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
           dmData.Qstate.ExecSQL;
           dmData.trQstate.Commit;
@@ -2479,18 +2484,7 @@ begin
   tmrUSDB.Enabled:=False;
   chkUState.Checked:=False;
 end;
-procedure  TfrmMonWsjtx.BuildUSDBStateDump;
-Begin
-//this could be faster but needs attention on mysql running as safe thread or external server
-//first drop table
 
-//Then make mysqldump from empty table
-
-//then add fixed usdbraw to dump file
-
-//then do mysql import from fixed dump file
-
-end;
 
 initialization
 
