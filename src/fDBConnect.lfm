@@ -2149,6 +2149,7 @@ object frmDBConnect: TfrmDBConnect
       Top = 19
       Width = 168
       BorderSpacing.Top = 2
+      OnExit = edtServerExit
       TabOrder = 0
       Text = 'localhost'
     end
@@ -2179,6 +2180,7 @@ object frmDBConnect: TfrmDBConnect
       Width = 80
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
+      OnExit = edtPortExit
       TabOrder = 1
       Text = '3306'
     end
@@ -2201,6 +2203,7 @@ object frmDBConnect: TfrmDBConnect
       Top = 78
       Width = 168
       BorderSpacing.Top = 2
+      OnExit = edtUserExit
       TabOrder = 2
     end
     object lblPassword: TLabel
@@ -2226,6 +2229,7 @@ object frmDBConnect: TfrmDBConnect
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
       EchoMode = emPassword
+      OnExit = edtPassExit
       PasswordChar = '*'
       TabOrder = 3
     end

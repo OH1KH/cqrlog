@@ -62,6 +62,10 @@ type
     procedure btnUtilsClick(Sender: TObject);
     procedure chkSavePassChange(Sender: TObject);
     procedure chkSaveToLocalClick(Sender: TObject);
+    procedure edtPassExit(Sender: TObject);
+    procedure edtPortExit(Sender: TObject);
+    procedure edtServerExit(Sender: TObject);
+    procedure edtUserExit(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -73,6 +77,10 @@ type
   private
     RemoteMySQL : Boolean;
     AskForDB    : Boolean;
+    EServer,
+    EPort,
+    EUser,
+    EPass       : String;
     procedure SaveLogin;
     procedure LoadLogin;
     procedure UpdateGridFields;
@@ -131,12 +139,12 @@ begin
     if not chkSaveToLocal.Checked then
     begin
       ini.WriteBool('Login','SaveToLocal',False);
-      ini.WriteString('Login','Server',edtServer.Text);
-      ini.WriteString('Login','Port',edtPort.Text);
-      ini.WriteString('Login','User',edtUser.Text);
+      ini.WriteString('Login','Server',EServer);
+      ini.WriteString('Login','Port',EPort);
+      ini.WriteString('Login','User',EUser);
 
       if chkSavePass.Checked then
-        ini.WriteString('Login','Pass',edtPass.Text)
+        ini.WriteString('Login','Pass',EPass)
       else
         ini.WriteString('Login','Pass','');
 
@@ -156,6 +164,11 @@ var
 begin
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
+    EServer       := ini.ReadString('Login','Server','');
+    EPort         := ini.ReadString('Login','Port','');
+    EUser         := ini.ReadString('Login','User','');
+    EPass         := ini.ReadString('Login','Pass','');
+
     if ini.ReadBool('Login','SaveTolocal',True) then
     begin
       edtServer.Text         := '127.0.0.1';
@@ -171,19 +184,20 @@ begin
     else begin
       chkSaveToLocal.Checked := False;
       grbLogin.Visible     := True;
-      edtServer.Text       := ini.ReadString('Login','Server','127.0.0.1');
-      edtPort.Text         := ini.ReadString('Login','Port','3306');
-      edtUser.Text         := ini.ReadString('Login','User','');
+      edtServer.Text       := EServer;
+      edtPort.Text         := EPort;
+      edtUser.Text         := EUser;
       chkSavePass.Checked  := ini.ReadBool('Login','SavePass',False);
 
       if chkSavePass.Checked then
-        edtPass.Text := ini.ReadString('Login','Pass','')
+        edtPass.Text := EPass
       else
         edtPass.Text := '';
 
         chkAutoConn.Checked := ini.ReadBool('Login','AutoConnect',False);
       chkSavePassChange(nil);
-      if (chkAutoConn.Checked) and (chkAutoConn.Enabled) then
+      if (chkAutoConn.Checked) and (chkAutoConn.Enabled)
+       and (EServer<>'') and (EPort<>'') then
         tmrAutoConnect.Enabled := True;
       RemoteMySQL  := True
     end;
@@ -458,10 +472,34 @@ begin
   begin
     btnDisconnectClick(nil);
     RemoteMySQL  := True;
+    edtServer.Text         := EServer;
+    edtPort.Text           := EPort;
+    edtUser.Text           := EUser;
+    edtPass.Text           := EPass;
     chkAutoConn.Checked:=False;
     chkSavePass.Checked:=False;
     grbLogin.Visible := True
   end
+end;
+
+procedure TfrmDBConnect.edtPassExit(Sender: TObject);
+begin
+  Epass:=edtPass.Text;
+end;
+
+procedure TfrmDBConnect.edtPortExit(Sender: TObject);
+begin
+  EPort:=edtPort.Text;
+end;
+
+procedure TfrmDBConnect.edtServerExit(Sender: TObject);
+begin
+  EServer:=edtServer.Text;
+end;
+
+procedure TfrmDBConnect.edtUserExit(Sender: TObject);
+begin
+  EUser:=edtUser.Text;
 end;
 
 procedure TfrmDBConnect.FormShow(Sender: TObject);
