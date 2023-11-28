@@ -2399,12 +2399,14 @@ end;
 procedure TdmData.LoadMasterSCP;
 var
   i   : LongInt=1;
+  l   : longint;
   f   : TextFile;
   tmp : String;
 begin
   if FileExists(fHomeDir+'MASTER.SCP') then
   begin
-    SetLength(aSCP,80000);
+    l:=80000;
+    SetLength(aSCP,l);
     AssignFile(f,fHomeDir+'MASTER.SCP');
     Reset(f);
     while not eof(f) do
@@ -2417,8 +2419,11 @@ begin
         Continue;
       aSCP[i-1] := tmp;
       inc(i);
-      if i>80000 then
-        SetLength(aSCP,10000000)
+      if (l-i<1000) then
+       begin
+        l:=l+10000;
+        SetLength(aSCP,l)
+       end;
     end;
     CloseFile(f);
     SetLength(aSCP,i);
