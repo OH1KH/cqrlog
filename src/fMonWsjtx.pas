@@ -2220,10 +2220,10 @@ Var
 begin
   tmrUSDB.Enabled:=False;
    chkUState.Enabled:= false;
-          if DProcess <> nil then
-              //if LocalDbg then Writeln('Dprocess running');
-
+          //if DProcess <> nil then if LocalDbg then Writeln('Dprocess running');
 case  DPstarted of
+          0:exit;
+
           1: begin
              if FileExists(dmData.HomeDir+C_MYZIP) then
               Begin
@@ -2245,12 +2245,13 @@ case  DPstarted of
               end;
 
           3: begin
-               //if LocalDbg then Writeln('Doing DB populate ... ');
+              // if LocalDbg then Writeln('Doing DB populate ... ');
                tmrUSDB.Enabled:=True;
              end;
 
-          4: begin
-               if LocalDbg then Writeln('DPstarted > 3');
+        else
+              begin
+              // if LocalDbg then Writeln('DPstarted > 3');
                tmrUSDB.Enabled:=False;
                frmProgress.lblInfo.Caption:= 'Done!';
                for sz:=0 to 100 do
@@ -2278,9 +2279,10 @@ begin
     chkUState.Checked := false;
     exit;
    end;
+
   CanCloseUSDBProcess:=false;
-  tmrUSDB.Enabled:=True;
   DPstarted:=3;
+  tmrUSDB.Enabled:=True;
   frmProgress.ShowOnTop;
   frmProgress.DoInit(350,1);
   frmProgress.DoStep('Abt 1,5M calls takes a while...');
@@ -2301,7 +2303,7 @@ begin
           dmData.Qstate.SQL.Text := 'truncate table cqrlog_common.states';
           if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
           dmData.Qstate.ExecSQL;
-          dmData.Qstate.SQL.Text := 'CREATE UNIQUE INDEX callsign ON states(callsign)';
+          dmData.Qstate.SQL.Text := 'CREATE UNIQUE INDEX callsign ON cqrlog_common.states(callsign)';
           if LocalDbg then Writeln(dmData.Qstate.SQL.Text);
           dmData.Qstate.ExecSQL;
           dmData.trQstate.Commit;
@@ -2317,7 +2319,13 @@ begin
       if dmData.trQstate.Active then dmData.trQstate.Rollback;
     end;
     //unfortunately W1NR data has same duplicates as FCC's file l_amat.zip. We need use "replace" not "insert"
-    dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_qth,call_state) values ';
+
+    //if you want also qth to database table release below and comment out other one
+    //Adding also qth to table will increase loading time abt 20%
+     //dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_qth,call_state) values ';
+
+    //just callsign and state to table
+     dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_state) values ';
 
     try
      while not eof(tfIn) do
@@ -2325,6 +2333,8 @@ begin
       readln(tfIn, s);
       if s<>'' then
       begin
+        //if you want also qth to database table release this below and comment out other one
+        {
        //unfortunately qth names in file may contain ' or " chars, replace them with space
         s:=StringReplace(s,#39,' ',[rfReplaceAll]);
         s:=StringReplace(s,'"',' ',[rfReplaceAll]);
@@ -2332,6 +2342,14 @@ begin
         try
            dmData.Qstate.SQL.Text := dmData.Qstate.SQL.Text
                                     +'('+#39+s+#39+')';
+          }
+
+         //{
+        //just callsign and state to table
+        try
+           dmData.Qstate.SQL.Text := dmData.Qstate.SQL.Text
+                                    +'('+#39+ExtractWord(1,s,['|'])+#39+','+#39+ExtractWord(3,s,['|'])+#39+')';
+         //}
 
           inc(r);inc(l);
           if l<500 then
@@ -2343,7 +2361,11 @@ begin
                         l:=0;
                         Application.ProcessMessages;
                         dmData.Qstate.ExecSQL;
-                        dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_qth,call_state) values ';
+                        //if you want also qth to database table release below and comment out other one
+                        //dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_qth,call_state) values ';
+
+                        //just callsign and state to table
+                         dmData.Qstate.SQL.Text := 'replace into cqrlog_common.states (callsign,call_state) values ';
                       end;
 
         except
@@ -2367,17 +2389,24 @@ begin
             if l>0 then
                 Begin
                  dmData.Qstate.SQL.Text:= copy(dmData.Qstate.SQL.Text,1,length(dmData.Qstate.SQL.Text)-2); //remove last comma
+                 if LocalDbg then Writeln('Short block file end'+lineEnding+dmData.Qstate.SQL.Text);
                  dmData.Qstate.ExecSQL;
+                 dmData.trQstate.Commit;
+                end
+              else
+                Begin
+                  dmData.Qstate.SQL.Text:='';
+                  if LocalDbg then Writeln('Even file end',dmData.Qstate.SQL.Text);
+                  dmData.trQstate.Commit;
                 end;
-            dmData.trQstate.Commit;
             if dmData.trQstate.Active then dmData.trQstate.Rollback;
          end
    except
     on E: EInOutError do
      writeln('File handling error occurred. Details: ', E.Message);
   end;
-  DPstarted:=4;
   CanCloseUSDBProcess:=true;
+  DPstarted:=4;
 end;
 
 procedure  TfrmMonWsjtx.USDBdownLoadInit;
