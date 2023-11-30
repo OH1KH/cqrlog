@@ -767,13 +767,15 @@ var
   i,c                :integer;
 begin
   cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
-  if chkUState.Checked  then;
+  if chkUState.Checked  then
     Begin
       if LocalDbg then  Writeln('State check activated');
       SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
       if (not FileExists(SourceFile)) or ((DaysBetween(now,FileDateTodateTime(FileAge(SourceFile)))) > 90) then
             Begin //over 3 month old or missing
-             msg := 'Source file '+SourceFile+' is over 90 days old or missing.'+#13+#13+'Should it be updated?';
+             msg := 'Source file '+SourceFile+' is over 90 days old or missing.'
+                    +#13+#13+'(More info: Help/Digital modes: wjstx/Checking "USt”)'
+                    +#13+#13+'Should it be updated?' ;
               if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
                 Begin
                  if FileExists(SourceFile) then DeleteFile(SourceFile);
@@ -787,6 +789,7 @@ begin
                    BuildUSDBState;
                 end
                else chkUState.Checked := false;
+
             end
         else //we have proper file, check if database has contents
          Begin
@@ -809,8 +812,6 @@ begin
                   chkUState.Checked := false;
              end;
          end;
-
-
     end;
 end;
 

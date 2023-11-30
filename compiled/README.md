@@ -1,5 +1,8 @@
 
- #### NOTE: Upgrading to 2.6.0.(115) ,or higer, will change database table "cqrlog_common" to version 6.
+ #### NOTE: Upgrading to 2.6.0.(120) ,or higer, will add database table "cqrlog_common.states" and set version to 7.
+ This database upgrade should be backwards compatible (none of old versions are interested in new table)
+
+ #### NOTE: Upgrading to 2.6.0.(115) ,or higer, will change database "cqrlog_common" to version 6.
  If you return back to previous cqrlog version you need to restore the database.
 ( if you used newupdate.sh it is to copy backup foder  ~/.config/cqrlog-YYYYMMDD-HHMMSS to name ~/.config/cqrlog )
  
@@ -9,9 +12,9 @@ Update GLIBC if it is below 2.3.5.
 If you do not want to do that you can compile this source (see 1 folder up) with your current OS version and get it running.
 Note that the source version is usually one step higher than ready compiled versions.
  
- #### NOTE: At the moment there is no new official version source release. That is why Alpha (119) is ***VERY far ahead*** from official.
+ #### NOTE: At the moment there is no new official version source release. That is why Alpha (120) is ***VERY far ahead*** from official.
 From [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
-you can see all changes. It appears also at first start of (119), and can be accessed via "Help" when Cqrlog is running.
+you can see all changes. It appears also at first start of (120), and can be accessed via "Help" when Cqrlog is running.
 
 
 Latest cqrlog alpha test binaries can be found from this folder.
@@ -37,9 +40,9 @@ BINARIES:
   - **cqr1.zip  holds binary for  32bit systems compiled for GTK2 widgets (official release )**
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (official release of cqrlog with alpha additions)**
   - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (official release of cqrlog with alpha additions)**
-  - **cqr4.zip  holds binary for  64bit Arm (Rpi4) compiled for GTK2 widgets (official release )**
+  - **cqr4.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets (official release )**
   - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (official release of cqrlog with alpha additions,you may need to install libqt5pas to run this)**
-  - **cqr6.zip  holds binary for  64bit Arm (Rpi4) compiled for GTK2 widgets (official release of cqrlog with alpha additions)**
+  - **cqr6.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets (official release of cqrlog with alpha additions)**
   - **help.tgz  holds latest help files**
   - **newupdate.zip holds the newupdate.sh script for easy update**
 
