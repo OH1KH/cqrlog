@@ -17,6 +17,7 @@ type
     btnOpenErrFile : TButton;
     Button2 : TButton;
     Label1 : TLabel;
+    Label2: TLabel;
     procedure btnOpenErrFileClick(Sender : TObject);
     procedure btnVisitFAQClick(Sender : TObject);
   private

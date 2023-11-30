@@ -149,6 +149,14 @@ object dmData: TdmData
       ');'
       'CREATE INDEX log_nr ON log_list(log_nr);'
       ''
+      'CREATE TABLE states ('
+      '            id_states INT AUTO_INCREMENT PRIMARY KEY,'
+      '            callsign VARCHAR(20) NOT NULL,'
+      '            call_qth VARCHAR(60)DEFAULT '''','
+      '            call_state VARCHAR(4) DEFAULT '''''
+      ');'
+      'CREATE UNIQUE INDEX callsign ON states(callsign);'
+      ''
       'CREATE TABLE db_version'
       '('
       '  nr SMALLINT NOT NULL'
@@ -1061,5 +1069,21 @@ object dmData: TdmData
     Active = False
     Left = 440
     Top = 552
+  end
+  object Qstate: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = QBeforeOpen
+    Transaction = trQ
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 800
+    Top = 80
+  end
+  object trQstate: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 800
+    Top = 144
   end
 end

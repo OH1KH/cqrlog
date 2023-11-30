@@ -357,7 +357,7 @@ begin
 end;
 procedure TRigControl.ClearRit;
 begin
-  RigCommand.Add('+\set_rig'+VfoStr+' 0');
+  RigCommand.Add('+\set_rit'+VfoStr+' 0');
   AllowCommand:=1; //call queue
 end;
 procedure TRigControl.DisableRit;

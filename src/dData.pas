@@ -25,7 +25,7 @@ uses
 const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 19;
-  cDB_COMN_VER = 6;
+  cDB_COMN_VER = 7;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -62,6 +62,7 @@ type
     mQ: TSQLQuery;
     Q2: TSQLQuery;
     CQ: TSQLQuery;
+    Qstate: TSQLQuery;
     qFreqMemGrid: TSQLQuery;
     qFreqs: TSQLQuery;
     trFreqMemGrid: TSQLTransaction;
@@ -93,6 +94,7 @@ type
     qRbnMon: TSQLQuery;
     qFreqMem: TSQLQuery;
     trCQ: TSQLTransaction;
+    trQstate: TSQLTransaction;
     trW: TSQLTransaction;
     trWorkedContests: TSQLTransaction;
     W1: TSQLQuery;
@@ -199,7 +201,7 @@ type
     RbnMonCon    : TSQLConnection;
     LogUploadCon : TSQLConnection;
     dbDXC        : TSQLConnection;
-
+    MySqlLocalRunning : boolean ;
     eQSLUsers : Array of ShortString;
     CallArray : Array of String[20];
     IsFilterSQL : String; //String that is created with Filter settings. Isvalid if isfilter is valid, no cleanups.
@@ -1104,6 +1106,7 @@ begin
   IsSFilter    := False;
   fDLLSSLName  := '';
   fDLLUtilName := '';
+  MySqlLocalRunning :=false;
 
   fDebugLevel := GetDebugLevel;
 
@@ -2397,11 +2400,13 @@ procedure TdmData.LoadMasterSCP;
 var
   i   : LongInt=1;
   f   : TextFile;
+  l   : LongInt;
   tmp : String;
 begin
   if FileExists(fHomeDir+'MASTER.SCP') then
   begin
-    SetLength(aSCP,80000);
+    l := Length(aSCP);
+    if fDebugLevel>=1 then WriteLn('loading master.scp into aSCP[',l,']');
     AssignFile(f,fHomeDir+'MASTER.SCP');
     Reset(f);
     while not eof(f) do
@@ -2412,13 +2417,19 @@ begin
         Continue;
       if tmp[1]='#' then //skip comments
         Continue;
+
+      if i>l then  // avoid buffer overflow - check before you write!
+      begin
+        l := l + 1000; // increment array size by 1k
+        if fDebugLevel>=1 then WriteLn('incrementing array to size ',l);
+        SetLength(aSCP, l);
+      end;
+
       aSCP[i-1] := tmp;
       inc(i);
-      if i>80000 then
-        SetLength(aSCP,10000000)
     end;
     CloseFile(f);
-    SetLength(aSCP,i);
+    SetLength(aSCP,i);  // truncate the array to the actual length we read
     if fDebugLevel>=1 then Writeln('Loaded ',i,' SCP calls')
   end
 end;
@@ -2788,9 +2799,29 @@ begin
         Q1.ExecSQL;
       end;
 
+       if old_version < 7 then
+      begin
+        Q1.SQL.Text := 'DROP TABLE IF EXISTS  cqrlog_common.states';
+        if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'CREATE TABLE cqrlog_common.states ( id_states INT AUTO_INCREMENT PRIMARY KEY,'
+                      +'callsign VARCHAR(20) NOT NULL, call_qth VARCHAR(60)DEFAULT "",'
+                      +'call_state VARCHAR(4) DEFAULT "")';
+        if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'CREATE UNIQUE INDEX callsign ON cqrlog_common.states(callsign)';
+        if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        cqrini.DeleteKey('MonWsjtx', 'FCC_Addr');  //delete old key if exist
+      end;
+
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-      Q1.ExecSQL
+      Q1.ExecSQL;
+
     except
       on E : Exception do
       begin
@@ -3430,6 +3461,7 @@ begin
   if dmData.DebugLevel>=1 then Writeln('MySQLProcess.Executable: ',MySQLProcess.Executable,' Parameters: ',MySQLProcess.Parameters.Text);
   MySQLProcess.Execute;
 
+  MySqlLocalRunning:= MySQLProcess.Running;
   if MainCon.Connected then
     MainCon.Connected := False;
 

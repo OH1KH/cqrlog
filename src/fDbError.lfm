@@ -1,45 +1,69 @@
 object frmDbError: TfrmDbError
-  Left = 804
-  Height = 196
+  Left = 735
+  Height = 208
   Top = 412
-  Width = 442
+  Width = 509
   Caption = 'Database problem'
-  ClientHeight = 196
-  ClientWidth = 442
+  ClientHeight = 208
+  ClientWidth = 509
   Position = poDesktopCenter
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '2.2.6.0'
   object Label1: TLabel
-    Left = 8
-    Height = 119
-    Top = 8
-    Width = 428
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 6
+    Height = 85
+    Top = 0
+    Width = 503
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 6
     Caption = 'MySQL could not be started, please check if the MySQL server is '#10'installed properly.'#10#10'Please look at https://www.cqrlog.com/faq'#10#10'If you don''t find the answer, ask in CQRLOG forum and attach '#10'last 20 lines from the mysql.err file.'
     ParentColor = False
   end
   object btnOpenErrFile: TButton
-    Left = 255
-    Height = 25
-    Top = 129
+    AnchorSideTop.Control = btnVisitFAQ
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = btnVisitFAQ
+    AnchorSideRight.Side = asrBottom
+    Left = 332
+    Height = 30
+    Top = 124
     Width = 171
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 3
     Caption = 'Open mysql.err file'
     OnClick = btnOpenErrFileClick
     TabOrder = 0
   end
   object Button2: TButton
-    Left = 168
-    Height = 25
-    Top = 168
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    Left = 217
+    Height = 30
+    Top = 165
     Width = 75
+    BorderSpacing.Top = 6
     Cancel = True
     Caption = 'Close'
     ModalResult = 2
     TabOrder = 1
   end
   object btnVisitFAQ: TBitBtn
-    Left = 309
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 375
     Height = 30
-    Top = 53
+    Top = 91
     Width = 128
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 6
     Caption = 'Open website'
     Glyph.Data = {
       36040000424D3604000000000000360000002800000010000000100000000100
@@ -79,5 +103,21 @@ object frmDbError: TfrmDbError
     }
     OnClick = btnVisitFAQClick
     TabOrder = 2
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = btnOpenErrFile
+    Left = 6
+    Height = 68
+    Top = 91
+    Width = 323
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 3
+    Caption = 'If this happened suddenly while normal'#10'use (not in first start) you can try to delete'#10'~/.config/cqrlog/database/ib_logfileX where '#10'X may be any number, and then restart.'
+    ParentColor = False
   end
 end
