@@ -86,11 +86,12 @@ Top line will show band and mode that is in use.
 <br>When 'ctyfiles/usdbraw' file does not exist or is older than 90days then file is fetched and table 'states' is recreated (takes some time, having abt 1.5M callsigns!).
 <br>If you want to recreate database table at any time  just remove ~/.config/cqrlog/ctyfiles/usdbraw file and recheck "USt" checkbox.
 <br>After upgrading to 2.6.0(120) with this fix  you can remove all files starting with "fcc_" from  ~/.config/cqrlog/ctyfiles folder. They are not needed any more.
-<br><br>In case you do not get ftp://ftp.w1nr.net/usdbraw.gz file (gzipped verion of usdbraw) you can create the file from data of http://wireless.fcc.gov/uls/data/complete/l_amat.zip file.
+<br><br>In case you do not get ftp://ftp.w1nr.net/usdbraw.gz file (gzipped verion of usdbraw) you can also use  http://wireless.fcc.gov/uls/data/complete/l_amat.zip file.
 <br>Format of usdbraw file is callsign|qth|state. I.E:
 <br>AA0A|SAINT LOUIS|MO
-<br>When creating from FCC's l_amat.zip note that file has duplicate callsigns (all ever). The latest callsign of duplicates in file has currently valis data. You have to sort all previous info away.
-<br><br><strong>Note:</strong> While database table is updating checkbox "USt" is grayed out to prevent restart of database table upgrade. Closing 'Progress' window does
+<br><br> FCC's l_amat.zip has lot of other data too and file size is 17x bigger, but may be better up to date. Cqrlog can use L_amat.zip and convert this to W1NR format.
+<br><br><strong>Note:</strong> For processing  you need programs wget and gunzip for W1NR data and wget, unzip and wak for FCC data.<br>
+While database table is updating checkbox "USt" is grayed out to prevent restart of database table upgrade. Closing 'Progress' window does
 not stop upgradiong, it continues without indication.
 <br>Closing wsjtx-remote or closing Cqrlog will halt database table upgrading. On next wsjtx-remote opening it will ask should the database table be updated because it has less than 1.5M callsigns.
 <br>Answering 'no' will keep table as is. Answering 'yes' will start upgrade from beginning <strong>not</strong> from point it was interrupted.

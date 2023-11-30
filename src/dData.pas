@@ -2421,7 +2421,7 @@ begin
       if i>l then  // avoid buffer overflow - check before you write!
       begin
         l := l + 1000; // increment array size by 1k
-        if fDebugLevel>=1 then WriteLn('incrementing array to size ',l);
+        //if fDebugLevel>=1 then WriteLn('incrementing array to size ',l);
         SetLength(aSCP, l);
       end;
 

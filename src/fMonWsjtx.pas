@@ -102,6 +102,7 @@ type
     DPstarted : integer;     //fcc states download process status
     DProcess  : TProcess;
     tfIn      : TextFile;
+    C_MYZIP   : String;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -167,7 +168,6 @@ const
 
   C_STATE_SOURCE = 'ctyfiles/usdbraw';
   C_URL = 'ftp://ftp.w1nr.net/usdbraw.gz';
-  C_MYZIP = 'ctyfiles/usdbraw.gz';
   C_MY_SCRIPT = 'ctyfiles/usdb_get.sh';
 
 
@@ -2411,13 +2411,18 @@ end;
 
 procedure  TfrmMonWsjtx.USDBdownLoadInit;
 var
-  f :textfile;
-
+  f   :textfile;
   begin
     CanCloseUSDBProcess:=false;
-    USDB_Address:=cqrini.ReadString('MonWsjtx', 'USDB_Addr', C_URL);  //wget -qN ftp://ftp.w1nr.net/usdbraw.gz
+    USDB_Address:=cqrini.ReadString('MonWsjtx', 'USDB_Addr', C_URL);
 
-     if InputQuery('Download address check','Using Address (change if needed):', USDB_Address) then
+    //wget -qN ftp://ftp.w1nr.net/usdbraw.gz                              -> needed programs: wget and gunzip
+    //You can still use also FCC's l_amat.zip (lot bigger download)       -> needed programs: wget, unzip and awk
+     ///  ftp://wirelessftp.fcc.gov/pub/uls/complete/l_amat.zip
+
+     if InputQuery('Download address check','Using Address (change if needed):'+
+                   LineEnding+'ftp://ftp.w1nr.net/usdbraw.gz (9M, fast to download)'+
+                   LineEnding+'ftp://wirelessftp.fcc.gov/pub/uls/complete/l_amat.zip (160M, may be more up to date)', USDB_Address) then
       begin
         cqrini.WriteString('MonWsjtx', 'USDB_Addr',USDB_Address);
         if LocalDbg then Writeln('Saved USDB_Address:',USDB_Address);
@@ -2430,12 +2435,24 @@ var
 
     if LocalDbg then Writeln('USDBdownLoadInit start');
     frmProgress.Show;
-    frmProgress.DoInit(10,1);
+    if pos('l_amat.zip',USDB_Address)>0 then   //FFC data needs different process
+                  begin
+                     frmProgress.DoInit(160,1);
+                     C_MYZIP := 'ctyfiles/l_amat.zip';
+                  end
+                else
+                  begin
+                     frmProgress.DoInit(10,1);
+                     C_MYZIP := 'ctyfiles/usdbraw.gz';
+                  end;
+
     frmProgress.DoJump(0);
     Application.ProcessMessages;
 
+
     DPstarted:=1;
     tmrUSDB.Enabled:=True;
+
     DProcess := TProcess.Create(nil);
 
     try
@@ -2447,7 +2464,6 @@ var
       DProcess.Parameters.Add(dmData.HomeDir+C_MYZIP);
       DProcess.Parameters.Add(trim(USDB_Address));
       if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
-      //DProcess.Options := DProcess.Options + [poWaitOnExit];
       DProcess.Execute;
       while DProcess.Running do
             Application.ProcessMessages;
@@ -2472,10 +2488,20 @@ var
 
     try
      try
-      DProcess.Executable  := 'gunzip';
+      if pos('l_amat.zip',USDB_Address)>0 then   //FFC data needs different process
+         DProcess.Executable  := 'unzip'
+      else
+         DProcess.Executable  := 'gunzip';
+      if pos('l_amat.zip',USDB_Address)>0 then   //FFC data needs different process
+         DProcess.Parameters.Add('-o');
       DProcess.Parameters.Add(dmData.HomeDir+C_MYZIP);
+      if pos('l_amat.zip',USDB_Address)>0 then   //FFC data needs different process
+        begin
+         DProcess.Parameters.Add('EN.dat');
+         DProcess.Parameters.Add('-d');
+         DProcess.Parameters.Add(dmData.HomeDir+'ctyfiles');
+        end;
       if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
-      //DProcess.Options := DProcess.Options + [poWaitOnExit];
       DProcess.Execute;
       while DProcess.Running do
             Application.ProcessMessages;
@@ -2486,6 +2512,35 @@ var
     on E :EExternal do
      writeln('Error Details: ', E.Message);
     end;
+
+    if pos('l_amat.zip',USDB_Address)>0 then   //FFC data needs different process
+     begin
+      DProcess := TProcess.Create(nil);
+      try
+       try
+        DProcess.Executable  := '/bin/bash';
+        DProcess.Parameters.Add('-c');
+        DProcess.Parameters.Add('awk -F"|" '+#39+'{print$5"|"$17"|"$18}'+#39+' < '+dmData.HomeDir+'ctyfiles/EN.dat >'+dmData.HomeDir+'ctyfiles/usdbraw');
+        //DProcess.Parameters.Add(#39+'{print$5"|"$17"|"$18}'+#39);
+        //DProcess.Parameters.Add(dmData.HomeDir+'ctyfiles/EN.dat');
+        //DProcess.Parameters.Add('>');
+        //DProcess.Parameters.Add(dmData.HomeDir+'ctyfiles/usdbraw');
+
+        if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+        DProcess.Execute;
+        while DProcess.Running do
+              Application.ProcessMessages;
+       finally
+        FreeAndNil(Dprocess);
+       end;
+      except
+      on E :EExternal do
+       writeln('Error Details: ', E.Message);
+      end;
+     end;
+
+    Application.MessageBox(PChar('Stop here and check result!'),'Error',mb_ok+mb_IconError);
+
    frmProgress.hide;
    Application.ProcessMessages;
 end;
