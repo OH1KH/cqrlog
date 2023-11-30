@@ -2540,8 +2540,6 @@ var
       end;
      end;
 
-    Application.MessageBox(PChar('Stop here and check result!'),'Error',mb_ok+mb_IconError);
-
    frmProgress.hide;
    Application.ProcessMessages;
 end;
