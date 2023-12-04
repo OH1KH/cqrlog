@@ -559,19 +559,19 @@ object frmMonWsjtx: TfrmMonWsjtx
     object cmHead: TMenuItem
       Caption = 'Set color of:'
       object cmNever: TMenuItem
-        Caption = 'Qso/Loc never before'
+        Caption = 'Qso/Loc/State never before'
         OnClick = cmNeverClick
       end
       object cmBand: TMenuItem
-        Caption = 'Qso/Loc on this band but other mode'
+        Caption = 'Qso/Loc/State on this band but other mode'
         OnClick = cmBandClick
       end
       object cmAny: TMenuItem
-        Caption = 'Qso/Loc on other band '
+        Caption = 'Qso/Loc/State on other band '
         OnClick = cmAnyClick
       end
       object cmHere: TMenuItem
-        Caption = 'Qso/Loc before this band and mode'
+        Caption = 'Qso/Loc/State before this band and mode'
         OnClick = cmHereClick
       end
       object cmCqDx: TMenuItem
