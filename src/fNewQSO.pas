@@ -3083,6 +3083,7 @@ begin
                                    edtContestName.Text := ContestName[ContestNr];
                                    edtContestSerialReceived.Text := copy(ExchR,3,4);  //serialNr
                                    edtContestExchangeMessageReceived.Text:= copy(ExchR,8,6); //exMsg=locator
+                                   edtGrid.Text:=copy(ExchR,8,6);
                                    edtContestSerialSent.Text := copy(ExchS,3,4);  //serialNr
                                    edtContestExchangeMessageSent.Text:= copy(ExchS,8,6); //exMsg=locator
                                    edtHisRST.Text := edtHisRST.Text+' '; // fake space here. Otherwise qso edit sets xx9 for reports
