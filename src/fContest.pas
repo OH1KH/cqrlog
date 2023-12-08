@@ -202,9 +202,8 @@ type
 
 var
   frmContest: TfrmContest;
-  RSTstx: string = ''; //contest mode serial numbers store
-  RSTstxAdd: string = ''; //contest mode additional string store
-  //RSTsrx         :string = '';
+  ResetStx: string = ''; //contest mode serial numbers store
+  ResetStxStr: string = ''; //contest mode additional string store
   EscTimes         :integer = 0;
   DupeFromDate :string = '1900-01-01';
   MsgIs        :integer = 0;
@@ -939,7 +938,9 @@ begin
   chkSP.Checked             := cqrini.ReadBool('frmContest', 'SP', False);
 
   edtSTX.Text               := cqrini.ReadString('frmContest', 'STX', '');
+  ResetStx                  := edtSTX.Text;
   edtSTXStr.Text            := cqrini.ReadString('frmContest', 'STXStr', '');
+  ResetStxStr               := edtSTXStr.Text;
 
   popSetMsg.Items[MsgIs].Checked:=true;
 
@@ -990,6 +991,7 @@ begin
   sgStatus.Visible:=False;
 
   InitInput;
+
 end;
 
 procedure TfrmContest.MsgIsPopChk(nr:integer);
@@ -1304,10 +1306,10 @@ Begin
   SetActualReportForModeFromRadio;
   FmemorySent:=False;
 
-  if not ((edtSTX.Text <> '') and (RSTstx = ''))  then
-    edtSTX.Text := RSTstx;
+  if not ((edtSTX.Text <> '') and (ResetStx = ''))  then
+    edtSTX.Text := ResetStx;
 
-  edtSTXStr.Text := RSTstxAdd;
+  edtSTXStr.Text := ResetStxStr;
   edtSRX.Text := '';
   edtSRXStr.Text := '';
   edtCall.Font.Color:=clDefault;
@@ -1360,8 +1362,8 @@ begin
     end;
   end;
 
-  RSTstx := stx;
-  RSTstxAdd := edtSTXStr.Text;
+  ResetStx := stx;
+  ResetStxStr := edtSTXStr.Text;
 
   if dmData.DebugLevel >= 1 then
     Writeln(' Inc number is: ', IncNr);

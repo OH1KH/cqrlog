@@ -1570,6 +1570,9 @@ begin
     frmDXCluster.BringToFront
   end;
 
+  if cqrini.ReadBool('Window','Contest',False) then
+    acContest.Execute;
+
   if not cqrini.ReadBool('NewQSO','SatelliteMode', False) then
       if  (cqrini.ReadInteger('NewQSO','DetailsTabIndex', 0)>1 ) then
           cqrini.WriteInteger('NewQSO','DetailsTabIndex',1);
@@ -1751,7 +1754,16 @@ begin
     end
     else
       cqrini.WriteBool('Window','RBNMonitor',False)
-  end
+  end ;
+
+  if frmContest.Showing then
+    begin
+      cqrini.WriteBool('Window','Contest',True);
+      frmRBNMonitor.Close
+    end
+    else
+      cqrini.WriteBool('Window','Contest',False)
+
 end;
 
 procedure TfrmNewQSO.SaveSettings;
