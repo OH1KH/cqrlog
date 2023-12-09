@@ -97,8 +97,9 @@ Add date to contest name if you keep many contests in same log. That way <b>QSO 
 <li><b>Dupe check</b> Default checked. If you use same log for several contests, and/or other working, set the contest start date with <b>from YY-MM-DD</b> button.
 <br> if <b>NoMode4Dupe</b> is selected duplicate check allows qso with same station in same band if mode differs.
 <br> if <b>Ignore dupes</b> is selected it will ignore duplication check completely.
-<br> When dupe check is active and callsign is found as duplicate, but still saved, program will add <b>/D</b> to <b>RST sent</b>.
- It is then operator's duty to clean or leave <b>/D</b> to exported Cabrillo log.</li>
+<br> if <b>Mark dupe</b>  is seleced, dupe check is active and callsign is found as duplicate, but still saved, program will add <b>/Dupe</b> to <b>RST sent</b> column.
+<br> <b>Note:</b> This affects <b>Status counting</b>. If sent RST has /Dupe marking it will added to dupe count and taken account also in other calculations.
+<br>Finally it is then operator's duty to clean or leave <b>/Dupe</b> text in <b>RST sent</b> of exported Cabrillo log.</li>
 <br>
 <li><b>RST s</b> RST sent. Can be changed.
 <br><b> Note:</b> defaults to 599 (CW) 59(phone). If rig mode is changed you get corresponding RST with 2xESC. 

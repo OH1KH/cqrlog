@@ -146,7 +146,6 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnHelpClick(Sender : TObject);
-    procedure gbStatusClick(Sender: TObject);
     procedure mnuQSOcountClick(Sender: TObject);
     procedure mnuGridClick(Sender: TObject);
     procedure mnuReSetAllHFClick(Sender: TObject);
@@ -460,7 +459,7 @@ begin
 
   frmNewQSO.edtHisRST.Text := edtRSTs.Text;
   if chkMarkDupe.Checked and CheckDupe(edtCall.Text) then
-        frmNewQSO.edtHisRST.Text:=frmNewQSO.edtHisRST.Text+'/D';
+        frmNewQSO.edtHisRST.Text:=frmNewQSO.edtHisRST.Text+'/Dupe';
   frmNewQSO.edtMyRST.Text := edtRSTr.Text;
   frmNewQSO.edtContestSerialReceived.Text := edtSRX.Text;
   frmNewQSO.edtContestSerialSent.Text := edtSTX.Text;
@@ -834,6 +833,7 @@ begin
   sgStatus.Cells[0,4]:='DXCtrys';
   sgStatus.Cells[0,5]:='OwnCtrys';
   sgStatus.Cells[0,6]:='MMults';
+  sgStatus.Cells[0,7]:='Dupes';
   sgStatus.ColWidths[0]:=80;
 end;
 procedure TfrmContest.SaveSettings;
@@ -1007,11 +1007,6 @@ begin
   ShowHelp
 end;
 
-procedure TfrmContest.gbStatusClick(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmContest.mnuQSOcountClick(Sender: TObject);   //This works for all selections
 var
    f:integer;
@@ -1153,6 +1148,8 @@ procedure TfrmContest.sgStatusPrepareCanvas(Sender: TObject; aCol,aRow: Integer;
 var
   f:integer;
 begin
+   if (aCol = 0) and (aRow = 0)then
+      sgStatus.Canvas.Brush.Color := clLime;
    for f:=0 to 10 do
     Begin
      if dUtils.cBands[ContestBandPtr[f]] = dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) then
@@ -1160,10 +1157,8 @@ begin
     end;
    if dUtils.cBands[ContestBandPtr[f]] <> dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) then
        exit;   //not in contest band list
-   if (aCol = f+2) and ((aRow >= 1) and (aRow <= 6)) then
-     begin
+   if (aCol = f+2) and ((aRow >= 1) and (aRow <= 7)) then
       sgStatus.Canvas.Brush.Color := clYellow;
-     end;
 end;
 
 
@@ -1496,6 +1491,7 @@ var
    Mlist         : array [1..2] of string[40];
    Band          : integer;
    QSOc,MULc     : array [1..2] of integer;
+   DUPEc         : array [1..2] of integer;
    f,p           : integer;
    M             : char;
    bands         : array [1..2] of string=('80M','40M');
@@ -1504,25 +1500,49 @@ Begin
    mStatus.Clear;
     for band:=2 downto 1 do
       begin
+       QSOc[band]:=0;
+       MULc[band]:=0;
+       DUPEc[band]:=0;
        try
-         MULc[band]:=0;
+        //total qso count
+        if dmData.trCQ.Active then dmData.trCQ.Rollback;
+          dmData.CQ.SQL.Text :=
+               'SELECT COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+
+               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('CW');
+          if dmData.DebugLevel >=1 then
+                                       Writeln(dmData.CQ.SQL.Text);
+         dmData.CQ.Open();
+         QSOc[band]:= dmData.CQ.FieldByName('Qcount').AsInteger;
+         //duplicate count
+         dmData.CQ.Close;
+         if dmData.trCQ.Active then dmData.trCQ.Rollback;
+          dmData.CQ.SQL.Text :=
+               'SELECT COUNT(callsign) AS Dcount FROM cqrlog_main WHERE contestname='+
+               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('CW')+
+               'AND rst_s LIKE '+QuotedStr('%/Dupe');
+          if dmData.DebugLevel >=1 then
+                                       Writeln(dmData.CQ.SQL.Text);
+         dmData.CQ.Open();
+         DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
+
+         //multipliers
           Mlist[band]:='....................................' ; //A-Z0-9
           dmData.CQ.Close;
           if dmData.trCQ.Active then dmData.trCQ.Rollback;
           dmData.CQ.SQL.Text :=
                'SELECT ASCII(MID(callsign,LENGTH(callsign),1)) AS SuffixEnd FROM cqrlog_main WHERE contestname='+
-               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('CW');
+               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('CW')+
+               'AND rst_s NOT LIKE '+QuotedStr('%/Dupe');
 
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
           dmData.CQ.Open();
-          QSOc[band]:=0;
+
           while not dmData.CQ.EOF do
           Begin
             f:= dmData.CQ.FieldByName('SuffixEnd').AsInteger;
             if f>0 then
              Begin
-               inc(QSOc[band]);
                case f of
                     65..90 : p:=0;
                     48..57 : p:=43;
@@ -1545,20 +1565,22 @@ Begin
            dmData.trCQ.Rollback;
 
            mStatus.Lines.Add(bands[band]+' CW:    '+Mlist[band]+'   '+IntToStr(MULc[band])+
-           '   QSOs:' + IntToStr(QSOc[band]));
+           '   QSOs:' + IntToStr(QSOc[band])+'   DUPEs:' + IntToStr(DUPEc[band]));
           end;
       end;
-    mStatus.Lines.Add('----------------------------------------------------------------------------------');
-    mStatus.Lines.Add(' Total    Pts: ' + IntToStr(QSOc[1]+QSOc[2])+'   Multipliers: '+IntToStr(MULc[1]+MULc[2])+
-                      '   Score: '+ IntToStr( (QSOc[1]+QSOc[2]) * (MULc[1]+MULc[2])) );
+    mStatus.Lines.Add('-----------------------------------------------------------------------------------------');
+    mStatus.Lines.Add(' Total    QSOs: ' + IntToStr(QSOc[1]+QSOc[2])+'   DUPEs: '+ IntToStr( DUPEc[1]+DUPEc[2]) );
+    mStatus.Lines.Add(' Total    Pts:  ' + IntToStr(QSOc[1]+QSOc[2]-(DUPEc[1]+DUPEc[2]))+'   Multipliers: '+IntToStr(MULc[1]+MULc[2])+
+                      '   Score: '+ IntToStr(  (QSOc[1]+QSOc[2]-DUPEc[1]-DUPEc[2]) * (MULc[1]+MULc[2])  ) );
 
     AllQsos:= QSOc[1]+QSOc[2];
     Rates;
-end;
+end; //MWC status end
 
 procedure  TfrmContest.NACStatus;
 var
     QSOs,
+    Dupes,
     LOCs,
     QRB,
     MaxQRB,
@@ -1570,6 +1592,7 @@ var
 Begin
     sgStatus.Visible:=False;
     QSOs:=0;
+    Dupes:=0;
     LOCs:=0;
     MaxQRB:=0;
     Points:=0;
@@ -1589,13 +1612,26 @@ Begin
     dmData.CQ.Open();
     QSOs:= dmData.CQ.FieldByName('Qcount').AsInteger;
 
+    //Dupe count  (28MHz and up)
+    //--------------------------------------------------------------
+    dmData.CQ.Close;
+    if dmData.trCQ.Active then dmData.trCQ.Rollback;
+    dmData.CQ.SQL.Text :=
+        'SELECT  COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
+         ' AND freq > 27.99999 AND rst_s LIKE '+ QuotedStr('%Dupe');
+    if dmData.DebugLevel >=1 then
+                                     Writeln(dmData.CQ.SQL.Text);
+    dmData.CQ.Open();
+    DUPEs:= dmData.CQ.FieldByName('Qcount').AsInteger;
+
+
     //Points count  (up to 47GHz)
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
         'SELECT  my_loc,loc,band FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
-         ' AND freq > 27.99999';
+         ' AND freq > 27.99999 AND rst_s NOT LIKE '+ QuotedStr('%Dupe');
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
@@ -1634,7 +1670,7 @@ Begin
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
         'SELECT DISTINCT(SUBSTRING(UPPER(loc),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname='+
-        QuotedStr(cmbContestName.Text)+' ORDER BY MainLoc ASC';
+        QuotedStr(cmbContestName.Text)+' AND rst_s NOT LIKE '+ QuotedStr('%Dupe')+' ORDER BY MainLoc ASC';
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
      dmData.CQ.Open();
@@ -1652,6 +1688,7 @@ Begin
      dmData.CQ.Close;
 
      mStatus.Lines.Add('QSO count: '+IntToStr(QSOs));
+     mStatus.Lines.Add('DUPE count: '+IntToStr(Dupes));
      mStatus.Lines.Add('QSO points: '+IntToStr(Points));
      mStatus.Lines.Add('-----------------------------------------------------------');
      mStatus.Lines.Add('Locator count: '+IntToStr(LOCs));
@@ -1662,14 +1699,14 @@ Begin
 
      AllQsos:=Qsos;
      Rates;
-end;
+end; //NAC status end
 
 procedure  TfrmContest.CommonStatus;
 var
   DXList,
   SRXSList,
   MyCountList     : string;
-  b               : byte;
+  b,f             : byte;
 
 //-------------------------------------------------------------------------
   procedure ByBandsStatus(UseRow:integer;SqlToUse,SqlColumn:string);
@@ -1703,7 +1740,7 @@ var
     MyCountList:='';
     sgStatus.Visible:=True;
     mStatus.Clear;
-
+    sgStatus.Clean([gzNormal]);
     if popCommonStatus.Items[0].Checked or popCommonStatus.Items[2].Checked  then
      Begin
         //total counts  of QSOs and countries + band & mode counts
@@ -1721,7 +1758,20 @@ var
              AllQsos:= dmData.CQ.FieldByName('QSOs').AsInteger;
              sgStatus.Cells[1,1]:=dmData.CQ.FieldByName('QSOs').AsString;
              ByBandsStatus(1,dmData.CQ.SQL.Text,'QSOs');
+
+             dmData.CQ.Close;
+            if dmData.trCQ.Active then dmData.trCQ.Rollback;
+            dmData.CQ.SQL.Text :=
+               'SELECT COUNT(callsign) AS DUPEs '+'FROM cqrlog_main WHERE contestname='
+               + QuotedStr(cmbContestName.Text)+ ' AND rst_s LIKE '+ QuotedStr('%Dupe');
+
+             if dmData.DebugLevel >=1 then
+                                         Writeln(dmData.CQ.SQL.Text);
+             dmData.CQ.Open();
+             sgStatus.Cells[1,7]:=dmData.CQ.FieldByName('DUPEs').AsString;
+             ByBandsStatus(7,dmData.CQ.SQL.Text,'DUPEs');
            end;
+
 
         if popCommonStatus.Items[2].Checked then
             Begin
@@ -1735,8 +1785,7 @@ var
              dmData.CQ.Open();
              sgStatus.Cells[1,3]:=dmData.CQ.FieldByName('Countries').AsString;
              ByBandsStatus(3,dmData.CQ.SQL.Text,'Countries');
-            end;
-
+            end
       end;
 
     //DX QSO count
@@ -1747,7 +1796,7 @@ var
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
       dmData.CQ.SQL.Text :=
           'SELECT COUNT(callsign) AS DXs  FROM cqrlog_main WHERE contestname='+
-           QuotedStr(cmbContestName.Text)+' AND cont<>'+QuotedStr(mycont);
+           QuotedStr(cmbContestName.Text)+' AND cont<>'+QuotedStr(mycont)+ ' AND rst_s NOT LIKE '+ QuotedStr('%Dupe');
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();

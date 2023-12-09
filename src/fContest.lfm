@@ -881,7 +881,7 @@ object frmContest: TfrmContest
         item
           Title.Caption = '023'
         end>
-      RowCount = 7
+      RowCount = 8
       TabOrder = 1
       OnMouseUp = sgStatusMouseUp
       OnPrepareCanvas = sgStatusPrepareCanvas
@@ -1165,7 +1165,7 @@ object frmContest: TfrmContest
     Left = 408
     Top = 264
     object mnuQSOcount: TMenuItem
-      Caption = 'QSO count'
+      Caption = 'QSO/DUPE count'
       Checked = True
       OnClick = mnuQSOcountClick
     end
