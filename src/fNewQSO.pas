@@ -2478,7 +2478,7 @@ var
   ExchR  : String;
   ExchS  : String;
   propmode  : String;
-
+//...................................................................
   Procedure MoveIndex(m:integer);    //within Buf limits
   Begin
      index := index+m;
@@ -2490,7 +2490,7 @@ var
       end
      else BufEnd := false;
   end;
-
+//...................................................................
   function ui32Buf(var index:integer):uint32;
   begin
     if BufEnd then
@@ -2504,7 +2504,7 @@ var
               + ord(Buf[index+3]);         // 32-bit unsigned int BigEndian
     MoveIndex(4);                 //point to next element
   end;
-
+//...................................................................
   function StrBuf(var index:integer):String;
   var
     P : uint32;
@@ -2524,7 +2524,7 @@ var
       MoveIndex(P);              //point to next element
     end
   end;
-
+//...................................................................
  function ui64Buf(var index:integer):uint64;
  var
     lo,hi    :uint32;
@@ -2533,7 +2533,7 @@ var
     lo :=  ui32Buf(index);
     Result := $100000000 * hi + lo
  end;
-
+//...................................................................
   function DoubleBuf(var index:integer):Double; //this does not work either but moves index right amount!!
    Begin
      Result := ui64Buf(index);
@@ -2548,7 +2548,7 @@ var
   begin
     Result := ui32Buf(index)
   end;
-
+//...................................................................
   function ui8Buf(var index:integer):uint8;
   begin
     if BufEnd then
@@ -2559,7 +2559,7 @@ var
     Result := ord(Buf[index]);
     MoveIndex(1)
   end;
-
+//...................................................................
   function BoolBuf(var index:integer):Boolean;
   begin
     if BufEnd then
@@ -2570,8 +2570,24 @@ var
     Result := ord(Buf[index]) = 1;
     MoveIndex(1)
   end;
+//...................................................................
+  procedure DupeInContest;
+  var
+     ContestDupe : integer;
+     begin
+       if frmContest.Showing
+          and ( not frmContest.rbIgnoreDupes.Checked )
+          and frmContest.chkMarkDupe.Checked then
+           Begin
+             ContestDupe:=frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
+             if frmContest.rbNoMode4Dupe.Checked and ( ContestDupe=2) then
+                                                  ContestDupe:=0;
+             if (ContestDupe=1) or (ContestDupe=2)  then
+                                                  edtHisRST.Text := edtHisRST.Text+'/Dupe';
+           end;
+  end;
+//...................................................................
 //-------------------------------------------------------------------
-
 begin
   if WsjtxDecodeRunning then
    begin
@@ -3089,6 +3105,7 @@ begin
                                   edtContestExchangeMessageReceived.Text := ExchR;
                                   edtContestExchangeMessageSent.Text := ExchS;
                                   edtHisRST.Text := ' '; // NA-VHF has no proper reports (!?!)
+                                  DupeInContest;
                                   edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
                                  end;
                       2         :Begin  //EU VHF    EX:RS-2chr/serial-4chr/ /locator
@@ -3098,6 +3115,7 @@ begin
                                    edtGrid.Text:=copy(ExchR,8,6);
                                    edtContestSerialSent.Text := copy(ExchS,3,4);  //serialNr
                                    edtContestExchangeMessageSent.Text:= copy(ExchS,8,6); //exMsg=locator
+                                   DupeInContest;
                                    edtHisRST.Text := edtHisRST.Text+' '; // fake space here. Otherwise qso edit sets xx9 for reports
                                    edtMyRST.Text := edtMyRST.Text+' ';
                                  end;
@@ -3106,6 +3124,7 @@ begin
                                   edtContestExchangeMessageReceived.Text := ExchR;
                                   edtContestExchangeMessageSent.Text := ExchS;
                                   edtHisRST.Text := ' '; // FD has no proper reports (!?!)
+                                  DupeInContest;
                                   edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
                                  end;
                       4         :Begin  //RTTY RU   EX:RST-3chr/ /serial-4chr[or] state(not numbers)
@@ -3118,8 +3137,12 @@ begin
                                     edtContestExchangeMessageReceived.Text:= copy(ExchR,5,length(ExchR)) //exMsg=state
                                    else
                                     edtContestSerialReceived.Text := copy(ExchR,5,length(ExchR)); //serialNr
+                                  DupeInContest;
                                  end;
-                      5,6       : edtContestName.Text := ContestName[ContestNr]+'-QSO';
+                      5,6       : Begin
+                                   edtContestName.Text := ContestName[ContestNr]+'-QSO';
+                                   DupeInContest;
+                                  end;
                  end;
                  case ContestNr of
                       1,2,3,4   : Begin

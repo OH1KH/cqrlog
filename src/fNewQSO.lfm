@@ -3149,8 +3149,8 @@ object frmNewQSO: TfrmNewQSO
               TitleFont.Height = 8
               TitleStyle = tsNative
               ColWidths = (
+                372
                 373
-                374
               )
             end
           end

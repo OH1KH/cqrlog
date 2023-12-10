@@ -418,6 +418,7 @@ begin
   if frmNewQSO.AnyRemoteOn then
     begin
       Application.MessageBox('Log is in remote mode, please disable it.','Info ...',mb_ok + mb_IconInformation);
+      edtCall.SetFocus;
       exit
     end;
   tmrScore.Enabled:=false;
@@ -1618,7 +1619,7 @@ Begin
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
         'SELECT  COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
-         ' AND freq > 27.99999 AND rst_s LIKE '+ QuotedStr('%Dupe');
+         ' AND freq > 27.99999 AND rst_s LIKE '+ QuotedStr('%Dupe%');
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
@@ -1631,7 +1632,7 @@ Begin
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
         'SELECT  my_loc,loc,band FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
-         ' AND freq > 27.99999 AND rst_s NOT LIKE '+ QuotedStr('%Dupe');
+         ' AND freq > 27.99999 AND rst_s NOT LIKE '+ QuotedStr('%Dupe%');
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
@@ -1670,7 +1671,7 @@ Begin
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
         'SELECT DISTINCT(SUBSTRING(UPPER(loc),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname='+
-        QuotedStr(cmbContestName.Text)+' AND rst_s NOT LIKE '+ QuotedStr('%Dupe')+' ORDER BY MainLoc ASC';
+        QuotedStr(cmbContestName.Text)+' AND rst_s NOT LIKE '+ QuotedStr('%Dupe%')+' ORDER BY MainLoc ASC';
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
      dmData.CQ.Open();
@@ -1763,7 +1764,7 @@ var
             if dmData.trCQ.Active then dmData.trCQ.Rollback;
             dmData.CQ.SQL.Text :=
                'SELECT COUNT(callsign) AS DUPEs '+'FROM cqrlog_main WHERE contestname='
-               + QuotedStr(cmbContestName.Text)+ ' AND rst_s LIKE '+ QuotedStr('%Dupe');
+               + QuotedStr(cmbContestName.Text)+ ' AND rst_s LIKE '+ QuotedStr('%Dupe%');
 
              if dmData.DebugLevel >=1 then
                                          Writeln(dmData.CQ.SQL.Text);
@@ -1796,7 +1797,7 @@ var
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
       dmData.CQ.SQL.Text :=
           'SELECT COUNT(callsign) AS DXs  FROM cqrlog_main WHERE contestname='+
-           QuotedStr(cmbContestName.Text)+' AND cont<>'+QuotedStr(mycont)+ ' AND rst_s NOT LIKE '+ QuotedStr('%Dupe');
+           QuotedStr(cmbContestName.Text)+' AND cont<>'+QuotedStr(mycont)+ ' AND rst_s NOT LIKE '+ QuotedStr('%Dupe%');
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
