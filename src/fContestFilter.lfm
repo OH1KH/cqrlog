@@ -120,7 +120,7 @@ object frmContestFilter: TfrmContestFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.2.2.0'
+  LCLVersion = '2.2.6.0'
   object btnOK: TButton
     AnchorSideLeft.Control = btnCancel
     AnchorSideLeft.Side = asrBottom
@@ -192,6 +192,7 @@ object frmContestFilter: TfrmContestFilter
       BorderSpacing.Left = 6
       ItemHeight = 0
       MaxLength = 40
+      OnEnter = cmbContestNameEnter
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -206,7 +207,7 @@ object frmContestFilter: TfrmContestFilter
       Width = 346
       AutoSize = False
       BorderSpacing.Top = 35
-      Caption = 'Select from worked contests in your log database'
+      Caption = 'Select from worked contests in your log'
       ParentColor = False
     end
   end

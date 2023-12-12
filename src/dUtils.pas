@@ -325,6 +325,7 @@ type
     function  StdFormatLocator(loc:string):String;
     function  IsHeDx(call:String; CqDir:String = ''):boolean;
     function  ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
+    function  ContestNameFromFilteredQsos:string;
 
 
 end;
@@ -5389,6 +5390,22 @@ begin
   end;
   dmData.Q.Close;
   dmData.trQ.Rollback
+end;
+
+function TdmUtils.ContestNameFromFilteredQsos:string;
+begin
+  Result:='';
+  dmData.qCQRLOG.First;
+    while not dmData.qCQRLOG.eof do
+    begin
+         if (dmData.qCQRLOG.FieldByName('contestname').AsString <> '') then
+          Result:=dmData.qCQRLOG.FieldByName('contestname').AsString;
+         //if there are different contest names in filtered qsos put "?" instead
+         if ((Result<>dmData.qCQRLOG.FieldByName('contestname').AsString)
+          and (dmData.qCQRLOG.FieldByName('contestname').AsString <> '')) then
+             Result:='Contest? eh? Check filter results!';
+         dmData.qCQRLOG.Next;
+    end;
 end;
 
 end.

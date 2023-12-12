@@ -78,10 +78,10 @@ Hotkeys work manly same way as with <a href="h20.html">New QSO window</a>.
 <ul>
 <li><b>Contest name</b> Selection box has a list of predefined contest names. When selecting one and leaving <b>Contest name</b> combo box name will be cut from "|"(including it) that separates contest name and explanation.
  You can also type contest name here if it is not in list. Be sure you do not use "|" character(s) in name because program will cut name from the first one found.
-<br><b>RECOMMENDATION:</b><br>
-Add date to contest name if you keep many contests in same log. That way <b>QSO list/Filter/Contest filter</b> can separate contests by name.</li>
+<br><b>&nbsp;RECOMMENDATION:</b> Add date to contest name if you keep many contests in same log. That way <b>QSO list/Filter/Contest filter</b> can separate contests by name.</li>
+<li><b>Set filter</b> If checked sets QSO list/Filter/Contest filter using name of contest. You see just qsos of this contest and can jump directly to Qso list/File/Export/...</li>
 <li><b>Tab in order</b> when checked overrides all other Tab settings (see below) and Tab Order is: Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
-<li><b>Show hint</b> when checked shows help text of object that mouse cursor currently points</li>
+<br>
 <li><b>CQ panel</b> is visible when <b>S&P</b> is not checked (CQ calling mode)</li>
     <ul><li><b>CQ period</b> timer period in millisecons to send one CQ+listen (5000 - 50000, 5-50sec)
     <br> To adjust: Set repeats=1, press CQ start, adjust period value so that F1 has time to run + listening time</li>
@@ -92,46 +92,39 @@ Add date to contest name if you keep many contests in same log. That way <b>QSO 
     </li>
 <li><b>Last Cq Freq</b> will show last used CQ frequency and mode. CQ frequency and mode is stored when F1 memory is launched either from keybord or from Memory keys F1 button.
     Click on frequency or mode reading or Ctrl+L will restore rig to that frequency and mode. This value is not stored and clears when contest window is closed.</li></ul>
+<br>
 <li><b>Call</b> when you leave this field callsign is moved to NewQSO. Callsign <b>turns BOLD RED</b> while typing if it is duplicate (and duplicate check is active).</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field. <b>Note:</b>This prevents typing space (perhaps needed in MSG fields).</li>
-<li><b>Dupe check</b> Default checked. If you use same log for several contests, and/or other working, set the contest start date with <b>from YY-MM-DD</b> button.
-<br> if <b>NoMode4Dupe</b> is selected duplicate check allows qso with same station in same band if mode differs.
-<br> if <b>Ignore dupes</b> is selected it will ignore duplication check completely.
-<br> if <b>Mark dupe</b>  is seleced, dupe check is active and callsign is found as duplicate, but still saved, program will add <b>/Dupe</b> to <b>RST sent</b> column.
-<br> <b>Note:</b> This affects <b>Status counting</b>. If sent RST has /Dupe marking it will added to dupe count and taken account also in other calculations.
-<br>Finally it is then operator's duty to clean or leave <b>/Dupe</b> text in <b>RST sent</b> of exported Cabrillo log.</li>
-<br>
 <li><b>RST s</b> RST sent. Can be changed.
-<br><b> Note:</b> defaults to 599 (CW) 59(phone). If rig mode is changed you get corresponding RST with 2xESC. 
-<br>It also changes when cursol leaves <b>call</b> column. So do not worry when working mixed mode contest!</li>
-<li><b>Tru</b> means you like to exchange true reports. Makes Tab order to stop at RST (s & r) fields. Useful in some high band contests, Es and tropo openings.</li>
+<br><b>&nbsp; Note:</b> defaults to 599(CW) 59(phone). If rig mode is changed you get corresponding RST with 3xESC (or Shift ESC). 
+<br>&nbsp; RST also changes (if needed) when cursol leaves <b>call</b> column. So do not worry when working mixed mode contest!</li>
+<li><b>Tru</b> means you like to exchange true reports. Makes Tab order to stop at RST fields. Useful in some high band contests, Es and tropo openings.</li>
 <br>
 <li><b>NR s</b> serial number to send.
-<br><b> Note:</b> you can type only numbers to NR s field.</li>
-<li> <b>Inc</b> if checked it will auto increment serial number. You may change this number at any time. Increment goes on from typed number.</li>
+<br><b>&nbsp; Note:</b> you can type only numbers to NR s field.</li>
+<li> <b>Inc</b> if checked it will auto increment serial number. You may change this number at any time. Increment goes ahead from number written in.</li>
 <br>
 <li><b>MSG s</b> sometimes you may need an additional message with number, or just a message with no number.
- On high band contests you may type your locator here.</li>
+ On high band contests you put your locator here.</li>
 <li><b>Qsp</b> if checked makes TAB order stop at MSG s. Content of MSG s is taken from last logged MSG r. Cursor is placed at the end of message for possible edit.
-  For contests where you have circulating message: At 1st qso you set your own word to send, after that you send previously received word as your next own message. </li>
-<li><b>S&P</b> When Search & Pounce is checked operator launces all CW/Voice messages manually.
+  For contests where you have circulating message: At 1st qso you set your own word to send, after that you send previously received word as your next own message. And so on... </li>
+<br><li><b>S&P</b> When Search & Pounce is checked operator launces all CW/Voice messages manually.
 <br>When S&P is not checked (in RUN mode) program launches message F2 when cursor enters one of RSTr, NRr, or MSGr columns. This way also if true reports are selected F2 is sent after your message is ready.
 <br>In case duplicate checking is enabled and callsign is duplicate, message F3 is launched instead of F2 and it happens always when cursor leaves callsign column.
 <br>When <i>Enter</i> or <i>Save qso</i> button is pressed program will send message F4.
 <br>Message F1 can be used for CQ that is manually launched.
 <br>When phone modes are used messages are lauched same way but you need very special voice script if you want to include worked station's callsign into F2 and F3 messages, but launcing F4 at QSO save may be useful.
-<br><b>NOTE:</b> When S&P checkbox changes state then also CW memory sets are switched between "S&P" and "Run".
-<br>See more about <a href="/h26.html">CW messages</a> how to define messages with macros and save/load different setups of CW messages.</li>
+<br><b>&nbsp;NOTE:</b> When S&P checkbox changes state then also CW memory sets are switched between "S&P" and "Run".
+<br>&nbsp;See more about <a href="/h26.html">CW messages</a> how to define messages with macros and save/load different setups of CW messages.</li>
 <br>
 <li><b>RST r</b> RST received. Default to 599 (CW) 59 (phone). Can be changed.
-<br>Default rst for CW and phone is created from rig's current mode. If you do not have cat controlled rig select "Hamlib dummy #1" as rig and set correct band and mode from TRXControl's band buttons.
-</li>
+<br>Default rst for CW and phone is created from rig's current mode. If you do not have cat controlled rig select "Hamlib dummy #1" as rig and set correct band and mode from TRXControl's band buttons.</li>
 <br>
 <li><b>NR r</b> serial number you receive.
-<br><b> Note:</b> you can type only numbers to NR r field. </li>
-<li><b>No </b> if thre is no serial number in contest this setting changes tab order so that it jumps over, directly to MSG r. </li>
+<br><b>&nbsp; Note:</b> you can type only numbers to NR r field. </li>
+<li><b>No</b> if there is no serial number in contest this setting changes tab order so that it jumps over, directly to MSG r. </li>
 <br>
-<li><b>MSG r</b> message you receive</li>
+<li><b>MSG r</b> contest message you receive</li>
 <li> <b>MSG is Grid</b> If '<b>MSG is ...</b>' is checked then message will be logged in <i> SRX_String </i><b>AND ALSO</b> to <i>selected NewQSO column</i>. 
 <br><br> By default <b>Msg is Grid</b>. It can be changed with right mouse click on the text.
  If <b>checked</b> then input will turn red if character count is odd. Maximum of 6 characters locator can be entered.
@@ -139,19 +132,27 @@ Add date to contest name if you keep many contests in same log. That way <b>QSO 
 <br> 
 <br>In case of <b>MSG is State</b> and callsign is detected by prefix to be a Germany callsign srx_string is copied to <b>DarcDOC</b> column, orherwise to <b>State</b> column.
 <br>In other cases MSG is copied to correspondig NewQSO column.
-<br><b>NOTE: </b>After selecting '<b>MSG is ...</b>' remember also to check the checkbox to get it activated!</b></li>
-</ul>
+<br><b>&nbsp; NOTE: </b>After selecting '<b>MSG is ...</b>' remember also to check the checkbox to get it activated!</b></li>
+
+<li><b>Dupe check</b> Default checked. If you use same log for several contests, and/or other working, set the contest start date with <b>from YY-MM-DD</b> button.
+<br> if <b>NoMode4Dupe</b> is selected duplicate check allows qso with same station in same band if mode differs.
+<br> if <b>Ignore dupes</b> is selected it will ignore duplication check completely.
+<br> if <b>Mark dupe</b>  is seleced, dupe check is active and callsign is found as duplicate, but still saved, program will add <b>/Dupe</b> to <b>RST sent</b> column.
+<br><b>&nbsp;Note:</b> This affects <b>Status counting</b>. If sent RST has /Dupe marking it will added to dupe count and taken account also in other calculations.
+<br>&nbsp;Finally it is then operator's duty to clean or leave <b>/Dupe</b> text in <b>RST sent</b> of exported Cabrillo log.</li>
+<li><b>Show hint</b> when checked shows help text of object that mouse cursor currently points</li></ul>
+
 <h4>Buttons you really do not need (you should <b>NOT use mouse</b> when working contest!):</h4>
 <ul>
 <li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears all fields.
 <br><b> Note:</b> pressing <b>ENTER at any time after cursor is out from Call column</b>  does the same.</li>
 <br><li><b>Clear QSO</b> Clear all QSO information.
 <br><b> Note:</b> Pressing 3x ESC key, or Shift+ESC, does the same.</li>
-<br><li><b>Clear all</b> Clear all fields. Usefull when starting a new contest to remove all saved settings.</li>
+<br><li><b>Clear all</b> Clear all fields. <b>Be aware!</b> Useful when starting a new contest to remove all saved settings.</li>
 </ul>
 <br>
 All settings, including contest name, are saved when closing contest form. When opening cqrlog and contest form again after rest period you can directly continue contest working.
-
+<br>See also: <a href="#cmn">Common status</a>, below for saving and loading settings. 
 </p>
 <p>
 <b>Typical contest qso goes like this:</b><br>
@@ -192,7 +193,7 @@ If contest name has "<b>nac</b>"  included (no case sensitive) then status count
 <br>
 <br><br>
 </p>
-<p><b>Common</b> status is supported.
+<p><A name="cmn"><b>Common</b></a> status is supported.
 <p align="center">
 <img src="img/contest_cmn.png">
 </p>
@@ -202,8 +203,8 @@ If contest name has <b>any name that does not fit rules of two above</b> status 
 <br>You can define what bands are shown in grid. The "All" column is shown always.
 <br>Band based counting can be defined to show all qsos in band(s) using any mode, or showing qso count only related by rig's current mode.
 <br>The DX and own continent counts (EU in picture) are defined against your callsign in preferences/station/call.
-<br><br><b>NOTE:</b> To see Status section you may need to stretch the bottom part of Contest window.
-<br><b>NOTE:</b><i> Status counting may have errors! It is just for showing progress of contest, not to show final score.</i>
+<br><br><b>&nbsp; NOTE:</b> To see Status section you may need to stretch the bottom part of Contest window.
+<br><b>&nbsp; NOTE</b><i> Status counting may have errors! It is just for showing progress of contest, not to show final score.</i>
 </p>
 
 <p>

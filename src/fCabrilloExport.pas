@@ -313,23 +313,7 @@ if not dmData.IsFilter then
       Application.MessageBox('You must first use Contest Filter for qsos to export!','Error ...',mb_OK+mb_IconError);
       exit
   end;
-  cmbCabContestName.Text:='';
-  dmData.qCQRLOG.First;
-    while not dmData.qCQRLOG.eof do
-    begin
-      if (cmbCabContestName.Text='') then //set contest name from filtered qosos
-       Begin
-         if (dmData.qCQRLOG.FieldByName('contestname').AsString <> '') then
-          cmbCabContestName.Text:=dmData.qCQRLOG.FieldByName('contestname').AsString;
-       end
-      else
-       Begin  //if there are different contest names in filtered qsos put "?" instead
-         if ((cmbCabContestName.Text<>dmData.qCQRLOG.FieldByName('contestname').AsString)
-          and (dmData.qCQRLOG.FieldByName('contestname').AsString <> '')) then
-             cmbCabContestName.Text:='eh? Check filter results!';
-       end;
-     dmData.qCQRLOG.Next;
-    end;
+  cmbCabContestName.Text:=dmUtils.ContestNameFromFilteredQsos;
 end;
 
 procedure TfrmCabrilloExport.btnCabHelpClick(Sender: TObject);

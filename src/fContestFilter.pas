@@ -32,6 +32,7 @@ type
     Label1: TLabel;
     procedure btClearClick(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
+    procedure cmbContestNameEnter(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -47,22 +48,23 @@ implementation
 {$R *.lfm}
 
 { TfrmContestFilter }
-uses dData, dUtils, fContest;
+uses dData, dUtils, fContest, fMain;
 
 procedure TfrmContestFilter.btnOKClick(Sender: TObject);
 begin
-  tmp := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "' + cmbContestName.Text + '"';
-  if (tmp <> '') then
+  if (cmbContestName.Text <> '') then
   begin
     dmData.qCQRLOG.Close;
-    dmData.qCQRLOG.SQL.Text := tmp;
+    dmData.qCQRLOG.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "'+ cmbContestName.Text + '"';
     if dmData.DebugLevel >=1 then
-      Writeln(tmp);
+      Writeln(dmData.qCQRLOG.SQL.Text);
     if dmData.trCQRLOG.Active then
       dmData.trCQRLOG.Rollback;
     dmData.trCQRLOG.StartTransaction;
     dmData.qCQRLOG.Open;
-    dmData.qCQRLOG.Last
+    dmData.qCQRLOG.Last;
+    dmData.IsFilter := True;
+    frmMain.sbMain.Panels[2].Text := 'Filter is ACTIVE!';
   end;
   ModalResult := mrOK;
 end;
@@ -100,6 +102,11 @@ end;
 procedure TfrmContestFilter.btnHelpClick(Sender: TObject);
 begin
   ShowHelp
+end;
+
+procedure TfrmContestFilter.cmbContestNameEnter(Sender: TObject);
+begin
+   frmContest.chkSetFilter.Checked:=False;
 end;
 
 procedure TfrmContestFilter.btClearClick(Sender: TObject);

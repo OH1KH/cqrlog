@@ -13,6 +13,7 @@ type
   { TfrmEDIExport }
 
   TfrmEDIExport = class(TForm)
+    btnFrmFlt: TButton;
     btnClose: TButton;
     btnExport: TButton;
     btnBrowse: TButton;
@@ -43,6 +44,7 @@ type
     pbExport: TProgressBar;
     procedure btnExportClick(Sender: TObject);
     procedure btnBrowseClick(Sender: TObject);
+    procedure btnFrmFltClick(Sender: TObject);
     procedure btnResultFileClick(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormShow(Sender : TObject);
@@ -150,6 +152,16 @@ procedure TfrmEDIExport.btnBrowseClick(Sender : TObject);
 begin
   if dlgSave.Execute then
     edtFileName.Text := dlgSave.FileName
+end;
+
+procedure TfrmEDIExport.btnFrmFltClick(Sender: TObject);
+begin
+  if not dmData.IsFilter then
+      begin
+          Application.MessageBox('You must first use Contest Filter for qsos to export!','Error ...',mb_OK+mb_IconError);
+          exit
+      end;
+  edtContestName.Text:=dmUtils.ContestNameFromFilteredQsos;
 end;
 
 procedure TfrmEDIExport.btnResultFileClick(Sender: TObject);

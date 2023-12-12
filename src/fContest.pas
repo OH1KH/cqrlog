@@ -20,6 +20,7 @@ type
     btDupChkStart: TButton;
     btnCQstart: TButton;
     cdDupeDate: TCalendarDialog;
+    chkSetFilter: TCheckBox;
     chkHint: TCheckBox;
     chkMarkDupe: TCheckBox;
     chkSP: TCheckBox;
@@ -120,6 +121,7 @@ type
     procedure chkNRIncChange(Sender: TObject);
     procedure chkNRIncClick(Sender : TObject);
     procedure chkQspChange(Sender: TObject);
+    procedure chkSetFilterExit(Sender: TObject);
     procedure chkSPClick(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
@@ -485,6 +487,7 @@ var
 begin
   chkTabAll.Checked:=False;
   chkHint.Checked:=True;
+  chkSetFilter.Checked:=False;
 
   rbDupeCheck.Checked := True;
   rbNoMode4Dupe.Checked := False;
@@ -637,6 +640,30 @@ begin
   SetTabOrders;
 end;
 
+procedure TfrmContest.chkSetFilterExit(Sender: TObject);
+begin
+  if chkSetFilter.Checked then
+   Begin
+    if(cmbContestName.Text <>'') then
+     Begin
+      dmData.qCQRLOG.Close;
+      dmData.qCQRLOG.SQL.Text :=  'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "' + cmbContestName.Text + '"';
+      if dmData.DebugLevel >=1 then
+        Writeln(dmData.qCQRLOG.SQL.Text);
+      if dmData.trCQRLOG.Active then
+        dmData.trCQRLOG.Rollback;
+      dmData.trCQRLOG.StartTransaction;
+      dmData.qCQRLOG.Open;
+      dmData.qCQRLOG.Last;
+      dmData.IsFilter := True;
+      frmMain.sbMain.Panels[2].Text := 'Filter is ACTIVE!';
+     end;
+   end
+  else
+   if dmData.IsFilter then
+        frmMain.acCancelFilterExecute(nil);
+end;
+
 procedure TfrmContest.chkSPClick(Sender: TObject);
 begin
      if chkSP.Checked then
@@ -675,17 +702,21 @@ end;
 procedure TfrmContest.cmbContestNameExit(Sender: TObject);
 var
    f: integer;
-begin
-    cmbContestName.Text:= ExtractWord(1,cmbContestName.Text,['|']);
 
-    if cmbContestName.Text='' then
+begin
+    cmbContestName.Text:= Trim(ExtractWord(1,cmbContestName.Text,['|']));
+
+    if (cmbContestName.Text='') then
        begin
          UseStatus:=-1; //no Contest name, noStatus
          mStatus.Clear;
          sgStatus.Visible:=False;
          gbStatus.Visible:=False;
+         if chkSetFilter.Checked then
+             chkSetFilter.Checked:=false;
          Exit;
        end;
+
     gbStatus.Visible:=True;
 
     if ((pos('MWC',uppercase(cmbContestName.Text))>0)
@@ -846,6 +877,7 @@ begin
 
   cqrini.WriteBool('frmContest', 'TabAll', chkTabAll.Checked);
   cqrini.WriteBool('frmContest', 'ShowHint', chkHint.Checked);
+  cqrini.WriteBool('frmContest', 'SetFilter', chkSetFilter.Checked);
   cqrini.WriteInteger('frmContest','CQperiod',spCQperiod.Value);
   cqrini.WriteInteger('frmContest','CQrepeat',spCQrepeat.Value);
 
@@ -914,8 +946,6 @@ var
 begin
   frmNewQSO.gbContest.Visible := true;
   dmUtils.LoadWindowPos(frmContest);
-
-  cmbContestName.Text       := cqrini.ReadString('frmContest', 'ContestName', '');
 
   chkTabAll.Checked         := cqrini.ReadBool('frmContest', 'TabAll', False);
   chkHint.Checked           := cqrini.ReadBool('frmContest', 'ShowHint', True);
@@ -992,6 +1022,10 @@ begin
   sgStatus.Visible:=False;
 
   InitInput;
+
+  //these as last of FormShow
+  cmbContestName.Text       := cqrini.ReadString('frmContest', 'ContestName', '');
+  chkSetFilter.Checked      := cqrini.ReadBool('frmContest', 'SetFilter', False);
 
 end;
 
@@ -1080,6 +1114,7 @@ begin
     try
       CTST.WriteString('frmContest', 'ContestName', cmbContestName.Text);
 
+      CTST.WriteBool('frmContest', 'SetFilter', chkSetFilter.Checked);
       CTST.WriteBool('frmContest', 'TabAll', chkTabAll.Checked);
       CTST.WriteBool('frmContest', 'ShowHint', chkHint.Checked);
       CTST.WriteInteger('frmContest','CQperiod',spCQperiod.Value);
@@ -1412,6 +1447,8 @@ Begin
     chkTabAll.TabStop:=false;
     cmbContestName.TabStop:=false;
     btDupChkStart.TabStop:=False;
+    chkSetFilter.TabStop:=False;
+    chkHint.TabStop:=False;
 end;
 procedure TfrmContest.QspMsg;
 Begin

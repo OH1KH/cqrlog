@@ -3,12 +3,12 @@ object frmEDIExport: TfrmEDIExport
   Height = 457
   Top = 254
   Width = 516
-  Caption = 'Export for contests'
+  Caption = 'EDI export'
   ClientHeight = 457
   ClientWidth = 516
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.6.0'
   object lblFilename: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -40,7 +40,7 @@ object frmEDIExport: TfrmEDIExport
     Left = 430
     Height = 25
     Top = 32
-    Width = 75
+    Width = 80
     BorderSpacing.Left = 3
     Caption = 'Browse'
     OnClick = btnBrowseClick
@@ -62,7 +62,7 @@ object frmEDIExport: TfrmEDIExport
     Cancel = True
     Caption = 'Close'
     ModalResult = 2
-    TabOrder = 10
+    TabOrder = 14
   end
   object btnExport: TButton
     AnchorSideTop.Control = btnClose
@@ -76,7 +76,7 @@ object frmEDIExport: TfrmEDIExport
     BorderSpacing.Right = 11
     Caption = 'Export'
     OnClick = btnExportClick
-    TabOrder = 9
+    TabOrder = 12
   end
   object pbExport: TProgressBar
     AnchorSideLeft.Control = lblFilename
@@ -87,7 +87,7 @@ object frmEDIExport: TfrmEDIExport
     Top = 422
     Width = 264
     Step = 1
-    TabOrder = 11
+    TabOrder = 15
   end
   object lblDone: TLabel
     AnchorSideLeft.Control = pbExport
@@ -150,7 +150,7 @@ object frmEDIExport: TfrmEDIExport
     Width = 307
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
-    TabOrder = 3
+    TabOrder = 4
   end
   object lblRxEquipment: TLabel
     AnchorSideLeft.Control = lblFilename
@@ -174,7 +174,7 @@ object frmEDIExport: TfrmEDIExport
     Width = 307
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
-    TabOrder = 5
+    TabOrder = 6
   end
   object lblAntenna: TLabel
     AnchorSideLeft.Control = lblFilename
@@ -197,7 +197,7 @@ object frmEDIExport: TfrmEDIExport
     Width = 307
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
-    TabOrder = 12
+    TabOrder = 7
   end
   object lblAntennaHeight: TLabel
     AnchorSideLeft.Control = lblFilename
@@ -223,7 +223,7 @@ object frmEDIExport: TfrmEDIExport
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
     NumbersOnly = True
-    TabOrder = 7
+    TabOrder = 8
   end
   object lblAntennaHeightSeaLevel: TLabel
     AnchorSideLeft.Control = edtAntennaHeightGroundLevel
@@ -251,7 +251,7 @@ object frmEDIExport: TfrmEDIExport
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
     NumbersOnly = True
-    TabOrder = 8
+    TabOrder = 9
   end
   object lblAntennaHeightGroundLevel: TLabel
     AnchorSideTop.Control = edtAntennaHeightSeaLevel
@@ -286,7 +286,7 @@ object frmEDIExport: TfrmEDIExport
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
     NumbersOnly = True
-    TabOrder = 4
+    TabOrder = 5
   end
   object lblDigitalModes: TLabel
     AnchorSideLeft.Control = lblFilename
@@ -310,7 +310,7 @@ object frmEDIExport: TfrmEDIExport
     Width = 307
     BorderSpacing.Left = 15
     BorderSpacing.Top = 3
-    TabOrder = 6
+    TabOrder = 10
   end
   object lblError: TLabel
     AnchorSideLeft.Control = lblFilename
@@ -350,9 +350,20 @@ object frmEDIExport: TfrmEDIExport
     Top = 358
     Width = 240
     Caption = 'Export requires serial nr (stx/srx)'
-    Checked = True
-    State = cbChecked
-    TabOrder = 14
+    TabOrder = 11
+  end
+  object btnFrmFlt: TButton
+    AnchorSideLeft.Control = btnBrowse
+    AnchorSideTop.Control = edtContestName
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Side = asrBottom
+    Left = 430
+    Height = 25
+    Top = 70
+    Width = 80
+    Caption = 'Frm Flt'
+    OnClick = btnFrmFltClick
+    TabOrder = 3
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.edi'

@@ -11,7 +11,7 @@ object frmCabrilloExport: TfrmCabrilloExport
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '2.2.6.0'
   object lblCabfileName: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
