@@ -169,30 +169,44 @@ Contest numbers and messages are saved in log in their own columns. Use <b>prefe
  how to use macros in messages.
 <br><b>NOTE:</b> If you use macro that sends whole contest message (%xrs = RST, STX, STXString) message will skip empty ones. This way %xrs works for all contests.
 </p>
+<hr>
 <h4>Status view support</h4>
 <b>NOTE:</b> If you have one log called <b>contest</b> that you clear always before contest, to have just qsos of that contest, and after contest you move all qsos 
 with adif export to another log called <b>archive</b> you can view contest status afterwards from that log if you have used <b>unique contest names</b> I.E. added contest start date to name.
 <br> Find contest with <b>Filter/Contest filter</b> and copy name from selection list box and paste it to Contest window. You do not have to activate contest filter to see the status of that contest.
+<hr>
 <p><b>OK1WC memorial contest</b> status is supported.
 <p align="center">
 <img src="img/contest_mwc.png">
 </p>
 <p>
-If contest name has "<b>mwc</b>" or "<b>ok1wc</b>" included (no case sensitive) then status counting by MWC rules is activated by 5sec timer interval.
+If contest name has "<b>mwc</b>" or "<b>ok1wc</b>" included (no case sensitive) then status counting by MWC rules is activated by 3sec timer interval.
 <br>TRXControl must show that rig is on 80m or 40m band. If you do not have cat controlled rig select "Hamlib dummy #1" as rig and set correct band and mode from TRXControl's band buttons. 
 <br>Only bands 80M and 40M and mode CW are counted (See rules of contest).
 <br><br>
 </p>
-<br>
+<hr>
 <p><b>Nordic Activity Contest (NAC)</b> status is supported.
 <p align="center">
 <img src="img/contest_nac.png">
 </p>
 <p>
-If contest name has "<b>nac</b>"  included (no case sensitive) then status counting by NAC rules is activated  by 5sec timer interval.
+If contest name has "<b>nac</b>"  included (no case sensitive) then status counting by NAC rules is activated  by 3sec timer interval.
+<br><br>
+</p>
+<hr>
+<p><b>SRAL FT8 Contest </b> (OH contest) status is supported.
+<p align="center">
+<img src="img/contest_sralft8.png">
+</p>
+<p>
+If contest name has "<b>sral</b>" and "<b>ft8</b>" <i>both</i> included (no case sensitive) then status counting by SRAL FT8 rules is activated  by 3sec timer interval.
+<br>Just keep the Contest window open while using <b>wsjt remote</b> to see the status of contest.
+<br>Dupe check and Mark dupe should be set.
 <br>
 <br><br>
 </p>
+<hr>
 <p><A name="cmn"><b>Common</b></a> status is supported.
 <p align="center">
 <img src="img/contest_cmn.png">
@@ -206,7 +220,7 @@ If contest name has <b>any name that does not fit rules of two above</b> status 
 <br><br><b>&nbsp; NOTE:</b> To see Status section you may need to stretch the bottom part of Contest window.
 <br><b>&nbsp; NOTE</b><i> Status counting may have errors! It is just for showing progress of contest, not to show final score.</i>
 </p>
-
+<hr>
 <p>
 <H4>After contest</h4>
 Most contests expect <b>Cabrillo</b> log format. Cqrlog has a limited support of Cabrillo exports. Mostly enough for a Sunday contester.

@@ -65,6 +65,8 @@ begin
     dmData.qCQRLOG.Last;
     dmData.IsFilter := True;
     frmMain.sbMain.Panels[2].Text := 'Filter is ACTIVE!';
+    frmMain.RefreshQSODXCCCount;
+    frmMain.ShowFields
   end;
   ModalResult := mrOK;
 end;

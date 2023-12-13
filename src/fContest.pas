@@ -190,6 +190,7 @@ type
     procedure MsgIsPopChk(nr:integer);
     procedure MWCStatus;
     procedure NACStatus;
+    procedure SRALFt8Status;
     procedure CommonStatus;
     procedure Rates;
     procedure SendFmemory(key:word);
@@ -720,7 +721,7 @@ begin
     gbStatus.Visible:=True;
 
     if ((pos('MWC',uppercase(cmbContestName.Text))>0)
-    or (pos('OK1WC',uppercase(cmbContestName.Text))>0)) then
+     or (pos('OK1WC',uppercase(cmbContestName.Text))>0)) then
       Begin
         UseStatus:=1; //OK1WC memorial contest
         MWCStatus;
@@ -734,17 +735,25 @@ begin
         Exit;
       end;
 
+    if ((pos('SRAL',uppercase(cmbContestName.Text))>0)
+     and (pos('FT8',uppercase(cmbContestName.Text))>0)) then
+      Begin
+        UseStatus:=3; //SRAL FT8 contest for OH stations
+        SRALFt8Status;
+        Exit;
+      end;
+
     {
     //if you create a Status procedure you can call it here
     if (pos('xxxx',uppercase(cmbContestName.Text))>0) then
       Begin
-        UseStatus:=3; //Next status counting procedure to be #3
+        UseStatus:=4; //Next status counting procedure to be #4
         xxxxStatus;
         Exit;
       end;
      }
 
-     UseStatus:=0;  //Common status display for contests where name does not fit to any above
+     UseStatus:=0;  //Common status display for contests where name is not '' and does not fit to any above
      for f:=10 to 20 do
       sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
      tmrScore.Enabled:=True;
@@ -1525,6 +1534,13 @@ Begin
 end;
 
 procedure  TfrmContest.MWCStatus;
+{
+OK1WC memorial contest MWC: OK1WC or MWC (no case sensitive) must appear in contest name to activate score counting
+Bands: 40,80M
+Modes: CW
+Points: 1p/Qso on each band
+Multipliers: last letter (or number) in callsign on each band
+}
 var
    Mlist         : array [1..2] of string[40];
    Band          : integer;
@@ -1616,6 +1632,14 @@ Begin
 end; //MWC status end
 
 procedure  TfrmContest.NACStatus;
+{
+Nordic Activity Contest NAC: (no case sensitive) must appear in contest name to activate score counting
+Bands: 28, 50, 70 ,2M, 70cm, 23cm and up (microwaves several bands in same contest, otherwise one band contest)
+Modes: CW, SSB, FM, MGM
+Points: by qso distance. below 10km=10p, otherwise QSOkm=p.
+Exception: 13cm multiply km*2=p and raise multiplier by 1 on every higer band than 13cm
+Multipliers: 500p for every 4chr locator grid
+}
 var
     QSOs,
     Dupes,
@@ -1702,7 +1726,7 @@ Begin
          dmData.CQ.Next;
       end;
 
-    //list of different main locators (localtor multipliers)
+    //list of different main locators (locator multipliers)
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
@@ -1738,6 +1762,92 @@ Begin
      AllQsos:=Qsos;
      Rates;
 end; //NAC status end
+
+procedure  TfrmContest.SRALFt8Status;
+{
+SRAL FT8 conntest for OH stations: SRAL *and* FT8  (no case sensitive) must appear in contest name to activate score counting
+Bands: 40,80M
+Modes: FT8
+Points: 2p/Qso on each band
+Multipliers: each 4chr locator/band
+}
+var
+   Mlist         : array [1..2] of string;
+   Band          : integer;
+   QSOc,MULc     : array [1..2] of integer;
+   DUPEc         : array [1..2] of integer;
+   f,p           : integer;
+   M             : char;
+   bands         : array [1..2] of string=('80M','40M');
+Begin
+   sgStatus.Visible:=False;
+   mStatus.Clear;
+    for band:=2 downto 1 do
+      begin
+       QSOc[band]:=0;
+       MULc[band]:=0;
+       DUPEc[band]:=0;
+       try
+        //total qso count
+        if dmData.trCQ.Active then dmData.trCQ.Rollback;
+          dmData.CQ.SQL.Text :=
+               'SELECT COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+
+               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('FT8');
+          if dmData.DebugLevel >=1 then
+                                       Writeln(dmData.CQ.SQL.Text);
+         dmData.CQ.Open();
+         QSOc[band]:= dmData.CQ.FieldByName('Qcount').AsInteger;
+         //duplicate count
+         dmData.CQ.Close;
+         if dmData.trCQ.Active then dmData.trCQ.Rollback;
+          dmData.CQ.SQL.Text :=
+               'SELECT COUNT(callsign) AS Dcount FROM cqrlog_main WHERE contestname='+
+               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('FT8')+
+               'AND rst_s LIKE '+QuotedStr('%/Dupe');
+          if dmData.DebugLevel >=1 then
+                                       Writeln(dmData.CQ.SQL.Text);
+         dmData.CQ.Open();
+         DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
+
+
+         //list of different 4chr locators (locator multipliers)
+         //--------------------------------------------------------------
+         dmData.CQ.Close;
+         if dmData.trCQ.Active then dmData.trCQ.Rollback;
+         dmData.CQ.SQL.Text :=
+             'SELECT DISTINCT(SUBSTRING(UPPER(loc),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname='+
+             QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('FT8')+
+             ' AND rst_s NOT LIKE '+ QuotedStr('%Dupe%')+' ORDER BY MainLoc ASC';
+         if dmData.DebugLevel >=1 then
+                                          Writeln(dmData.CQ.SQL.Text);
+          dmData.CQ.Open();
+          dmData.CQ.First;
+          while not dmData.CQ.EOF do
+           begin
+            if dmData.CQ.FieldByName('MainLoc').AsString<>'' then
+             Begin
+              MList[band]:= MList[band]+dmData.CQ.FieldByName('Mainloc').AsString+',';
+              MULc[band]:= MULc[band]+1;
+             end;
+             dmData.CQ.Next;
+           end;
+         finally
+           dmData.CQ.Close();
+           dmData.trCQ.Rollback;
+         end;
+           mStatus.Lines.Add(bands[band]+':   Loc:'+IntToStr(MULc[band])+
+           '   QSOs:' + IntToStr(QSOc[band])+'   DUPEs:' + IntToStr(DUPEc[band])+LineEnding+
+           Mlist[band]+LineEnding);
+      end;
+
+    mStatus.Lines.Add('-----------------------------------------------------------------------------------------');
+    mStatus.Lines.Add(' Total    QSOs: ' + IntToStr(QSOc[1]+QSOc[2])+'   DUPEs: '+ IntToStr( DUPEc[1]+DUPEc[2]) );
+    mStatus.Lines.Add(' Total    Pts:  ' + IntToStr( (QSOc[1]+QSOc[2]-DUPEc[1]-DUPEc[2])*2 )+'   Multipliers: '+IntToStr(MULc[1]+MULc[2])+
+                      '   Score: '+ IntToStr(  ((QSOc[1]+QSOc[2]-DUPEc[1]-DUPEc[2])*2) * (MULc[1]+MULc[2])  ) );
+
+    AllQsos:= QSOc[1]+QSOc[2];
+    Rates;
+end; //SRAL FT8 status end
 
 procedure  TfrmContest.CommonStatus;
 var

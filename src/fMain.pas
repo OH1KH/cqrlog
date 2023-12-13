@@ -561,8 +561,7 @@ end;
 
 procedure TfrmMain.lblQSOCountClick(Sender: TObject);
 begin
-  if dmData.DebugLevel >= 1 then
-    ShowMessage(IntToStr(dbgrdMain.SelectedRows.Count));
+    ShowMessage(IntToStr(dbgrdMain.SelectedRows.Count)+' selected QSOs');
 end;
 
 procedure TfrmMain.mnuCEClick(Sender: TObject);
