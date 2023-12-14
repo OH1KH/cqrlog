@@ -1429,7 +1429,7 @@ begin
   ClearGrayLineMapLine;
 
   if not AnyRemoteOn then
-                       edtCall.SetFocus;
+                       ReturnToNewQSO;
   if not (fEditQSO or fViewQSO or cbOffline.Checked) then
     tmrStart.Enabled := True;
   tmrEnd.Enabled := False;
@@ -1856,7 +1856,7 @@ begin
   ClearAll;
   dmUtils.AddBandsToStatGrid(sgrdStatistic);
   dmUtils.AddBandsToStatGrid(sgrdCallStatistic);
-  edtCall.SetFocus;
+  ReturnToNewQSO;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
   if cqrini.ReadBool('Modes', 'Rig2Data', False) then chkAutoMode.Font.Color:=clRed;
@@ -3531,7 +3531,7 @@ begin
         else
          Begin
           if cbOffline.Checked then edtDate.SetFocus
-                               else edtCall.SetFocus;
+                               else ReturnToNewQSO;
          end;
      end;
 
@@ -3817,7 +3817,7 @@ begin
   end;
   if ((key = VK_TAB) and cbOffline.Checked and (edtCall.Text='') and (not AnyRemoteOn)) then
    Begin
-     edtCall.SetFocus;
+     ReturnToNewQSO;
      key := 0
    end;
    if ((length(edtEndTime.Text)=3)
@@ -4126,7 +4126,7 @@ begin
   end;
   if (key = 38) then //up arrow
   begin
-    edtCall.SetFocus;
+    ReturnToNewQSO;
     key := 0
   end;
   if ((key = VK_SPACE) and UseSpaceBar) then
@@ -5702,7 +5702,7 @@ begin
         if edtCall.Text = '' then
         begin
           if edtCall.Enabled then
-            edtCall.SetFocus
+            ReturnToNewQSO
         end
         else
          edtCall.Text := ''; // OnChange calls ClearAll;
@@ -5851,7 +5851,7 @@ begin
   begin     //F8
     if not (fEditQSO or fViewQSO) then
       edtCall.Text:= '';
-    edtCall.SetFocus;
+    ReturnToNewQSO;
     key := 0
   end;
 
@@ -6064,7 +6064,7 @@ procedure TfrmNewQSO.mCommentKeyDown(Sender: TObject; var Key: Word;
 begin
   if ((key = VK_TAB) and (not AnyRemoteOn)) then
     Begin
-     edtCall.SetFocus;
+     ReturnToNewQSO;
      key := 0
     end;
 end;
@@ -6637,7 +6637,7 @@ begin
   edtDate.ReadOnly  := fViewQSO;
   mComment.ReadOnly := fViewQSO;
   edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
-  edtCall.SetFocus
+  ReturnToNewQSO
 end;
 
 procedure TfrmNewQSO.NewQSO;
@@ -7441,7 +7441,7 @@ end;
 
 procedure TfrmNewQSO.ReturnToNewQSO;
 begin
-  if frmContest.Showing then
+  if frmContest.Showing  and frmContest.ContestReady then
       frmContest.edtCall.SetFocus
     else
       if edtCall.Enabled then
@@ -7710,7 +7710,7 @@ begin
   cbOffline.Checked         := False;
   cbOffline.Enabled         := True;
   btnSave.Enabled           := True;
-  edtCall.SetFocus;
+  ReturnToNewQSO;
   //clear TMPQSO mode on close. Otherwise it shows up on next remote mode (procedure ClearAll makes it)
   cqrini.WriteString('TMPQSO','Mode','');
 end;

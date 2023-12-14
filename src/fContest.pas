@@ -199,6 +199,7 @@ type
     procedure ChangeStatusPop(Sender: TObject);
   public
     { public declarations }
+    ContestReady: Boolean;
     procedure SaveSettings;
   end;
 
@@ -864,6 +865,7 @@ end;
 
 procedure TfrmContest.FormCreate(Sender: TObject);
 begin
+  ContestReady:=False;
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
   QsoSince:=0;
@@ -936,6 +938,7 @@ begin
 end;
 procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 Begin
+   ContestReady:=False;
    SaveSettings;
    cqrini.WriteBool('CW','S&P',True);  //set default CW memories
    frmNewQSO.UpdateFKeyLabels;
@@ -1032,10 +1035,9 @@ begin
 
   InitInput;
 
-  //these as last of FormShow
   cmbContestName.Text       := cqrini.ReadString('frmContest', 'ContestName', '');
   chkSetFilter.Checked      := cqrini.ReadBool('frmContest', 'SetFilter', False);
-
+  ContestReady:=True; //indicates that all values are loaded and ready to go
 end;
 
 procedure TfrmContest.MsgIsPopChk(nr:integer);
