@@ -1125,7 +1125,7 @@ object frmContest: TfrmContest
     BorderSpacing.Left = 6
     BorderSpacing.Top = 3
     Caption = 'Set filter'
-    OnExit = chkSetFilterExit
+    OnClick = chkSetFilterClick
     TabOrder = 28
   end
   object tmrESC2: TTimer

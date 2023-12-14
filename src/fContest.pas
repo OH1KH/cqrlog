@@ -121,7 +121,7 @@ type
     procedure chkNRIncChange(Sender: TObject);
     procedure chkNRIncClick(Sender : TObject);
     procedure chkQspChange(Sender: TObject);
-    procedure chkSetFilterExit(Sender: TObject);
+    procedure chkSetFilterClick(Sender: TObject);
     procedure chkSPClick(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
@@ -231,6 +231,8 @@ var
    // contest bands 160M to 23cm  Points to dUtils.cBands [0..30]
    // 160M  80M  40M  20M  15M  10M   6M    4M    2M    0,7M   0,23M
       (2,    3,   5,   7,   9,  11,   13,   15,   16,    18,    20);
+
+  WasContestName:string;
 
 implementation
 
@@ -642,7 +644,8 @@ begin
   SetTabOrders;
 end;
 
-procedure TfrmContest.chkSetFilterExit(Sender: TObject);
+procedure TfrmContest.chkSetFilterClick(Sender: TObject);
+
 begin
   if chkSetFilter.Checked then
    Begin
@@ -659,11 +662,15 @@ begin
       dmData.qCQRLOG.Last;
       dmData.IsFilter := True;
       frmMain.sbMain.Panels[2].Text := 'Filter is ACTIVE!';
+      WasContestName:=cmbContestName.Text;
      end;
    end
   else
    if dmData.IsFilter then
         frmMain.acCancelFilterExecute(nil);
+
+  if ContestReady then
+                edtCall.SetFocus;
 end;
 
 procedure TfrmContest.chkSPClick(Sender: TObject);
@@ -699,6 +706,7 @@ end;
 procedure TfrmContest.cmbContestNameEnter(Sender: TObject);
 begin
   tmrScore.Enabled:=False;
+  WasContestName:=cmbContestName.Text;
 end;
 
 procedure TfrmContest.cmbContestNameExit(Sender: TObject);
@@ -716,10 +724,19 @@ begin
          gbStatus.Visible:=False;
          if chkSetFilter.Checked then
              chkSetFilter.Checked:=false;
+         WasContestName:='';
          Exit;
        end;
 
     gbStatus.Visible:=True;
+
+    //this happen when Contest window is opened with saved value of SetFilter and ContestName
+    if  chkSetFilter.Checked and (not dmData.IsFilter) and ContestReady then
+             chkSetFilterClick(nil);
+
+    //contest name changed while filter was active
+    if (WasContestName <> cmbContestName.Text) and chkSetFilter.Checked and dmData.IsFilter  then
+             chkSetFilterClick(nil);
 
     if ((pos('MWC',uppercase(cmbContestName.Text))>0)
      or (pos('OK1WC',uppercase(cmbContestName.Text))>0)) then
@@ -866,6 +883,7 @@ end;
 procedure TfrmContest.FormCreate(Sender: TObject);
 begin
   ContestReady:=False;
+  WasContestName:='';
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
   QsoSince:=0;
