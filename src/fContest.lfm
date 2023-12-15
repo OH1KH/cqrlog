@@ -1121,11 +1121,12 @@ object frmContest: TfrmContest
     Height = 23
     Hint = 'Set QsoList/FIlter/Contest filter by contest name'#10'used in Contest window.'#10'You can jump directly to QsoList/File/Export/... then.'
     Top = 43
-    Width = 82
+    Width = 108
     BorderSpacing.Left = 6
     BorderSpacing.Top = 3
-    Caption = 'Set filter'
+    Caption = 'Set filter(Ex)'
     OnClick = chkSetFilterClick
+    OnMouseUp = chkSetFilterMouseUp
     TabOrder = 28
   end
   object tmrESC2: TTimer
@@ -1334,5 +1335,18 @@ object frmContest: TfrmContest
     Options = [ofOverwritePrompt, ofPathMustExist, ofEnableSizing, ofViewDetail]
     Left = 656
     Top = 264
+  end
+  object popQuickExport: TPopupMenu
+    Left = 320
+    Top = 264
+    object AdifExp: TMenuItem
+      Action = frmMain.acExADIF
+    end
+    object CabrilloExp: TMenuItem
+      Action = frmMain.acCabrilloExport
+    end
+    object EdiExp: TMenuItem
+      Action = frmMain.acEDIExport
+    end
   end
 end

@@ -62,6 +62,9 @@ type
     Band_160: TMenuItem;
     Load: TMenuItem;
     Band_023: TMenuItem;
+    AdifExp: TMenuItem;
+    CabrilloExp: TMenuItem;
+    EdiExp: TMenuItem;
     mnuModeRelated: TMenuItem;
     mnuReSetAllHF: TMenuItem;
     mnuReSetAllVHF: TMenuItem;
@@ -96,6 +99,7 @@ type
     mnuComment: TMenuItem;
     mnuName: TMenuItem;
     CQpanel: TPanel;
+    popQuickExport: TPopupMenu;
     popSetMsg: TPopupMenu;
     popCommonStatus: TPopupMenu;
     rbDupeCheck: TRadioButton;
@@ -122,6 +126,8 @@ type
     procedure chkNRIncClick(Sender : TObject);
     procedure chkQspChange(Sender: TObject);
     procedure chkSetFilterClick(Sender: TObject);
+    procedure chkSetFilterMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure chkSPClick(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
@@ -673,6 +679,18 @@ begin
                 edtCall.SetFocus;
 end;
 
+procedure TfrmContest.chkSetFilterMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if (Button=mbRight) and chkSetFIlter.Checked then
+   Begin
+    AdifExp.Checked:=False;
+    AdifExp.ShortCut:=0000;
+    CabrilloExp.Checked:=False;
+    EdiExp.Checked:=False;
+    popQuickExport.PopUp;
+   end;
+end;
 procedure TfrmContest.chkSPClick(Sender: TObject);
 begin
      if chkSP.Checked then
@@ -1832,6 +1850,7 @@ Begin
 
          //list of different 4chr locators (locator multipliers)
          //--------------------------------------------------------------
+         Mlist[band]:='';
          dmData.CQ.Close;
          if dmData.trCQ.Active then dmData.trCQ.Rollback;
          dmData.CQ.SQL.Text :=
