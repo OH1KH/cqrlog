@@ -2054,14 +2054,33 @@ begin
        msgRes, WAZ, posun, ITU, lat, long);
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
-     //case of USA print it only. Forget state. It is not shown full and may be bogus
+     //case of USA print it only. Forget state. It is not shown full and may be false
      StatClr :=clBlack;
      if pos('USA',upcase(msgRes))=1 then
+        Begin
+           if chkUState.Checked then
+              msgRes := 'USA '+UsCallState(msgCall,StatClr)
+            else
+              msgRes := 'USA';
+          end;
+
+     //exception to USA is Hawaii that is also US state, but call may also be in mainland
+      if pos('HAWAII',upcase(msgRes))=1  then
        begin
-        msgRes := 'USA';
          if chkUState.Checked then
-            msgRes := 'USA '+UsCallState(msgCall,StatClr);
-       end;
+          begin
+           if upcase(UsCallState(msgCall,StatClr))='HI' then
+            Begin
+             if chkMap.Checked then
+                 msgRes := 'HAW '+UsCallState(msgCall,StatClr)
+                else
+                 msgRes := 'Hawaii '+UsCallState(msgCall,StatClr);
+            end
+           else
+            if upcase(UsCallState(msgCall,StatClr))<>'' then
+              msgRes := 'USA '+UsCallState(msgCall,StatClr)
+          end;
+         end;
 
       if (chkMap.Checked and (StatClr<>clBlack))  then  //there is US state to print to Map
       AddColorStr(copy(msgRes,5,2), StatClr,6,sgMonitor.rowCount-1);
