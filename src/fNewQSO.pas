@@ -4463,8 +4463,8 @@ var
   lat, lng : Currency;
 begin
   f := frmTRXControl.GetFreqMHz;
-  if f = 0.0 then
-    f := StrToFloat(cmbFreq.Text);
+  if (f = 0.0) and  (cmbFreq.Text<>'') then
+        f := StrToFloat(cmbFreq.Text);
   dmUtils.GetRealCoordinate(lblLat.Caption,lblLong.Caption,lat,lng);
   frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
                           lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible)
@@ -5959,8 +5959,6 @@ begin
     acNewQSOExecute(nil);
     key := 0
   end;
-
-
 end;
 
 procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
