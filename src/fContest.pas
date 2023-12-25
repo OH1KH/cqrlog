@@ -134,6 +134,7 @@ type
     procedure cmbContestNameEnter(Sender: TObject);
     procedure cmbContestNameExit(Sender: TObject);
     procedure edtRSTrEnter(Sender: TObject);
+    procedure edtSRXStrKeyPress(Sender: TObject; var Key: char);
     procedure lblCqFreqClick(Sender: TObject);
     procedure LoadClick(Sender: TObject);
     procedure mnuReSetAllCountersClick(Sender: TObject);
@@ -382,6 +383,7 @@ begin
   //Jump to last CQ freq,mode
   if  ((Shift = [ssCTRL]) and (key = VK_L)) then
                               lblCqFreqClick(nil);
+
 end;
 
 procedure TfrmContest.edtCallExit(Sender: TObject);
@@ -808,6 +810,12 @@ begin
               end;
 end;
 
+procedure TfrmContest.edtSRXStrKeyPress(Sender: TObject; var Key: char);
+begin
+   if ((chkLoc.Checked) and (MsgIs=1 ))then
+                         dmUtils.KeyInLoc(edtSRXStr.Text,Key);
+end;
+
 procedure TfrmContest.lblCqFreqClick(Sender: TObject);
 var
    f:double;
@@ -837,10 +845,14 @@ begin
     Key := 0;
     SelectNext(Sender as TWinControl, True, True);
   end;
-   if not (key in [VK_A..VK_Z, VK_0..VK_9, VK_NUMPAD0..VK_NUMPAD9,
+
+  if not (key in [VK_A..VK_Z, VK_0..VK_9, VK_NUMPAD0..VK_NUMPAD9,
     VK_TAB, VK_LCL_SLASH, VK_DELETE,VK_BACK,VK_RIGHT,VK_LEFT,
     VK_HOME,VK_DIVIDE, VK_END]) then
      key := 0;
+
+  if (Shift = [ssCTRL]) then
+    if key in [VK_A..VK_Z] then  Key:=0;
 end;
 
 procedure TfrmContest.edtCallKeyPress(Sender: TObject; var Key: char);
@@ -856,11 +868,14 @@ begin
 end;
 
 procedure TfrmContest.edtSRXStrChange(Sender: TObject);
+var
+   Key:char;
 begin
   if ((chkLoc.Checked) and (MsgIs=1 ))then
   begin
    edtSRXStr.Text := dmUtils.StdFormatLocator(edtSRXStr.Text);
    edtSRXStr.SelStart := Length(edtSRXStr.Text);
+   edtSRXStr.SelLength:=0;
    if ( Length(edtSRXStr.Text) in [1,3,5] )then
        edtSRXStr.Font.Color:=clRed
       else

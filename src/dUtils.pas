@@ -233,6 +233,7 @@ type
     procedure ClearStatGrid(g:TStringGrid);
     procedure AddBandsToStatGrid(g:TStringGrid);
     procedure ShowStatistic(ref_adif,old_stat_adif:Word; g:TStringGrid; call:String='');
+    procedure KeyInLoc(loc:string; var key:char);
 
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
@@ -1089,6 +1090,26 @@ begin
     delta := delta + fTimeOffset;
     if delta <> 0 then
       Result := Result - (delta / 24);
+  end;
+end;
+
+procedure TdmUtils.KeyInLoc(Loc:string; var Key:char);
+Begin
+  //pass only format AB12cd34ef and BS/DEL keys
+  if (( Key<>#$8 ) and ( Key<>#$7F) and ( Key<>#22)) then
+  begin
+    case length(Loc) of
+      0,1  :  if Key in ['a'..'r'] then Key:= chr(ord(Key) - $20) else
+                  if not (Key in ['A'..'R']) then Key:= #0;
+      2,3  :  if not (Key in ['0'..'9']) then Key:= #0;
+      4,5  :  if Key in ['A'..'X'] then Key:= chr(ord(Key) + $20) else
+                 if not (Key in ['a'..'x']) then Key:= #0;
+      6,7  :  if not (Key in ['0'..'9']) then Key:=  #0;
+      8,9  :  if Key in ['A'..'X'] then Key:= chr(ord(Key) + $20) else
+                 if not (Key in ['a'..'x']) then Key:= #0;
+      else
+        Key:=#0;
+    end;
   end;
 end;
 

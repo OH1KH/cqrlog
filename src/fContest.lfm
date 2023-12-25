@@ -138,6 +138,7 @@ object frmContest: TfrmContest
     OnChange = edtSRXStrChange
     OnEnter = edtRSTrEnter
     OnKeyDown = edtCallKeyDown
+    OnKeyPress = edtSRXStrKeyPress
     ParentShowHint = False
     ShowHint = True
     TabOrder = 4

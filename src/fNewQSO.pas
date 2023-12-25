@@ -4626,21 +4626,7 @@ end;
 procedure TfrmNewQSO.edtGridKeyPress(Sender: TObject; var Key: char);
 begin
   //pass only format AB12cd34ef and BS/DEL keys
-  if (( Key<>#$8 ) and ( Key<>#$7F) and ( Key<>#22)) then
-  begin
-    case length(edtGrid.Text) of
-      0,1  :  if Key in ['a'..'z'] then Key:= chr(ord(Key) - $20) else
-                  if not (Key in ['A'..'Z']) then Key:= #0;
-      2,3  :  if not (Key in ['0'..'9']) then Key:= #0;
-      4,5  :  if Key in ['A'..'Z'] then Key:= chr(ord(Key) + $20) else
-                 if not (Key in ['a'..'z']) then Key:= #0;
-      6,7  :  if not (Key in ['0'..'9']) then Key:=  #0;
-      8,9  :  if Key in ['A'..'Z'] then Key:= chr(ord(Key) + $20) else
-                 if not (Key in ['a'..'z']) then Key:= #0;
-      else
-        Key:=#0;
-    end;
-  end;
+  dmUtils.KeyInLoc(edtGrid.Text,Key);
 end;
 
 procedure TfrmNewQSO.acQSOListExecute(Sender: TObject);

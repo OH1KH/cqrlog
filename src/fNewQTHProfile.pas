@@ -27,6 +27,9 @@ type
     mEquipment: TMemo;
     mQTH: TMemo;
     procedure edtLocatorChange(Sender: TObject);
+    procedure edtLocatorEnter(Sender: TObject);
+    procedure edtLocatorExit(Sender: TObject);
+    procedure edtLocatorKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
@@ -104,6 +107,31 @@ procedure TfrmNewQTHProfile.edtLocatorChange(Sender: TObject);
 begin
   edtLocator.Text := dmUtils.StdFormatLocator(edtLocator.Text);
   edtLocator.SelStart := Length(edtLocator.Text);
+  edtLocator.SelLength:=0;
+end;
+
+procedure TfrmNewQTHProfile.edtLocatorEnter(Sender: TObject);
+begin
+  edtLocator.SelectAll;
+end;
+
+procedure TfrmNewQTHProfile.edtLocatorExit(Sender: TObject);
+begin
+  if dmUtils.isLocOK(edtLocator.Text) then
+    begin
+     lblLocator.Font.Style:=[];
+     lblLocator.Font.Color:=clDefault;
+    end
+   else
+    Begin
+     lblLocator.Font.Style:=[fsBold];
+     lblLocator.Font.Color:=clRed;
+    end;
+end;
+
+procedure TfrmNewQTHProfile.edtLocatorKeyPress(Sender: TObject; var Key: char);
+begin
+    dmUtils.KeyInLoc(edtLocator.Text,Key);
 end;
 
 end.

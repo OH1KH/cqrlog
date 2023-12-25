@@ -1025,6 +1025,7 @@ type
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtLocExit(Sender: TObject);
+    procedure edtLocKeyPress(Sender: TObject; var Key: char);
     procedure edtOperatorExit(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
@@ -2667,6 +2668,11 @@ begin
     edtLoc.Text:='';
     edtLoc.SetFocus;
    end;
+end;
+
+procedure TfrmPreferences.edtLocKeyPress(Sender: TObject; var Key: char);
+begin
+  dmUtils.KeyInLoc(edtLoc.text,Key);
 end;
 
 procedure TfrmPreferences.edtOperatorExit(Sender: TObject);
