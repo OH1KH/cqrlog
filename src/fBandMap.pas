@@ -842,12 +842,8 @@ begin
   xColor := IntToHex(cqrini.ReadInteger('xplanet','color',clWhite),8);
   xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
 
-  if dmUtils.IsLocOK(myloc) then
-    begin
-       dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long);
+  if dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long) then
        l.Add(CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
-       writeln (CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
-    end;
 end;
 
 procedure TfrmBandMAp.xplanetExport;

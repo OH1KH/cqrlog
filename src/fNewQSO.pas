@@ -1231,6 +1231,7 @@ procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
   lat,long :currency;
 Begin
+  dmUtils.ModifyXplanetQso;
   frmGrayLine.ob^.GC_line_clear; //clear short and long path lines
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(CurrentMyLoc),lat,long);
   lat := lat*-1;
@@ -7728,10 +7729,12 @@ begin
 end;
 
 procedure TfrmNewQSO.DrawGrayLine;
+
 begin
   frmGrayline.s   := lblLat.Caption;
   frmGrayline.d   := lblLong.Caption;
   frmGrayline.pfx := lblDXCC.Caption;
+  dmUtils.ModifyXplanetQso;
   frmGrayline.kresli
 end;
 

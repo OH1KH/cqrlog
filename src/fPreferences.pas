@@ -107,6 +107,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkShowQso: TCheckBox;
     chkUdUpEnabled: TCheckBox;
     chkUdUpOnline: TCheckBox;
     chkUdIncExch: TCheckBox;
@@ -440,6 +441,7 @@ type
     cmbIfaceType: TComboBox;
     cmbDataMode: TComboBox;
     btnSelectQSOColor: TColorButton;
+    cmbXplanetQsoColor: TColorBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
@@ -1455,6 +1457,8 @@ begin
   cqrini.WriteBool('xplanet', 'UseDefColor', chkXplanetColor.Checked);
   cqrini.WriteString('xplanet', 'loc', edtXplanetLoc.Text);
   cqrini.WriteBool('xplanet', 'ShowOwnPos', chkShowOwnPos.Checked);
+  cqrini.WriteBool('xplanet', 'ShowQso', chkShowQso.Checked);
+  cqrini.WriteInteger('xplanet', 'UseQsoColor', cmbXplanetQsoColor.Selected);
 
   cqrini.WriteString('ZipCode', 'First', cmbFirstZip.Text);
   cqrini.WriteString('ZipCode', 'FirstSaveTo', cmbFirstSaveTo.Text);
@@ -3138,6 +3142,9 @@ begin
   chkXplanetColor.Checked := cqrini.ReadBool('xplanet', 'UseDefColor', True);
   edtXplanetLoc.Text := cqrini.ReadString('xplanet', 'loc', '');
   chkShowOwnPos.Checked := cqrini.ReadBool('xplanet', 'ShowOwnPos', False);
+  chkShowQSO.Checked:= cqrini.ReadBool('xplanet', 'ShowQso', false);
+  cmbXplanetQsoColor.Selected:=cqrini.ReadInteger('xplanet', 'UseQsoColor', clWhite);
+
 
   cmbFirstZip.Text := cqrini.ReadString('ZipCode', 'First', '');
   cmbFirstSaveTo.Text := cqrini.ReadString('ZipCode', 'FirstSaveTo', '');

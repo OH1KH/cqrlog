@@ -4591,7 +4591,7 @@ object frmPreferences: TfrmPreferences
         Top = 48
         Width = 622
         Caption = 'Profiles'
-        ClientHeight = 247
+        ClientHeight = 263
         ClientWidth = 620
         TabOrder = 1
         object Bevel1: TBevel
@@ -6542,10 +6542,14 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 562
         TabOrder = 10
         object edtXplanetPath: TEdit
-          Left = 6
+          AnchorSideLeft.Control = GroupBox21
+          AnchorSideTop.Control = GroupBox21
+          AnchorSideTop.Side = asrCenter
+          Left = 24
           Height = 34
-          Top = 15
+          Top = 18
           Width = 432
+          BorderSpacing.Left = 24
           TabOrder = 0
           Text = '/usr/bin/xplanet'
         end
@@ -6564,30 +6568,44 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 111
         TabOrder = 1
         object Label66: TLabel
-          Left = 8
+          AnchorSideLeft.Control = GroupBox22
+          AnchorSideTop.Control = GroupBox22
+          Left = 6
           Height = 17
-          Top = 3
+          Top = 6
           Width = 47
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 6
           Caption = 'Height:'
           ParentColor = False
         end
         object Label67: TLabel
+          AnchorSideLeft.Control = Label66
+          AnchorSideTop.Control = edtXHeight
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
           Top = 43
           Width = 42
+          BorderSpacing.Top = 3
           Caption = 'Width:'
           ParentColor = False
         end
         object edtXHeight: TEdit
-          Left = 64
+          AnchorSideLeft.Control = Label66
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label66
+          Left = 59
           Height = 34
-          Top = 3
+          Top = 6
           Width = 41
+          BorderSpacing.Left = 6
           TabOrder = 0
         end
         object edtXWidth: TEdit
-          Left = 64
+          AnchorSideLeft.Control = edtXHeight
+          AnchorSideTop.Control = Label67
+          Left = 59
           Height = 34
           Top = 43
           Width = 41
@@ -6608,15 +6626,20 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 127
         TabOrder = 2
         object Label68: TLabel
-          Left = 8
+          AnchorSideLeft.Control = GroupBox23
+          AnchorSideTop.Control = GroupBox23
+          Left = 6
           Height = 17
-          Top = 3
+          Top = 6
           Width = 26
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 6
           Caption = 'Top:'
           ParentColor = False
         end
         object Label69: TLabel
-          Left = 8
+          AnchorSideLeft.Control = Label68
+          Left = 6
           Height = 17
           Top = 43
           Width = 29
@@ -6624,21 +6647,34 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
         end
         object edtXTop: TEdit
-          Left = 64
+          AnchorSideTop.Control = GroupBox23
+          AnchorSideRight.Control = GroupBox23
+          AnchorSideRight.Side = asrBottom
+          Left = 69
           Height = 34
-          Top = 3
+          Top = 6
           Width = 52
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 6
+          BorderSpacing.Right = 6
           TabOrder = 0
         end
         object edtXLeft: TEdit
-          Left = 64
+          AnchorSideTop.Control = edtXTop
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = edtXTop
+          AnchorSideRight.Side = asrBottom
+          Left = 69
           Height = 34
           Top = 43
           Width = 52
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 3
           TabOrder = 1
         end
         object btnTestXplanet: TButton
-          Left = 8
+          AnchorSideLeft.Control = Label68
+          Left = 6
           Height = 17
           Top = 72
           Width = 56
@@ -6684,49 +6720,74 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 296
         TabOrder = 5
         object Label70: TLabel
-          Left = 8
+          AnchorSideLeft.Control = GroupBox24
+          AnchorSideTop.Control = edtXRefresh
+          AnchorSideTop.Side = asrCenter
+          Left = 6
           Height = 17
-          Top = 3
+          Top = 15
           Width = 144
+          BorderSpacing.Left = 6
           Caption = 'Refresh xplanet every'
           ParentColor = False
         end
         object Label71: TLabel
-          Left = 240
+          AnchorSideLeft.Control = edtXRefresh
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtXRefresh
+          AnchorSideTop.Side = asrCenter
+          Left = 229
           Height = 17
-          Top = 3
+          Top = 15
           Width = 26
+          BorderSpacing.Left = 12
           Caption = 'sec.'
           ParentColor = False
         end
         object Label72: TLabel
+          AnchorSideLeft.Control = Label70
+          AnchorSideTop.Control = edtXLastSpots
+          AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 17
-          Top = 43
+          Top = 55
           Width = 63
           Caption = 'Show last'
           ParentColor = False
         end
         object Label73: TLabel
-          Left = 136
+          AnchorSideLeft.Control = edtXLastSpots
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtXLastSpots
+          AnchorSideTop.Side = asrCenter
+          Left = 135
           Height = 17
-          Top = 43
+          Top = 55
           Width = 35
+          BorderSpacing.Left = 12
           Caption = 'spots'
           ParentColor = False
         end
         object edtXRefresh: TEdit
+          AnchorSideTop.Control = GroupBox24
           Left = 168
           Height = 34
-          Top = 3
+          Top = 6
           Width = 49
+          BorderSpacing.Top = 6
           TabOrder = 0
         end
         object edtXLastSpots: TEdit
-          Left = 83
+          AnchorSideLeft.Control = Label72
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtXRefresh
+          AnchorSideTop.Side = asrBottom
+          Left = 81
           Height = 34
-          Top = 43
+          Top = 46
           Width = 42
+          BorderSpacing.Left = 12
+          BorderSpacing.Top = 6
           TabOrder = 1
         end
       end
@@ -6847,6 +6908,32 @@ object frmPreferences: TfrmPreferences
         Caption = 'Show own position within xplanet (with default color)'
         TabOrder = 11
       end
+      object chkShowQso: TCheckBox
+        AnchorSideLeft.Control = chkShowOwnPos
+        AnchorSideTop.Control = chkShowOwnPos
+        AnchorSideTop.Side = asrBottom
+        Left = 6
+        Height = 23
+        Top = 526
+        Width = 301
+        BorderSpacing.Top = 6
+        Caption = 'Show qso great circle path line using color'
+        TabOrder = 12
+      end
+      object cmbXplanetQsoColor: TColorBox
+        AnchorSideLeft.Control = chkShowQso
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = chkShowQso
+        AnchorSideTop.Side = asrCenter
+        Left = 319
+        Height = 29
+        Top = 523
+        Width = 100
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames, cbCustomColors]
+        BorderSpacing.Left = 12
+        ItemHeight = 28
+        TabOrder = 13
+      end
     end
     object tabZipCode: TTabSheet
       Caption = 'Zip code tracking'
@@ -6858,7 +6945,7 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 545
         Caption = ' First '
-        ClientHeight = 86
+        ClientHeight = 102
         ClientWidth = 543
         TabOrder = 0
         object Label74: TLabel
@@ -6942,7 +7029,7 @@ object frmPreferences: TfrmPreferences
         Top = 123
         Width = 545
         Caption = ' Second '
-        ClientHeight = 86
+        ClientHeight = 102
         ClientWidth = 543
         TabOrder = 1
         object Label76: TLabel
@@ -7026,7 +7113,7 @@ object frmPreferences: TfrmPreferences
         Top = 235
         Width = 545
         Caption = ' Third '
-        ClientHeight = 86
+        ClientHeight = 102
         ClientWidth = 543
         TabOrder = 2
         object Label78: TLabel

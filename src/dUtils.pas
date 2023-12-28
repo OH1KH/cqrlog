@@ -199,7 +199,6 @@ type
     procedure DistanceFromLocator(my_loc, his_loc: string; var qra, azim: string);
     procedure DistanceFromPrefixMyLoc(my_loc, pfx: string; var qra, azim: string);
     procedure ModifyWAZITU(var waz, itu: string);
-    procedure CoordinateFromLocator(loc: string; var latitude, longitude: currency);
     procedure EnterFreq;
     procedure LoadFontSettings(aForm: TForm);
     procedure LoadBandLabelSettins;
@@ -208,6 +207,7 @@ type
     procedure CloseXplanet;
     procedure ModifyXplanetConf;
     procedure DeleteMarkerFile;
+    procedure ModifyXplanetQso;
     procedure ReadZipList(cmbZip: TComboBox);
     procedure CalcSunRiseSunSet(Lat, Long: double; var SunRise, SunSet: TDateTime);
     procedure ExecuteCommand(cmd: string);
@@ -327,7 +327,7 @@ type
     function  IsHeDx(call:String; CqDir:String = ''):boolean;
     function  ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
     function  ContestNameFromFilteredQsos:string;
-
+    function  CoordinateFromLocator(loc: string; var latitude, longitude: currency):Boolean;
 
 end;
 
@@ -1462,12 +1462,12 @@ begin
   Result := Pos(ch, letters);
 end;
 
-procedure TdmUtils.CoordinateFromLocator(loc: string;
-  var latitude, longitude: currency);
+function TdmUtils.CoordinateFromLocator(loc: string; var latitude, longitude: currency): Boolean;
 var
   a, b, c, d, e, f: integer;
 begin
-  if not IsLocOK(loc) then
+  Result:= IsLocOK(loc);
+  if not Result then
     exit;
 
   a := nr(loc[1]);
@@ -2495,7 +2495,6 @@ var
   wait: string;
   geom: string;
   proj: string = '';
-  qso : string = '';
 begin
   Result := '';
   Result := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
@@ -2506,7 +2505,6 @@ begin
     Result := '';
     exit;
   end;
-  //qso:= ' -arc_file ' + dmData.HomeDir + 'xplanet' + PathDelim + 'qso';
   geom := ' -geometry ' + cqrini.ReadString('xplanet', 'width', '100') + 'x' +
     cqrini.ReadString('xplanet', 'height', '100') + '+' +
     cqrini.ReadString('xplanet', 'left', '10') +
@@ -2530,9 +2528,9 @@ begin
   end; //case
   wait := '-wait ' + cqrini.ReadString('xplanet', 'refresh', '5');
   Result := Result + ' -config ' + dmData.HomeDir +
-    'xplanet' + PathDelim + 'geoconfig '+qso+' -glare 28 ' + '-light_time -range 2.5 ' +
+    'xplanet' + PathDelim + 'geoconfig -glare 28 ' + '-light_time -range 2.5 ' +
     wait + ' ' + geom + ' -window_title "CQRLOG - xplanet"' + myloc + proj;
-
+ writeln;writeln(Result);writeln;
 end;
 
 procedure TdmUtils.RunXplanet;
@@ -2579,6 +2577,8 @@ begin
   finally
     AProcess.Free
   end;
+  DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
+  DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'rotor');
 end;
 
 procedure TdmUtils.ModifyXplanetConf;
@@ -2597,10 +2597,67 @@ begin
         break;
       end;
     end;
+    if pos('qso',l.Text)=0 then
+       l.Add('arc_file=' + dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
+    if pos('rotor',l.Text)=0 then
+       l.Add('arc_file=' + dmData.HomeDir + 'xplanet' + PathDelim + 'rotor');
     l.SaveToFile(dmData.HomeDir + 'xplanet' + PathDelim + 'geoconfig')
   finally
     l.Free
   end;
+end;
+procedure TdmUtils.ModifyXplanetQso;
+var
+   f:textfile;
+ lat1,
+ lon1,
+ c     : currency;
+ la, lo,
+ BGRcolor:string;
+ col : integer;
+Begin
+  if not cqrini.ReadBool('xplanet', 'ShowQso', false) then exit;
+  col:=cqrini.ReadInteger('xplanet', 'UseQsoColor', clWhite);
+  BGRcolor := IntToHex(col,8);   //this reverses RGB to BGR !!
+    BGRcolor := '0x'
+      + copy(BGRcolor,7,2)  //R
+      + copy(BGRcolor,5,2)  //G
+      + copy(BGRcolor,3,2); //B
+    if dmData.DebugLevel >= 1 then
+       Writeln('Color for xplanetQso:',BGRcolor);
+
+   //update qso path to xplanet arc file
+  if dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(frmNewQSO.CurrentMyLoc), lat1, lon1) then
+   begin
+    la:=frmNewQSO.lblLat.Caption;
+    lo:=frmNewQSO.lblLong.Caption;
+
+    if pos('S',la)>0 then  //if S is there, the data must be negative
+                      la:= '-'+la;
+    la:=copy(la,1,Length(la)-1);
+    if pos('.',la) > 0 then
+                      la[pos('.',la)] := FormatSettings.DecimalSeparator;
+    if not TryStrToCurr(la,c) then
+                       la := CurrToStr(lat1);
+    if pos('W',lo)>0 then  //  if there is a W it must be negative
+                      lo:= '-'+lo;
+    lo:=copy(lo,1,Length(lo)-1);
+    if pos('.',lo) > 0 then
+                      lo[pos('.',lo)] := FormatSettings.DecimalSeparator;
+    if not TryStrToCurr(lo,c) then
+                       lo := CurrToStr(lon1);
+    try
+      AssignFile(f,dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
+      Rewrite(f);
+      writeln(f,' # Qso path start/end points for xplanet'+LineEnding
+                +'# staton lat / lon opponent call lat/lon  When no QSO both pairs are station lat/lon');
+      writeln(f,CurrToStr(lat1)+' '+CurrToStr(lon1)+' '+la+' '+lo+' color='+BGRcolor+'    #'+frmNewQSO.edtCall.Text);
+      closeFile(f);
+    except
+        on e : Exception do
+          if dmData.DebugLevel >=1 then Writeln('Saving xplanet qso file failed with this message: ',e.Message)
+    end;
+   end;
 end;
 
 procedure TdmUtils.DeleteMarkerFile;

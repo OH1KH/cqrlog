@@ -959,7 +959,7 @@ begin
         l.SaveToFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
       except
         on e : Exception do
-          if dmData.DebugLevel >=1 then Writeln('Saving maker file failed with this message: ',e.Message)
+          if dmData.DebugLevel >=1 then Writeln('Saving xplanet maker file failed with this message: ',e.Message)
       end
     finally
       l.Free
