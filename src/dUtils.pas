@@ -2495,7 +2495,7 @@ var
   wait: string;
   geom: string;
   proj: string = '';
-  //qso : string = '';
+  qso : string = '';
 begin
   Result := '';
   Result := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
