@@ -116,7 +116,7 @@ type
     procedure SaveFormPos(FormMode: string);
     procedure LoadFormPos(FormMode: string);
     procedure CqPeriodTimerStart;
-    procedure AddXpList(call,loc:string);
+    procedure AddXplanetList(call,loc:string);
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
     procedure setDefaultColorSgMonitorAttributes;
@@ -216,14 +216,11 @@ var
   CurBand: string = '';
   LockMap: boolean;
   LockFlw: boolean;
-  PCallColor :Tcolor;  //color that was last used fro callsign printing, will be used in xplanet
+  PCallColor :Tcolor;  //color that was last used for callsign printing, will be used in xplanet
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
   USDB_Address :String;
-  //UState : TStringList;
-  //URState : TStringList; // runtime found calls=states expecting them occur many times. faster to find.
-  //crit : TRTLCriticalSection;
 
 
 implementation
@@ -256,11 +253,9 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.AddXpList(call,loc:string);
+procedure TfrmMonWsjtx.AddXplanetList(call,loc:string);
 var lat,lon :currency;
    slat,slon:String;
-   BGRcolor,
-   RGBcolor: String;
    i       : integer;
 Begin
     if cqrini.ReadInteger('xplanet','ShowFrom',0) <> 2 then exit;  //dxclust =0, bandmap=1
@@ -1277,7 +1272,7 @@ begin
     if chkMap.Checked then
         begin
           CqPeriodTimerStart;
-          //if LocalDbg then
+          if LocalDbg then
            Writeln('Other line:', Message);
           if  (pos('RR73',Message)= length(Message)-3)
            or (pos(' 73',Message)= length(Message)-2) then
@@ -1351,7 +1346,7 @@ begin
             if msgLocator <> '' then
             begin
               PrintLoc(msgLocator, '', '');
-              if frmWorkedGrids.GridOK(msgLocator) then  AddXpList(msgCall,msgLocator);
+              if frmWorkedGrids.GridOK(msgLocator) then  AddXplanetList(msgCall,msgLocator);
             end;
             //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
             AddColorStr(ClLine, clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
@@ -2048,7 +2043,7 @@ begin
 
    PrintLoc(msgLocator, timeToAlert, msgTime,chkCbCQ.Checked);
 
-   if frmWorkedGrids.GridOK(msgLocator) then AddXpList(msgCall,msgLocator);
+   if frmWorkedGrids.GridOK(msgLocator) then AddXplanetList(msgCall,msgLocator);
 
      dxcc_number_adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
        msgRes, WAZ, posun, ITU, lat, long);

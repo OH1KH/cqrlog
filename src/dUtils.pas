@@ -2495,6 +2495,7 @@ var
   wait: string;
   geom: string;
   proj: string = '';
+  //qso : string = '';
 begin
   Result := '';
   Result := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
@@ -2505,6 +2506,7 @@ begin
     Result := '';
     exit;
   end;
+  //qso:= ' -arc_file ' + dmData.HomeDir + 'xplanet' + PathDelim + 'qso';
   geom := ' -geometry ' + cqrini.ReadString('xplanet', 'width', '100') + 'x' +
     cqrini.ReadString('xplanet', 'height', '100') + '+' +
     cqrini.ReadString('xplanet', 'left', '10') +
@@ -2528,8 +2530,9 @@ begin
   end; //case
   wait := '-wait ' + cqrini.ReadString('xplanet', 'refresh', '5');
   Result := Result + ' -config ' + dmData.HomeDir +
-    'xplanet' + PathDelim + 'geoconfig  -glare 28 ' + '-light_time -range 2.5 ' +
-    wait + ' ' + geom + ' -window_title "CQRLOG - xplanet"' + myloc + proj
+    'xplanet' + PathDelim + 'geoconfig '+qso+' -glare 28 ' + '-light_time -range 2.5 ' +
+    wait + ' ' + geom + ' -window_title "CQRLOG - xplanet"' + myloc + proj;
+
 end;
 
 procedure TdmUtils.RunXplanet;
@@ -2554,7 +2557,8 @@ begin
       inc(index);
     end;
     paramList.Free;
-    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    if dmData.DebugLevel>=1 then
+       Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute;
   finally
     AProcess.Free;

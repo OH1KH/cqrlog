@@ -110,7 +110,7 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, znacmech, uMyini, fTRXControl;
+uses dUtils, dData, znacmech, uMyini, fTRXControl, fBandMap;
 
 type Tchyb1 = object(Tchyby) // podedim objekt a prepisu "hlaseni"
        //procedure hlaseni(vzkaz,kdo:string);virtual;
@@ -935,7 +935,7 @@ begin
     l := TStringList.Create;
     l.Clear;
     if FileExists(dmData.HomeDir + 'xplanet'+PathDelim+'marker') then
-      l.LoadFromFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
+         l.LoadFromFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
     try
       for i:= 0 to l.Count-1 do // for loop try to find call and delete old position before adding the new
       begin
@@ -952,11 +952,14 @@ begin
         for i:= 0 to iMax-1 do
           l.Delete(0) // delete always index 0, this is always the oldest entry
       end;
+      if cqrini.ReadBool('xplanet','ShowOwnPos',False) then  //add own call, will be Max+own
+         if pos(cqrini.ReadString('Station', 'Call', ''), l.Text) = 0 then
+                                                                       frmBandMap.XplanetShowOwn(l);
       try
         l.SaveToFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
       except
         on e : Exception do
-          if dmData.DebugLevel >=1 then Writeln('Savig maker file failed with this message: ',e.Message)
+          if dmData.DebugLevel >=1 then Writeln('Saving maker file failed with this message: ',e.Message)
       end
     finally
       l.Free

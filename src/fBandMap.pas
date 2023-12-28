@@ -164,6 +164,7 @@ type
     procedure LoadSettings;
     procedure SaveBandMapItemsToFile(FileName : String);
     procedure LoadBandMapItemsFromFile(FileName : String);
+    procedure XplanetShowOwn(l:TStringList);
   end; 
 
 var
@@ -827,6 +828,27 @@ begin
     LeaveCriticalSection(BandMapCrit)
   end
 end;
+procedure TfrmBandMAp.XplanetShowOwn(l:TStringList);
+var
+  xColor : String;
+  myloc: string = '';
+  mycall: string = '';
+  lat, long: currency;
+begin
+  if not cqrini.ReadBool('xplanet','ShowOwnPos',False) then exit;
+
+  myloc := cqrini.ReadString('Station', 'LOC', '');
+  mycall := cqrini.ReadString('Station', 'Call', '');
+  xColor := IntToHex(cqrini.ReadInteger('xplanet','color',clWhite),8);
+  xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
+
+  if dmUtils.IsLocOK(myloc) then
+    begin
+       dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long);
+       l.Add(CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
+       writeln (CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
+    end;
+end;
 
 procedure TfrmBandMAp.xplanetExport;
 var
@@ -836,31 +858,16 @@ var
   UseDefaultColor : Boolean;
   DefaultColor    : Integer;
   MaxXplanetSpots : Integer;
-  myloc: string = '';
-  mycall: string = '';
-  lat, long: currency;
-  ShowOwnPos      : Boolean;
 begin
   UseDefaultColor := cqrini.ReadBool('xplanet','UseDefColor',True);
   DefaultColor    := cqrini.ReadInteger('xplanet','color',clWhite);
   MaxXplanetSpots := cqrini.ReadInteger('xplanet','LastSpots',20);
-  ShowOwnPos      := cqrini.ReadBool('xplanet','ShowOwnPos',False);
 
   DeleteFile(FxplanetFile);
 
   l := TStringList.Create;
-  myloc := cqrini.ReadString('Station', 'LOC', '');
-  mycall := cqrini.ReadString('Station', 'Call', '');
-  xColor := IntToHex(DefaultColor,8);
-  xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
-  if (ShowOwnPos) then
-  begin
-    if dmUtils.IsLocOK(myloc) then
-    begin
-       dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long);
-       l.Add(CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
-    end;
-  end;
+  XplanetShowOwn(l);
+
   try
     for i:=1 to MAX_ITEMS do
     begin
