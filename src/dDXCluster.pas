@@ -920,9 +920,6 @@ begin
     if  cqrini.ReadBool('xplanet','UseDefColor',True) then
       sColor := cqrini.ReadInteger('xplanet','color',clWhite);
     iMax      := cqrini.ReadInteger('xplanet','LastSpots',20);
-    //this is not needed here as check of cfgShowFrom is done already in fDXCluster !!
-      //if cqrini.ReadInteger('xplanet','ShowFrom',0) > 0 then exit;
-    //removing it allows "universal use"
     dmUtils.GetRealCoordinate(lat,long,clat,clong);
     BGRcolor := IntToHex(sColor,8);   //this reverses RGB to BGR !!
     stColor := '0x'

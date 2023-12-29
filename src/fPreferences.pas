@@ -108,6 +108,7 @@ type
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
     chkShowQso: TCheckBox;
+    chkShowBeam: TCheckBox;
     chkUdUpEnabled: TCheckBox;
     chkUdUpOnline: TCheckBox;
     chkUdIncExch: TCheckBox;
@@ -442,6 +443,7 @@ type
     cmbDataMode: TComboBox;
     btnSelectQSOColor: TColorButton;
     cmbXplanetQsoColor: TColorBox;
+    cmbXplanetBeamColor: TColorBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
@@ -1459,6 +1461,8 @@ begin
   cqrini.WriteBool('xplanet', 'ShowOwnPos', chkShowOwnPos.Checked);
   cqrini.WriteBool('xplanet', 'ShowQso', chkShowQso.Checked);
   cqrini.WriteInteger('xplanet', 'UseQsoColor', cmbXplanetQsoColor.Selected);
+  cqrini.WriteBool('xplanet', 'ShowBeam', chkShowBeam.Checked);
+  cqrini.WriteInteger('xplanet', 'UseBeamColor', cmbXplanetBeamColor.Selected);
 
   cqrini.WriteString('ZipCode', 'First', cmbFirstZip.Text);
   cqrini.WriteString('ZipCode', 'FirstSaveTo', cmbFirstSaveTo.Text);
@@ -1694,6 +1698,14 @@ begin
    end;
 
   if frmMain.Visible then frmMain.ShowFields;
+
+  if cqrini.ReadInteger('xplanet', 'ShowFrom', 0)=4 then  //show none
+     DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'marker');
+  if cqrini.ReadBool('xplanet', 'ShowQso', false) then
+     DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
+  if cqrini.ReadBool('xplanet', 'ShowBeam', false) then
+     DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'rotor');
+
 
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
@@ -3144,7 +3156,8 @@ begin
   chkShowOwnPos.Checked := cqrini.ReadBool('xplanet', 'ShowOwnPos', False);
   chkShowQSO.Checked:= cqrini.ReadBool('xplanet', 'ShowQso', false);
   cmbXplanetQsoColor.Selected:=cqrini.ReadInteger('xplanet', 'UseQsoColor', clWhite);
-
+  chkShowBeam.Checked:= cqrini.ReadBool('xplanet', 'ShowBeam', false);
+  cmbXplanetBeamColor.Selected:=cqrini.ReadInteger('xplanet', 'UseBeamColor', clWhite);
 
   cmbFirstZip.Text := cqrini.ReadString('ZipCode', 'First', '');
   cmbFirstSaveTo.Text := cqrini.ReadString('ZipCode', 'FirstSaveTo', '');

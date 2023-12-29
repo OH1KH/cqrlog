@@ -426,13 +426,17 @@ begin
     Az := rotor.GetAzimut;
     if frmGrayline.Showing then
        Begin
-        if (Trunc(Az)<>BeamDir) and frmGrayline.pumShowBeamPath.Checked then
-          Begin
-            dist :=cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500); //in kilometers
-            dmutils.CoordinateFromLocator(frmNewQSO.CurrentMyLoc,mylat,mylon);
-            frmGrayline.CalculateLatLonOfNewPoint(mylon,mylat,dist,Trunc(Az),exlon,exlat);
-            frmGrayline.PlotGreatCircleArcLine(mylon,mylat,exlon,exlat,2);
-            Beamdir:=Trunc(Az);
+        if (Trunc(Az)<>BeamDir) then
+          begin
+           if frmGrayline.pumShowBeamPath.Checked then
+            Begin
+              dist :=cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500); //in kilometers
+              dmutils.CoordinateFromLocator(frmNewQSO.CurrentMyLoc,mylat,mylon);
+              frmGrayline.CalculateLatLonOfNewPoint(mylon,mylat,dist,Trunc(Az),exlon,exlat);
+              frmGrayline.PlotGreatCircleArcLine(mylon,mylat,exlon,exlat,2);
+              Beamdir:=Trunc(Az);
+            end;
+           dmUtils.ModifyXplanetBeam(mylat,mylon,exlat,exlon);
           end;
        end;
    end

@@ -596,6 +596,46 @@ for f:=1 to distcount do
       writeln(' Lon:',FormatFloat('0.00;;',lon2));
    end;
 end;
+{vk3ou, ocatvia script
+
+a = 6378137.0;              ## WGS-84 semi-major axis
+DEG_TO_RAD=(pi/180.0);      ## Degrees to Radians conversion factor
+RAD_TO_DEG=(180.0/pi);      ## Radians to Degrees conversion factor
+
+Target.HomeLat = -38;       ## Home lat and lon
+Target.HomeLon=144;
+Target.Range = 18000e3;      ## Length of arc to draw
+Target.Bearing = 272;       ## bearing of arc from true north
+
+Antenna.BeamWidth = 30;
+Antenna.CcwBeam = Target.Bearing-Antenna.BeamWidth;
+Antenna.CwBeam = Target.Bearing+Antenna.BeamWidth;
+
+
+Target.PointerLat =RAD_TO_DEG*asin(sin(Target.HomeLat*DEG_TO_RAD)*cos(Target.Range/a) +cos(Target.HomeLat*DEG_TO_RAD)*sin(Target.Range/a)*cos(Target.Bearing*DEG_TO_RAD));
+Target.PointerLon= RAD_TO_DEG*(Target.HomeLon*DEG_TO_RAD + atan2(sin(Target.Bearing*DEG_TO_RAD)*sin(Target.Range/a)*cos(Target.HomeLat*DEG_TO_RAD),..cos(Target.Range/a)-sin(Target.HomeLat*DEG_TO_RAD)*sin(Target.PointerLat*DEG_TO_RAD)));
+
+Target.Range = Target.Range*1.0;
+Target.CcwLat =RAD_TO_DEG*asin(sin(Target.HomeLat*DEG_TO_RAD)*cos(Target.Range/a) +...
+cos(Target.HomeLat*DEG_TO_RAD)*sin(Target.Range/a)*cos(Antenna.CcwBeam*DEG_TO_RAD));
+Target.CcwLon= RAD_TO_DEG*(Target.HomeLon*DEG_TO_RAD + ...
+atan2(sin(Antenna.CcwBeam*DEG_TO_RAD)*sin(Target.Range/a)*cos(Target.HomeLat*DEG_TO_RAD),...
+cos(Target.Range/a)-sin(Target.HomeLat*DEG_TO_RAD)*sin(Target.CcwLat*DEG_TO_RAD)));
+
+Target.CwLat =RAD_TO_DEG*asin(sin(Target.HomeLat*DEG_TO_RAD)*cos(Target.Range/a) +...
+cos(Target.HomeLat*DEG_TO_RAD)*sin(Target.Range/a)*cos(Antenna.CwBeam*DEG_TO_RAD));
+Target.CwLon= RAD_TO_DEG*(Target.HomeLon*DEG_TO_RAD + ...
+atan2(sin(Antenna.CwBeam*DEG_TO_RAD)*sin(Target.Range/a)*cos(Target.HomeLat*DEG_TO_RAD),...
+cos(Target.Range/a)-sin(Target.HomeLat*DEG_TO_RAD)*sin(Target.CwLat*DEG_TO_RAD)));
+
+pointer = cstrcat('# Range = ',num2str(Target.Range/1000),"km\n",'# Bearing = ',num2str(Target.Bearing),"deg\n",'# BeamWidth = ',num2str(Antenna.BeamWidth),"deg\n")
+pointer = cstrcat(pointer,num2str(Target.HomeLat),' ',num2str(Target.HomeLon),' ',num2str(Target.PointerLat),' ',num2str(Target.PointerLon),' thickness=4 color=red');
+pointer = cstrcat(pointer,"\n",num2str(Target.HomeLat),' ',num2str(Target.HomeLon),' ',num2str(Target.CcwLat),' ',num2str(Target.CcwLon),' thickness=1.5 color=yellow')
+pointer = cstrcat(pointer,"\n",num2str(Target.HomeLat),' ',num2str(Target.HomeLon),' ',num2str(Target.CwLat),' ',num2str(Target.CwLon),' thickness=1.5 color=yellow')
+pointer = cstrcat(pointer,"\n",num2str(Target.CcwLat),' ',num2str(Target.CcwLon),' ',num2str(Target.CwLat),' ',num2str(Target.CwLon),' thickness=1.5 color=yellow')
+save("pointer","pointer");
+
+}
 
 procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:integer);
  { Ref: http://www.movable-type.co.uk/scripts/latlong.html }

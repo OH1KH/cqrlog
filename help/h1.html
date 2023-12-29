@@ -647,17 +647,22 @@ There are no known dependencies issues.<br><br>
     300x300 etc. to avoid strange effects). Also, the <strong>window position</strong>
     must be set up to create a nice looking screen. Use the <strong>Test it!</strong>
     button to see how your settings affect the resulting screen.<br><br>
+    There are also other settings that you may like to change. Open ~/.config/cqrlog/xplanet/geoconfig file with text editor.
+    With lines in [earth] section:
+    <br>twilight=50
+    <br>shade=5
+    <br>you can create Grayline. Adjust values suitable for you. For other settings: consult xplanet man pages.
+    <br>
     Xplanet can refresh its display at a preset interval. This is very useful because it
     can read the spot (entry) list and update the displayed data. To avoid a 'flooded',
     unreadable window, the number of displayed spots/entries must be limited. It seems
     that 20 is the maximum to keep the display garbage away. Actually, the number of
     spots (entries) is not limited by the program but by the readability. If you change
     the number of spots to be displayed or if the spots should (should not) be sent to
-    xplanet, restart the program. Remember that a program restart will be needed to
-    make the changes take effect!<br><br>
-    Set up the source (DX Cluster, Band map) by checking the appropriate radio button
+    xplanet,  Remember that the change may take some refresh periods to make the changes take effect!<br><br>
+    Set up the source (DX Cluster, Band map, Wsjtx, None) by checking the appropriate radio button
     in the '<strong>Show stations from</strong>' section. The '<strong>Projection</strong>'
-    has 3 options:<br>
+    has 4 options:<br>
     <ul>
         <li><strong>3D</strong> - shows the globe as viewed from space. This rendering
             type without any projection is very nice, however the very distant points will not be
@@ -676,14 +681,15 @@ There are no known dependencies issues.<br><br>
             'emergency' solution which is useful if you have not enough space to set up
             the main xplanet window as a square.
         </li>
+        <li><strong>Rectangular</strong> - is the same as Grayline map has
+        </li>
     </ul>
     The center locator for the xplanet window can be customized by configuring in on 
-    this page. In case the field is empty the default locator of the station is used.<br><br>
+    this page. In case the field is empty the default locator of the station is used.<br>
     If you want to have your own position displayed within xplanet check the <strong>Show own 
-    position within xplanet</strong> checkbox.<br><br>
-    this page. In case the field is empty the default locator of the station is used.<br><br>
-    The xplanet window currently has no other function than to display spots or band
-    map entries in the azimuthal projection or 3D-like picture.
+    position within xplanet</strong> checkbox. Own position is always shown with selected default color.<br>
+    The xplanet window has also functions to display Qso short path and Beam path (if rotor assigned) with selected colors
+    in the 3D-like, azimuthal projection or rectangular picture.
     <br><br>
     <a name=bh3><h2><strong>Zip code tracking</strong></h2></a>
     <img src=img/h69.png border=0><br><br>

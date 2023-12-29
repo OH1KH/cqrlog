@@ -208,6 +208,7 @@ type
     procedure ModifyXplanetConf;
     procedure DeleteMarkerFile;
     procedure ModifyXplanetQso;
+    procedure ModifyXplanetBeam(lat1,lon1,la,lo:currency);
     procedure ReadZipList(cmbZip: TComboBox);
     procedure CalcSunRiseSunSet(Lat, Long: double; var SunRise, SunSet: TDateTime);
     procedure ExecuteCommand(cmd: string);
@@ -2656,6 +2657,37 @@ Begin
     except
         on e : Exception do
           if dmData.DebugLevel >=1 then Writeln('Saving xplanet qso file failed with this message: ',e.Message)
+    end;
+   end;
+end;
+procedure TdmUtils.ModifyXplanetBeam(lat1,lon1,la,lo:currency);
+var
+ f:textfile;
+ BGRcolor:string;
+ col : integer;
+Begin
+  if not cqrini.ReadBool('xplanet', 'ShowBeam', false) then exit;
+  col:=cqrini.ReadInteger('xplanet', 'UseBeamColor', clWhite);
+  BGRcolor := IntToHex(col,8);   //this reverses RGB to BGR !!
+    BGRcolor := '0x'
+      + copy(BGRcolor,7,2)  //R
+      + copy(BGRcolor,5,2)  //G
+      + copy(BGRcolor,3,2); //B
+    if dmData.DebugLevel >= 1 then
+       Writeln('Color for xplanetQso:',BGRcolor);
+
+   //update beam path to xplanet arc file
+   begin
+    try
+      AssignFile(f,dmData.HomeDir + 'xplanet' + PathDelim + 'rotor');
+      Rewrite(f);
+      writeln(f,' # Beam path start/end points for xplanet'+LineEnding
+                +'# staton lat / lon and beam point lat/lon  When no beam both pairs are station lat/lon or no file');
+      writeln(f,CurrToStr(lat1)+' '+CurrToStr(lon1)+' '+CurrToStr(la)+' '+CurrToStr(lo)+'  color='+BGRcolor);
+      closeFile(f);
+    except
+        on e : Exception do
+          if dmData.DebugLevel >=1 then Writeln('Saving xplanet beam file failed with this message: ',e.Message)
     end;
    end;
 end;
