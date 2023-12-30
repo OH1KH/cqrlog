@@ -206,6 +206,8 @@ type
     procedure RunXplanet;
     procedure CloseXplanet;
     procedure ModifyXplanetConf;
+    procedure XplanetShowOwn(l:TStringList);
+    procedure XplanetLaLoFrmNewQSO(var la,lo:string;lat,long:currency);
     procedure DeleteMarkerFile;
     procedure ModifyXplanetQso;
     procedure ModifyXplanetBeam(lat1,lon1,la,lo:currency);
@@ -2612,12 +2614,15 @@ var
    f:textfile;
  lat1,
  lon1,
+ lat,lon,
  c     : currency;
- la, lo,
+ la    :string='';
+ lo    : string='';
  BGRcolor:string;
- col : integer;
+ col   : integer;
+ l     : TStringList;
 Begin
-  if not cqrini.ReadBool('xplanet', 'ShowQso', false) then exit;
+
   col:=cqrini.ReadInteger('xplanet', 'UseQsoColor', clWhite);
   BGRcolor := IntToHex(col,8);   //this reverses RGB to BGR !!
     BGRcolor := '0x'
@@ -2630,30 +2635,39 @@ Begin
    //update qso path to xplanet arc file
   if dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(frmNewQSO.CurrentMyLoc), lat1, lon1) then
    begin
-    la:=frmNewQSO.lblLat.Caption;
-    lo:=frmNewQSO.lblLong.Caption;
-
-    if pos('S',la)>0 then  //if S is there, the data must be negative
-                      la:= '-'+la;
-    la:=copy(la,1,Length(la)-1);
-    if pos('.',la) > 0 then
-                      la[pos('.',la)] := FormatSettings.DecimalSeparator;
-    if not TryStrToCurr(la,c) then
-                       la := CurrToStr(lat1);
-    if pos('W',lo)>0 then  //  if there is a W it must be negative
-                      lo:= '-'+lo;
-    lo:=copy(lo,1,Length(lo)-1);
-    if pos('.',lo) > 0 then
-                      lo[pos('.',lo)] := FormatSettings.DecimalSeparator;
-    if not TryStrToCurr(lo,c) then
-                       lo := CurrToStr(lon1);
+    lat:=0;lon:=0;
+    XplanetLaLoFrmNewQSO(la,lo,lat,lon);
     try
-      AssignFile(f,dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
-      Rewrite(f);
-      writeln(f,' # Qso path start/end points for xplanet'+LineEnding
-                +'# staton lat / lon opponent call lat/lon  When no QSO both pairs are station lat/lon');
-      writeln(f,CurrToStr(lat1)+' '+CurrToStr(lon1)+' '+la+' '+lo+' color='+BGRcolor+'    #'+frmNewQSO.edtCall.Text);
-      closeFile(f);
+      if cqrini.ReadBool('xplanet', 'ShowQso', false) then
+       begin
+        AssignFile(f,dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
+        Rewrite(f);
+        writeln(f,' # Qso path start/end points for xplanet'+LineEnding
+                  +'# staton lat / lon opponent call lat/lon  When no QSO both pairs are same lat/lon');
+        if (la='') or (lo='') then
+            writeln(f,CurrToStr(lat1)+' '+CurrToStr(lon1)+' '+CurrToStr(lat1)+' '+CurrToStr(lon1)+' color='+BGRcolor+'    #'+frmNewQSO.edtCall.Text)
+         else
+           writeln(f,CurrToStr(lat1)+' '+CurrToStr(lon1)+' '+la+' '+lo+' color='+BGRcolor+'    #'+frmNewQSO.edtCall.Text);
+        closeFile(f);
+       end;
+
+      if (cqrini.ReadInteger('xplanet','ShowFrom',0) = 3)         // there is no marker file, do it
+       and (cqrini.ReadBool('xplanet','ShowOwnPos',False)) then
+       begin
+        try
+          DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'marker');
+          l := TStringList.Create;
+          dmUtils.XplanetShowOwn(l);
+          try
+          l.SaveToFile(dmData.HomeDir + 'xplanet' + PathDelim + 'marker');
+          except
+            on e : Exception do
+            if dmData.DebugLevel >=1 then Writeln('Saving xplanet own marker file failed with this message: ',e.Message)
+          end;
+        finally
+         FreeAndNil(l)
+        end;
+       end;
     except
         on e : Exception do
           if dmData.DebugLevel >=1 then Writeln('Saving xplanet qso file failed with this message: ',e.Message)
@@ -2690,6 +2704,66 @@ Begin
           if dmData.DebugLevel >=1 then Writeln('Saving xplanet beam file failed with this message: ',e.Message)
     end;
    end;
+end;
+
+procedure  TdmUtils.XplanetLaLoFrmNewQSO(var la,lo:string;lat,long:currency);  //returns strings and currency values
+
+Begin
+    la:=frmNewQSO.lblLat.Caption;
+    lo:=frmNewQSO.lblLong.Caption;
+    if (la='') or (lo='') then
+     begin
+      la:='';lo:=la;  //fail: string values are nul
+      lat:=0;long:=lat;
+      exit;
+     end;
+    if la[Length(la)] = 'S' then  //if S is there, the data must be negative
+      la := '-' +la ;
+    la := copy(la,1,Length(la)-1);
+    if pos('.',la) > 0 then
+      la[pos('.',la)] := FormatSettings.DecimalSeparator;
+    if not TryStrToCurr(la,lat) then
+     begin
+      lat := 0;
+      la  :='';
+     end;
+
+    if lo[Length(lo)] = 'W' then  //  if there is a W it must be negative
+      lo := '-' + lo ;
+    lo := copy(lo,1,Length(lo)-1);
+    if pos('.',lo) > 0 then
+      lo[pos('.',lo)] := FormatSettings.DecimalSeparator;
+    if not TryStrToCurr(lo,long) then
+      begin
+      long := 0;
+      lo   :='';
+     end;
+end;
+
+procedure TdmUtils.XplanetShowOwn(l:TStringList);
+var
+  xColor : String;
+  myloc: string = '';
+  mycall: string = '';
+  lat, long: currency;
+  la,lo : string;
+begin
+  if not cqrini.ReadBool('xplanet','ShowOwnPos',False) then exit;
+
+  myloc := cqrini.ReadString('Station', 'LOC', '');
+  mycall := cqrini.ReadString('Station', 'Call', '');
+  xColor := IntToHex(cqrini.ReadInteger('xplanet','color',clWhite),8);
+  xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
+
+  if dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long) then
+       l.Add(CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
+
+  if (frmNewQSO.edtCall.Text<>'') then//    show always with own
+    Begin
+      XplanetLaLoFrmNewQSO(la,lo,lat,long);
+      l.Add(la+' '+lo+' "'+frmNewQSO.edtCall.Text+'" color='+xColor);
+    end;
+
 end;
 
 procedure TdmUtils.DeleteMarkerFile;

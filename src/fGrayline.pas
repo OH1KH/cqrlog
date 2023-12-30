@@ -551,8 +551,8 @@ var R,B :extended;
     f:integer;
     di:string;
 Begin
-
-     R:=6378.15;     (* Radius of the earth *)
+  f:=dist;
+  R:=6378.15;     (* Radius of the earth *)
 
   if cqrini.ReadBool('xplanet', 'BeamArcLen', False) then
    begin
@@ -560,13 +560,12 @@ Begin
       Begin
         di:=copy(frmNewQSO.lblQRA.Caption,1,pos('mi', frmNewQSO.lblQRA.Caption)-1);
         if TryStrToInt(di,f) then
-          dist:=Round(f * 1.609344);
+          f:=Round(f * 1.609344);
       end;
     if pos('km', frmNewQSO.lblQRA.Caption)>0 then
       Begin
-        s:=copy(frmNewQSO.lblQRA.Caption,1,pos('mi', frmNewQSO.lblQRA.Caption)-1);
+        di:=copy(frmNewQSO.lblQRA.Caption,1,pos('km', frmNewQSO.lblQRA.Caption)-1);
         if TryStrToInt(di,f) then
-          dist:=f;
       end;
    end;
 
@@ -575,15 +574,15 @@ Begin
       write('Lat:',FormatFloat('0.00;;',BaseLat));
       write(' Lon:',FormatFloat('0.00;;',BaseLon));
       write('     ',FormatFloat('0.00;;',bearing),'      ');
-      writeln( 'Dist: ' , dist);
+      writeln( 'Dist: ' , di);
    end;
 
 
-   lat2 := RadToDeg(arcsin(sin(DegToRad(BaseLat))*cos(dist/R) +
-                            cos(DegToRad(BaseLat))*sin(dist/R)*cos(DegToRad(bearing)) ));
+   lat2 := RadToDeg(arcsin(sin(DegToRad(BaseLat))*cos(f/R) +
+                            cos(DegToRad(BaseLat))*sin(f/R)*cos(DegToRad(bearing)) ));
 
-   lon2 := RadToDeg(DegToRad(BaseLon) +arctan2(sin(DegToRad(bearing))*sin(dist/R)*cos(DegToRad(BaseLat)),
-                            cos(dist/R)-sin(DegToRad(BaseLat))*sin(DegToRad(Lat2))));
+   lon2 := RadToDeg(DegToRad(BaseLon) +arctan2(sin(DegToRad(bearing))*sin(f/R)*cos(DegToRad(BaseLat)),
+                            cos(f/R)-sin(DegToRad(BaseLat))*sin(DegToRad(Lat2))));
 
   if LocalDbg then
    begin

@@ -164,7 +164,6 @@ type
     procedure LoadSettings;
     procedure SaveBandMapItemsToFile(FileName : String);
     procedure LoadBandMapItemsFromFile(FileName : String);
-    procedure XplanetShowOwn(l:TStringList);
   end; 
 
 var
@@ -828,23 +827,6 @@ begin
     LeaveCriticalSection(BandMapCrit)
   end
 end;
-procedure TfrmBandMAp.XplanetShowOwn(l:TStringList);
-var
-  xColor : String;
-  myloc: string = '';
-  mycall: string = '';
-  lat, long: currency;
-begin
-  if not cqrini.ReadBool('xplanet','ShowOwnPos',False) then exit;
-
-  myloc := cqrini.ReadString('Station', 'LOC', '');
-  mycall := cqrini.ReadString('Station', 'Call', '');
-  xColor := IntToHex(cqrini.ReadInteger('xplanet','color',clWhite),8);
-  xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
-
-  if dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long) then
-       l.Add(CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
-end;
 
 procedure TfrmBandMAp.xplanetExport;
 var
@@ -862,7 +844,7 @@ begin
   DeleteFile(FxplanetFile);
 
   l := TStringList.Create;
-  XplanetShowOwn(l);
+  dmUtils.XplanetShowOwn(l);
 
   try
     for i:=1 to MAX_ITEMS do

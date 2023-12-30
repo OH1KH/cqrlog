@@ -1704,11 +1704,11 @@ begin
 
   if frmMain.Visible then frmMain.ShowFields;
 
-  if cqrini.ReadInteger('xplanet', 'ShowFrom', 0)=4 then  //show none
+  if cqrini.ReadInteger('xplanet', 'ShowFrom', 0)=3 then  //show none
      DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'marker');
-  if cqrini.ReadBool('xplanet', 'ShowQso', false) then
+  if not cqrini.ReadBool('xplanet', 'ShowQso', false) then
      DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'qso');
-  if cqrini.ReadBool('xplanet', 'ShowBeam', false) then
+  if not cqrini.ReadBool('xplanet', 'ShowBeam', false) then
      DeleteFile(dmData.HomeDir + 'xplanet' + PathDelim + 'rotor');
 
 

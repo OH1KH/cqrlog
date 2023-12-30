@@ -949,9 +949,11 @@ begin
         for i:= 0 to iMax-1 do
           l.Delete(0) // delete always index 0, this is always the oldest entry
       end;
+
       if cqrini.ReadBool('xplanet','ShowOwnPos',False) then  //add own call, will be Max+own
          if pos(cqrini.ReadString('Station', 'Call', ''), l.Text) = 0 then
-                                                                       frmBandMap.XplanetShowOwn(l);
+                                                                       dmUtils.XplanetShowOwn(l);
+
       try
         l.SaveToFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
       except
