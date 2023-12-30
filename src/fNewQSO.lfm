@@ -4272,14 +4272,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblWAZ: TLabel
           AnchorSideLeft.Control = lblWAZCaption
+          AnchorSideTop.Control = lblWAZCaption
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblWAZCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
           Height = 17
           Top = 93
           Width = 27
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 40
           BorderSpacing.Top = 5
           Caption = 'AAA'
@@ -4289,14 +4288,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblITU: TLabel
           AnchorSideLeft.Control = lblWAZ
+          AnchorSideTop.Control = lblITUCaption
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblITUCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
           Height = 17
           Top = 115
           Width = 27
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 5
           Caption = 'AAA'
           Layout = tlBottom
@@ -4305,15 +4303,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblDXCC: TLabel
           AnchorSideLeft.Control = lblCont
-          AnchorSideTop.Side = asrBottom
-          AnchorSideBottom.Control = lblDXCCCaption
+          AnchorSideTop.Control = lblDXCCCaption
+          AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Side = asrBottom
           Left = 174
           Height = 17
           Top = 115
           Width = 27
-          Anchors = [akLeft, akBottom]
-          BorderSpacing.Top = 5
           Caption = 'AAA'
           Layout = tlBottom
           ParentColor = False
@@ -4322,14 +4318,13 @@ object frmNewQSO: TfrmNewQSO
         object lblCont: TLabel
           AnchorSideLeft.Control = lblContCaption
           AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = lblContCaption
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblContCaption
           AnchorSideBottom.Side = asrBottom
           Left = 174
           Height = 17
           Top = 93
           Width = 27
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 9
           Caption = 'AAA'
           Layout = tlBottom
@@ -4365,6 +4360,7 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblLat: TLabel
           AnchorSideLeft.Control = lblWAZ
+          AnchorSideTop.Control = lblLatCaption
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblLatCaption
           AnchorSideBottom.Side = asrBottom
@@ -4372,7 +4368,6 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 137
           Width = 27
-          Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
           ParentColor = False
@@ -4380,14 +4375,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblLong: TLabel
           AnchorSideLeft.Control = lblDXCC
+          AnchorSideTop.Control = lblLongCaption
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblLongCaption
           AnchorSideBottom.Side = asrBottom
           Left = 174
           Height = 17
           Top = 137
           Width = 27
-          Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
           ParentColor = False
@@ -4409,14 +4403,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblQRA: TLabel
           AnchorSideLeft.Control = lblWAZ
+          AnchorSideTop.Control = lblDistCaption
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblDistCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
           Height = 17
           Top = 159
           Width = 27
-          Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
           ParentColor = False
@@ -4438,14 +4431,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblAzi: TLabel
           AnchorSideLeft.Control = lblDXCC
+          AnchorSideTop.Control = lblAzim
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblAzim
           AnchorSideBottom.Side = asrBottom
           Left = 174
           Height = 17
           Top = 159
           Width = 27
-          Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
           ParentColor = False

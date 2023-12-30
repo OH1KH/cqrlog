@@ -107,6 +107,8 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkBlenByQso: TCheckBox;
+    chkBeamArcLength: TCheckBox;
     chkShowQso: TCheckBox;
     chkShowBeam: TCheckBox;
     chkUdUpEnabled: TCheckBox;
@@ -988,6 +990,8 @@ type
     procedure btnSplitClick(Sender: TObject);
     procedure btnForceMembershipUpdateClick(Sender : TObject);
     procedure cbNoKeyerResetChange(Sender: TObject);
+    procedure chkBeamArcLengthExit(Sender: TObject);
+    procedure chkBlenByQsoExit(Sender: TObject);
     procedure chkClUpEnabledChange(Sender: TObject);
     procedure chkHaUpEnabledChange(Sender: TObject);
     procedure chkHrUpEnabledChange(Sender: TObject);
@@ -1463,6 +1467,7 @@ begin
   cqrini.WriteInteger('xplanet', 'UseQsoColor', cmbXplanetQsoColor.Selected);
   cqrini.WriteBool('xplanet', 'ShowBeam', chkShowBeam.Checked);
   cqrini.WriteInteger('xplanet', 'UseBeamColor', cmbXplanetBeamColor.Selected);
+  cqrini.WriteBool('xplanet', 'BeamArcLen', chkBeamArcLength.Checked);
 
   cqrini.WriteString('ZipCode', 'First', cmbFirstZip.Text);
   cqrini.WriteString('ZipCode', 'FirstSaveTo', cmbFirstSaveTo.Text);
@@ -2468,6 +2473,20 @@ begin
   CWKeyerChanged := True
 end;
 
+procedure TfrmPreferences.chkBeamArcLengthExit(Sender: TObject);
+begin
+     if chkBlenByQso.Checked <> chkBeamArcLength.checked then
+        chkBlenByQso.Checked := chkBeamArcLength.checked
+end;
+
+
+procedure TfrmPreferences.chkBlenByQsoExit(Sender: TObject);
+begin
+    if chkBlenByQso.Checked <> chkBeamArcLength.checked then
+       chkBeamArcLength.checked := chkBlenByQso.Checked
+end;
+
+
 procedure TfrmPreferences.cmbIfaceTypeCloseUp(Sender: TObject);
 begin
   CWKeyerChanged := True;
@@ -2564,8 +2583,13 @@ begin
 end;
 
 procedure TfrmPreferences.edtGCBeamWidthChange(Sender: TObject);
+var i:integer;
 begin
-
+   if not TryStrToInt(edtGCBeamLength.Text,i) then
+     edtGCBeamLength.Text:='' //should not happen with numbers only input
+    else
+    if i> 19000 then  edtGCBeamLength.Text:='19000';
+   edtGCBeamLength.SelStart:=Length(edtGCBeamLength.Text);
 end;
 
 function TfrmPreferences.DataModeInput(s:string):string;
@@ -2865,7 +2889,7 @@ begin
   btnBPColor.ButtonColor:= StringToColor(cqrini.ReadString('Program', 'GraylineGCLineBEColor','clRed'));
   edtGCBeamWidth.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineWidth',2));
   edtGCBeamLength.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500));
-
+  chkBlenByQso.Checked := cqrini.ReadBool('xplanet', 'BeamArcLen', False); //these tied together
 
   edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
   chkNewDXCCTables.Checked := cqrini.ReadBool('Program', 'CheckDXCCTabs', True);
@@ -3158,6 +3182,7 @@ begin
   cmbXplanetQsoColor.Selected:=cqrini.ReadInteger('xplanet', 'UseQsoColor', clWhite);
   chkShowBeam.Checked:= cqrini.ReadBool('xplanet', 'ShowBeam', false);
   cmbXplanetBeamColor.Selected:=cqrini.ReadInteger('xplanet', 'UseBeamColor', clWhite);
+  chkBeamArcLength.Checked := cqrini.ReadBool('xplanet', 'BeamArcLen', False);
 
   cmbFirstZip.Text := cqrini.ReadString('ZipCode', 'First', '');
   cmbFirstSaveTo.Text := cqrini.ReadString('ZipCode', 'FirstSaveTo', '');
