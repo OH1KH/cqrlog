@@ -130,9 +130,12 @@ If you are able to use <strong>color back</strong> feature you may want to chang
 <p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
  Wsjtx will produce again last periods decode (wsjt map will show it double) and after that you can have effect for double click.
 If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
-</br></br>
-Selecting <b>DX</b> checkbox cqrlog fiters away all calls that are from same continent as you are. This works both in Cq monitor and MAP mode<br>
-<br>Checking <b>Show LoTW, eQSL usage in CQ-monitor</b> from <b>preferences/fldigi- wsjt interface</b> L &amp; E will show up in front of continent in CQ-monitor<br>
+
+</p><p><img src="img/wsjt21ab.png" name="21" width="363" height="282">
+<p>Selecting <b>DX</b> checkbox opens a popup that lets specify what continents are shown.  This works both in Cq monitor and MAP mode.
+<br>Cqrlog filters away all calls that are not from filter continents. When filter is properly set the <b>Dx</b> of checkbox is shown with <b>Green</b> color.
+<br>If none continents are selected when <b>Dx</b> is checked color is <b>Red</b> telling that you cant see any calls as all continents are unchecked.
+<br>You can click Dx checkbox (when checked) with right mouse button if you want change continent settings without change to Dx checkbox state.
 
 </p><p><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img><img src="img/wsjt21b.png" name="21" width="363" height="282">
@@ -144,7 +147,7 @@ You can also toggle  <b>Follow</b> button ON and OFF by mouse clicks (turns gree
 shows decoded lines where that <b>followed callsign is the originating (2nd) callsign</b> and the line is <b>not CQ</b> or not <b>to YOUR Call</b>(destination). That box uses same font and size as CQ-monitor.
 </br>You can also paint any call from WSJT-X main window or CQ-monitor, drag it over Follow callsign field, and drop it there. Follow callsign field can have previous call (it is erased) or empty.
  Dropping also activates <b>Follow button</b> ON (turns green).
-</br></br>Line contains:  <b>decoding_period_time</b> | <b>snr</b>  | <b>delta_frequency</b>  | <b>the_message</b>.  
+</br></br>Line contains:   <b>delta_frequency</b> | <b>snr</b> | <b>the_message</b>.  
  </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
  </br>Line color turns silver gray from default color (black) when corresponding response period is over.
  </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.

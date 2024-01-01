@@ -14,6 +14,7 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
+    ShAll: TMenuItem;
     btFtxtName: TButton;
     cbflw: TCheckBox;
     chkDx: TCheckBox;
@@ -30,11 +31,18 @@ type
     lblBand: TLabel;
     lblInfo: TLabel;
     lblMode: TLabel;
+    ShAS: TMenuItem;
+    ShEU: TMenuItem;
+    ShNA: TMenuItem;
+    ShOC: TMenuItem;
+    ShSA: TMenuItem;
+    ShAF: TMenuItem;
     pnlTrigPop: TPanel;
     pnlSelects: TPanel;
     pnlChecks: TPanel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
+    popDx: TPopupMenu;
     sgMonitor: TStringGrid;
     tbAlert: TToggleBox;
     cmCqDx: TMenuItem;
@@ -60,6 +68,9 @@ type
     procedure chkCbCQChange(Sender: TObject);
     procedure cbflwChange(Sender: TObject);
     procedure chkdBChange(Sender: TObject);
+    procedure chkDxClick(Sender: TObject);
+    procedure chkDxMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
@@ -85,9 +96,12 @@ type
     procedure chknoTxtChange(Sender: TObject);
     procedure pnlSelectsClick(Sender: TObject);
     procedure pnlTrigPopMouseEnter(Sender: TObject);
+    procedure popDxClose(Sender: TObject);
     procedure sgMonitorDblClick(Sender: TObject);
     procedure sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure ShAFClick(Sender: TObject);
+    procedure ShAllClick(Sender: TObject);
     procedure tbAlertChange(Sender: TObject);
     procedure tbFollowChange(Sender: TObject);
     procedure tbLocAlertChange(Sender: TObject);
@@ -221,7 +235,7 @@ var
   LocalDbg : boolean;
 
   USDB_Address :String;
-
+  DXpopOK      : boolean;
 
 implementation
 
@@ -416,7 +430,6 @@ begin
   else
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
-
   //DoneCriticalsection(crit)
 end;
  
@@ -834,6 +847,52 @@ begin
   cqrini.WriteBool('MonWsjtx', 'ShowdB', chkdB.Checked);
 end;
 
+procedure TfrmMonWsjtx.chkDxClick(Sender: TObject);
+var
+  f:integer;
+  c:String;
+begin
+   if chkDx.Checked then
+    Begin
+      for f:=1 to 6 do
+            begin
+              popDx.Items[f].Enabled:=true;  //first enable all
+              popDx.Items[f].Checked:=False; //but disable checks
+            end;
+      case dmUtils.MyContinent of            //then disable own
+        'AF': ShAF.Enabled:=False;
+        'AS': ShAS.Enabled:=False;
+        'EU': ShEU.Enabled:=False;
+        'NA': ShNA.Enabled:=False;
+        'OC': ShOC.Enabled:=False;
+        'SA': ShSA.Enabled:=False;
+      end;
+      //preset values
+      c:=cqrini.ReadString('MonWsjtx', 'ShowDxList', 'AFASEUNAOCSA');
+      for f:=1 to 6 do                      //enable selected checks
+          if popDx.Items[f].Enabled then
+             if (pos(ExtractWord(2,popDx.Items[f].Caption,[' ']),c)>0) then
+                                                         popDx.Items[f].Checked:=True;
+
+     if DXpopOK then popDx.PopUp;
+    end
+     else
+      Begin
+       chkDx.Font.Style:=[];
+       chkDx.Font.Color:=clDefault;
+      end;
+   cqrini.WriteBool('MonWsjtx', 'CheckDx',chkDx.Checked);
+end;
+
+procedure TfrmMonWsjtx.chkDxMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ if (Button=mbRight) and chkDX.Checked then
+   Begin
+      popDX.popup;
+   end;
+end;
+
 procedure TfrmMonWsjtx.btFtxtNameClick(Sender: TObject);
 var
   My: string;
@@ -877,6 +936,7 @@ begin
   sgMonitor.BorderSpacing.Top:=pnlSelects.Height;
 end;
 
+
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 //DL7OAP: complete procedure for the coloring, this function is called every time
@@ -888,6 +948,53 @@ begin
     sgMonitor.Canvas.Font.Style:=[fsBold];
   sgMonitor.Canvas.Fillrect(aRect); // fills cell with backcolor, text is lost in this moment
   sgMonitor.Canvas.TextRect(aRect, aRect.Left + 1, aRect.Top + 1, sgMonitor.Cells[ACol, ARow]); //refills the text
+end;
+                        
+procedure TfrmMonWsjtx.ShAFClick(Sender: TObject);
+var
+   p: TPoint;
+Begin
+  p:=popDx.PopupPoint;
+  TMenuitem(Sender).checked:= not TMenuitem(Sender).checked;
+  popDx.PopUp(p.x,p.y);
+end;
+
+procedure TfrmMonWsjtx.ShAllClick(Sender: TObject);
+var
+    f: integer;
+    b: boolean;
+    p:TPoint;
+Begin
+  p:=popDx.PopupPoint;
+  b:= not popDx.Items[0].Checked;
+  for f:=1 to 6 do
+   if popDx.Items[f].Enabled then
+             popDx.Items[f].Checked:=b;
+  popDx.PopUp(p.x,p.y);
+end;
+
+procedure TfrmMonWsjtx.popDxClose(Sender: TObject);
+var
+    f: integer;
+    c:string ='';
+begin
+     for f:=1 to 6 do
+       if popDx.Items[f].Checked then
+        Begin
+          c:= c+ExtractWord(2,popDx.Items[f].Caption,[' ']);
+        end;
+     if (c='') then
+                 Begin
+                   c:='!'; //indicates empty, but exisiting list
+                   chkDx.Font.Style:=[fsBold];
+                   chkDx.Font.Color:=clRed;
+                 end
+                else
+                 begin
+                  chkDx.Font.Style:=[fsBold];
+                  chkDx.Font.Color:=clGreen;
+                 end;
+     cqrini.WriteString('MonWsjtx', 'ShowDxList', c);
 end;
 
 procedure TfrmMonWsjtx.tbAlertChange(Sender: TObject);
@@ -1013,7 +1120,11 @@ end;
 procedure TfrmMonWsjtx.tmrStartupDoneTimer(Sender: TObject);
 begin   //post actions after window has opened.
    tmrStartupDone.Enabled:=False;
+   chkDx.Checked:=cqrini.ReadBool('MonWsjtx', 'CheckDx',false);
    chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
+   if chkDx.Checked then
+                    popDxClose(nil);
+   DXpopOK:=true;
 end;
 
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
@@ -1063,7 +1174,7 @@ begin
   EditedText := '';
   LastWsjtLineTime := '';
   DblClickCall :='';
-
+  DXpopOK      :=false;
    //InitCriticalSection(crit);
 
   cmHere.Bitmap := TBitmap.Create;
@@ -1144,7 +1255,6 @@ begin
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
   chknoHistoryChange(nil); // sure to get history settings right
   pnlTrigPopMouseEnter(nil); //starts with panel visible,
-  chkDx.Checked:=False; //DX filter off
 
   //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;

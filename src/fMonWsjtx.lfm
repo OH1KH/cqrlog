@@ -484,10 +484,11 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideLeft.Control = chkStopTx
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrCenter
       Left = 316
       Height = 23
-      Top = 4
+      Top = 5
       Width = 49
       BorderSpacing.Right = 2
       Caption = 'USt'
@@ -504,6 +505,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       Top = 5
       Width = 44
       Caption = 'Dx'
+      OnClick = chkDxClick
+      OnMouseUp = chkDxMouseUp
       TabOrder = 5
     end
     object lblMode: TLabel
@@ -609,14 +612,14 @@ object frmMonWsjtx: TfrmMonWsjtx
       'ColorS=F0FBFF'
       'ColorT=A4A0A0'
     )
-    Left = 160
+    Left = 224
     Top = 88
   end
   object popFontDlg: TFontDialog
     Title = 'Choose font'
     MinFontSize = 0
     MaxFontSize = 0
-    Left = 224
+    Left = 288
     Top = 88
   end
   object tmrCqPeriod: TTimer
@@ -644,5 +647,38 @@ object frmMonWsjtx: TfrmMonWsjtx
     OnTimer = tmrStartupDoneTimer
     Left = 288
     Top = 144
+  end
+  object popDx: TPopupMenu
+    OnClose = popDxClose
+    Left = 160
+    Top = 88
+    object ShAll: TMenuItem
+      Caption = 'Show All'
+      OnClick = ShAllClick
+    end
+    object ShAF: TMenuItem
+      Caption = 'Show AF'
+      OnClick = ShAFClick
+    end
+    object ShAS: TMenuItem
+      Caption = 'Show AS'
+      OnClick = ShAFClick
+    end
+    object ShEU: TMenuItem
+      Caption = 'Show EU'
+      OnClick = ShAFClick
+    end
+    object ShNA: TMenuItem
+      Caption = 'Show NA'
+      OnClick = ShAFClick
+    end
+    object ShOC: TMenuItem
+      Caption = 'Show OC'
+      OnClick = ShAFClick
+    end
+    object ShSA: TMenuItem
+      Caption = 'Show SA'
+      OnClick = ShAFClick
+    end
   end
 end
