@@ -1,5 +1,9 @@
 
- #### NOTE: Upgrading to 2.6.0.(121) ,or higer, will add database table "cqrlog_common.states" and set version to 7.
+ #### NOTE: Upgrading instructions for using script, manual install or compile from shource can be foud below. Just scroll down ...
+
+
+
+ #### NOTE: Upgrading to 2.6.0.(122) ,or higer, will add database table "cqrlog_common.states" and set version to 7.
  This database upgrade should be backwards compatible (none of old versions are interested in new table)
 
  #### NOTE: For now on binaries are compiled using system that has GLIBC version 2.35.
@@ -8,9 +12,9 @@ Update GLIBC if it is below 2.3.5.
 If you do not want to do that you can compile this source (see 1 folder up) with your current OS version and get it running.
 Note that the Alpha source version is usually one step higher than ready compiled versions.
  
- #### NOTE: At the moment there is no new official version release.  Alpha 2.6.0(121) is ahead of official source that identifies itself now as 2.6.0(119) 
+ #### NOTE: At the moment there is no new official version release.  Alpha 2.6.0(122) is ahead of official source that identifies itself now as 2.6.0(119) 
 From [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
-you can see all changes. It appears also at first start of (121), and can be accessed via "Help" when Cqrlog is running.
+you can see all changes. It appears also at first start of (122), and can be accessed via "Help" when Cqrlog is running.
 
 
 Latest cqrlog alpha test binaries can be found from this folder.
@@ -65,6 +69,10 @@ BINARIES:
    
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
+
+
+## UPDATE INSTRUCTIONS:
+
 
 
 ### -------------------SCRIPT-INSTALL--------------------

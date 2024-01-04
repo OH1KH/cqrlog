@@ -1677,32 +1677,35 @@ function TdmUtils.StringToADIF(ATag,Text: string): string;
 var
    t:string;
    i:integer;
-   b:boolean;
+   is_intl:Boolean;
+   is_utf8:boolean;
 begin
+  is_utf8:= (UTF8Length(Text) <> Length(Text));
 
-  if UTF8Length(Text) <> Length(Text) then
+  if is_utf8 then
    Begin
       t:= copy(Atag,2,length(ATag)); // leave '<'
-      b :=false;
+      is_intl:=false;
       for i:=0 to 18 do
-        if pos(uppercase(t),adif_intls[i]) > 0 then
-          Begin
-            b:=true;
-            break;
-          end;
-    if b then // tag in _intl allowed list
-      begin
+       Begin
+         is_intl:= (pos(uppercase(t),adif_intls[i]) >0);
+         if is_intl then  break;
+       end;
+
+    if is_intl then // tag in _intl allowed list
        Result := ATag+'_INTL:' + IntToStr(UTF8Length(Text)) + '>' + Text
-      end
      else
-      begin
-       Result := ATag+':' + IntToStr(Length(Text)) + '>' + Text;
-      end;
+      Begin
+        Result:='';
+       //this would be against adif.org ADIF definitions as tags withthout _INTL may have just ascii chars (7bit)
+       //Result := ATag+':' + IntToStr(UTF8Length(Text)) + '>' + Text;
+       if dmData.DebugLevel >=1 then
+                             Writeln('"'+ATag+':' + IntToStr(UTF8Length(Text)) + '>' + Text+'" Not ascii(7bit).'+
+                             lineEnding+' Breaks adif.org ADIF definitions! Not written to export file!');
+       end;
    end
   else
-   begin
     Result := ATag+':' + IntToStr(Length(Text)) + '>' + Text;
-   end;
 
   //if dmData.DebugLevel >=1 then Writeln(Result);
 end;

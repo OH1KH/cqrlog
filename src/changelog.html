@@ -11,6 +11,10 @@
     <strong>Alpha test version of CQRLOG 2.6.0 (122)</strong><br>
     New in this alpha version (not in official version):<br>
     <ul style="list-style: square;text-align:left; color: green;" >
+    <li>UTF8: Try to make NewQSO more UTF8 compatible in cases where UTF8 chars appear to columns that
+    <br>shoud contain only ASCII 7bit by ADIF standard. That may happen with callbook data added.
+    <br>Faulty entry is saved to log, but will not export to ADIF. As well as ADIF import will ignore
+    <br>nonstandard tags.</li>
     <li>Wsjt:Cq-monitor:Add: checkbox DX includes now popup to select shown Dx continents</li>
     <li>Xplanet:Fix:If Show own pos show also opponents, and even when None-source is selected</li>
     <li>Xplanet:Fix: Beam path calculation( tnx: Andy VK3OU)</li> 

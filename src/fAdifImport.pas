@@ -155,6 +155,7 @@ type
     FFilteredOutRecNr: integer;
     FFilterByDate: boolean;
     FFilterDateRange: array [0..1] of TDateString;
+    TmpAdifRec: string;
     function ValidateFilter: boolean;
     procedure WriteWrongADIF(lines : Array of String; error : String);
     function generateAdifTagHash(aaa:String):longint;
@@ -164,7 +165,7 @@ type
     function TrimDataLen(adifTag:String;adifdata:String;maxlen:integer): String;
     { private declarations }
   public
-    function getNextAdifTag(var vstup,prik,data:string):boolean;
+    function  getNextAdifTag(var AdifRemaining,AdifTag,AdifData:string):boolean;
     procedure OpenInTextEditor(OtF:String);
     { public declarations }
   end; 
@@ -196,75 +197,75 @@ begin
   generateAdifTagHash:=x;
 end;
 
-function TfrmAdifImport.getNextAdifTag(var vstup,prik,data:string):boolean;
-// vstup - remaining text have to be searched for next tag
-// prik - deliveres back the extracted ADIF tag name
-// data - deliveres back the extracted ADIF information of the tag
-
+function TfrmAdifImport.getNextAdifTag(var AdifRemaining,AdifTag,AdifData:string):boolean;
+// AdifRemaining - remaining text have to be searched for next tag
+// AdifTag - deliveres back the extracted ADIF tag name
+// AdifData - deliveres back the extracted ADIF information of the tag
+// make this more UTF8 compatible done
 var z,x:longint;
-    aaa:string;
-    i : Integer;
-    slen : String = '';
-    DataLen : Word = 0;
-  begin
+    CopyOfAdifRemaining:string;
+    IntlPos : Integer;
+    TagStrLen : String = '';
+    AdifDataLen : Word = 0;
+
+
+begin
     getNextAdifTag:=false;
-    z:=pos('<',vstup);
-    if z=0 then exit;//  there is no other record - disappearing.
+    z:=pos('<',AdifRemaining);
+    if z=0 then exit;//  there is no other record. The last one - disappearing.
 
-    aaa:=copy(vstup,z+1,length(vstup));
-    z:=pos(':',aaa);
-    x:=pos('>',aaa);
-    if (x=0) then exit; //  the record was not terminated ... disappearing
+    CopyOfAdifRemaining:=UTF8copy(AdifRemaining,z+1,length(AdifRemaining));
+    z:=pos(':',CopyOfAdifRemaining);
+    x:=pos('>',CopyOfAdifRemaining);
+    if (x=0) then exit; //  the record tag was not terminated ... disappearing
 
-    //detect length of ADIF Data
-    for i:=z+1 to x do
-    begin
-      if (aaa[i] in ['0'..'9']) then
-        slen := slen + aaa[i]
-    end;
-    if slen = '' then
-      DataLen := 0
-    else
-      DataLen := StrToInt(slen);
-    //if LocalDbg then Write('Got length:',DataLen);
+    //detect given length of ADIF from AdifTag
+    for IntlPos:=z+1 to x do
+      begin
+        if (CopyOfAdifRemaining[IntlPos] in ['0'..'9']) then
+          TagStrLen := TagStrLen + CopyOfAdifRemaining[IntlPos]
+      end;
+    if TagStrLen = '' then
+        AdifDataLen := 0
+      else
+        AdifDataLen := StrToInt(TagStrLen);
+    //if LocalDbg then Write('Got length:',AdifDataLen);
 
     if z<>0 then
-      prik:=trim(copy(aaa,1,z-1))
+      AdifTag:=trim(copy(CopyOfAdifRemaining,1,z-1))
     else
-      prik:=trim(copy(aaa,1,x-1));
+      AdifTag:=trim(copy(CopyOfAdifRemaining,1,x-1));
 
-    aaa:=copy(aaa,x+1,length(aaa));
+    CopyOfAdifRemaining:=UTF8copy(CopyOfAdifRemaining,x+1,UTF8length(CopyOfAdifRemaining));
+    z:=pos('<',CopyOfAdifRemaining);
+    IntlPos:= pos('_INTL',upcase(AdifTag));
+    AdifData:=trim(UTF8copy(CopyOfAdifRemaining,1,AdifDataLen));
 
-    z:=pos('<',aaa);
-    i:= pos('_INTL',upcase(prik));
     //if LocalDbg then Write(' pos INTL:',i);
+
+    if IntlPos>0 then  //tags with '_intl' have UTF8 charactes
+        AdifTag:= copy(AdifTag,1,IntlPos-1); //remove '_INTL'
+
+    if ((IntlPos=0) and (length(AdifData)<>UTF8length(AdifData))) then
+      begin
+       WriteWrongADIF(TmpAdifRec+LineEnding+AdifTag+' '+AdifData,'UTF8 characters in non _INTL tag, not ADIF standard! Ignoring AdifData');
+       AdifData:='';
+       inc(WrongRecNr);
+       lblErrors.Caption   := IntToStr(WrongRecNr);
+       lblErrorLog.Caption := dmData.UsrHomeDir + ERR_FILE;
+       lblErrorLog.Visible:=true;
+       Repaint;
+       //UTF8 characters in non _INTL tag, not ADIF standard Ignoring AdifData
+      end;
+
     if z=0 then
-    begin
-      if i>0 then  //tags with '_intl' have UTF8 charactes
-       Begin
-        prik:= copy(prik,1,i-1); //remove '_INTL'
-        data:=UTF8copy(aaa,1,DataLen);
-        //if LocalDbg then Write(' as UTF8');
-       end
-      else
-        data:=copy(aaa,1,DataLen);
-      vstup:=''
-    end
-    else begin
-      if i>0 then  //tags with '_intl' have UTF8 charactes
-       Begin
-        prik:= copy(prik,1,i-1); //remove '_INTL'
-        data:=UTF8copy(aaa,1,DataLen);
-        //if LocalDbg then Write(' as UTF8');
-       end
-      else
-        data:=copy(aaa,1,DataLen);
-      vstup:=copy(aaa,z,length(aaa))
-    end;
-    data :=trim(data);
-    //if LocalDbg then Writeln(' for tag:',prik,' with data:',data);
+        AdifRemaining:=''
+     else
+        AdifRemaining:=UTF8copy(CopyOfAdifRemaining,z,length(CopyOfAdifRemaining));
+
+    //if LocalDbg then Writeln(' for tag:',AdifTag,' with AdifData:',AdifData);
     getNextAdifTag:=true
-  end;
+end;
 
 function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry;adifTag:String):boolean;
 
@@ -275,40 +276,40 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
 
     fillTypeVariableWithTagData:=true;
     data := trim(data);
-
+     //do all UTF8 compatible  with  UTF8UpperCase (even most of them should be always 7bit ascii by ADIF specs)
     case h of
-    h_BAND                          :d.BAND:=UpperCase(TrimDataLen(adifTag,data,l_BAND));
-    h_CALL                          :d.CALL:=UpperCase(TrimDataLen(adifTag,data,l_CALL));
+    h_BAND                          :d.BAND:=UTF8UpperCase(TrimDataLen(adifTag,data,l_BAND));
+    h_CALL                          :d.CALL:=UTF8UpperCase(TrimDataLen(adifTag,data,l_CALL));
     h_CNTY                          :d.CNTY:=TrimDataLen(adifTag,data,l_CNTY);
     h_COMMENT                       :d.COMMENT:=TrimDataLen(adifTag,data,l_COMMENT);
-    h_CONT                          :d.CONT:=UpperCase(TrimDataLen(adifTag,data,l_CONT));
-    h_DXCC                          :d.DXCC:=UpperCase(TrimDataLen(adifTag,data,l_DXCC));
+    h_CONT                          :d.CONT:=UTF8UpperCase(TrimDataLen(adifTag,data,l_CONT));
+    h_DXCC                          :d.DXCC:=UTF8UpperCase(TrimDataLen(adifTag,data,l_DXCC));
     h_EQSL_QSLRDATE                 :d.EQSL_QSLRDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLRDATE);
     h_EQSL_QSLSDATE                 :d.EQSL_QSLSDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLSDATE);
     h_EQSL_QSL_RCVD                 :d.EQSL_QSL_RCVD:=TrimDataLen(adifTag,data,l_EQSL_QSL_RCVD);
     h_EQSL_QSL_SENT                 :d.EQSL_QSL_SENT:=TrimDataLen(adifTag,data,l_EQSL_QSL_SENT);
     h_FREQ                          :d.FREQ:=TrimDataLen(adifTag,data,l_FREQ);
     h_GRIDSQUARE                    :d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-    h_IOTA                          :d.IOTA:=UpperCase(TrimDataLen(adifTag,data,l_IOTA));
+    h_IOTA                          :d.IOTA:=UTF8UpperCase(TrimDataLen(adifTag,data,l_IOTA));
     h_ITUZ                          :d.ITUZ:=TrimDataLen(adifTag,data,l_ITUZ);
     h_LOTW_QSLRDATE                 :d.LOTW_QSLRDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLRDATE);
     h_LOTW_QSLSDATE                 :d.LOTW_QSLSDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLSDATE);
     h_LOTW_QSL_RCVD                 :d.LOTW_QSL_RCVD:=TrimDataLen(adifTag,data,l_LOTW_QSL_RCVD);
     h_LOTW_QSL_SENT                 :d.LOTW_QSL_SENT:=TrimDataLen(adifTag,data,l_LOTW_QSL_SENT);
 
-    h_MODE                          :d.MODE    := UpperCase(TrimDataLen(adifTag,data,l_MODE));
-    h_SUBMODE                       :d.SUBMODE := UpperCase(TrimDataLen(adifTag,data,l_SUBMODE));
+    h_MODE                          :d.MODE    := UTF8UpperCase(TrimDataLen(adifTag,data,l_MODE));
+    h_SUBMODE                       :d.SUBMODE := UTF8UpperCase(TrimDataLen(adifTag,data,l_SUBMODE));
 
     h_MY_GRIDSQUARE                 :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
     h_NAME                          :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
     h_NOTES                         :d.NOTES:=TrimDataLen(adifTag,data,l_NOTES);
-    h_PFX                           :d.PFX:=UpperCase(TrimDataLen(adifTag,data,l_PFX));
+    h_PFX                           :d.PFX:=UTF8UpperCase(TrimDataLen(adifTag,data,l_PFX));
     h_QSLMSG                        :d.QSLMSG:=TrimDataLen(adifTag,data,l_QSLMSG);
     h_QSLRDATE                      :d.QSLRDATE:=TrimDataLen(adifTag,data,l_QSLRDATE);
     h_QSLSDATE                      :d.QSLSDATE:=TrimDataLen(adifTag,data,l_QSLSDATE);
     h_QSL_RCVD                      :d.QSL_RCVD:=TrimDataLen(adifTag,data,l_QSL_RCVD);
     h_QSL_SENT                      :d.QSL_SENT:=TrimDataLen(adifTag,data,l_QSL_SENT);
-    h_QSL_VIA                       :d.QSL_VIA:=TrimDataLen(adifTag,data,l_QSL_VIA);
+    h_QSL_VIA                       :d.QSL_VIA:=UTF8UpperCase(TrimDataLen(adifTag,data,l_QSL_VIA));
     h_QSO_DATE                      :d.QSO_DATE:=TrimDataLen(adifTag,data,l_QSO_DATE);
     h_QTH                           :d.QTH:=TrimDataLen(adifTag,data,l_QTH);
     h_RST_RCVD                      :d.RST_RCVD:=TrimDataLen(adifTag,data,l_RST_RCVD);
@@ -328,12 +329,12 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
     h_APP_CQRLOG_QSLR               :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
     h_APP_CQRLOG_COUNTY             :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
     h_CQZ                           :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
-    h_STATE                         :d.STATE:=UpperCase(TrimDataLen(adifTag,data,l_STATE));
+    h_STATE                         :d.STATE:=UTF8UpperCase(TrimDataLen(adifTag,data,l_STATE));
     h_AWARD                         :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
     h_PROP_MODE                     :d.PROP_MODE:=TrimDataLen(adifTag,data,l_PROP_MODE);
     h_SAT_NAME                      :d.SAT_NAME:=TrimDataLen(adifTag,data,l_SAT_NAME);
     h_FREQ_RX                       :d.FREQ_RX:=TrimDataLen(adifTag,data,l_FREQ_RX);
-    h_OP                            :d.OP:=TrimDataLen(adifTag,data,l_OP);
+    h_OP                            :d.OP:=UTF8UpperCase(TrimDataLen(adifTag,data,l_OP));
 
     else begin
         { writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}
@@ -432,30 +433,19 @@ begin
         d.QSL_RCVD := ''
     end;
 
-    // d.IOTA  := Trim(d.IOTA); this has been trimmed at  fillTypeVariableWithTagData
-    d.IOTA  := UpperCase(d.IOTA);
-    //lengths now fixed in  fillTypeVariableWithTagData
-    //d.NAME  := Copy(d.NAME, 1 ,40);
-    //d.QTH   := Copy(d.QTH, 1, 60);
     //workaround for 'TRegExpr exec: empty input string' error in fpc compiler
-    if (trim(d.DARC_DOK) <> '') then
+    if (d.DARC_DOK <> '') then
     begin
       d.DARC_DOK := ReplaceRegExpr('Ø', d.DARC_DOK, '0', True);
       d.DARC_DOK := LeftStr(Uppercase(ReplaceRegExpr('[^a-zA-Z0-9]',d.DARC_DOK, '', True)), 12);
     end;
-    d.QSL_VIA := UpperCase(d.QSL_VIA);
     if Pos('QSL VIA',d.QSL_VIA) > 0 then
-      d.QSL_VIA := copy(d.QSL_VIA,9,Length(d.QSL_VIA)-1);
+      d.QSL_VIA := UTF8copy(d.QSL_VIA,9,Length(d.QSL_VIA)-1);
     d.QSL_VIA := trim(d.QSL_VIA);
     if edtRemarks.Text <> '' then
       d.COMMENT := edtRemarks.Text + ' ' + d.COMMENT;
     if d.TX_PWR = '' then
       d.TX_PWR := FMyPower;
-    d.COMMENT := copy(d.COMMENT, 1, 200);
-
-    d.MODE := UpperCase(d.MODE);
-
-    d.OP := UpperCase(d.OP);
 
     if (not dmUtils.IsAdifOK(d.QSO_DATE,d.TIME_ON,d.TIME_OFF,d.CALL,d.FREQ,d.MODE,d.RST_SENT,
                             d.RST_RCVD,d.IOTA,d.ITUZ,d.CQZ,d.GRIDSQUARE,d.MY_GRIDSQUARE,
@@ -772,7 +762,6 @@ var
   dt : TDateTime;
   hh,m,s,ms : Word;
   ErrText : String = '';
-  tmp : String='';
 begin
   if lblFileName.Caption='' then exit;
   CutErrText :='';
@@ -811,20 +800,21 @@ begin
     begin
       readln(textFileIn,oneTextRow);
       if Pos('<EOH>',UpperCase(oneTextRow)) > 0 then
-        tmp := ''
+        TmpAdifRec := ''
       else
-        tmp := tmp + oneTextRow;
+        TmpAdifRec := TmpAdifRec + oneTextRow;
       while getNextAdifTag(oneTextRow,adifTag,data) and not (AbortImport) do
       begin
+       // writeln(adiftag,'   ',data,'  ',UTF8length(data),'  ',length(data));
         h:=generateAdifTagHash(adifTag);
         if ((h=h_EOH) or (h=h_EOR)) then
         begin
           if not saveNewEntryFromADIFinDatabase(d,ErrText) then
-            WriteWrongADIF(tmp,ErrText);
+            WriteWrongADIF(TmpAdifRec,ErrText);
           if (CutErrText<>'') and (h=h_EOR)then
-              WriteWrongADIF(tmp,'Imported with shrink(s):'+#10+CutErrText);
+              WriteWrongADIF(TmpAdifRec,'Imported with shrink(s):'+#10+CutErrText);
           CutErrText:='';
-          tmp:='';
+          TmpAdifRec:='';
         end;
         fillTypeVariableWithTagData(h,data,D,adifTag);
       end;
@@ -895,7 +885,7 @@ begin
   try
     tmp := FormatSettings.TimeSeparator;
     FormatSettings.TimeSeparator := '_';
-    ERR_FILE := 'errors_'+TimeToStr(now)+'.adi'
+    ERR_FILE := 'errors_ADIFimport '+DateTimeToStr(now)+'.adi'
   finally
     FormatSettings.TimeSeparator := tmp
   end;
@@ -969,7 +959,7 @@ begin
   try
     tmp := FormatSettings.TimeSeparator;
     FormatSettings.TimeSeparator := '_';
-    ERR_FILE := 'errors_'+TimeToStr(now)+'.adi'
+    ERR_FILE := 'errors_ADIFimport '+DateTimeToStr(now)+'.adi';
   finally
     FormatSettings.TimeSeparator := tmp
   end;
@@ -1004,13 +994,14 @@ end;
 
 function TfrmAdifImport.TrimDataLen(adiftag:String;adifdata:String;maxlen:integer):String;
 Begin
- if length(adifdata)>maxlen then
+ if UTF8length(adifdata)>maxlen then
      Begin
-            CutErrText:=CutErrText + adiftag+' shrink to '+IntToStr(maxlen)+' chrs:'+adifdata+' -> '+copy(adifdata,1,maxlen)+#10;
-            Result:= trim(copy(adifdata,1,maxlen)); //trim after cut
+           Result:= trim(UTF8copy(adifdata,1,maxlen)); //trim after cut
+           CutErrText:=CutErrText + adiftag+' shrink to '+IntToStr(maxlen)+' chrs:'+adifdata+' -> '+Result+#10;
+
      end
    else
-            Result:=adifdata; //trimmed before
+            Result:=trim(adifdata);
 end;
 
 

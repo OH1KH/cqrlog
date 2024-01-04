@@ -20,7 +20,7 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn, uMyFindFile, Graphics;
+  mysql57dyn, mysql57conn, uMyFindFile, Graphics, LazUTF8;
 
 const
   cDB_LIMIT = 500;
@@ -1360,12 +1360,6 @@ begin
   rx_freq := FloatToStr(RxFreq);
   if (rx_freq = '0') then
     rx_freq := 'null';
-  qsl_via := copy(qsl_via,1,30);
-  award   := copy(award,1,50);
-  state   := copy(state,1,4);
-  dok     := UpperCase(copy(dok,1,12));
-  cont    := UpperCase(copy(cont,1,2));
-  qth     := copy(qth,1,60);
   trQ.StartTransaction;
   qsodate := (FormatDateTime('YYYY-MM-DD',date));
   Q.SQL.Text :=  'insert into cqrlog_main (qsodate,time_on,time_off,callsign,freq,mode,'+
@@ -1788,7 +1782,7 @@ begin
     begin
       if exatly then
       begin
-        if UpperCase(qry.FieldByName(Column).AsVariant) = UpperCase(Value) then
+        if UTF8UpperCase(qry.FieldByName(Column).AsVariant) = UTF8UpperCase(Value) then
         begin
           Result := True;
           break
@@ -1797,7 +1791,7 @@ begin
           qry.Next
       end
       else begin
-        if Pos(UpperCase(Value),UpperCase(qry.FieldByName(Column).AsVariant))=1 then
+        if Pos(UTF8UpperCase(Value),UTF8UpperCase(qry.FieldByName(Column).AsVariant))=1 then
         begin
           Result := True;
           break
