@@ -70,6 +70,7 @@ object frmContest: TfrmContest
     Top = 127
     Width = 100
     MaxLength = 50
+    OnChange = edtSTXStrChange
     OnEnter = edtSTXStrEnter
     OnExit = edtSTXStrExit
     OnKeyDown = edtCallKeyDown
@@ -606,6 +607,7 @@ object frmContest: TfrmContest
       'YUDXC'
     )
     MaxLength = 40
+    OnChange = cmbContestNameChange
     OnEnter = cmbContestNameEnter
     OnExit = cmbContestNameExit
     ParentShowHint = False

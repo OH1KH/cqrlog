@@ -237,6 +237,7 @@ type
     procedure AddBandsToStatGrid(g:TStringGrid);
     procedure ShowStatistic(ref_adif,old_stat_adif:Word; g:TStringGrid; call:String='');
     procedure KeyInLoc(loc:string; var key:char);
+    procedure AdifAsciiTrim(var col:TEdit);
 
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
@@ -1709,6 +1710,14 @@ begin
 
   //if dmData.DebugLevel >=1 then Writeln(Result);
 end;
+
+procedure  TdmUtils.AdifAsciiTrim(var col:TEdit);
+begin
+  col.Text:=dmUtils.MyTrim(col.Text);
+  col.SelStart:=length(col.Text);
+  col.SelLength:=0;
+end;
+
 
 function TdmUtils.MyTrim(Text: string): string;
 var

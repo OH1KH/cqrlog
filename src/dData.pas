@@ -1370,8 +1370,6 @@ begin
                  ','+QuotedStr(time_on)+','+QuotedStr(time_off)+
                  ','+QuotedStr(call)+','+FloatToStr(freq)+
                  ','+QuotedStr(mode)+','+QuotedStr(rst_s)+
-                 //','+QuotedStr(rst_r)+','+QuotedStr(dmUtils.MyTrim(stn_name))+
-                 //','+QuotedStr(dmUtils.MyTrim(qth))+','+QuotedStr(qsl_s)+
                  ','+QuotedStr(rst_r)+','+QuotedStr(trim(stn_name))+
                  ','+QuotedStr(trim(qth))+','+QuotedStr(qsl_s)+
                  ','+QuotedStr(qsl_r)+','+QuotedStr(qsl_via)+
@@ -1379,7 +1377,6 @@ begin
                  ','+sITU+','+sWAZ+
                     //here we make final check that for now on locator writing format is by std in database
                  ','+QuotedStr(dmUtils.StdFormatLocator(loc))+','+QuotedStr(dmUtils.StdFormatLocator(my_loc))+
-                 //','+QuotedStr(dmUtils.MyTrim(county))+',' + QuotedStr(dmUtils.MyTrim(award)) + ','+QuotedStr(dmUtils.MyTrim(remarks))+
                  ','+QuotedStr(trim(county))+',' + QuotedStr(trim(award)) + ','+QuotedStr(trim(remarks))+
                  ','+IntToStr(adif)+','+ QuotedStr(idcall) + ','+ QuotedStr(state) +','+IntToStr(changed)+
                  ','+QuotedStr(band)+','+ IntToStr(profile) +','+QuotedStr(cont)+

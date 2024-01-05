@@ -131,10 +131,12 @@ type
     procedure chkSPClick(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
+    procedure cmbContestNameChange(Sender: TObject);
     procedure cmbContestNameEnter(Sender: TObject);
     procedure cmbContestNameExit(Sender: TObject);
     procedure edtRSTrEnter(Sender: TObject);
     procedure edtSRXStrKeyPress(Sender: TObject; var Key: char);
+    procedure edtSTXStrChange(Sender: TObject);
     procedure lblCqFreqClick(Sender: TObject);
     procedure LoadClick(Sender: TObject);
     procedure mnuReSetAllCountersClick(Sender: TObject);
@@ -723,6 +725,11 @@ begin
   SetTabOrders;
 end;
 
+procedure TfrmContest.cmbContestNameChange(Sender: TObject);
+begin
+  cmbContestName.Caption:= dmUtils.MyTrim(cmbContestName.Caption);
+end;
+
 procedure TfrmContest.cmbContestNameEnter(Sender: TObject);
 begin
   tmrScore.Enabled:=False;
@@ -816,6 +823,11 @@ begin
                          dmUtils.KeyInLoc(edtSRXStr.Text,Key);
 end;
 
+procedure TfrmContest.edtSTXStrChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtSTXStr);
+end;
+
 procedure TfrmContest.lblCqFreqClick(Sender: TObject);
 var
    f:double;
@@ -871,6 +883,7 @@ procedure TfrmContest.edtSRXStrChange(Sender: TObject);
 var
    Key:char;
 begin
+  dmUtils.AdifAsciiTrim(edtSRXStr);
   if ((chkLoc.Checked) and (MsgIs=1 ))then
   begin
    edtSRXStr.Text := dmUtils.StdFormatLocator(edtSRXStr.Text);

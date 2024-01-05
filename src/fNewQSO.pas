@@ -425,10 +425,19 @@ type
     procedure cmbQSL_SExit(Sender: TObject);
     procedure cmbSatelliteChange(Sender : TObject);
     procedure dbgrdQSOBeforeColumnSized(Sender: TObject);
+    procedure edtAwardChange(Sender: TObject);
     procedure edtAwardEnter(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
+    procedure edtContestExchangeMessageReceivedChange(Sender: TObject);
+    procedure edtContestExchangeMessageSentChange(Sender: TObject);
+    procedure edtContestNameChange(Sender: TObject);
+    procedure edtContestSerialReceivedChange(Sender: TObject);
+    procedure edtContestSerialSentChange(Sender: TObject);
+    procedure edtCountyChange(Sender: TObject);
     procedure edtDateChange(Sender: TObject);
     procedure edtDateEnter(Sender: TObject);
+    procedure edtDOKChange(Sender: TObject);
+    procedure edtDXCCRefChange(Sender: TObject);
     procedure edtDXCCRefEnter(Sender: TObject);
     procedure edtEndTimeChange(Sender: TObject);
     procedure edtEndTimeEnter(Sender: TObject);
@@ -437,11 +446,14 @@ type
     procedure edtGridKeyPress(Sender: TObject; var Key: char);
     procedure edtHisRSTExit(Sender: TObject);
     procedure edtHisRSTKeyPress(Sender : TObject; var Key : char);
+    procedure edtITUChange(Sender: TObject);
     procedure edtITUEnter(Sender: TObject);
     procedure edtMyRSTExit(Sender: TObject);
     procedure edtMyRSTKeyPress(Sender : TObject; var Key : char);
     procedure edtNameEnter(Sender: TObject);
+    procedure edtPWRChange(Sender: TObject);
     procedure edtPWREnter(Sender: TObject);
+    procedure edtQSL_VIAChange(Sender: TObject);
     procedure edtQSL_VIAEnter(Sender: TObject);
     procedure edtQTHEnter(Sender: TObject);
     procedure edtRemQSOEnter(Sender: TObject);
@@ -450,8 +462,10 @@ type
     procedure edtRXLOExit(Sender: TObject);
     procedure edtStartTimeChange(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
+    procedure edtStateChange(Sender: TObject);
     procedure edtStateEnter(Sender: TObject);
     procedure edtTXLOExit(Sender: TObject);
+    procedure edtWAZChange(Sender: TObject);
     procedure edtWAZEnter(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -4527,6 +4541,7 @@ end;
 
 procedure TfrmNewQSO.edtCallChange(Sender: TObject);
 begin
+  dmUtils.AdifAsciiTrim(edtCall);
   if not EditQSO then
     if edtCall.Text = '' then
       ClearAll;
@@ -4536,6 +4551,36 @@ begin
     frmSCP.mSCP.Clear;
   lblGrid.Font.Style:=[];
   lblGrid.Font.Color:=clDefault;
+end;
+
+procedure TfrmNewQSO.edtContestExchangeMessageReceivedChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtContestExchangeMessageReceived);
+end;
+
+procedure TfrmNewQSO.edtContestExchangeMessageSentChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtContestExchangeMessageSent);
+end;
+
+procedure TfrmNewQSO.edtContestNameChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtContestName);
+end;
+
+procedure TfrmNewQSO.edtContestSerialReceivedChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtContestSerialReceived);
+end;
+
+procedure TfrmNewQSO.edtContestSerialSentChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim( edtContestSerialSent);
+end;
+
+procedure TfrmNewQSO.edtCountyChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtCounty);
 end;
 
 procedure TfrmNewQSO.edtDateChange(Sender: TObject);
@@ -4552,6 +4597,16 @@ end;
 procedure TfrmNewQSO.edtDateEnter(Sender: TObject);
 begin
   edtDate.SelectAll
+end;
+
+procedure TfrmNewQSO.edtDOKChange(Sender: TObject);
+begin
+   dmUtils.AdifAsciiTrim(edtDOK);
+end;
+
+procedure TfrmNewQSO.edtDXCCRefChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim( edtDXCCRef);
 end;
 
 procedure TfrmNewQSO.edtDXCCRefEnter(Sender: TObject);
@@ -4957,6 +5012,11 @@ begin
   SaveGrid
 end;
 
+procedure TfrmNewQSO.edtAwardChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtAward);
+end;
+
 procedure TfrmNewQSO.edtAwardEnter(Sender: TObject);
 begin
   edtAward.SelectAll
@@ -4971,6 +5031,11 @@ end;
 procedure TfrmNewQSO.edtHisRSTKeyPress(Sender : TObject; var Key : char);
 begin
   SelTextFix(edtHisRST, Key)
+end;
+
+procedure TfrmNewQSO.edtITUChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtITU);
 end;
 
 procedure TfrmNewQSO.edtITUEnter(Sender: TObject);
@@ -5002,9 +5067,19 @@ begin
   edtName.SelectAll
 end;
 
+procedure TfrmNewQSO.edtPWRChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtPWR);
+end;
+
 procedure TfrmNewQSO.edtPWREnter(Sender: TObject);
 begin
   edtPWR.SelectAll
+end;
+
+procedure TfrmNewQSO.edtQSL_VIAChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtQSL_VIA);
 end;
 
 procedure TfrmNewQSO.edtQSL_VIAEnter(Sender: TObject);
@@ -5069,6 +5144,11 @@ begin
   edtStartTime.SelectAll
 end;
 
+procedure TfrmNewQSO.edtStateChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtState);
+end;
+
 procedure TfrmNewQSO.edtStateEnter(Sender: TObject);
 begin
   edtState.SelectAll
@@ -5083,6 +5163,11 @@ begin
       edtTXLO.Text := '0.0';
   end;
   cqrini.WriteString('NewQSO', 'TXLO', edtTXLO.Text);
+end;
+
+procedure TfrmNewQSO.edtWAZChange(Sender: TObject);
+begin
+  dmUtils.AdifAsciiTrim(edtWAZ)
 end;
 
 procedure TfrmNewQSO.edtWAZEnter(Sender: TObject);
