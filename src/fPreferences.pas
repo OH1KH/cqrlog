@@ -35,6 +35,7 @@ type
     btnBPColor: TColorButton;
     btnSPColor: TColorButton;
     btnLPColor: TColorButton;
+    btnTestXplanet: TButton;
     btnWsjtPath: TButton;
     btnSecondLoad: TButton;
     btnFrequencies1: TButton;
@@ -62,7 +63,6 @@ type
     btnSelectBandFont: TButton;
     Button1: TButton;
     Button2: TButton;
-    btnTestXplanet: TButton;
     btnFirstLoad: TButton;
     btnChangeDefaultFreq: TButton;
     btnKeyMacros: TButton;
@@ -489,6 +489,8 @@ type
     edtRot2Host: TEdit;
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
+    edtXLeft: TEdit;
+    edtXTop: TEdit;
     edtZipCity: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
@@ -567,7 +569,6 @@ type
     edtADIFPort: TEdit;
     edtXRefresh: TEdit;
     edtXLastSpots: TEdit;
-    edtXTop: TEdit;
     edtXWidth: TEdit;
     edtXHeight: TEdit;
     edtXplanetLoc: TEdit;
@@ -579,7 +580,6 @@ type
     edtDoNotShow1: TEdit;
     edtWAward1: TEdit;
     edtDoNotShow: TEdit;
-    edtXLeft: TEdit;
     edtCIV3: TEdit;
     edtPasswd: TEdit;
     edtUser: TEdit;
@@ -615,7 +615,6 @@ type
     GroupBox20: TGroupBox;
     GroupBox21: TGroupBox;
     GroupBox22: TGroupBox;
-    GroupBox23: TGroupBox;
     GroupBox24: TGroupBox;
     GroupBox25: TGroupBox;
     GroupBox26: TGroupBox;
@@ -664,6 +663,8 @@ type
     Label13: TLabel;
     Label193: TLabel;
     Label194: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
     lblGCBeamWidth: TLabel;
     lblGCBeamLength: TLabel;
     lblGC_BP_Color: TLabel;
@@ -880,8 +881,6 @@ type
     Label65: TLabel;
     Label66: TLabel;
     Label67: TLabel;
-    Label68: TLabel;
-    Label69: TLabel;
     Label7: TLabel;
     Label70: TLabel;
     Label71: TLabel;
