@@ -26,6 +26,7 @@ type
     chkNewDXConly: TCheckBox;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
+    edtSpotDelay: TEdit;
     edtSrcCall: TEdit;
     edtDate: TEdit;
     edtDXBand: TEdit;
@@ -42,6 +43,7 @@ type
     grpDXStation: TGroupBox;
     grpCallisgn: TGroupBox;
     grpSource: TGroupBox;
+    lblSpotDelay: TLabel;
     lblIgnoreHours: TLabel;
     Label10: TLabel;
     lblCallExample: TLabel;
@@ -71,6 +73,7 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure btnSrcCallAllClick(Sender: TObject);
     procedure btnSrcContAllClick(Sender: TObject);
+    procedure edtSpotDelayExit(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -116,7 +119,8 @@ begin
   chkOnlyLoTW.Checked := cqrini.ReadBool('RBNFilter','LoTWOnly',False);
   chkOnlyeQSL.Checked := cqrini.ReadBool('RBNFilter','eQSLOnly',False);
 
-  chkNewDXConly.Checked := cqrini.ReadBool('RBNFilter','NewDXCOnly',False)
+  chkNewDXConly.Checked := cqrini.ReadBool('RBNFilter','NewDXCOnly',False);
+  edtSpotDelay.Text:= cqrini.ReadString('RBNFilter','SpotDelay','150');
 end;
 
 procedure TfrmRbnFilter.btnOKClick(Sender: TObject);
@@ -198,7 +202,7 @@ begin
   cqrini.WriteBool('RBNFilter','eQSLOnly',chkOnlyeQSL.Checked);
 
   cqrini.WriteBool('RBNFilter','NewDXCOnly',chkNewDXConly.Checked);
-
+  cqrini.WriteString('RBNFilter','SpotDelay',edtSpotDelay.Text);
   ModalResult := mrOK
 end;
 
@@ -210,6 +214,18 @@ end;
 procedure TfrmRbnFilter.btnSrcContAllClick(Sender: TObject);
 begin
   edtSrcCont.Text := C_RBN_CONT
+end;
+
+procedure TfrmRbnFilter.edtSpotDelayExit(Sender: TObject);
+var
+  v :integer;
+begin
+ if TryStrToInt(edtSpotDelay.Text,v) then
+   begin
+     if v<10 then edtSpotDelay.Text:='10';
+     if v>600 then edtSpotDelay.Text:='600';
+   end;
+ if edtSpotDelay.Text='' then edtSpotDelay.Text:='150';
 end;
 
 procedure TfrmRbnFilter.btnDXCCntyClick(Sender: TObject);

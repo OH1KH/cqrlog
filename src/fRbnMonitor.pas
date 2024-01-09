@@ -61,6 +61,7 @@ type
     fil_LoTWOnly              : Boolean;
     fil_eQSLOnly              : Boolean;
     fil_NewDXCOnly            : Boolean;
+    fil_SpotDelay             : Integer;    //between spots milliseconds
 
     property OnShowSpot : TOnShowSpotEvent read FOnShowSpot write FOnShowSpot;
 end;
@@ -382,7 +383,7 @@ begin
       end;
       if (spot='') then
       begin
-        sleep(200);
+        sleep(fil_SpotDelay);
         Continue
       end;
 
@@ -409,7 +410,7 @@ begin
         fRbnSpot.signal  := stren;
         Synchronize(@ShowSpot)
       end;
-      Sleep(100)
+      Sleep(fil_SpotDelay)
     end
   except
     on E: Exception do
@@ -762,7 +763,10 @@ begin
     RbnMonThread.fil_LoTWOnly := cqrini.ReadBool('RBNFilter','LoTWOnly',False);
     RbnMonThread.fil_eQSLOnly := cqrini.ReadBool('RBNFilter','eQSLOnly',False);
 
-    RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False)
+    RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False);
+    //note: we can do WriteString and then ReadInteger if parameter has only numbers. No conversion needed.
+    RbnMonThread.fil_SpotDelay:= cqrini.ReadInteger('RBNFilter','SpotDelay',150);
+
   end;
 
 end;
