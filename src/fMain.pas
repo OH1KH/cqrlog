@@ -366,14 +366,12 @@ type
     procedure acUploadToHamQTHExecute(Sender: TObject);
     procedure acUploadToHrdLogExecute(Sender: TObject);
     procedure acUploadToUDPLogExecute(Sender: TObject);
-    procedure dbgrdMainColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer
-      );
+    procedure dbgrdMainColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
     procedure dbgrdMainColumnSized(Sender: TObject);
     procedure dbgrdMainDrawColumnCell(Sender : TObject; const Rect : TRect;
       DataCol : Integer; Column : TColumn; State : TGridDrawState);
     procedure dbgrdMainEnter(Sender: TObject);
-    procedure dbgrdMainKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
-      );
+    procedure dbgrdMainKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -1794,7 +1792,6 @@ begin
     dmData.qCQRLOG.Open;
     dmData.qCQRLOG.Last
   end;
-
   if ((key = VK_HOME) and (Shift = [ssCtrl])) and (not dmData.IsFilter) then
   begin
     dmData.trCQRLOG.Rollback;

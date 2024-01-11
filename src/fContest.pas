@@ -662,14 +662,15 @@ begin
     if(cmbContestName.Text <>'') then
      Begin
       dmData.qCQRLOG.Close;
-      dmData.qCQRLOG.SQL.Text :=  'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "' + cmbContestName.Text + '"';
+      dmData.qCQRLOG.SQL.Text :=  'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "'
+                                   + cmbContestName.Text
+                                   + '" LIMIT '+IntToStr(cDB_LIMIT);
       if dmData.DebugLevel >=1 then
         Writeln(dmData.qCQRLOG.SQL.Text);
       if dmData.trCQRLOG.Active then
         dmData.trCQRLOG.Rollback;
       dmData.trCQRLOG.StartTransaction;
       dmData.qCQRLOG.Open;
-      dmData.qCQRLOG.Last;
       dmData.IsFilter := True;
       frmMain.sbMain.Panels[2].Text := 'Filter is ACTIVE!';
       WasContestName:=cmbContestName.Text;
@@ -752,6 +753,7 @@ begin
          if chkSetFilter.Checked then
              chkSetFilter.Checked:=false;
          WasContestName:='';
+         tmrScore.Enabled:=False;
          Exit;
        end;
 
@@ -770,6 +772,7 @@ begin
       Begin
         UseStatus:=1; //OK1WC memorial contest
         MWCStatus;
+        tmrScore.Enabled:=True;
         Exit;
       end;
 
@@ -777,6 +780,7 @@ begin
       Begin
         UseStatus:=2; //Nordic V,U,SHF activity contest
         NACStatus;
+        tmrScore.Enabled:=True;
         Exit;
       end;
 
@@ -785,6 +789,7 @@ begin
       Begin
         UseStatus:=3; //SRAL FT8 contest for OH stations
         SRALFt8Status;
+        tmrScore.Enabled:=True;
         Exit;
       end;
 
@@ -1387,7 +1392,6 @@ procedure TfrmContest.tmrScoreTimer(Sender: TObject);
 begin
   tmrScore.Enabled:=false;
   cmbContestNameExit(nil);
-  tmrScore.Enabled:=true;
 end;
 
 procedure TfrmContest.SetActualReportForModeFromRadio;
@@ -1876,13 +1880,13 @@ Begin
          DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
 
 
-         //list of different 4chr locators (locator multipliers)
+         //list of different 4chr locators (locator multipliers) in srx_string
          //--------------------------------------------------------------
          Mlist[band]:='';
          dmData.CQ.Close;
          if dmData.trCQ.Active then dmData.trCQ.Rollback;
          dmData.CQ.SQL.Text :=
-             'SELECT DISTINCT(SUBSTRING(UPPER(loc),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname='+
+             'SELECT DISTINCT(SUBSTRING(UPPER(srx_string),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname='+
              QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('FT8')+
              ' AND rst_s NOT LIKE '+ QuotedStr('%Dupe%')+' ORDER BY MainLoc ASC';
          if dmData.DebugLevel >=1 then

@@ -203,8 +203,9 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 550
+      Top = 556
       Width = 169
+      BorderSpacing.Top = 6
       Caption = 'Show only eQSL users'
       TabOrder = 10
     end
@@ -226,7 +227,7 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 590
+      Top = 596
       Width = 431
       BorderSpacing.Top = 6
       Caption = 'Show only spots that are "New one"/"New band"/"New mode" '
@@ -602,7 +603,7 @@ object frmRbnFilter: TfrmRbnFilter
       AnchorSideRight.Side = asrBottom
       Left = 12
       Height = 5
-      Top = 579
+      Top = 585
       Width = 660
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 6
@@ -640,35 +641,49 @@ object frmRbnFilter: TfrmRbnFilter
       TabOrder = 13
     end
     object lblSpotDelay: TLabel
-      AnchorSideLeft.Control = chkOnlyLoTW
+      AnchorSideLeft.Control = edtSpotDelay
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = chkOnlyLoTW
       AnchorSideTop.Side = asrCenter
-      Left = 236
+      Left = 294
       Height = 17
       Top = 530
-      Width = 121
-      BorderSpacing.Left = 58
-      Caption = 'Spot Delay (in ms)'
+      Width = 159
+      BorderSpacing.Left = 6
+      Caption = 'ms delay between spots'
       ParentColor = False
     end
     object edtSpotDelay: TEdit
-      AnchorSideLeft.Control = lblSpotDelay
+      AnchorSideLeft.Control = chkOnlyLoTW
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lblSpotDelay
       AnchorSideTop.Side = asrCenter
-      Left = 363
+      Left = 238
       Height = 34
-      Hint = 'Adjust delay between received spots printing. '#10'Big value may causes delayed show out.'#10'Small values hard to read speed (good filtering is needed then).'#10'Small values may be needed during high band activity.'#10'Values: 10ms .. 600ms'
+      Hint = 'Adjust delay between received spots printing. '#10'Big value may cause delayed show up,'#10'small value hard to read speed (good filtering may be needed ).'#10'Use small values during high band activity.'#10'Values: 5ms .. 600ms'
       Top = 521
       Width = 50
-      BorderSpacing.Left = 6
+      BorderSpacing.Left = 60
       MaxLength = 3
       NumbersOnly = True
       OnExit = edtSpotDelayExit
       ParentShowHint = False
       ShowHint = True
       TabOrder = 9
+    end
+    object chkToBandMap: TCheckBox
+      AnchorSideLeft.Control = edtSpotDelay
+      AnchorSideTop.Control = chkOnlyeQSL
+      AnchorSideTop.Side = asrCenter
+      Left = 238
+      Height = 23
+      Hint = 'When selected and BandMap is open spots that have DXCC N,M,B '#10'(New DXCC, New Mode, New Band) are sent to BandMap.'#10'BandMap spot uses DXCLuster spot color settings (set them there)'
+      Top = 556
+      Width = 263
+      Caption = 'Send N,B,M DXCC spots to BandMap'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 14
     end
   end
 end

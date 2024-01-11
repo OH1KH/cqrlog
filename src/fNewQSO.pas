@@ -3515,7 +3515,12 @@ begin
     begin
      frmMain.acRefresh.Execute;
      if not fEditQso then
-                   frmMain.dbgrdMainKeyUp(nil,key,[ssCtrl]); //shows last logged qso
+       begin
+            if frmContest.Showing and frmContest.chkSetFilter.Checked then
+              frmContest.chkSetFilterClick(nil) //shows last logged qso
+            else
+             frmMain.dbgrdMainKeyUp(nil,key,[ssCtrl]); //shows last logged qso
+       end
 
     end;
   if fEditQso then

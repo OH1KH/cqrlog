@@ -62,6 +62,17 @@ type
     fil_eQSLOnly              : Boolean;
     fil_NewDXCOnly            : Boolean;
     fil_SpotDelay             : Integer;    //between spots milliseconds
+    fil_ToBandMap             : Boolean;
+    fil_gcfgNewCountryColor   : TColor;
+    fil_gcfgNewBandColor      : TColor;
+    fil_gcfgNewModeColor      : TColor;
+    fil_ThBckColor            : Integer;
+    fil_gcfgUseBackColor      : Boolean;
+    fil_gcfgeUseBackColor     : Boolean;
+    fil_gcfgBckColor          : TColor;
+    fil_gcfgeBckColor         : TColor;
+    fil_gcfgUseDXCColors      : Boolean;
+
 
     property OnShowSpot : TOnShowSpotEvent read FOnShowSpot write FOnShowSpot;
 end;
@@ -129,9 +140,6 @@ type
     aRbnArchive  : Array of TRbnSpot;
     SrcCalls : TStringlist;
 
-
-    function  GetModeFromFreq(freq: string): string;
-
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
@@ -151,7 +159,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline;
+uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,fBandMap;
 
 { TfrmRbnMonitor }
 
@@ -354,7 +362,8 @@ procedure TRBNThread.Execute;
 var
   spot    : String;
   spotter : String;
-  freq    : String;
+  freq,
+  Mfreq   : String;
   stren   : String;
   mode    : String;
   dxstn   : String;
@@ -364,6 +373,10 @@ var
   RbnSpot : TRbnSpot;
   index   : Integer;
   band    : String;
+  cLat,
+  cLon    : Currency;
+  sColor  : integer;
+  dFreq   : Double;
 begin
   reg := TRegExpr.Create;
   try try
@@ -388,17 +401,14 @@ begin
       end;
 
       ParseSpot(spot, spotter, dxstn, freq, mode, stren);
-
       if dmData.UsesLotw(dxstn) then
         LoTW := 'L'
       else
         LoTW := '';
-
       if dmDXCluster.UseseQSL(dxstn) then
         eQSL := 'E'
       else
         eQSL := '';
-
       if AllowedSpot(spotter,dxstn,freq,mode,LoTW,eQSL,dxinfo) then
       begin
         fRbnSpot.spotter := spotter;
@@ -408,10 +418,35 @@ begin
         fRbnSpot.qsl     := LoTW+eQSL;
         fRbnSpot.dxinfo  := dxinfo;
         fRbnSpot.signal  := stren;
-        Synchronize(@ShowSpot)
+
+        if fil_ToBandMap and frmBandMap.Showing and (dxinfo<>'') then
+          begin
+            dFreq:=0.0; MFreq:='0.0';
+            //dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
+            dmUtils.GetCoordinate(dmUtils.GetPfx(dxstn),cLat,cLon);
+            if TryStrToFloat(freq,dFreq) then
+               Mfreq:=FloatToStr( dFreq/1000);
+            fil_ThBckColor := clWindow;
+            sColor     := clDefault;
+            if fil_gcfgUseDXCColors then
+             Begin
+               case dxinfo of
+                'N': sColor:=fil_gcfgNewCountryColor;
+                'B': sColor:=fil_gcfgNewBandColor;
+                'M': sColor:=fil_gcfgNewModeColor;
+               end;
+              if fil_gcfgeUseBackColor and (eQSL='E') then
+                fil_ThBckColor := fil_gcfgeBckColor;
+              if fil_gcfgUseBackColor and (LoTW='L') then
+                fil_ThBckColor := fil_gcfgBckColor;
+              end;
+              frmBandMap.AddToBandMap(dFreq,dxstn,mode,dmUtils.GetBandFromFreq(Mfreq),'',cLat,cLon,
+                                      sColor,fil_ThBckColor, False,(LoTW='L'),(eQSL='E') )
+          end;
+        Synchronize(@ShowSpot);
+        Sleep(fil_SpotDelay);
       end;
-      Sleep(fil_SpotDelay)
-    end
+    end;
   except
     on E: Exception do
       Writeln('*********',E.Message)
@@ -662,6 +697,7 @@ begin
 
   if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnectM',False) )) then
      acConnectExecute(nil);
+
 end;
 
 procedure TfrmRbnMonitor.sgRbnDblClick(Sender: TObject);
@@ -767,6 +803,16 @@ begin
     //note: we can do WriteString and then ReadInteger if parameter has only numbers. No conversion needed.
     RbnMonThread.fil_SpotDelay:= cqrini.ReadInteger('RBNFilter','SpotDelay',150);
 
+    RbnMonThread.fil_ToBandMap           := cqrini.ReadBool('RBNMonitor','ToBandMap',false);
+    RbnMonThread.fil_gcfgNewCountryColor := cqrini.ReadInteger('DXCluster','NewCountry',0);
+    RbnMonThread.fil_gcfgNewBandColor    := cqrini.ReadInteger('DXCluster','NewBand',0);
+    RbnMonThread.fil_gcfgNewModeColor    := cqrini.ReadInteger('DXCluster','NewMode',0);
+    RbnMonThread.fil_gcfgUseBackColor    := cqrini.ReadBool('LoTW','UseBackColor',True);
+    RbnMonThread.fil_gcfgeUseBackColor   := cqrini.ReadBool('LoTW','eUseBackColor',True);
+    RbnMonThread.fil_gcfgBckColor        := cqrini.ReadInteger('LoTW','BckColor',clMoneyGreen);
+    RbnMonThread.fil_gcfgeBckColor       := cqrini.ReadInteger('LoTW','eBckColor',clSkyBlue);
+    RbnMonThread.fil_gcfgUseDXCColors    := cqrini.ReadBool('BandMap','UseDXCColors',False);
+
   end;
 
 end;
@@ -813,47 +859,6 @@ begin
     end;
 
     sgRbn.Row := sgRbn.RowCount
-  end
-end;
-
-function TfrmRbnMonitor.GetModeFromFreq(freq: string): string;
-var
-  Band: string;
-  eFreq: Currency;
-begin
-  Result := '';
-  if TryStrToCurr(freq,eFreq) then
-    eFreq := eFreq/1000
-  else
-    exit;
-
-  band := dmDXCluster.GetBandFromFreq(freq, True);
-  dmData.qRbnMon.Close;
-  dmData.qRbnMon.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
-  if dmData.DebugLevel>=1 then Writeln(dmData.qRbnMon.SQL.Text);
-  if dmData.trRbnMon.Active then
-    dmData.trRbnMon.Rollback;
-  dmData.trRbnMon.StartTransaction;
-  try
-    dmData.qRbnMon.Open;
-    if dmData.qRbnMon.RecordCount > 0 then
-    begin
-      if ((eFreq >= dmData.qRbnMon.FieldByName('B_BEGIN').AsCurrency) and
-        (eFreq <= dmData.qRbnMon.FieldByName('CW').AsCurrency)) then
-        Result := 'CW'
-      else
-      begin
-        if ((eFreq > dmData.qRbnMon.FieldByName('RTTY').AsCurrency) and
-          (eFreq <= dmData.qRbnMon.FieldByName('SSB').AsCurrency)) then
-          Result := 'RTTY'
-        else begin
-          Result := 'SSB'
-        end
-      end
-    end
-  finally
-    dmData.qRbnMon.Close;
-    dmData.trRbnMon.Rollback
   end
 end;
 

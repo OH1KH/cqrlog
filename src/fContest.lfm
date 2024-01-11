@@ -1122,12 +1122,12 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 6
     Height = 23
-    Hint = 'Set QsoList/FIlter/Contest filter by contest name'#10'used in Contest window.'#10'You can jump directly to QsoList/File/Export/... then.'
+    Hint = 'Set "QsoList/FIlter/Contest filter" by contest name'#10'used in "Contest name".'#10'Then using right click you can jump directly to log exports.'
     Top = 43
-    Width = 108
+    Width = 100
     BorderSpacing.Left = 6
     BorderSpacing.Top = 3
-    Caption = 'Set filter(Ex)'
+    Caption = 'Filter && Exp'
     OnClick = chkSetFilterClick
     OnMouseUp = chkSetFilterMouseUp
     TabOrder = 28

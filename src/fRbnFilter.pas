@@ -23,6 +23,7 @@ type
     btnOK: TButton;
     btnSrcContAll: TButton;
     btnSrcCallAll: TButton;
+    chkToBandMap: TCheckBox;
     chkNewDXConly: TCheckBox;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
@@ -120,7 +121,8 @@ begin
   chkOnlyeQSL.Checked := cqrini.ReadBool('RBNFilter','eQSLOnly',False);
 
   chkNewDXConly.Checked := cqrini.ReadBool('RBNFilter','NewDXCOnly',False);
-  edtSpotDelay.Text:= cqrini.ReadString('RBNFilter','SpotDelay','150');
+  edtSpotDelay.Text     := cqrini.ReadString('RBNFilter','SpotDelay','150');
+  chkToBandMap.Checked  :=cqrini.ReadBool('RBNMonitor','ToBandMap',false);
 end;
 
 procedure TfrmRbnFilter.btnOKClick(Sender: TObject);
@@ -203,6 +205,7 @@ begin
 
   cqrini.WriteBool('RBNFilter','NewDXCOnly',chkNewDXConly.Checked);
   cqrini.WriteString('RBNFilter','SpotDelay',edtSpotDelay.Text);
+  cqrini.WriteBool('RBNMonitor','ToBandMap',chkToBandMap.Checked );
   ModalResult := mrOK
 end;
 
@@ -222,7 +225,7 @@ var
 begin
  if TryStrToInt(edtSpotDelay.Text,v) then
    begin
-     if v<10 then edtSpotDelay.Text:='10';
+     if v<5 then edtSpotDelay.Text:='5';
      if v>600 then edtSpotDelay.Text:='600';
    end;
  if edtSpotDelay.Text='' then edtSpotDelay.Text:='150';

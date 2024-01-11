@@ -328,6 +328,7 @@ type
     function  MyDateTimeToStr(DateTime : TDateTime) : String;
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
     function  StdFormatLocator(loc:string):String;
+    function  GetPfx(call:string):string;
     function  MyContinent:string;
     function  IsHeDx(call:String; CqDir:String = ''):boolean;
     function  ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
@@ -5098,6 +5099,22 @@ Begin
       finally
       end;
      //else use default browser that is defined at program early start
+end;
+function  TdmUtils.GetPfx(call:string):string;
+var
+  adif   :word;
+  pfx    : String = '';
+  mycont : String = '';
+  cont   : String = '';
+  country: String = '';
+  waz    : String = '';
+  posun  : String = '';
+  itu    : String = '';
+  lat    : String = '';
+  long   : String = '';
+Begin
+  adif:= dmDXCC.id_country(call, Now(), pfx, mycont,  country, WAZ, posun, ITU, lat, long);
+  Result:=pfx;
 end;
 function  TdmUtils.MyContinent:string;
 var
