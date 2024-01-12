@@ -662,9 +662,8 @@ begin
     if(cmbContestName.Text <>'') then
      Begin
       dmData.qCQRLOG.Close;
-      dmData.qCQRLOG.SQL.Text :=  'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "'
-                                   + cmbContestName.Text
-                                   + '" LIMIT '+IntToStr(cDB_LIMIT);
+      dmData.qCQRLOG.SQL.Text :=  'SELECT * FROM view_cqrlog_main_by_qsodate WHERE contestname='
+                                   + QuotedStr(cmbContestName.Text);
       if dmData.DebugLevel >=1 then
         Writeln(dmData.qCQRLOG.SQL.Text);
       if dmData.trCQRLOG.Active then
