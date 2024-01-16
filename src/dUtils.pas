@@ -1715,8 +1715,8 @@ end;
 procedure  TdmUtils.AdifAsciiTrim(var col:TEdit);
 begin
   col.Text:=dmUtils.MyTrim(col.Text);
-  col.SelStart:=length(col.Text);
-  col.SelLength:=0;
+  //col.SelStart:=length(col.Text);  //breaks editing
+  //col.SelLength:=0;
 end;
 
 
