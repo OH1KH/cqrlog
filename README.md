@@ -4,6 +4,7 @@ This is a clone of Cqrlog source with some additons of my own.
 From folder "compiled" you find ready compiled binary files against official Cqrlog and for this "local_testing" source.
 There is also "newupdate.zip" that includes "newupdate.sh", a script that does Cqrlog backup and update for you with selected binary file.
 Same folder has also README.md that holds further informations.
+Compiled version may be one step behind the source here. I'll test source for some time before releasing it as ready compiled.
 
 
 
