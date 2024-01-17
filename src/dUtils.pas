@@ -239,6 +239,7 @@ type
     procedure KeyInLoc(loc:string; var key:char);
     procedure AdifAsciiTrim(var col:TEdit);
 
+    function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
     function  StrToDateFormat(sDate : String) : TDateTime;
@@ -1732,6 +1733,15 @@ begin
     if (Text[i] in AllowedChars) then
       Result := Result + Text[i];
   end;
+end;
+
+function TdmUtils.UTF8UpperFirst(Value:UTF8String):UTF8String;
+var temp:WideString;
+begin
+  value:=Utf8LowerCase(value);
+  temp:=UTF8Decode(Value);
+  if length(temp) > 0 then temp[1]:=WideUpperCase(temp[1])[1];
+  Result:=UTF8Encode(temp);
 end;
 
 function TdmUtils.ReplaceSpace(txt: string): string;
@@ -3433,13 +3443,12 @@ begin
         if Pos('<Error>Not found:', m.Text) > 0 then
           exit;
         nick := GetTagValue(m.Text, '<fname>');
-        if Pos(' ', nick) > 0 then
-          nick := copy(nick, 1, Pos(' ', nick) - 1);
-        if Length(nick) > 0 then
-        begin
-          nick := LowerCase(nick);
-          nick[1] := upCase(nick[1]);
-        end;
+
+        if Utf8Length(nick) > 40 then
+          nick := UTF8copy(nick,1,40);
+
+        nick:=UTF8UpperFirst(nick);
+
         qth := GetTagValue(m.Text, '<addr2>');
         state := GetTagValue(m.Text, '<state>');
         zip := GetTagValue(m.Text, '<zip>');
@@ -3514,19 +3523,11 @@ begin
           exit;
 
         nick:= GetTagValue(m.Text, '<name>');
-        if WordCount(nick,[' ']) >2 then //There may be nickname after true name
-          Begin
-            tmp := ExtractWord(2,nick,[' ']);
-            nick:= ExtractWord(1,nick,[' ']);
-            if ((pos('(',tmp)>0)
-             or (pos('"',tmp)>0)
-             or (pos(#$27,tmp)>0)  // '
-             or (pos('[',tmp)>0)
-             or (pos('{',tmp)>0) ) then //There may be nickname after true name
-               nick:= nick+' '+tmp;
-          end
-         else
-          nick:= ExtractWord(1,nick,[' ']);
+        if Utf8Length(nick) > 40 then
+          nick := UTF8copy(nick,1,40);
+
+        nick:=UTF8UpperFirst(nick);
+
         qth := GetTagValue(m.Text, '<qth>');
         state := GetTagValue(m.Text, '<state>');
         zip := GetTagValue(m.Text, '<zip>');
@@ -4336,13 +4337,12 @@ begin
           exit;
         end;
         nick := GetTagValue(m.Text, '<nick>');
-        if Pos(' ', nick) > 0 then
-          nick := copy(nick, 1, Pos(' ', nick) - 1);
-        if Length(nick) > 0 then
-        begin
-          nick := LowerCase(nick);
-          nick[1] := upCase(nick[1]);
-        end;
+
+        if Utf8Length(nick) > 40 then
+          nick := UTF8copy(nick,1,40);
+
+        nick:=UTF8UpperFirst(nick);
+
         qth := GetTagValue(m.Text, '<qth>');
         state := GetTagValue(m.Text, '<us_state>');
         zip := GetTagValue(m.Text, '<adr_zip>');
