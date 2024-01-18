@@ -117,6 +117,7 @@ type
     DProcess  : TProcess;
     tfIn      : TextFile;
     C_MYZIP   : String;
+    CqState   : string;  //use in map mode to join state and Cqdir
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -2111,6 +2112,7 @@ begin
    //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
    if LocalDbg then
      Writeln('Start adding monitor lines');
+   CqState:='';
 
    if (not ChkCbCq.Checked) and (not chknoTxt.Checked) then      //was chkmap
     begin
@@ -2188,7 +2190,10 @@ begin
          end;
 
       if (chkMap.Checked and (StatClr<>clBlack))  then  //there is US state to print to Map
-      AddColorStr(copy(msgRes,5,2), StatClr,6,sgMonitor.rowCount-1);
+       Begin
+        CqState:= copy(msgRes,5,2);
+         AddColorStr(CqState, StatClr,7,sgMonitor.rowCount-1);
+       end;
 
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
@@ -2260,7 +2265,12 @@ procedure TfrmMonWsjtx.extcqprint;
           AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
         end
        else
-          AddColorStr('>'+CqDir, extCqCall,7,sgMonitor.rowCount-1)
+        Begin
+         if CqState<>'' then
+            AddColorStr(CqState+' >'+CqDir,extCqCall,7,sgMonitor.rowCount-1)
+          else
+            AddColorStr('>'+CqDir, extCqCall,7,sgMonitor.rowCount-1)
+        end;
     end;
   end;
 

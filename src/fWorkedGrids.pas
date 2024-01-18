@@ -45,6 +45,7 @@ type
     procedure ZooMapClick(Sender: TObject);
   private
     { private declarations }
+    csWG : TRTLCriticalSection;
     procedure DrawFullMap;
     procedure DrawSubMap;
     procedure DrawGridLines(BCanvas: TCanvas; SubBase: boolean);
@@ -158,7 +159,7 @@ end;
 
 function TfrmWorkedGrids.RecordCount: string;
 begin
-
+  EnterCriticalSection(csWG);
   dmData.W1.Close;
   if dmData.trW1.Active then
     dmData.trW1.Rollback;
@@ -175,6 +176,7 @@ begin
   finally
     dmData.trW1.Rollback;
   end;
+  LeaveCriticalSection(csWG);
 end;
 
 function TfrmWorkedGrids.WkdMainGrid(loc, band, mode: String): integer;
@@ -189,12 +191,13 @@ var
   L4: String;
 
   Begin
+    EnterCriticalSection(csWG);
     if LocalDbg then Writeln('Start WkdMainGrid');
     WkdMainGrid := 0;
     L4:= copy(loc, 1, 4);
     L2:= copy(loc, 1, 2);
     if cqrini.ReadBool('wsjt','wb4CLoc', False) then
-              daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
+              daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')) //default date check all qsos
        else
               daylimit :='';
 
@@ -202,16 +205,16 @@ var
     if dmData.trW.Active then dmData.trW.Rollback;
 
     try
-      dmData.W.SQL.Text :='select count(loc) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
+      dmData.W.SQL.Text :='select count(loc) as sumMG from '+LogTable+
+                          ' where loc like '+QuotedStr(L2+'%')+
+                          ' and band='+QuotedStr(band)+' and mode='+QuotedStr(mode)+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+daylimit+
+                          ' where loc like '+QuotedStr(L2+'%')+
+                          ' and band='+QuotedStr(band)+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+daylimit;
+                          ' where loc like '+QuotedStr(L2+'%')+daylimit;
 
 
       if LocalDbg then Write('Main loc query: ');
@@ -219,8 +222,8 @@ var
       i := 1;
       while not dmData.W.Eof do
                 begin
-                 if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
-                 if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdMainGrid = 0) then WkdMainGrid := i;
+                 if LocalDbg then writeln(dmData.W.FieldByName('sumMG').AsInteger);
+                 if (dmData.W.FieldByName('sumMG').AsInteger > 0 ) and (WkdMainGrid = 0) then WkdMainGrid := i;
                  inc(i);
                  dmData.W.Next;
                 end;
@@ -229,6 +232,7 @@ var
       dmData.trW.Rollback;
     end;
      if LocalDbg then  Writeln('WkdMainGrid is:', WkdMainGrid);
+     LeaveCriticalSection(csWG);
   end;
 
 function TfrmWorkedGrids.WkdGrid(loc, band, mode: String): integer;
@@ -247,12 +251,13 @@ var
   L4: String;
 
 begin
+  EnterCriticalSection(csWG);
   if LocalDbg then Writeln('Start WkdGrid');
   WkdGrid := 0;
   L4:= copy(loc, 1, 4);
   L2:= copy(loc, 1, 2);
   if cqrini.ReadBool('wsjt','wb4CLoc', False) then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
+            daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')) //default date check all qsos
      else
             daylimit :='';
 
@@ -260,35 +265,35 @@ begin
   if dmData.trW.Active then dmData.trW.Rollback;
 
   try
-    dmData.W.SQL.Text := 'select count(loc) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where loc like '+#39+L4+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
+    dmData.W.SQL.Text := 'select count(loc) as sumG from '+LogTable+
+                          ' where loc like '+QuotedStr(L4+'%')+
+                          ' and band='+QuotedStr(band)+' and mode='+QuotedStr(mode)+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L4+ '%'+#39+
-                          ' and band='+#39+band+#39+daylimit+
+                          ' where loc like '+QuotedStr(L4+'%')+
+                          ' and band='+QuotedStr(band)+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L4+ '%'+#39+daylimit+
+                          ' where loc like '+QuotedStr(L4+'%')+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
+                          ' where loc like '+QuotedStr(L2+'%')+
+                          ' and band='+QuotedStr(band)+' and mode='+QuotedStr(mode)+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+daylimit+
+                          ' where loc like '+QuotedStr(L2+'%')+
+                          ' and band='+QuotedStr(band)+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+daylimit ;
+                          ' where loc like '+QuotedStr(L2+'%')+daylimit ;
 
     if LocalDbg then Write('loc query: ');
     dmData.W.Open;
     i := 1;
     while not dmData.W.Eof do
               begin
-               if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
-               if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdGrid = 0) then WkdGrid := i;
+               if LocalDbg then writeln(dmData.W.FieldByName('sumG').AsInteger);
+               if (dmData.W.FieldByName('sumG').AsInteger > 0 ) and (WkdGrid = 0) then WkdGrid := i;
                inc(i);
                dmData.W.Next;
               end;
@@ -297,6 +302,7 @@ begin
     dmData.trW.Rollback;
   end;
    if LocalDbg then  Writeln('WkdGrid is:', WkdGrid);
+   LeaveCriticalSection(csWG);
 end;
 
 function TfrmWorkedGrids.WkdCall(call, band, mode: string): integer;
@@ -310,15 +316,16 @@ var
   daylimit : String;
 
 begin
+  EnterCriticalSection(csWG);
   if LocalDbg then Writeln('Start WkdCall');
   //in case we were called from contest form open
   if ((frmContest.Showing) and ((frmContest.rbDupeCheck.Checked) or (frmContest.rbNoMode4Dupe.Checked)))
       then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01')+#39 //default date check all qsos
+            daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01')) //default date check all qsos
    else
      Begin
         if cqrini.ReadBool('wsjt','wb4CCall', False) then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39
+            daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01'))
           else
             daylimit :='';
      end;
@@ -327,24 +334,24 @@ begin
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
   try
-     dmData.W.SQL.Text := 'select count(callsign) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where callsign='+#39+call+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
+     dmData.W.SQL.Text := 'select count(callsign) as sumCA from '+LogTable+
+                          ' where callsign='+QuotedStr(call)+
+                          ' and band='+QuotedStr(band)+' and mode='+QuotedStr(mode)+daylimit+
                           'union all '+
                           'select count(callsign) from '+LogTable+
-                          ' where callsign='+#39+call+#39+
-                          ' and band='+#39+band+#39+daylimit+
+                          ' where callsign='+QuotedStr(call)+
+                          ' and band='+QuotedStr(band)+daylimit+
                           'union all '+
                           'select count(callsign) from '+LogTable+
-                          ' where callsign='+#39+call+#39+daylimit;
+                          ' where callsign='+QuotedStr(call)+daylimit;
 
     if LocalDbg then Write('call query: ');
     dmData.W.Open;
     i := 1;
     while not dmData.W.Eof do
               begin
-               if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
-               if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdCall = 0) then WkdCall := i;
+               if LocalDbg then writeln(dmData.W.FieldByName('sumCA').AsInteger);
+               if (dmData.W.FieldByName('sumCA').AsInteger > 0 ) and (WkdCall = 0) then WkdCall := i;
                inc(i);
                dmData.W.Next;
               end;
@@ -353,6 +360,7 @@ begin
       dmData.trW.Rollback;
     end;
   if LocalDbg then  Writeln('WkdCall is:', WkdCall);
+  LeaveCriticalSection(csWG);
 end;
 function TfrmWorkedGrids.WkdState(state, band, mode: string): integer;
 //returns 0=not wkd
@@ -365,9 +373,10 @@ var
   daylimit : String;
 
 begin
+  EnterCriticalSection(csWG);
   if LocalDbg then Writeln('Start WkdState');
   if cqrini.ReadBool('wsjt','wb4CCall', False) then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39 //default date check all qsos
+            daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')) //default date check all qsos
      else
             daylimit :='';
 
@@ -375,24 +384,24 @@ begin
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
   try
-     dmData.W.SQL.Text := 'select count(state) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where state='+#39+state+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
+     dmData.W.SQL.Text := 'select count(state) as sumST from '+LogTable+
+                          ' where state='+QuotedStr(state)+
+                          ' and band='+QuotedStr(band)+' and mode='+QuotedStr(mode)+daylimit+
                           'union all '+
                           'select count(state) from '+LogTable+
-                          ' where state='+#39+state+#39+
-                          ' and band='+#39+band+#39+daylimit+
+                          ' where state='+QuotedStr(state)+
+                          ' and band='+QuotedStr(band)+daylimit+
                           'union all '+
                           'select count(state) from '+LogTable+
-                          ' where state='+#39+state+#39+daylimit;
+                          ' where state='+QuotedStr(state)+daylimit;
 
     if LocalDbg then Write('state query: ');
     dmData.W.Open;
     i := 1;
     while not dmData.W.Eof do
               begin
-               if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
-               if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdState = 0) then WkdState := i;
+               if LocalDbg then writeln(dmData.W.FieldByName('sumST').AsInteger);
+               if (dmData.W.FieldByName('sumST').AsInteger > 0 ) and (WkdState = 0) then WkdState := i;
                inc(i);
                dmData.W.Next;
               end;
@@ -401,6 +410,7 @@ begin
       dmData.trW.Rollback;
     end;
   if LocalDbg then  Writeln('WkdState is:', WkdState);
+  LeaveCriticalSection(csWG);
 end;
 
 //mark grid worked with confirmed status (red/green)
@@ -607,7 +617,7 @@ begin
   finally
     ImgStream.Free
   end;
-
+  InitCriticalSection(csWG);
   AutoUpdate.Enabled := False;
   AutoUpdate.Interval := 5000;
   WsMode.ItemIndex := -1;
@@ -653,6 +663,7 @@ begin
   cqrini.WriteBool('Worked_grids', 'ShowWkdOnly', ShoWkdOnly.Checked);
   dmUtils.SaveWindowPos(frmWorkedGrids);
   frmWorkedGrids.hide;
+  DoneCriticalSection(csWG);
 end;
 
 procedure TfrmWorkedGrids.SaveMapImageClose(Sender: TObject);
@@ -825,7 +836,7 @@ begin
     Changes := False;
 
     if cqrini.ReadBool('wsjt','wb4CLoc', False) then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
+            daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')) //default date check all qsos
      else
             daylimit :='';
 
@@ -833,19 +844,16 @@ begin
       //any
       0: SQLModeTail := '';
       //JT9+JT65
-      1: SQLModeTail := ' and ((mode=' + #39 + 'JT9' + #39 +
-          ') or ( mode=' + #39 + 'JT65' + #39 + '))';
+      1: SQLModeTail := ' and ((mode='+QuotedStr('JT9')+') or (mode='+QuotedStr('JT65')+'))';
       else  // all others
-        SQLModeTail := ' and mode=' + #39 + WsMode.items[WsMode.ItemIndex] + #39;
+         SQLModeTail :=' and mode='+QuotedStr(WsMode.items[WsMode.ItemIndex]);
     end;
 
 
     //1:not (at all) confirmed grids
-    SQLCfm[1] := ' and eqsl_qsl_rcvd<>' + #39 + 'E' + #39 +
-      ' and lotw_qslr<>' + #39 + 'L' + #39 + ' and qsl_r<>' + #39 + 'Q' + #39;
+    SQLCfm[1] := ' and eqsl_qsl_rcvd<>'+QuotedStr('E')+' and lotw_qslr<>'+QuotedStr('L')+' and qsl_r<>'+QuotedStr('Q');
     //2:some way confirmed grids
-    SQLCfm[2] := ' and (eqsl_qsl_rcvd=' + #39 + 'E' + #39 +
-      ' or lotw_qslr=' + #39 + 'L' + #39 + ' or qsl_r=' + #39 + 'Q' + #39 + ')';
+    SQLCfm[2] := ' and (eqsl_qsl_rcvd='+QuotedStr('E')+' or lotw_qslr='+QuotedStr('L')+' or qsl_r='+QuotedStr('Q')+' )';
 
     dmData.W.Close;
     if dmData.trW.Active then
@@ -854,17 +862,15 @@ begin
     if BandSelector.ItemIndex > 0 then //band selected
     begin
       //0:the base query string
-      SQLCfm[0] := 'select upper(left(loc,4)) as lo from ' + LogTable +
-        ' where band=' + #39 + BandSelector.items[BandSelector.ItemIndex] +
-        #39 + 'and loc<>' + #39 + #39 + SQLModeTail;
+      SQLCfm[0] := 'select upper(left(loc,4)) as lo from '+ LogTable+
+        ' where band='+QuotedStr(BandSelector.items[BandSelector.ItemIndex]) +'and loc<>'+QuotedStr('')+SQLModeTail;
     end
     else begin //band "all"                 //as
-      SQLCfm[0] := 'select upper(left(loc,4)) as lo from ' + LogTable +
-        ' where loc<>' + #39 + #39 + SQLModeTail;
+      SQLCfm[0] := 'select upper(left(loc,4)) as lo from '+LogTable+' where loc<>'+QuotedStr('')+SQLModeTail;
     end;
     if ZooMap.Visible then  //coming from zoomed grid
     begin
-      SQLCfm[0] := SQLCfm[0] + ' and loc like ' + #39 + LockMainGrid + '%' + #39;
+      SQLCfm[0] := SQLCfm[0]+' and loc like '+QuotedStr(LockMainGrid+'%');
     end;
 
     dmData.trW.StartTransaction;
@@ -896,18 +902,18 @@ begin
       dmData.W.Close;
 
       if cqrini.ReadBool('wsjt','wb4CCall', False) then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4calldate','1900-01-01')+#39 //default date check all qsos
+            daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4calldate','1900-01-01')) //default date check all qsos
          else
             daylimit :='';
 
       //qso counts;
       if BandSelector.ItemIndex > 0 then   //some of bands
-        SQLBand := ' and band=' + #39 + BandSelector.items[BandSelector.ItemIndex] + #39 + SQLModeTail
+        SQLBand := ' and band='+QuotedStr(BandSelector.items[BandSelector.ItemIndex])+SQLModeTail
         else   //can be else than 0, means all bands
         SQLBand := SQLModeTail;
 
-      dmData.W.SQL.Text := 'select count(callsign) as qso from cqrlog_main where callsign<>'+#39+#39+daylimit+
-                            'union all select count(callsign) from cqrlog_main where callsign<>'+#39+#39 + SQLBand +daylimit ;
+      dmData.W.SQL.Text := 'select count(callsign) as qso from cqrlog_main where callsign<>'+QuotedStr('')+daylimit+
+                            'union all select count(callsign) from cqrlog_main where callsign<>'+QuotedStr('') + SQLBand +daylimit ;
       dmData.W.Open;
       if not dmData.W.EOF then FullQsoCount := dmData.W.FieldByName('qso').AsString;
       dmData.W.Next;
