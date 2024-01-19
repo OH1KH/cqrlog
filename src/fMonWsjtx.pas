@@ -14,6 +14,15 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
+    chkSort: TCheckBox;
+    mnuSort1: TMenuItem;
+    mnuSort2: TMenuItem;
+    mnuSort3: TMenuItem;
+    mnuSort4: TMenuItem;
+    mnuSort5: TMenuItem;
+    mnuSort6: TMenuItem;
+    mnuSort7: TMenuItem;
+    popSort: TPopupMenu;
     ShAll: TMenuItem;
     btFtxtName: TButton;
     cbflw: TCheckBox;
@@ -65,6 +74,9 @@ type
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
+    procedure chkSortClick(Sender: TObject);
+    procedure chkSortMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure chkCbCQChange(Sender: TObject);
     procedure cbflwChange(Sender: TObject);
     procedure chkdBChange(Sender: TObject);
@@ -94,6 +106,7 @@ type
     procedure FormHide(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure chknoTxtChange(Sender: TObject);
+    procedure mnuSort1Click(Sender: TObject);
     procedure pnlSelectsClick(Sender: TObject);
     procedure pnlTrigPopMouseEnter(Sender: TObject);
     procedure popDxClose(Sender: TObject);
@@ -143,6 +156,7 @@ type
     procedure extcqprint;
     procedure BuildUSDBState;
     procedure USDBdownLoadInit;
+    Procedure ReColorsgMonitor(Fc,Bc:tColor;Boff:Boolean);
     function UsCallState(call:string;var StatClr:TColor):string;
     { private declarations }
   public
@@ -912,6 +926,22 @@ begin
   end;
 end;
 
+procedure TfrmMonWsjtx.chkSortClick(Sender: TObject);
+begin
+  cqrini.WriteBool('MonWsjtx', 'Sort', chkSort.Checked);
+  if chkSort.Checked and DXpopOK then
+     popSort.PopUp;
+end;
+
+procedure TfrmMonWsjtx.chkSortMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if (Button=mbRight) and chkSort.Checked then
+   Begin
+      popSort.popup;
+   end;
+end;
+
 procedure TfrmMonWsjtx.chkCbCQChange(Sender: TObject);
 begin
   cqrini.WriteBool('MonWsjtx', 'ColorBacCQkMap', chkCbCQ.Checked);
@@ -922,6 +952,18 @@ begin
   cqrini.WriteBool('MonWsjtx', 'NoTxt', chknoTxt.Checked);
   sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not sgMonitor.Visible;
+end;
+
+procedure TfrmMonWsjtx.mnuSort1Click(Sender: TObject);
+var f,i:integer;
+
+begin
+     for f:=0 to 6 do
+          popSort.Items[f].Checked:=false;
+
+     TMenuitem(Sender).Checked:=true;
+     if tryStrToInt(copy(TMenuitem(Sender).Caption,11,1),i) then
+        cqrini.WriteInteger('MonWsjtx', 'SortCol', i);
 end;
 
 procedure TfrmMonWsjtx.pnlSelectsClick(Sender: TObject);
@@ -1104,27 +1146,21 @@ begin
   tmrCqPeriod.Enabled := False;
   if LocalDbg then Writeln('Period timer hit the time!');
   if (chknoHistory.Checked) then
-  begin
-    for i:= 0 to 7 do
-    begin
-         for j:=0 to MaxLinesSgMonitor - 1 do
-         begin
-            sgMonitorAttributes[i,j].FG_Color:=clSilver;
-            sgMonitorAttributes[i,j].BG_Color:=clWhite;
-            sgMonitorAttributes[i,j].isBold:=false;
-         end;
-    end;
-  end;
-  sgMonitor.Repaint;
+     ReColorsgMonitor(clSilver,clWhite,true);
 end;
 
 procedure TfrmMonWsjtx.tmrStartupDoneTimer(Sender: TObject);
 begin   //post actions after window has opened.
    tmrStartupDone.Enabled:=False;
-   chkDx.Checked:=cqrini.ReadBool('MonWsjtx', 'CheckDx',false);
    chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
+
+   chkDx.Checked:=cqrini.ReadBool('MonWsjtx', 'CheckDx',false);
+   chkSort.Checked:= cqrini.ReadBool('MonWsjtx', 'Sort', false);
+   popSort.Items[cqrini.ReadInteger('MonWsjtx', 'SortCol', 1)-1].Checked:=true;
    if chkDx.Checked then
                     popDxClose(nil);
+   if chkSort.Checked then
+                    popSort.Close;
    DXpopOK:=true;
 end;
 
@@ -1254,6 +1290,11 @@ begin
   //DL7OAP
   SetsgMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
+   //for debug
+   { sgMonitor.GridLineColor:=clBlack;
+    sgMonitor.GridLineStyle:=psSolid;
+    sgMonitor.GridLineWidth:=1;
+   }
   chknoHistoryChange(nil); // sure to get history settings right
   pnlTrigPopMouseEnter(nil); //starts with panel visible,
 
@@ -1262,6 +1303,7 @@ begin
   if dmData.DebugLevel < 0 then
         LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
   tmrStartupDone.Enabled:=True;    //post actions
+
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1443,8 +1485,8 @@ begin
             //Snr
             //X if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
             // else sgMonitor.Columns.Items[1].Visible:= false;
-            sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
-                               //PadLeft(IntToStr(Snr),3);
+            sgMonitor.Cells[1, sgMonitor.rowCount-1]:= Format('%.2d',[Snr]);
+
 
             if LocalDbg then
                Writeln('Other: Add reply array:', sgMonitor.rowCount-1);
@@ -1481,6 +1523,11 @@ begin
               end;
             TryAlerts;
           end;
+          if chkMap.Checked and chkSort.Checked then
+             Begin
+                   sgMonitor.SortColRow(true,cqrini.ReadInteger('MonWsjtx', 'SortCol', 1),0,sgMonitor.RowCount-1);
+                   ReColorsgMonitor(clBlack,clWhite,false);
+             end;
         end;  //chkMap.Checked
   scrollSgMonitorToLastLine;
 end;
@@ -2118,7 +2165,8 @@ begin
     begin
      if (chknoHistory.Checked)  then
       Begin
-       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 4), PadLeft(IntToStr(Snr),3)]);
+       //sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 4), PadLeft(IntToStr(Snr),3)]);
+         sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [Format('%4d',[Dfreq]), Format('%.2d',[Snr])]);
       end
      else
       Begin
@@ -2154,7 +2202,6 @@ begin
     end;
 
    PrintLoc(msgLocator, timeToAlert, msgTime,chkCbCQ.Checked);
-
    if frmWorkedGrids.GridOK(msgLocator) then AddXplanetList(msgCall,msgLocator);
 
      dxcc_number_adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
@@ -2244,14 +2291,18 @@ begin
        else
          AddColorStr(msgRes, clBlack,7 ,sgMonitor.rowCount-1);     //something else...can't be
      end;
-
-   end; //not Map mode
+   end //not Map mode
+     else
+      if chkMap.Checked and chkSort.Checked  then
+             Begin
+                   sgMonitor.SortColRow(true,cqrini.ReadInteger('MonWsjtx', 'SortCol', 1),0,sgMonitor.RowCount-1);
+                   ReColorsgMonitor(clBlack,clWhite,false);
+             end;
 
    if not (chkCbCQ.Checked or chknoTxt.Checked) then
      Begin
         scrollSgMonitor; // if needed
         //sgMonitor.AutoSizeColumns;
-
      end;
 
  end;//printing out  line
@@ -2260,6 +2311,7 @@ procedure TfrmMonWsjtx.extcqprint;
     if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
     else
     Begin
+      if CqDir='' then exit;
       if not  chkMap.Checked then
         Begin
           AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
@@ -2701,7 +2753,22 @@ begin
   tmrUSDB.Enabled:=False;
   chkUState.Checked:=False;
 end;
-
+Procedure  TfrmMonWsjtx.ReColorsgMonitor(Fc,Bc:tColor;Boff:Boolean);
+var
+  i, j : integer;
+begin
+  for i:= 0 to 7 do
+  begin
+       for j:=0 to MaxLinesSgMonitor - 1 do
+       begin
+          sgMonitorAttributes[i,j].FG_Color:=Fc;
+          sgMonitorAttributes[i,j].BG_Color:=Bc;
+          if Boff then
+                  sgMonitorAttributes[i,j].isBold:=false;
+       end;
+  end;
+  sgMonitor.Repaint;
+end;
 
 initialization
 

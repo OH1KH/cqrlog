@@ -1,11 +1,11 @@
 object frmMonWsjtx: TfrmMonWsjtx
   Left = 12
-  Height = 362
+  Height = 345
   Top = 58
   Width = 582
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
-  ClientHeight = 362
+  ClientHeight = 345
   ClientWidth = 582
   OnClose = FormClose
   OnCreate = FormCreate
@@ -21,7 +21,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Control = pnlFollow
     Left = 2
     Height = 45
-    Top = 268
+    Top = 251
     Width = 578
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -158,7 +158,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 2
     Height = 45
-    Top = 315
+    Top = 298
     Width = 578
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -240,13 +240,16 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 5
     Height = 23
-    Top = 327
-    Width = 118
+    Hint = 'Send colors based by your logged qsos back to WSJT-x''s display.'
+    Top = 310
+    Width = 70
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 5
     BorderSpacing.Bottom = 12
-    Caption = 'ColorBackCQs'
+    Caption = 'CBCQs'
     OnChange = chkCbCQChange
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
     Visible = False
   end
@@ -255,15 +258,18 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 124
+    Left = 78
     Height = 23
-    Top = 327
+    Hint = 'Show decoded signal strength'
+    Top = 310
     Width = 43
     Anchors = [akLeft, akBottom]
-    BorderSpacing.Left = 1
+    BorderSpacing.Left = 3
     BorderSpacing.Bottom = 12
     Caption = 'dB'
     OnChange = chkdBChange
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
     Visible = False
   end
@@ -273,7 +279,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideRight.Control = Owner
     AnchorSideBottom.Control = pnlFollow
     Left = 2
-    Height = 311
+    Height = 294
     Top = 0
     Width = 578
     Align = alClient
@@ -411,12 +417,15 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 100
       Height = 23
+      Hint = 'Clear monitor lines at start of every period'
       Top = 5
       Width = 56
       BorderSpacing.Top = 6
       BorderSpacing.Right = 1
       Caption = 'nHst'
       OnChange = chknoHistoryChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
     end
     object chknoTxt: TCheckBox
@@ -428,11 +437,14 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 157
       Height = 23
+      Hint = 'Do not show decoded lines, just alerts and follow '
       Top = 5
       Width = 55
       BorderSpacing.Top = 6
       Caption = 'nTxt'
       OnChange = chknoTxtChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
     object cbflw: TCheckBox
@@ -443,12 +455,15 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 49
       Height = 23
+      Hint = 'Set follow to one callsign or part of it '
       Top = 5
       Width = 49
       BorderSpacing.Top = 6
       BorderSpacing.Right = 2
       Caption = 'Flw'
       OnChange = cbflwChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
     end
     object chkMap: TCheckBox
@@ -459,11 +474,14 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 212
       Height = 23
+      Hint = 'Switch between CQ monitor (show CQ lines) and Map (show all band traffic)'
       Top = 5
       Width = 54
       BorderSpacing.Top = 6
       Caption = 'Map'
       OnChange = chkMapChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
     end
     object chkStopTx: TCheckBox
@@ -474,10 +492,13 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrBottom
       Left = 266
       Height = 23
+      Hint = 'Stop your TX if station you called answered to someone else.'
       Top = 5
       Width = 50
       Caption = 'sTX'
       OnChange = chkStopTxChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
     end
     object chkUState: TCheckBox
@@ -488,11 +509,14 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideBottom.Side = asrCenter
       Left = 316
       Height = 23
+      Hint = 'Show station USA state by FCC '#10'(this may show different than Cqrlog''s prefix based state view)'
       Top = 5
       Width = 49
       BorderSpacing.Right = 2
       Caption = 'USt'
       OnChange = chkUStateChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 6
     end
     object chkDx: TCheckBox
@@ -502,11 +526,14 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       Left = 367
       Height = 23
+      Hint = 'Show only DX (for you) stations.'#10'Continents to show are selected when checked, or rigth mouse click if already checked.'
       Top = 5
       Width = 44
       Caption = 'Dx'
       OnClick = chkDxClick
       OnMouseUp = chkDxMouseUp
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
     end
     object lblMode: TLabel
@@ -555,6 +582,25 @@ object frmMonWsjtx: TfrmMonWsjtx
     BevelOuter = bvNone
     TabOrder = 6
     OnMouseEnter = pnlTrigPopMouseEnter
+  end
+  object chkSort: TCheckBox
+    AnchorSideLeft.Control = chkdB
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = chkdB
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Side = asrCenter
+    Left = 124
+    Height = 23
+    Hint = 'Sort view by column.'#10'Column can be selected when checkbox is set, or rigth mouse click if already checked.'#10'Columns are:    dB   (  callsign  locator12  locator34  )*  state/cqdir '#10'Corresponding column numbers are 1..7'#10'NOTES:'#10'- Sort happen by dB (col1), if set,  even when it is not visible in monitor'#10'- dB sort output is as ascii sort order, not integer sort.'#10'- Sorting breaks color coding but worked print lowcase letters, never worked bold'
+    Top = 310
+    Width = 52
+    BorderSpacing.Left = 3
+    Caption = 'Sort'
+    OnClick = chkSortClick
+    OnMouseUp = chkSortMouseUp
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 7
   end
   object popColors: TPopupMenu
     Left = 104
@@ -679,6 +725,38 @@ object frmMonWsjtx: TfrmMonWsjtx
     object ShSA: TMenuItem
       Caption = 'Show SA'
       OnClick = ShAFClick
+    end
+  end
+  object popSort: TPopupMenu
+    Left = 356
+    Top = 88
+    object mnuSort1: TMenuItem
+      Caption = 'by column 1'
+      OnClick = mnuSort1Click
+    end
+    object mnuSort2: TMenuItem
+      Caption = 'by column 2'
+      OnClick = mnuSort1Click
+    end
+    object mnuSort3: TMenuItem
+      Caption = 'by column 3'
+      OnClick = mnuSort1Click
+    end
+    object mnuSort4: TMenuItem
+      Caption = 'by column 4'
+      OnClick = mnuSort1Click
+    end
+    object mnuSort5: TMenuItem
+      Caption = 'by column 5'
+      OnClick = mnuSort1Click
+    end
+    object mnuSort6: TMenuItem
+      Caption = 'by column 6'
+      OnClick = mnuSort1Click
+    end
+    object mnuSort7: TMenuItem
+      Caption = 'by column 7'
+      OnClick = mnuSort1Click
     end
   end
 end
