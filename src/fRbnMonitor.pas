@@ -159,7 +159,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,fBandMap;
+uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,fBandMap, fTRXControl;
 
 { TfrmRbnMonitor }
 
@@ -181,6 +181,7 @@ var
   LastDate : String;
   LastTime : String;
   Band     : String;
+  tmp      : String;
   adif     : Word;
   index    : Integer;
   f        : Double;
@@ -263,13 +264,20 @@ begin
     end
   end;
 
-  if (Pos(band+',',fil_AllowBands+',')=0) and (fil_AllowBands<>'') then
+  tmp:=fil_AllowBands;
+  If (pos('RIG',UpperCase(fil_AllowBands))>0) then
+                tmp:= tmp+','+dmDXCluster.GetBandFromFreq(FloatToStr(frmTRXControl.GetFreqkHz),True);
+  if (Pos(band+',',tmp+',')=0) and (tmp<>'') then
   begin
     if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This band is NOT allowed - ',band);
     exit
   end;
 
-  if (Pos(mode+',',fil_AllowModes+',')=0) and (fil_AllowModes<>'') then
+  tmp:= fil_AllowModes;
+  If (pos('RIG',UpperCase(fil_AllowBands))>0) then
+                tmp:= tmp+','+frmTRXControl.GetActualMode;
+
+  if (Pos(mode+',',tmp+',')=0) and (tmp<>'') then
   begin
     if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This mode is NOT allowed - ',mode);
     exit

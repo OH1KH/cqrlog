@@ -439,9 +439,9 @@ object frmRbnFilter: TfrmRbnFilter
         Left = 518
         Height = 17
         Top = 46
-        Width = 100
+        Width = 131
         BorderSpacing.Left = 12
-        Caption = '160M, 80M etc.'
+        Caption = '160M, 80M, RIG etc.'
         ParentColor = False
       end
       object edtDXMode: TEdit
@@ -474,8 +474,8 @@ object frmRbnFilter: TfrmRbnFilter
         Left = 518
         Height = 17
         Top = 80
-        Width = 95
-        Caption = 'CW,  RTTY etc.'
+        Width = 126
+        Caption = 'CW,  RTTY, RIG etc.'
         ParentColor = False
       end
       object edtDXCnty: TEdit

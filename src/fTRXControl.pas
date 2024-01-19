@@ -154,9 +154,6 @@ type
 
     currMin      :String; //for timing rig command: set_clock
 
-    function GetActualMode : String;
-    function GetModeNumber(mode : String) : Cardinal;
-    procedure SetMode(mode : String; bandwidth : Integer);
     procedure ClearBandButtonsColor;
     procedure ClearModeButtonsColor;
     procedure UpdateModeButtons(mode : String);
@@ -182,7 +179,10 @@ type
     function GetFreqMHz : Double;
     function GetDislayFreq : String;
     function GetRawMode : String;
+    function GetActualMode : String;
+    function GetModeNumber(mode : String) : Cardinal;
 
+    procedure SetMode(mode : String; bandwidth : Integer);
     procedure SetModeFreq(mode, freq : String);
     procedure SetFreqModeBandWidth(freq : Double; mode : String; BandWidth : Integer);
     procedure SavePosition;
