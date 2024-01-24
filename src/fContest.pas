@@ -135,6 +135,7 @@ type
     procedure cmbContestNameEnter(Sender: TObject);
     procedure cmbContestNameExit(Sender: TObject);
     procedure edtRSTrEnter(Sender: TObject);
+    procedure edtRSTsEnter(Sender: TObject);
     procedure edtSRXStrKeyPress(Sender: TObject; var Key: char);
     procedure edtSTXStrChange(Sender: TObject);
     procedure lblCqFreqClick(Sender: TObject);
@@ -819,6 +820,15 @@ begin
                 FmemorySent:=true;
                 SendFmemory(VK_F2);
               end;
+end;
+
+procedure TfrmContest.edtRSTsEnter(Sender: TObject);
+begin
+  if chkTrueRST.Checked then
+     Begin
+          edtRSTs.Text:='';
+          edtRSTr.Text:='';
+     end;
 end;
 
 procedure TfrmContest.edtSRXStrKeyPress(Sender: TObject; var Key: char);

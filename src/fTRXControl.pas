@@ -1442,7 +1442,7 @@ begin
   Result := True;
   freq := lblFreq.Caption;
   mode := GetActualMode;
-  if (freq = empty_freq) or (freq = '') then
+  if (freq = empty_freq) or (freq = '') or (not Assigned(radio)) then
     Result := False
   else
     band := dmUtils.GetBandFromFreq(freq);
