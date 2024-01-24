@@ -695,6 +695,13 @@ begin
 end;
 
 procedure TfrmMonWsjtx.LoadFormPos(FormMode: string);
+Const
+  Mh=600;      //starting defaults
+  Mw=300;
+  Ch=400;
+  Cw=550;
+var
+  w,h : integer;
 begin
   if LocalDbg then
     Writeln('---------------------------------------LoadFormPos:', FormMode);
@@ -702,10 +709,20 @@ begin
     frmMonWsjtx.WindowState := wsMaximized
   else
   begin
-    frmMonWsjtx.Height := cqrini.ReadInteger('MonWsjtx', FormMode + 'Height', 100);
-    frmMonWsjtx.Width := cqrini.ReadInteger('MonWsjtx', FormMode + 'Width', 100);
-    frmMonWsjtx.Top := cqrini.ReadInteger('MonWsjtx', FormMode + 'Top', 20);
-    frmMonWsjtx.Left := cqrini.ReadInteger('MonWsjtx', FormMode + 'Left', 20);
+    if (pos('MAP',UpperCase(FormMode))>0) then
+      Begin
+        h:=Mh;
+        w:=Mw;
+      end
+     else
+      Begin
+        h:=Ch;
+        w:=Cw;
+      end;
+    frmMonWsjtx.Height := cqrini.ReadInteger('MonWsjtx', FormMode + 'Height', h);
+    frmMonWsjtx.Width := cqrini.ReadInteger('MonWsjtx', FormMode + 'Width', w);
+    frmMonWsjtx.Top := cqrini.ReadInteger('MonWsjtx', FormMode + 'Top', 3);
+    frmMonWsjtx.Left := cqrini.ReadInteger('MonWsjtx', FormMode + 'Left', 3);
   end;
 end;
 
@@ -715,6 +732,7 @@ begin
   lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
+  chkSort.Visible:=chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
