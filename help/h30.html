@@ -40,14 +40,20 @@ TRX Control window shows current frequency and buttons that allow change of band
 <br>Additional selections are User defined buttons, Power buttons, Vfo A and B buttons and memory information field.
 <br>When pressing band selection button rig moves to that band using predefined frequency of currently active mode. Default frequencies and User buttons can be defined in <a href="h1.html#ah7">preferecences/TRX control</a>.
 <br><br>
-By clicking frequency display you can set a new frequency and click again (or press enter) to send command to rig.
-<br>You can also use mouse roll to move frequency after first clicking the frequency display. 
-
-<ul><li>By default steps are 100Hz 
-</li><li>Keeping <strong>Shift key</strong> pressed while turning the roll steps are 1kHz
-</li><li>Keeping <strong>Ctrl key</strong> pressed while turning the roll steps are 10kHz
-</li><li>Keeping both <strong>Shift key</strong> and <strong>Ctrl key</strong> pressed while turning the roll steps are 1MHz
-</li></ul>
+You can set a new frequency by <strong>clicking first frequency display with mouse left button</strong>:
+<ul><li><strong>Using keyboard:</strong></li>
+    <ul><li>Press <strong>Ins</strong> key to change between Insert and Replace mode (Replace mode = bigger cursor)</li>
+	<li>Move cursor with <strong>Arrow left</strong> and <strong>Arrow right</strong> keys</li>
+	<li>Use <strong>Backspace</strong> and <strong>Del</strong> keys to remove selected number</li>
+	<li>Instead you can press first <strong>Ctrl+A</strong> and then type in whole new frequency</li>
+	<li>Press <strong>Enter key</strong> to end editing. Set frequency command is then sent to rig.</li>
+    </ul><strong>Using mouse:</strong><ul>
+	<li>Move <strong>mouse cursor</strong> over the number you want to change</li>
+	<li>Roll <strong>mouse wheel</strong> to change number up or down. Changes are sent to rig.</li>
+	<ul><li>Speed of change is tied to <strong>TRXControl/Poll</strong> value.You need to decrease <strong>Poll</strong> to get faster actions</li></ul>
+	<li>Click <strong>mouse roll</strong>,  press <strong>Enter key</strong>,  or <strong>move mouse cursor away</strong> from Frequency display to end editimg</li>
+    </ul>
+<br>
 You can select rig vfo with buttons <strong>A</strong> and <strong>B</strong> but there may be no feedback what vfo is currenty used (Icom brand rigs do not support "Get_vfo" command).
 </p><a name="m4"></a><p>If <strong>M_up</strong> or <strong>M_dwn</strong> are pressed or memory is selected by double click of memory list, the information text will show up to <strong>Mem Info</strong> field. If frequency is changed manually after that info text will disappear.
 <br>If memory does not have info text (max 25chr) just <strong>x of y</strong> is displayed where x refers to memory order in Add/Modify memory list and y total amount of memories.
@@ -67,7 +73,7 @@ So do not wonder if you get smaller amount of memories than in your list when pr
  <img src="img/h121.png" name="10"  width="373" height="367">
 </img>
 <br/>
-<br>You can <b>search a memory</b> by clicking the first (header) line of grid. Search is done against the column you clicked.
+<br>You can <strong>search a memory</strong> by clicking the first (header) line of grid. Search is done against the column you clicked.
 <br>You can set rig by double click of an memory row in <strong>Open  memory list</strong>. Similar action happen also in <strong>Add/Modify memories</strong>. The differense is that you can keep
  <strong>Open memory list</strong> open while loggeing qsos etc. Where as <strong>Add/Modify memories</strong>, when open, blocks other functionality.
  <br>While <strong>Add/Modify memories</strong> is open you can use buttons in right frame. Texts of buttons are quite self explaining.

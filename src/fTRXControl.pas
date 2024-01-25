@@ -80,6 +80,7 @@ type
     pnlRig : TPanel;
     pnlMain : TPanel;
     pnlPower : TPanel;
+    tmrChokeWheel: TTimer;
     tmrSetRigTime: TTimer;
     tmrRadio : TTimer;
     procedure acAddModMemExecute(Sender : TObject);
@@ -132,10 +133,12 @@ type
     procedure mnuProgPrefClick(Sender : TObject);
     procedure mnuShowUsrClick(Sender : TObject);
     procedure mnuShowVfoClick(Sender : TObject);
+    procedure tmrChokeWheelTimer(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
     procedure tmrSetRigTimeTimer(Sender: TObject);
   private
     MouseWheelUsed : Boolean;
+    CaretMousePos   : integer;
     radio : TRigControl;
     old_mode : String;
 
@@ -638,12 +641,13 @@ end;
 
 procedure TfrmTRXControl.gbFreqClick(Sender : TObject);
 begin
-  edtFreqInput.Text := lblFreq.Caption;
-  edtFreqInput.Font := lblFreq.Font;
-  edtFreqInput.Color := clYellow;
-  edtFreqInput.Visible := True;
+  edtFreqInput.Text     := lblFreq.Caption;
+  edtFreqInput.Font     := lblFreq.Font;
+  edtFreqInput.Color    := clYellow;
+  edtFreqInput.Visible  := True;
   edtFreqInput.SetFocus;
-  edtFreqInput.SelStart := Length(edtFreqInput.Text);
+  edtFreqInput.SelStart := 0;
+  //Length(edtFreqInput.Text);
 end;
 
 procedure TfrmTRXControl.lblFreqClick(Sender : TObject);
@@ -710,6 +714,12 @@ begin
   gbVfo.Visible := not gbVfo.Visible;
   mnuShowVfo.Checked := gbVfo.Visible;
   cqrini.WriteBool('TRX', 'ShowVfo', gbVfo.Visible);
+end;
+
+procedure TfrmTRXControl.tmrChokeWheelTimer(Sender: TObject);
+begin
+  tmrChokeWheel.Enabled:=False;
+  tmrChokeWheel.Interval:=cqrini.ReadInteger('TRX' + RigInUse, 'poll', 500);
 end;
 
 procedure TfrmTRXControl.tmrRadioTimer(Sender : TObject);
@@ -976,7 +986,8 @@ begin
       On E : Exception do
         edtFreqInput.Text := s;
     end;
-    edtFreqInput.Visible := False;
+    lblFreq.Caption       := edtFreqInput.Text;
+    edtFreqInput.Visible  := False;
   end;
 end;
 
@@ -989,37 +1000,54 @@ end;
 procedure TfrmTRXControl.edtFreqInputMouseUp(Sender : TObject;
   Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
 var
-  Key : Word = VK_Return;
+  Key:word=VK_Return;
 begin
-  edtFreqInputKeyUp(nil, Key, Shift);
+  if Button=mbLeft then
+   Begin
+    CaretMousePos:=edtFreqInput.CaretPos.X;
+    edtFreqInput.SelStart:=CaretMousePos-1;
+    edtFreqInput.SelLength:=1;
+    Exit;
+   end;
+ if Button=mbMiddle then
+    edtFreqInputKeyUp(nil, Key, Shift);
 end;
 
 procedure TfrmTRXControl.edtFreqInputMouseWheel(Sender : TObject;
   Shift : TShiftState; WheelDelta : Integer; MousePos : TPoint; var Handled : Boolean);
 var
   s : String;
+  c : char;
   f : Currency;
-  m : Currency;
 begin
+  if tmrChokeWheel.Enabled then
+                               Exit;
   MouseWheelUsed := True;
-  m := 0.0001;   //base 10Hz step
-  if Shift = [ssShift] then
-    m := 0.001;
-  if Shift = [ssCtrl] then
-    m := 0.01;
-  if Shift = [ssShift] + [ssCtrl] then
-    m := 1;
+  s:=edtFreqInput.Text;
+  c:= s[CaretMousePos];
+  if c='.' then Exit;
   if WheelDelta < 0 then
-    m := m * -1;
-
-  s := edtFreqInput.Text;
+     begin
+      c:=Pred(c);
+      if c<'0' then  c:='9'
+     end
+   else
+     begin
+      c:=Succ(c);
+      if c>'9' then  c:='0'
+     end;
+  s[CaretMousePos]:=c;
+  edtFreqInput.Text :=s;
+  edtFreqInput.SelStart:=CaretMousePos-1;
+  edtFreqInput.SelLength:=1;
   try
     f := StrToFloat(s);
-    f := f + m;
     if f < 0 then f := 0;
-    edtFreqInput.Text := FormatFloat(empty_freq + ';;', f);
     if Assigned(radio) then
+     Begin
+      tmrChokeWheel.Enabled:=true;
       radio.SetFreqKHz(f * 1000);
+     end;
   except
     On E : Exception do
       edtFreqInput.Text := s;

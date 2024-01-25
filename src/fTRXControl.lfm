@@ -881,4 +881,9 @@ object frmTRXControl: TfrmTRXControl
     Left = 128
     Top = 112
   end
+  object tmrChokeWheel: TTimer
+    OnTimer = tmrChokeWheelTimer
+    Left = 160
+    Top = 112
+  end
 end
