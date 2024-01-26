@@ -967,6 +967,8 @@ procedure TfrmTRXControl.edtFreqInputKeyUp(Sender : TObject; var Key : Word;
 var
   freq : String = '';
   mode : String = '';
+  band : String = '';
+  bw   : integer;
   s : String;
   f : Currency;
 begin
@@ -974,25 +976,27 @@ begin
   begin
     MouseWheelUsed := False;
     s := trim(edtFreqInput.Text);
-    mode := GetActualMode;
     try
       f := StrToFloat(s);
-      f := f * 1000;
-      freq := FloatToStr(f);
-      SetModeFreq(mode, freq);
+      radio.SetFreqKHz(f * 1000);
     except
       On E : Exception do
         edtFreqInput.Text := s;
     end;
     lblFreq.Caption       := edtFreqInput.Text;
     edtFreqInput.Visible  := False;
+    mode:=dmUtils.GetModeFromFreq(s);
+    bw:= GetBandWidth(mode);
+    SetMode(mode,bw);
   end;
 end;
 
 procedure TfrmTRXControl.edtFreqInputMouseLeave(Sender : TObject);
+var
+  Key:word=VK_Return;
 begin
   if MouseWheelUsed then
-    edtFreqInputMouseUp(nil, mbMiddle, [ssCtrl], 0, 0);
+    edtFreqInputKeyUp(nil, Key, []);
 end;
 
 procedure TfrmTRXControl.edtFreqInputMouseUp(Sender : TObject;
@@ -1039,6 +1043,8 @@ begin
 
   s[CaretMousePos+1]:=c;
   edtFreqInput.Text := s;
+  edtFreqInput.SelStart:=CaretMousePos;
+  edtFreqInput.SelLength:=1;
 
   try
     f := StrToFloat(s);

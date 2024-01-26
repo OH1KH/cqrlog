@@ -289,9 +289,11 @@ begin
 end;
 
 procedure TfrmRotControl.edtAzimuthMouseLeave(Sender: TObject);
+var
+  Key:word=VK_Return;
 begin
   if MouseWheelUsed then
-                    edtAzimuthMouseUp(nil,mbMiddle,[ssCtrl],0,0);
+    edtAzimuthKeyUp(nil, Key, []);
 end;
 
 procedure TfrmRotControl.edtAzimuthMouseUp(Sender: TObject;
