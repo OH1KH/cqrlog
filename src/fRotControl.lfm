@@ -57,7 +57,7 @@ object frmRotControl: TfrmRotControl
       Layout = tlCenter
       ParentColor = False
       ParentFont = False
-      OnClick = lblAzimuthClick
+      OnClick = gbAzimuthClick
     end
     object pnlMinMax: TPanel
       AnchorSideLeft.Control = gbAzimuth
@@ -132,18 +132,23 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Side = asrBottom
       Left = 2
       Height = 36
-      Hint = '0-360(enter)'
       Top = 25
       Width = 166
+      Alignment = taRightJustify
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = False
       AutoSelect = False
       Color = clYellow
+      DoubleBuffered = True
+      MaxLength = 3
+      ParentBidiMode = False
       OnKeyPress = edtAzimuthKeyPress
       OnKeyUp = edtAzimuthKeyUp
       OnMouseLeave = edtAzimuthMouseLeave
       OnMouseUp = edtAzimuthMouseUp
       OnMouseWheel = edtAzimuthMouseWheel
+      ParentDoubleBuffered = False
+      ParentShowHint = False
       TabOrder = 1
       Visible = False
     end

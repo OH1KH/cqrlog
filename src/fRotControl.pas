@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls, Menus,
-  EditBtn, Types;
+  EditBtn, Types, StrUtils;
 
 type
 
@@ -54,7 +54,6 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure gbAzimuthClick(Sender: TObject);
-    procedure lblAzimuthClick(Sender: TObject);
     procedure mnuDirbtnsClick(Sender: TObject);
     procedure mnuMinMaxClick(Sender: TObject);
     procedure mnuPreferencesClick(Sender: TObject);
@@ -67,6 +66,7 @@ type
     { private declarations }
     rotor : TRotControl;
     MouseWheelUsed : Boolean;
+    CaretMousePos  : integer;
   public
     { public declarations }
     BeamDir : Double;
@@ -102,20 +102,18 @@ begin
 end;
 
 procedure TfrmRotControl.gbAzimuthClick(Sender: TObject);
+var
+  i:Extended;
 begin
-  edtAzimuth.Text:=lblAzimuth.Caption;
-  edtAzimuth.Font:=lblAzimuth.Font;
-  edtAzimuth.Color:=clYellow;
-  edtAzimuth.Visible:=true;
+  TryStrToFloat(lblAzimuth.Caption,i);
+  edtAzimuth.Text       := FormatFloat('000',i);
+  CaretMousePos         := length(edtAzimuth.Text);
+  edtAzimuth.Font       := lblAzimuth.Font;
+  edtAzimuth.Color      := clYellow;
+  edtAzimuth.Visible    := true;
+  edtAzimuth.Repaint;
   edtAzimuth.SetFocus;
-  edtAzimuth.SelStart := Length(edtAzimuth.Text);
 end;
-
-procedure TfrmRotControl.lblAzimuthClick(Sender: TObject);
-begin
-   gbAzimuthClick(Sender);
-end;
-
 
 procedure TfrmRotControl.mnuDirbtnsClick(Sender: TObject);
 begin
@@ -270,7 +268,6 @@ begin
     and ((Key >'9')
        or (( Key>=#20) and (Key<'0'))) then
                                         Key:=#0;
-
    if TryStrToInt(edtAzimuth.Text,a) then
      Begin
        if a > 360 then a:=360;
@@ -302,6 +299,15 @@ procedure TfrmRotControl.edtAzimuthMouseUp(Sender: TObject;
 var
    Key : word = VK_Return;
 begin
+  if Button=mbLeft then
+   Begin
+    CaretMousePos:=edtAzimuth.CaretPos.X-1;
+    if  CaretMousePos<0 then  CaretMousePos:=0;
+    edtAzimuth.SelStart:=CaretMousePos;
+    edtAzimuth.SelLength:=1;
+    Exit;
+   end;
+ if Button=mbMiddle then
     edtAzimuthKeyUp(nil,Key,Shift);
 end;
 
@@ -309,25 +315,37 @@ procedure TfrmRotControl.edtAzimuthMouseWheel(Sender: TObject;
   Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
   var Handled: Boolean);
 var
-      m,s : integer;
+  s : String;
+  c : char;
+  f : integer;
 begin
     MouseWheelUsed:=true;
-    m:=1;   //base 10Hz step
-    if Shift = [ssShift]           then
-                                       m:=10;
-    if Shift = [ssCtrl]            then
-                                       m:=100;
-    if  WheelDelta<0 then
-                                       m:=m*-1;
-    if pos('.',edtAzimuth.Text)>0 then
-                   edtAzimuth.Text:=copy(edtAzimuth.Text,1, pos('.',edtAzimuth.Text)-1);
-    if TryStrToInt(edtAzimuth.Text,s) then
-    Begin
-     s:=s+m;
-     if s > 360 then s:=0;
-     if s < 0 then s:=360;
-     edtAzimuth.Text:=IntToStr(s);
-    end;
+    s:=edtAzimuth.Text;
+     c:= s[CaretMousePos+1];
+     if c='.' then Exit;
+
+     if WheelDelta < 0 then
+        begin
+         c:=Pred(c);
+         if c<'0' then  c:='9'
+        end
+      else
+        begin
+         c:=Succ(c);
+         if c>'9' then  c:='0'
+        end;
+
+     s[CaretMousePos+1]:=c;
+
+     if (length(s)=3) then
+      begin
+      if  (s[1] > '3') then s[1]:='0';
+      if ((s[1] = '3') and (s[2]>'6')) then s[2]:='6';
+      if ((s[1] = '3') and (s[2]='6')) then s[3]:='0';
+      end;
+     edtAzimuth.Text :=s;
+     edtAzimuth.SelStart:=CaretMousePos;
+     edtAzimuth.SelLength:=1;
 end;
 
 procedure TfrmRotControl.tmrStopRotTimer(Sender: TObject);
@@ -424,6 +442,7 @@ begin
   if Assigned(rotor) then
    begin
     Az := rotor.GetAzimut;
+    if Az<0 then Az:=360-Az;
     if frmGrayline.Showing then
        Begin
         if (Trunc(Az)<>BeamDir) then
@@ -441,7 +460,7 @@ begin
        end;
    end
   else
-    Az := 0;
+  Az := 0;
   lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az)
 end;
 

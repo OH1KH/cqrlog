@@ -327,14 +327,14 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 3
         BorderSpacing.Right = 3
         BorderSpacing.Bottom = 3
-        Caption = '0.0000'
+        Caption = '0.00000'
         Font.Color = clBlue
         Font.Height = 30
         Font.Style = [fsBold]
         Layout = tlCenter
         ParentColor = False
         ParentFont = False
-        OnClick = lblFreqClick
+        OnClick = gbFreqClick
       end
       object edtFreqInput: TEdit
         AnchorSideLeft.Control = lblFreq
@@ -347,17 +347,22 @@ object frmTRXControl: TfrmTRXControl
         Height = 39
         Top = 4
         Width = 173
+        Alignment = taRightJustify
         Anchors = [akTop, akLeft, akRight, akBottom]
         AutoSize = False
         AutoSelect = False
         Color = clYellow
+        DoubleBuffered = True
+        ParentBidiMode = False
         OnKeyPress = edtFreqInputKeyPress
         OnKeyUp = edtFreqInputKeyUp
         OnMouseLeave = edtFreqInputMouseLeave
         OnMouseUp = edtFreqInputMouseUp
         OnMouseWheel = edtFreqInputMouseWheel
+        ParentDoubleBuffered = False
+        ParentShowHint = False
         TabOrder = 0
-        TextHint = 'Mhz(Enter)'
+        TextHint = 'Mhz'
         Visible = False
       end
     end

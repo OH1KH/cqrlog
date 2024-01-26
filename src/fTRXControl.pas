@@ -19,7 +19,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, inifiles, process, lcltype, Buttons, Menus, ActnList, dynlibs,
-  uRigControl, Types;
+  uRigControl, Types, StrUtils;
 
 type
 
@@ -127,7 +127,6 @@ type
     procedure btnDATAClick(Sender : TObject);
     procedure btnSSBClick(Sender : TObject);
     procedure gbFreqClick(Sender : TObject);
-    procedure lblFreqClick(Sender : TObject);
     procedure mnuShowInfoClick(Sender : TObject);
     procedure mnuShowPwrClick(Sender : TObject);
     procedure mnuProgPrefClick(Sender : TObject);
@@ -640,19 +639,18 @@ begin
 end;
 
 procedure TfrmTRXControl.gbFreqClick(Sender : TObject);
+var
+  i:Extended;
 begin
-  edtFreqInput.Text     := lblFreq.Caption;
+  TryStrToFloat(lblFreq.Caption,i);
+  edtFreqInput.Text     := FormatFloat('00000.00000',i);
+  CaretMousePos         := length(edtFreqInput.Text);
   edtFreqInput.Font     := lblFreq.Font;
   edtFreqInput.Color    := clYellow;
   edtFreqInput.Visible  := True;
+  edtFreqInput.Repaint;
   edtFreqInput.SetFocus;
-  edtFreqInput.SelStart := 0;
-  //Length(edtFreqInput.Text);
-end;
 
-procedure TfrmTRXControl.lblFreqClick(Sender : TObject);
-begin
-  gbFreqClick(Sender);
 end;
 
 procedure TfrmTRXControl.mnuShowInfoClick(Sender : TObject);
@@ -952,15 +950,15 @@ end;
 
 procedure TfrmTRXControl.edtFreqInputKeyPress(Sender : TObject; var Key : Char);
 begin
-  if key = '.' then
-  begin
-    if pos('.', edtFreqInput.Text) > 0 then         //only one dot
-      Key := #0;
-  end
-  else
-  if (Key <> #127)      //delete and numbers ok
-    and ((Key > '9') or ((Key >= #20) and (Key < '0'))) then
-    Key := #0;
+   if key = '.' then
+    begin
+      if pos('.', edtFreqInput.Text) > 0 then         //only one dot
+        Key := #0;
+    end
+   else
+    if (Key <> #127)      //delete and numbers ok
+      and ((Key > '9') or ((Key >= #20) and (Key < '0'))) then
+        Key := #0;
 end;
 
 
@@ -975,7 +973,7 @@ begin
   if Key = VK_Return then
   begin
     MouseWheelUsed := False;
-    s := edtFreqInput.Text;
+    s := trim(edtFreqInput.Text);
     mode := GetActualMode;
     try
       f := StrToFloat(s);
@@ -1004,8 +1002,9 @@ var
 begin
   if Button=mbLeft then
    Begin
-    CaretMousePos:=edtFreqInput.CaretPos.X;
-    edtFreqInput.SelStart:=CaretMousePos-1;
+    CaretMousePos:=edtFreqInput.CaretPos.X-1;
+    if  CaretMousePos<0 then  CaretMousePos:=0;
+    edtFreqInput.SelStart:=CaretMousePos;
     edtFreqInput.SelLength:=1;
     Exit;
    end;
@@ -1019,13 +1018,14 @@ var
   s : String;
   c : char;
   f : Currency;
+  l : integer;
 begin
-  if tmrChokeWheel.Enabled then
-                               Exit;
+  if tmrChokeWheel.Enabled then Exit;
   MouseWheelUsed := True;
   s:=edtFreqInput.Text;
-  c:= s[CaretMousePos];
+  c:= s[CaretMousePos+1];
   if c='.' then Exit;
+
   if WheelDelta < 0 then
      begin
       c:=Pred(c);
@@ -1036,10 +1036,10 @@ begin
       c:=Succ(c);
       if c>'9' then  c:='0'
      end;
-  s[CaretMousePos]:=c;
-  edtFreqInput.Text :=s;
-  edtFreqInput.SelStart:=CaretMousePos-1;
-  edtFreqInput.SelLength:=1;
+
+  s[CaretMousePos+1]:=c;
+  edtFreqInput.Text := s;
+
   try
     f := StrToFloat(s);
     if f < 0 then f := 0;
@@ -1107,7 +1107,7 @@ begin
   if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'model', ''), id) then
    Begin
     cmbRig.Items[cmbRig.ItemIndex]:= RigInUse + ' Is not Set';
-    lblFreq.Caption:='0.0000';
+    lblFreq.Caption:=empty_freq;  //empty_freq is String Const in dUtils
     ClearBandButtonsColor;
     ClearModeButtonsColor;
     exit;

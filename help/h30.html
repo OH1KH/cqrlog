@@ -39,7 +39,7 @@ OS<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 TRX Control window shows current frequency and buttons that allow change of band, mode, memory and rig. 
 <br>Additional selections are User defined buttons, Power buttons, Vfo A and B buttons and memory information field.
 <br>When pressing band selection button rig moves to that band using predefined frequency of currently active mode. Default frequencies and User buttons can be defined in <a href="h1.html#ah7">preferecences/TRX control</a>.
-<br><br>
+<br><a name="mouse"></a><p>
 You can set a new frequency by <strong>clicking first frequency display with mouse left button</strong>:
 <ul><li><strong>Using keyboard:</strong></li>
     <ul><li>Press <strong>Ins</strong> key to change between Insert and Replace mode (Replace mode = bigger cursor)</li>
@@ -53,7 +53,7 @@ You can set a new frequency by <strong>clicking first frequency display with mou
 	<ul><li>Speed of change is tied to <strong>TRXControl/Poll</strong> value.You need to decrease <strong>Poll</strong> to get faster actions</li></ul>
 	<li>Click <strong>mouse roll</strong>,  press <strong>Enter key</strong>,  or <strong>move mouse cursor away</strong> from Frequency display to end editimg</li>
     </ul>
-<br>
+</p>
 You can select rig vfo with buttons <strong>A</strong> and <strong>B</strong> but there may be no feedback what vfo is currenty used (Icom brand rigs do not support "Get_vfo" command).
 </p><a name="m4"></a><p>If <strong>M_up</strong> or <strong>M_dwn</strong> are pressed or memory is selected by double click of memory list, the information text will show up to <strong>Mem Info</strong> field. If frequency is changed manually after that info text will disappear.
 <br>If memory does not have info text (max 25chr) just <strong>x of y</strong> is displayed where x refers to memory order in Add/Modify memory list and y total amount of memories.
@@ -100,9 +100,9 @@ Window shows current position of rotor with <strong>numerical display, Short and
 <br><br> When a call is entered to <strong>NewQSO</strong> callsign field and cursor is moved away from that field <strong>DXCC info</strong> part gets filled against call prefix and/or locator grid,
  then, when <strong>DXCC/AZIM</strong> shows a value, it is possible to press <strong>Short Path</strong> or <strong>Long Path buttons</strong> and your ro
  tor will turn your antenna to that direction.
-<br><br>It is also possible to set new direction by a click on <strong>Azimuth display</strong>, type a new direction value and press <strong>Enter</strong> or use  <strong>mouse wheel</strong> to select degrees.
-<br>One wheel step is one degree. If you keep <strong>Shift key</strong> pressed while turning mouse wheel the step will be 10 degrees. If <strong> Ctrl key</strong> is pressed instead step will be 100 degrees.
-<br>If you have used mouse wheel it is enough to move mouse away from Azimuth reading to get rotor turning. No enter keypress is needed then.
+<br><br>It is also possible to set new direction by a <strong> mouse left click on Azimuth display</strong>.
+Procedure is simlar as <a href="#mouse"> setting frequency</a> with TRXControl.
+
 <br><br>Pressing <strong>Stop button</strong> stops rotor turning started either with path or turn buttons.</p>
 <p>Progress bar displays Az value relative to AzLimits (if Use \dump_state is checked in preferences) so do not wonder if it in some cases may look different than numerical true direction display. 
 <br>If error message is received from rotctld button area turns red. If requested turn command is ok, but az_min or az_maz limits change requested direction from true direction 
