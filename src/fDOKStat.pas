@@ -620,6 +620,13 @@ begin
       while not Eof(f) do
       begin
         Readln(f,r);
+        if (r.CountChar(';')<2) then
+          Begin
+            ShowMessage('Check line '+IntToStr(i)+' : "'+r+'"'+LineEnding
+            +' in file '+ dmData.HomeDir+'dok_data'+PathDelim+'dok.csv'+LineEnding+LineEnding
+            +'Reading aborted !!');
+            Exit;
+          end;
         a := dmUtils.Explode(';',r);
         if dmData.DebugLevel>=1 then Writeln(Format('%04d: %s -> %s', [i, a[0], a[2]]));
 
@@ -645,6 +652,13 @@ begin
       while not Eof(f) do
       begin
         Readln(f,r);
+        if (r.CountChar(';')<4) then
+          Begin
+            ShowMessage('Check line '+IntToStr(i)+' : "'+r+'"'+LineEnding
+            +' in file '+ dmData.HomeDir+'dok_data'+PathDelim+'sdok.csv'+LineEnding+LineEnding
+            +'Reading aborted !!');
+            Exit;
+          end;
         a := dmUtils.Explode(';',r);
         if (a[0] = last) then Continue
         else
