@@ -243,6 +243,7 @@ var
       (2,    3,   5,   7,   9,  11,   13,   15,   16,    18,    20);
 
   WasContestName:string;
+  WasContestNameChange:String;
 
 implementation
 
@@ -770,6 +771,21 @@ begin
     if ((pos('MWC',uppercase(cmbContestName.Text))>0)
      or (pos('OK1WC',uppercase(cmbContestName.Text))>0)) then
       Begin
+        if (WasContestNameChange <> cmbContestName.Text) then
+         Begin //do some presets
+           frmTRXControl.DisableRitXit;
+           chkSpace.Checked:=true;
+           chkTrueRST.Checked:=false;
+           chkNRInc.Checked:=true;
+           chkQsp.Checked:=false;
+           chkSP.Checked:=true;
+           chkNoNr.Checked:=false;
+           chkLoc.Checked:=false;
+           rbDupeCheck.Checked:=true;
+           chkMarkDupe.Checked:=true;
+           chkHint.Checked:=false;
+           WasContestNameChange :=cmbContestName.Text
+         end;
         UseStatus:=1; //OK1WC memorial contest
         MWCStatus;
         tmrScore.Enabled:=True;
@@ -778,6 +794,24 @@ begin
 
     if (pos('NAC',uppercase(cmbContestName.Text))>0) then
       Begin
+        if (WasContestNameChange <> cmbContestName.Text) then
+         Begin //do some presets
+           frmTRXControl.DisableRitXit;
+           mnuGridClick(nil);
+           chkSpace.Checked:=true;
+           chkTrueRST.Checked:=false;
+           chkNRInc.Checked:=false;
+           edtSTX.Text:='';
+           edtSTXStr.Text:='';
+           chkQsp.Checked:=false;
+           chkSP.Checked:=true;
+           chkNoNr.Checked:=true;
+           chkLoc.Checked:=true;
+           rbDupeCheck.Checked:=true;
+           chkMarkDupe.Checked:=true;
+           chkHint.Checked:=false;
+           WasContestNameChange :=cmbContestName.Text
+         end;
         UseStatus:=2; //Nordic V,U,SHF activity contest
         NACStatus;
         tmrScore.Enabled:=True;
@@ -787,6 +821,24 @@ begin
     if ((pos('SRAL',uppercase(cmbContestName.Text))>0)
      and (pos('FT8',uppercase(cmbContestName.Text))>0)) then
       Begin
+        if (WasContestNameChange <> cmbContestName.Text) then
+         Begin //do some presets
+           frmTRXControl.DisableRitXit;
+           mnuGridClick(nil);
+           chkSpace.Checked:=true;
+           chkTrueRST.Checked:=false;
+           chkNRInc.Checked:=false;
+           edtSTX.Text:='';
+           edtSTXStr.Text:='';
+           chkQsp.Checked:=false;
+           chkSP.Checked:=true;
+           chkNoNr.Checked:=true;
+           chkLoc.Checked:=true;
+           rbDupeCheck.Checked:=true;
+           chkMarkDupe.Checked:=true;
+           chkHint.Checked:=false;
+           WasContestNameChange :=cmbContestName.Text
+         end;
         UseStatus:=3; //SRAL FT8 contest for OH stations
         SRALFt8Status;
         tmrScore.Enabled:=True;
@@ -802,7 +854,9 @@ begin
         Exit;
       end;
      }
-
+     if (WasContestNameChange <> cmbContestName.Text) then
+        frmTRXControl.DisableRitXit;
+     WasContestNameChange :=cmbContestName.Text;
      UseStatus:=0;  //Common status display for contests where name is not '' and does not fit to any above
      for f:=10 to 20 do
       sgStatus.Columns.Items[f-9].Visible:=popCommonStatus.Items[f].Checked;
@@ -944,6 +998,7 @@ procedure TfrmContest.FormCreate(Sender: TObject);
 begin
   ContestReady:=False;
   WasContestName:='';
+  WasContestNameChange:='';
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
   QsoSince:=0;
