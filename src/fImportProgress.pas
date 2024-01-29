@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ComCtrls,lcltype, synachar, ExtCtrls, httpsend, blcksock, iniFiles, FileUtil,
-  LazFileUtils;
+  LazFileUtils, LazUTF8;
 
 const
   C_EErrorFile ='errors_eQSL.adi';
@@ -657,9 +657,11 @@ procedure TfrmImportProgress.WriteErrorRecord(f:char;call,band,modeorig,submodeo
 var
   l,
   tmp:String;
-
+  eFile  :TextFile;
+  eName  :string;
 
 Begin
+             eName := dmData.UsrHomeDir + C_EErrorFile;
              tmp:=LineEnding
                   +'------------------------------------------------'+LineEnding
                   +'QSO NOT FOUND in log'+LineEnding
@@ -671,6 +673,7 @@ Begin
                   +'Time_on:  '+time_on+LineEnding;
              if f='L' then
                begin
+                 eName := dmData.UsrHomeDir + C_LErrorFile;
                  tmp:=tmp
                  +'QSLR:     '+qslr+LineEnding
                  +'QSLRDate: '+qslrdate+LineEnding
@@ -689,7 +692,19 @@ Begin
              +LineEnding;
 
              s.Add('<APP_CQRLOG_ERROR:'+l+'>'+tmp);
+             AssignFile(eFile,eName);
+             try
+             if FileExistsUTF8(eName) then
+               Append(eFile)
+              else
+               Rewrite(eFile);
 
+             write(eFile,s.text);
+             closeFile(eFile);
+             s.clear;
+             except
+               ShowMessage('Error writing '+eName);
+             end;
 end;
 procedure TfrmImportProgress.ImportLoTWAdif;
 var
@@ -733,6 +748,8 @@ begin
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
 
+  if FileExistsUTF8(dmData.UsrHomeDir + C_LErrorFile) then
+     DeleteFile(dmData.UsrHomeDir + C_LErrorFile);
 
   l := TStringList.Create;
   l.Add('<ADIF_VER:5>3.1.0');
@@ -761,7 +778,7 @@ begin
     while (PosEOH = 0) and (not eof(f)) do //Skip header
     begin
       Readln(f, a);
-      a      := UpperCase(a);
+      a      := UTF8UpperCase(a);
       PosEOH := Pos('<EOH>', a);
     end;
     if PosEOH > 0 then //we have valid lotw adif output
@@ -911,7 +928,7 @@ begin
       dmData.trQ1.Commit;
       if ErrorCount > 0 then
       begin
-        l.SaveToFile(dmData.UsrHomeDir + C_LErrorFile);
+        //l.SaveToFile(dmData.UsrHomeDir + C_LErrorFile);  //this is done now right after error record appear
         if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log.'+LineEnding+'QSO(s) are stored to '+dmData.UsrHomeDir + C_LErrorFile +
                                   LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
           frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_LErrorFile)
@@ -1090,6 +1107,8 @@ var
   t_log       : TDateTime;
 
 begin
+   if FileExistsUTF8(dmData.UsrHomeDir + C_EErrorFile) then
+     DeleteFile(dmData.UsrHomeDir + C_EErrorFile);
   l := TStringList.Create;
   l.Add('<ADIF_VER:5>3.1.0');
   l.Add('<CREATED_TIMESTAMP:15>'+FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
@@ -1121,7 +1140,7 @@ begin
     while not (PosEOH > 0) do //Skip header
     begin
       Readln(f, a);
-      a      := UpperCase(a);
+      a      := UTF8UpperCase(a);
       PosEOH := Pos('<EOH>', a);
     end;
     while not eof(f) do
@@ -1251,7 +1270,7 @@ begin
     CloseFile(f);
     if ErrorCount > 0 then
     begin
-      l.SaveToFile(dmData.UsrHomeDir + C_EErrorFile);
+      //l.SaveToFile(dmData.UsrHomeDir + C_EErrorFile); //this is done now right after error record appear
       if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log.'+LineEnding+'QSO(s) are stored to '+dmData.UsrHomeDir + C_EErrorFile +
                                 LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
       frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_EErrorFile)
