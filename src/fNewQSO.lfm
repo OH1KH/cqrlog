@@ -2578,6 +2578,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 92
           BorderSpacing.Top = 2
           MaxLength = 40
+          OnDblClick = edtNameExit
           OnEnter = edtNameEnter
           OnExit = edtNameExit
           OnKeyDown = edtNameKeyDown

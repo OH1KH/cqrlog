@@ -3965,7 +3965,7 @@ begin
   if edtName.Text <> '' then
   begin
     tmp := edtName.Text;
-    tmp[1] := UpCase(tmp[1]);
+    tmp:=dmUtils.UTF8UpperFirst(tmp);
     edtName.Text := tmp
   end
 end;
@@ -3990,6 +3990,11 @@ begin
     edtQTH.SetFocus;
     key := 0;
   end;
+  if ((key = VK_A) and (Shift=[ssAlt])) then
+     Begin
+      edtName.SelectAll;
+      key:=0;
+     end;
 end;
 
 procedure TfrmNewQSO.edtPWRKeyDown(Sender: TObject; var Key: Word;
@@ -5063,12 +5068,7 @@ procedure TfrmNewQSO.edtNameEnter(Sender: TObject);
 var
   tmp : String;
 begin
-  if edtName.Text <> '' then
-  begin
-    tmp := edtName.Text;
-    tmp[1] := UpCase(tmp[1]);
-    edtName.Text := tmp
-  end;
+  edtNameExit(nil);
   edtName.SelectAll
 end;
 

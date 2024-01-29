@@ -14,12 +14,13 @@ Note that the Alpha source version is usually one step higher than ready compile
  
  #### NOTE: At the moment there is no new official version release.  Alpha 2.6.0(122) is ahead of official source that identifies itself now as 2.6.0(119) 
 From [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
-you can see all changes. It appears also at first start of (122), and can be accessed via "Help" when Cqrlog is running.
+you can see all changes.  Changelog appears also at first start of (122), and can be accessed via "Help" when Cqrlog is running.
 
 
-Latest cqrlog alpha test binaries can be found from this folder.
-This folder holds ready compiled binary files of source "loc_testing" that is the version of cqrlog that I am using myself daily. That is called Alpha version.
+This folder holds ready compiled binary files of source branch "loc_testing" that is the version of Cqrlog that I am using myself daily. That is called Alpha version.
 They contain all accepted pull requests from official source (that may not be released offically yet) plus some test code that is not pull requested yet (and may not be pull requested ever)
+Note that source (one step backwards from this "compiled" folder)  may have bigger subversion number and have changes and fixes made after ready compiled versions are released.
+Source is more as "daily snapshot" and may have (more) bugs. Compiled binary versions are released after it seems that biggest bugs are found and fixed.
 
 ## ABOUT THESE BINARIES:
  These binaries (cqr0,cqr1,cqr4 zips) include latest official source compiled, having updates up to commit:
