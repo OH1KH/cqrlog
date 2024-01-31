@@ -240,6 +240,9 @@ type
     procedure AdifAsciiTrim(var col:TEdit);
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
+    function  IsNonAsciiChrs(s:string):Boolean;
+    function  NoNonAsciiChrs(s:string):String;
+    function  UTF8TransToASCII(s:string):string;
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
     function  StrToDateFormat(sDate : String) : TDateTime;
@@ -1742,6 +1745,52 @@ begin
   temp:=UTF8Decode(Value);
   if length(temp) > 0 then temp[1]:=WideUpperCase(temp[1])[1];
   Result:=UTF8Encode(temp);
+end;
+function TdmUtils.IsNonAsciiChrs(s:string):boolean;   //inform illegal chars in tag data See adif.org
+var
+ i:integer;
+Begin
+    Result:=false;
+    for i:=1 to length(s) do
+     begin
+      if  ((ord(s[i])>126) or (ord(s[i])<32)) then
+       Begin
+        Result:=true;
+        exit;
+       end;
+     end;
+end;
+function TdmUtils.NoNonAsciiChrs(s:string):String;  //remove illegal chars in tag data See adif.org
+var
+ i:integer;
+Begin
+    Result:='';
+    for i:=1 to length(s) do
+     begin
+      if  not (s[i] in [' '..'~'] ) then
+       begin
+         s[i]:='?';
+       end;
+       Result:=Result+s[i];
+     end;
+end;
+
+function TdmUtils.UTF8TransToASCII(s:string):string; //remove char codes under 32(space) and over 126 (~)ADIF tag Data
+
+var
+temp:WideString;
+i:integer;
+Begin
+    temp:=UTF8Decode(s);
+    Result:='';
+    for i:=1 to length(temp) do
+     begin
+      if  ((ord(temp[i])>126) or (ord(temp[i])<32))
+       then
+       Result:=Result+'_'
+       else
+         Result:=Result+char(ord(temp[i]));
+     end;
 end;
 
 function TdmUtils.ReplaceSpace(txt: string): string;
@@ -5498,7 +5547,7 @@ var
   space: String;
 
 begin
-  tmpq:='';
+  tmpq:='adif='+IntToStr(ref_adif);
   if call='' then
    Begin
     if old_stat_adif = ref_adif then
@@ -5507,7 +5556,7 @@ begin
    end
   else
    begin
-   tmpq:=' and callsign='+QuotedStr(call);
+   tmpq:='callsign='+QuotedStr(call);
    end;
 
   g.ColCount  := cMaxBandsCount;
@@ -5540,13 +5589,13 @@ begin
 
   ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
   if ShowLoTW then
-    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
-                         IntToStr(ref_adif) + tmpq + ' and ((qsl_r='+QuotedStr('Q')+') or '+
+    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where '
+                          + tmpq + ' and ((qsl_r='+QuotedStr('Q')+') or '+
                          '(lotw_qslr = '+QuotedStr('L')+') or (eqsl_qsl_rcvd='+QuotedStr('E')+
                          ')) group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd'
   else
-    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
-                         IntToStr(ref_adif) + tmpq + ' and (qsl_r = '+QuotedStr('Q')+') '+
+    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where '
+                         + tmpq + ' and (qsl_r = '+QuotedStr('Q')+') '+
                          'group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd';
   dmData.trQ.StartTransaction;
   dmData.Q.Open;
@@ -5601,14 +5650,15 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where adif='+
-                       IntToStr(ref_adif) + tmpq +' group by band,mode';
+  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where '+ tmpq +' group by band,mode';
+
   dmData.trQ.StartTransaction;
   dmData.Q.Open;
   while not dmData.Q.Eof do
   begin
     i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
     mode := dmData.Q.Fields[1].AsString;
+
     if i > 0 then
       begin
         if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
