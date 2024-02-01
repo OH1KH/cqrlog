@@ -21,7 +21,7 @@ uses
   LCLType, httpsend, Menus, ActnList, process, db,
   uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
   fMonWsjtx, fWorkedGrids,fPropDK0WCY, fAdifImport, RegExpr,
-  FileUtil, LazFileUtils, sqldb, strutils;
+  FileUtil, LazFileUtils, sqldb, strutils, LazUTF8;
 
 const
   cRefCall = 'Ref.call (CTRL+R): ';
@@ -450,11 +450,13 @@ type
     procedure edtITUEnter(Sender: TObject);
     procedure edtMyRSTExit(Sender: TObject);
     procedure edtMyRSTKeyPress(Sender : TObject; var Key : char);
+    procedure edtNameChange(Sender: TObject);
     procedure edtNameEnter(Sender: TObject);
     procedure edtPWRChange(Sender: TObject);
     procedure edtPWREnter(Sender: TObject);
     procedure edtQSL_VIAChange(Sender: TObject);
     procedure edtQSL_VIAEnter(Sender: TObject);
+    procedure edtQTHChange(Sender: TObject);
     procedure edtQTHEnter(Sender: TObject);
     procedure edtRemQSOEnter(Sender: TObject);
     procedure edtRXFreqChange(Sender: TObject);
@@ -565,7 +567,6 @@ type
     procedure edtMyRSTEnter(Sender: TObject);
     procedure edtMyRSTKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
       );
-    procedure edtNameExit(Sender: TObject);
     procedure edtNameKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 
     procedure edtPWRKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -2029,7 +2030,6 @@ begin
     Mask              := logged.ValueFromIndex[logged.IndexOfName('endtime')];
     edtEndTime.Text   := copy(Mask,1,2)+':'+ copy(Mask,3,2);
     edtName.Text      := logged.ValueFromIndex[logged.IndexOfName('name')];
-    edtNameExit(nil);
     edtQTH.Text       := logged.ValueFromIndex[logged.IndexOfName('qth')];
     edtQTHExit(nil);
     edtGrid.Text      := logged.ValueFromIndex[logged.IndexOfName('locator')];
@@ -3059,7 +3059,6 @@ begin
            if sname <>'' then  //if user gives name edtName from qrz.com get replaced
             Begin
               edtName.Text := sname;
-              edtNameExit(nil); //makes 1st ltr upcase
             end;
            if dmData.DebugLevel>=1 then Writeln('edtName before pressing save:',edtName.Text );
           //----------------------------------------------------
@@ -3958,15 +3957,16 @@ begin
   end;
 end;
 
-procedure TfrmNewQSO.edtNameExit(Sender: TObject);
+procedure TfrmNewQSO.edtNameChange(Sender: TObject);
 var
   tmp : String;
 begin
-  if edtName.Text <> '' then
+  if (UTF8length(edtName.Text)=1) and cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True) then
   begin
     tmp := edtName.Text;
     tmp:=dmUtils.UTF8UpperFirst(tmp);
-    edtName.Text := tmp
+    edtName.Text := tmp;
+    edtName.SelStart:=1;
   end
 end;
 
@@ -4037,16 +4037,20 @@ begin
   end
 end;
 
-procedure TfrmNewQSO.edtQTHExit(Sender: TObject);
+procedure TfrmNewQSO.edtQTHChange(Sender: TObject);
 var
   tmp : String;
 begin
-  if (edtQTH.Text <> '') and cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True) then
+  if (UTF8length(edtQTH.Text)=1) and cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True) then
   begin
     tmp := edtQTH.Text;
-    tmp[1] := UpCase(tmp[1]);
-    edtQTH.Text := tmp
+    tmp:=dmUtils.UTF8UpperFirst(tmp);
+    edtQTH.Text := tmp;
+    edtQTH.SelStart:=1;
   end;
+end;
+procedure TfrmNewQSO.edtQTHExit(Sender: TObject);
+Begin
   CheckQTHClub
 end;
 
@@ -5068,7 +5072,6 @@ procedure TfrmNewQSO.edtNameEnter(Sender: TObject);
 var
   tmp : String;
 begin
-  edtNameExit(nil);
   edtName.SelectAll
 end;
 
@@ -5091,6 +5094,7 @@ procedure TfrmNewQSO.edtQSL_VIAEnter(Sender: TObject);
 begin
   edtQSL_VIA.SelectAll
 end;
+
 
 procedure TfrmNewQSO.edtQTHEnter(Sender: TObject);
 begin

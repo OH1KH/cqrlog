@@ -735,7 +735,7 @@ object frmPreferences: TfrmPreferences
         Top = 16
         Width = 312
         Caption = 'General'
-        ClientHeight = 150
+        ClientHeight = 166
         ClientWidth = 310
         TabOrder = 0
         object Label4: TLabel
@@ -809,7 +809,7 @@ object frmPreferences: TfrmPreferences
         Top = 208
         Width = 312
         Caption = 'Contest Info'
-        ClientHeight = 178
+        ClientHeight = 194
         ClientWidth = 310
         TabOrder = 1
         object Label10: TLabel
@@ -1025,7 +1025,7 @@ object frmPreferences: TfrmPreferences
           AutoSize = False
           BorderSpacing.Left = 70
           ItemHeight = 0
-          TabOrder = 3
+          TabOrder = 4
         end
         object edtComments: TEdit
           AnchorSideLeft.Control = GroupBox1
@@ -1038,7 +1038,7 @@ object frmPreferences: TfrmPreferences
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
           BorderSpacing.Bottom = 5
-          TabOrder = 4
+          TabOrder = 7
         end
         object cmbFreq: TComboBox
           AnchorSideLeft.Control = edtPWR
@@ -1051,7 +1051,7 @@ object frmPreferences: TfrmPreferences
           AutoSize = False
           BorderSpacing.Left = 40
           ItemHeight = 0
-          TabOrder = 5
+          TabOrder = 3
         end
         object btnChangeDefFreq: TButton
           AnchorSideLeft.Control = cmbFreq
@@ -1064,7 +1064,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 5
           Caption = 'Change default values'
           OnClick = btnChangeDefFreqClick
-          TabOrder = 6
+          TabOrder = 5
         end
         object btnChangeDefMode: TButton
           AnchorSideLeft.Control = cmbMode
@@ -1077,7 +1077,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 5
           Caption = 'Change default values'
           OnClick = btnChangeDefModeClick
-          TabOrder = 7
+          TabOrder = 6
         end
         object edtOperator: TEdit
           AnchorSideLeft.Control = cmbFreq
@@ -1114,7 +1114,7 @@ object frmPreferences: TfrmPreferences
         Width = 272
         BorderSpacing.Left = 20
         Caption = 'Use spacebar to move between fields'
-        TabOrder = 1
+        TabOrder = 5
       end
       object chkRefreshAfterSave: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1126,7 +1126,7 @@ object frmPreferences: TfrmPreferences
         Width = 211
         BorderSpacing.Left = 20
         Caption = 'Refresh data after save QSO'
-        TabOrder = 2
+        TabOrder = 7
       end
       object chkSkipModeFreq: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1138,7 +1138,7 @@ object frmPreferences: TfrmPreferences
         Width = 387
         BorderSpacing.Left = 20
         Caption = 'Skip over mode and frequency when radio is connected'
-        TabOrder = 3
+        TabOrder = 6
       end
       object chkAutoSearch: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1150,7 +1150,7 @@ object frmPreferences: TfrmPreferences
         Width = 415
         BorderSpacing.Left = 20
         Caption = 'Enable auto search on HamQTH.com/QRZ.COM/QRZCQ.com'
-        TabOrder = 4
+        TabOrder = 8
       end
       object chkShowRecentQSOs: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1162,7 +1162,7 @@ object frmPreferences: TfrmPreferences
         Width = 244
         BorderSpacing.Left = 20
         Caption = 'Show recent QSO records for last '
-        TabOrder = 5
+        TabOrder = 12
       end
       object edtRecetQSOs: TEdit
         AnchorSideLeft.Control = chkShowRecentQSOs
@@ -1175,7 +1175,7 @@ object frmPreferences: TfrmPreferences
         Width = 56
         BorderSpacing.Left = 5
         OnKeyPress = edtRecetQSOsKeyPress
-        TabOrder = 6
+        TabOrder = 13
         Text = '5'
       end
       object chkIgnoreQRZQSL: TCheckBox
@@ -1188,7 +1188,7 @@ object frmPreferences: TfrmPreferences
         Width = 281
         BorderSpacing.Left = 20
         Caption = 'Ignore HamQTH.com/QRZ.COM qsl info'
-        TabOrder = 7
+        TabOrder = 10
       end
       object chkMvToRem: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1200,7 +1200,7 @@ object frmPreferences: TfrmPreferences
         Width = 578
         BorderSpacing.Left = 20
         Caption = 'If ''QSL via'' field contains other info than a call sign, move to ''Comment to QSO'' field'
-        TabOrder = 8
+        TabOrder = 11
       end
       object chkAutoQSLS: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1213,7 +1213,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 20
         BorderSpacing.Top = 10
         Caption = 'Enable auto mark QSO QSL__S field as'
-        TabOrder = 9
+        TabOrder = 1
       end
       object cmbQSL_S: TComboBox
         AnchorSideLeft.Control = chkAutoQSLS
@@ -1227,7 +1227,7 @@ object frmPreferences: TfrmPreferences
         AutoSize = False
         BorderSpacing.Left = 10
         ItemHeight = 0
-        TabOrder = 10
+        TabOrder = 2
       end
       object chkAutoDQSLS: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1240,7 +1240,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 40
         BorderSpacing.Top = 3
         Caption = 'Mark only QSO which are new country, new band country ...'
-        TabOrder = 11
+        TabOrder = 3
       end
       object chkAutoQQSLS: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1252,7 +1252,7 @@ object frmPreferences: TfrmPreferences
         Width = 387
         BorderSpacing.Left = 40
         Caption = 'Mark only the first QSO, first band QSO, first mode QSO'
-        TabOrder = 12
+        TabOrder = 4
       end
       object chkAllVariants: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1264,7 +1264,7 @@ object frmPreferences: TfrmPreferences
         Width = 458
         BorderSpacing.Left = 20
         Caption = 'In previous QSO list show also QSO with call/p, call/m, W6/call etc.'
-        TabOrder = 13
+        TabOrder = 15
       end
       object chkClearRIT: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1276,7 +1276,7 @@ object frmPreferences: TfrmPreferences
         Width = 199
         BorderSpacing.Left = 20
         Caption = 'Clear RIT after saving QSO'
-        TabOrder = 14
+        TabOrder = 16
       end
       object chkUseCallBookData: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1288,7 +1288,7 @@ object frmPreferences: TfrmPreferences
         Width = 419
         BorderSpacing.Left = 20
         Caption = 'Always overwrite info from previous QSO with callbook data'
-        TabOrder = 15
+        TabOrder = 17
       end
       object chkCapFirstQTHLetter: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1297,10 +1297,10 @@ object frmPreferences: TfrmPreferences
         Left = 20
         Height = 23
         Top = 521
-        Width = 241
+        Width = 419
         BorderSpacing.Left = 20
-        Caption = 'Capitalise first letter in QTH field'
-        TabOrder = 16
+        Caption = 'When typing in capitalize first letter in Name and QTH fields'
+        TabOrder = 19
       end
       object chkUseCallbookZonesEtc: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1312,7 +1312,7 @@ object frmPreferences: TfrmPreferences
         Width = 405
         BorderSpacing.Left = 40
         Caption = 'Always overwrite only CQ, ITU zones, county and US state'
-        TabOrder = 17
+        TabOrder = 18
       end
       object chkFillAwardField: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1324,7 +1324,7 @@ object frmPreferences: TfrmPreferences
         Width = 253
         BorderSpacing.Left = 20
         Caption = 'Fill Award field from previous QSO '
-        TabOrder = 18
+        TabOrder = 20
       end
       object chkSatelliteMode: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1336,7 +1336,7 @@ object frmPreferences: TfrmPreferences
         Width = 168
         BorderSpacing.Left = 20
         Caption = 'Enable satellite mode'
-        TabOrder = 19
+        TabOrder = 21
       end
       object chkShowB4call: TCheckBox
         AnchorSideLeft.Control = Label82
@@ -1349,7 +1349,7 @@ object frmPreferences: TfrmPreferences
         Width = 345
         BorderSpacing.Left = 5
         Caption = 'instead of recent, show QSOs B4 with logged call'
-        TabOrder = 20
+        TabOrder = 14
       end
       object chkUpdateAMSATstatus: TCheckBox
         AnchorSideLeft.Control = tabNewQSO
@@ -1361,7 +1361,7 @@ object frmPreferences: TfrmPreferences
         Width = 279
         BorderSpacing.Left = 20
         Caption = 'Upload SAT info to AMSAT status page'
-        TabOrder = 21
+        TabOrder = 22
       end
       object lblUsrBtn: TLabel
         AnchorSideLeft.Control = tabNewQSO
@@ -1384,7 +1384,23 @@ object frmPreferences: TfrmPreferences
         Top = 630
         Width = 548
         BorderSpacing.Left = 20
-        TabOrder = 22
+        TabOrder = 23
+      end
+      object chkNFname: TCheckBox
+        AnchorSideLeft.Control = chkAutoSearch
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = chkAutoSearch
+        AnchorSideTop.Side = asrCenter
+        Left = 441
+        Height = 23
+        Hint = 'As default callbook gives nickname. If not found then first name.'#10'If checked firstname+lastname (fullname) combination is always selected.'#10'Result varies: '#10'HamQTH: nickname or fullname'#10'QRZ: nickname(payed), firstname or fullname'#10'QRZCQ: full name(payed)'
+        Top = 326
+        Width = 269
+        BorderSpacing.Left = 6
+        Caption = 'Select full name instead of nickname'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 9
       end
     end
     object tabVisibleColumns: TTabSheet
@@ -2384,7 +2400,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 4
         Caption = ' rigctld '
-        ClientHeight = 70
+        ClientHeight = 86
         ClientWidth = 655
         TabOrder = 0
         object lblRigctdPath: TLabel
@@ -2660,7 +2676,7 @@ object frmPreferences: TfrmPreferences
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
-          ClientHeight = 130
+          ClientHeight = 146
           ClientWidth = 509
           TabOrder = 11
           object lblSerialRSpd: TLabel
@@ -3225,7 +3241,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 6
         Caption = ' rotctld '
-        ClientHeight = 70
+        ClientHeight = 86
         ClientWidth = 655
         TabOrder = 0
         object Label124: TLabel
@@ -3273,7 +3289,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = pgROTControl
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 647
           object gbRot1: TGroupBox
             AnchorSideLeft.Control = tabRot1
@@ -3285,7 +3301,7 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Left = 6
             BorderSpacing.Top = 12
             Caption = ' Rotor one, desc.:'
-            ClientHeight = 323
+            ClientHeight = 339
             ClientWidth = 622
             TabOrder = 0
             object lblDevice1: TLabel
@@ -3417,14 +3433,14 @@ object frmPreferences: TfrmPreferences
               AnchorSideBottom.Side = asrBottom
               Left = 6
               Height = 161
-              Top = 156
+              Top = 172
               Width = 610
               Anchors = [akLeft, akRight, akBottom]
               BorderSpacing.Left = 6
               BorderSpacing.Right = 6
               BorderSpacing.Bottom = 6
               Caption = 'Rotor one serial parameters'
-              ClientHeight = 143
+              ClientHeight = 159
               ClientWidth = 608
               TabOrder = 5
               object lblSpeed1: TLabel
@@ -3736,7 +3752,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = tabRot1
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 647
           object gbRot2: TGroupBox
             AnchorSideLeft.Control = tabRot2
@@ -4241,7 +4257,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 12
         BorderSpacing.Top = 12
         Caption = ' Radio'
-        ClientHeight = 274
+        ClientHeight = 290
         ClientWidth = 522
         TabOrder = 1
         object lblMode: TLabel
@@ -6577,7 +6593,7 @@ object frmPreferences: TfrmPreferences
         Width = 280
         BorderSpacing.Top = 6
         Caption = ' Window size && position'
-        ClientHeight = 87
+        ClientHeight = 103
         ClientWidth = 278
         TabOrder = 1
         object Label66: TLabel
@@ -6731,7 +6747,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 3
         BorderSpacing.Top = 6
         Caption = ' Refresh '
-        ClientHeight = 87
+        ClientHeight = 103
         ClientWidth = 278
         TabOrder = 4
         object Label70: TLabel

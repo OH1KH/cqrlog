@@ -2560,6 +2560,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 60
+          OnChange = edtQTHChange
           OnEnter = edtQTHEnter
           OnExit = edtQTHExit
           OnKeyDown = edtQTHKeyDown
@@ -2578,9 +2579,8 @@ object frmNewQSO: TfrmNewQSO
           Width = 92
           BorderSpacing.Top = 2
           MaxLength = 40
-          OnDblClick = edtNameExit
+          OnChange = edtNameChange
           OnEnter = edtNameEnter
-          OnExit = edtNameExit
           OnKeyDown = edtNameKeyDown
           ParentShowHint = False
           ShowHint = True

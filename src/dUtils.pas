@@ -3491,12 +3491,18 @@ begin
       begin
         if Pos('<Error>Not found:', m.Text) > 0 then
           exit;
-        nick := GetTagValue(m.Text, '<fname>');
+
+        if (cqrini.ReadBool('NewQSO', 'NFname', False)) then
+                 nick := GetTagValue(m.Text, '<fname>') + ' ' + GetTagValue(m.Text, '<name>')
+               else
+                Begin
+                  nick := GetTagValue(m.Text, '<nickname>');
+                  if nick ='' then  nick := GetTagValue(m.Text, '<fname>');
+                end;
 
         if Utf8Length(nick) > 40 then
           nick := UTF8copy(nick,1,40);
 
-        nick:=UTF8UpperFirst(nick);
 
         qth := GetTagValue(m.Text, '<addr2>');
         state := GetTagValue(m.Text, '<state>');
@@ -3574,8 +3580,6 @@ begin
         nick:= GetTagValue(m.Text, '<name>');
         if Utf8Length(nick) > 40 then
           nick := UTF8copy(nick,1,40);
-
-        nick:=UTF8UpperFirst(nick);
 
         qth := GetTagValue(m.Text, '<qth>');
         state := GetTagValue(m.Text, '<state>');
@@ -4385,12 +4389,18 @@ begin
           ErrMsg := 'Callsign not found';
           exit;
         end;
-        nick := GetTagValue(m.Text, '<nick>');
+
+          if (cqrini.ReadBool('NewQSO', 'NFname', False)) then
+                 nick := GetTagValue(m.Text, '<adr_name>')
+               else
+                Begin
+                  nick := GetTagValue(m.Text, '<nick>');
+                  if nick ='' then  nick := GetTagValue(m.Text, '<adr_name>');
+                end;
 
         if Utf8Length(nick) > 40 then
           nick := UTF8copy(nick,1,40);
 
-        nick:=UTF8UpperFirst(nick);
 
         qth := GetTagValue(m.Text, '<qth>');
         state := GetTagValue(m.Text, '<us_state>');
