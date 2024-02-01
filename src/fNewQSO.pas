@@ -7494,6 +7494,13 @@ begin
       FileName := FileName + '_backup.adi'
     else
       FileName := FileName + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
+
+    FileName2         := Path2 + call;
+    if cqrini.ReadInteger('Backup', 'BackupType1', 0) > 0 then
+      FileName2 := FileName2 + '_backup.adi'
+    else
+      FileName2 := FileName2 + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
+
     ExportType := 2;
 
     ShowModal

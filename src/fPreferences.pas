@@ -107,6 +107,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkCompressBackup1: TCheckBox;
     chkNFname: TCheckBox;
     chkBlenByQso: TCheckBox;
     chkBeamArcLength: TCheckBox;
@@ -662,10 +663,12 @@ type
     Label108: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    lblFile1: TLabel;
     Label193: TLabel;
     Label194: TLabel;
     Label68: TLabel;
     Label69: TLabel;
+    lblFile2: TLabel;
     lblGCBeamWidth: TLabel;
     lblGCBeamLength: TLabel;
     lblGC_BP_Color: TLabel;
@@ -911,6 +914,7 @@ type
     rbQRZ: TRadioButton;
     rbQRZCQ: TRadioButton;
     rgBackupType: TRadioGroup;
+    rgBackupType1: TRadioGroup;
     rgRSTFrom: TRadioGroup;
     RadioGroup2: TRadioGroup;
     rbRSTDefault1: TRadioButton;
@@ -1530,11 +1534,17 @@ begin
   if edtBackupPath.Text <> '' then
     if edtBackupPath.Text[Length(edtBackupPath.Text)] <> PathDelim then
       edtBackupPath.Text := edtBackupPath.Text + PathDelim;
+  if edtBackupPath1.Text <> '' then
+    if edtBackupPath1.Text[Length(edtBackupPath1.Text)] <> PathDelim then
+      edtBackupPath1.Text := edtBackupPath1.Text + PathDelim;
+
   cqrini.WriteBool('Backup', 'Enable', chkEnableBackup.Checked);
   cqrini.WriteBool('Backup', 'Compress', chkCompressBackup.Checked);
+  cqrini.WriteBool('Backup', 'Compress1', chkCompressBackup1.Checked);
   cqrini.WriteString('Backup', 'Path', edtBackupPath.Text);
   cqrini.WriteString('Backup', 'Path1', edtBackupPath1.Text);
   cqrini.WriteInteger('Backup', 'BackupType', rgBackupType.ItemIndex);
+  cqrini.WriteInteger('Backup', 'BackupType1', rgBackupType1.ItemIndex);
   cqrini.WriteBool('Backup','AskFirst',chkAskBackup.Checked);
 
   cqrini.WriteString('ExtView', 'txt', edtTxtFiles.Text);
@@ -3247,9 +3257,11 @@ begin
 
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
+  chkCompressBackup1.Checked := cqrini.ReadBool('Backup', 'Compress1', True);
   edtBackupPath.Text := cqrini.ReadString('Backup', 'Path', dmData.DataDir);
   edtBackupPath1.Text := cqrini.ReadString('Backup', 'Path1','');
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
+  rgBackupType1.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType1', 0);
   chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 
   edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', '');

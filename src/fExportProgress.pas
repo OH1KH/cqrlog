@@ -36,6 +36,7 @@ type
     SecondBackupPath : String;
     ExportType : Integer; // 0 - ADIF, 1 - HTML, 2 - ADIF for backup
     FileName   : String;
+    Filename2  : String;
     AutoBackup : Boolean;
     { public declarations }
   end; 
@@ -571,33 +572,35 @@ begin   //TfrmExportProgress
     CloseFile(f);
     if ExportType <> 2 then
       ShowMessage('Export complete.'#13'File: ' + FileName)
-    else begin
+   else
+    begin
       dir      := ExtractFilePath(FileName);
       FileName := ExtractFileName(FileName);
+      FileName2 := ExtractFileName(FileName2);
 
       if cqrini.ReadBool('Backup','Compress',True) then
-      begin
+       begin
         chdir(dir);
         dmUtils.ExecuteCommand('tar -cvzf ' + ChangeFileExt(FileName,'.tar.gz') + ' ' +
                                FileName);
         tmp := ChangeFileExt(FileName,'.tar.gz');
-
         CopyFile(Dir + tmp,FirstBackupPath+tmp);
-
-        if (SecondBackupPath<>'') then
-        begin
-          SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
-          CopyFile(Dir + tmp,SecondBackupPath+tmp)
-        end;
-        DeleteFileUTF8(Dir + tmp)
-      end
-      else begin
+       end
+      else
         CopyFile(Dir + FileName,FirstBackupPath+FileName);
-        if (SecondBackupPath<>'') then
-        begin
-          SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
-          CopyFile(Dir+FileName,SecondBackupPath+FileName)
-        end
+
+      if (SecondBackupPath<>'') then
+      begin
+         if cqrini.ReadBool('Backup','Compress1',True) then
+           begin
+            chdir(dir);
+            dmUtils.ExecuteCommand('tar -cvzf ' + ChangeFileExt(FileName2,'.tar.gz') + ' ' +
+                                   FileName);
+            tmp := ChangeFileExt(FileName2,'.tar.gz');
+            CopyFile(Dir + tmp,SecondBackupPath+tmp);
+           end
+          else
+            CopyFile(Dir + FileName,SecondBackupPath+FileName2);
       end;
       DeleteFileUTF8(Dir + FileName)
     end;
