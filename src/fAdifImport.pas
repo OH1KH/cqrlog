@@ -142,6 +142,7 @@ type
     procedure mnuImportClick(Sender: TObject);
   private
     LocalDbg     : Boolean;
+    btnImportClicked : boolean;
     AbortImport : boolean;
     ERR_FILE : String;
     Do_Err_Import : Boolean;
@@ -165,7 +166,7 @@ type
     function TrimDataLen(adifTag:String;adifdata:String;maxlen:integer): String;
     { private declarations }
   public
-    function  getNextAdifTag(var AdifRemaining,AdifTag,AdifData:string):boolean;
+    function  getNextAdifTag(var AdifRemaining,AdifTag,AdifData:string;NoErr:boolean=false):boolean;
     procedure OpenInTextEditor(OtF:String);
     { public declarations }
   end; 
@@ -197,7 +198,7 @@ begin
   generateAdifTagHash:=x;
 end;
 
-function TfrmAdifImport.getNextAdifTag(var AdifRemaining,AdifTag,AdifData:string):boolean;
+function TfrmAdifImport.getNextAdifTag(var AdifRemaining,AdifTag,AdifData:string;NoErr:boolean=false):boolean;
 // AdifRemaining - remaining text have to be searched for next tag
 // AdifTag - deliveres back the extracted ADIF tag name
 // AdifData - deliveres back the extracted ADIF information of the tag
@@ -207,7 +208,7 @@ var z,x:longint;
     IntlPos : Integer;
     TagStrLen : String = '';
     AdifDataLen : Word = 0;
-
+    tmp         :string;
 
 begin
     getNextAdifTag:=false;
@@ -243,20 +244,36 @@ begin
 
     //if LocalDbg then Write(' pos INTL:',i);
 
-    if IntlPos>0 then  //tags with '_intl' have UTF8 charactes
-        AdifTag:= copy(AdifTag,1,IntlPos-1); //remove '_INTL'
+    if ((IntlPos=0) and not NoErr) then
+     begin
+     if (length(AdifData)<>UTF8length(AdifData)) then
+       begin
+           tmp:=AdifData;
+           AdifData:=dmUtils.UTF8TransToASCII(AdifData);
+           WriteWrongADIF(TmpAdifRec+LineEnding+ AdifTag+' error-> '
+                           +tmp+' fix-> '+AdifData,'UTF8 characters in tag data, not ADIF standard! Modifying AdifData');
+           inc(WrongRecNr);
+           lblErrors.Caption   := IntToStr(WrongRecNr);
+           lblErrorLog.Caption := dmData.UsrHomeDir + ERR_FILE;
+           lblErrorLog.Visible:=true;
+           Repaint;
+       end;
+     if (dmUtils.IsNonAsciiChrs(AdifData)) then
+       Begin
+           tmp:=AdifData;
+           AdifData:=dmUtils.NoNonAsciiChrs(AdifData);
+           WriteWrongADIF(TmpAdifRec+LineEnding+ AdifTag+' error-> '
+                           +tmp+' fix-> '+AdifData,'Illegal characters in tag data, not ADIF standard! Modifying AdifData');
+           inc(WrongRecNr);
+           lblErrors.Caption   := IntToStr(WrongRecNr);
+           lblErrorLog.Caption := dmData.UsrHomeDir + ERR_FILE;
+           lblErrorLog.Visible:=true;
+           Repaint;
+       end;
+     end;
 
-    if ((IntlPos=0) and (length(AdifData)<>UTF8length(AdifData))) then
-      begin
-       WriteWrongADIF(TmpAdifRec+LineEnding+AdifTag+' '+AdifData,'UTF8 characters in non _INTL tag, not ADIF standard! Ignoring AdifData');
-       AdifData:='';
-       inc(WrongRecNr);
-       lblErrors.Caption   := IntToStr(WrongRecNr);
-       lblErrorLog.Caption := dmData.UsrHomeDir + ERR_FILE;
-       lblErrorLog.Visible:=true;
-       Repaint;
-       //UTF8 characters in non _INTL tag, not ADIF standard Ignoring AdifData
-      end;
+    if IntlPos>0 then  //tags with '_intl' have UTF8 charactes
+          AdifTag:= copy(AdifTag,1,IntlPos-1); //remove '_INTL'
 
     if z=0 then
         AdifRemaining:=''
@@ -394,6 +411,9 @@ begin
     if not IsQsoDateInRange then
     begin
       Inc(FFilteredOutRecNr);
+      lblFilteredOutCount.Caption := IntToStr(FFilteredOutRecNr);
+      Application.ProcessMessages;
+      Repaint;
       initializeTypeVariable(d);
       exit;
     end;
@@ -764,6 +784,7 @@ var
   ErrText : String = '';
 begin
   if lblFileName.Caption='' then exit;
+  btnImportClicked:=true;
   CutErrText :='';
   AbortImport := false;
   lblComplete.Visible := False;
@@ -964,6 +985,7 @@ begin
     FormatSettings.TimeSeparator := tmp
   end;
   lblErrorLog.Visible:=false;
+  btnImportClicked:=false;
   //set debug rules for this form
   // bit 1, %1,  ---> -2 for routines in this form
   LocalDbg := dmData.DebugLevel >= 1 ;
@@ -1010,8 +1032,13 @@ var
   f : TextFile;
   i : Integer;
 begin
-    for i:= 0 to Length(lines)-1 do
-      if LocalDbg then WriteLn(lines[i]);
+
+       for i:= 0 to Length(lines)-1 do
+         Begin
+               //lines[i]:=dmUtils.NoNonAsciiChrs(lines[i]);
+               if LocalDbg then
+                                WriteLn(lines[i]);
+         end;
 
   if FileExists(dmData.UsrHomeDir + ERR_FILE) then
   begin

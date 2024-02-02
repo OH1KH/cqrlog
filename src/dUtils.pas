@@ -1769,7 +1769,7 @@ Begin
      begin
       if  not (s[i] in [' '..'~'] ) then
        begin
-         s[i]:='?';
+         s[i]:='_';
        end;
        Result:=Result+s[i];
      end;

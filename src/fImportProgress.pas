@@ -620,7 +620,7 @@ Begin
 mode := ''; //be sure there is no mode at this point
   repeat
    begin
-     if frmAdifImport.getNextAdifTag(Buf,prik,data) then
+     if frmAdifImport.getNextAdifTag(Buf,prik,data,True) then
        if LocalDbg then
          Begin
           write(prik,'->');

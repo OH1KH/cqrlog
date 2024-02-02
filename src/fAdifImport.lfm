@@ -1,13 +1,12 @@
 object frmAdifImport: TfrmAdifImport
-  Left = 2111
-  Height = 420
-  Top = 236
-  Width = 392
+  Left = 560
+  Height = 442
+  Top = 186
+  Width = 458
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'Importing ADIF file'
-  ClientHeight = 420
-  ClientWidth = 392
+  ClientHeight = 442
+  ClientWidth = 458
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -116,7 +115,7 @@ object frmAdifImport: TfrmAdifImport
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.6.0'
   object pnlFilterDateRange: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = pnlAll
@@ -125,13 +124,13 @@ object frmAdifImport: TfrmAdifImport
     AnchorSideRight.Side = asrBottom
     Left = 0
     Height = 45
-    Top = 352
-    Width = 392
+    Top = 376
+    Width = 458
     Alignment = taLeftJustify
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
     ClientHeight = 45
-    ClientWidth = 392
+    ClientWidth = 458
     Enabled = False
     TabOrder = 0
     object lblDateTo: TLabel
@@ -139,10 +138,10 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlFilterDateRange
       AnchorSideTop.Side = asrCenter
-      Left = 164
-      Height = 15
-      Top = 15
-      Width = 15
+      Left = 161
+      Height = 17
+      Top = 14
+      Width = 13
       BorderSpacing.Left = 12
       Caption = 'to'
       ParentColor = False
@@ -152,9 +151,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlFilterDateRange
       AnchorSideTop.Side = asrCenter
-      Left = 49
-      Height = 33
-      Top = 6
+      Left = 46
+      Height = 34
+      Top = 5
       Width = 103
       CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
       DateOrder = doYMd
@@ -170,9 +169,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlFilterDateRange
       AnchorSideTop.Side = asrCenter
-      Left = 191
-      Height = 33
-      Top = 6
+      Left = 186
+      Height = 34
+      Top = 5
       Width = 103
       CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
       DateOrder = doYMd
@@ -188,9 +187,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Control = pnlFilterDateRange
       AnchorSideTop.Side = asrCenter
       Left = 3
-      Height = 15
-      Top = 15
-      Width = 34
+      Height = 17
+      Top = 14
+      Width = 31
       BorderSpacing.Left = 3
       Caption = 'from'
       ParentColor = False
@@ -202,20 +201,20 @@ object frmAdifImport: TfrmAdifImport
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 352
+    Height = 376
     Top = 0
-    Width = 392
+    Width = 458
     Anchors = [akTop, akLeft, akRight]
-    ClientHeight = 352
-    ClientWidth = 392
+    ClientHeight = 376
+    ClientWidth = 458
     TabOrder = 1
     object lbFile: TLabel
       AnchorSideLeft.Control = pnlAll
       AnchorSideTop.Control = pnlAll
       Left = 4
-      Height = 15
+      Height = 17
       Top = 13
-      Width = 28
+      Width = 26
       BorderSpacing.Left = 3
       BorderSpacing.Top = 12
       Caption = 'File:'
@@ -225,34 +224,35 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Control = lbFile
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lbFile
-      Left = 38
-      Height = 15
+      AnchorSideTop.Side = asrCenter
+      Left = 36
+      Height = 17
       Top = 13
-      Width = 81
+      Width = 77
       BorderSpacing.Left = 6
       Caption = 'lblFileName'
       ParentColor = False
     end
     object lblError: TLabel
       AnchorSideLeft.Control = lbFile
-      AnchorSideTop.Control = lblImport
+      AnchorSideTop.Control = lbFile
       AnchorSideTop.Side = asrBottom
       Left = 4
-      Height = 15
-      Top = 55
-      Width = 46
+      Height = 17
+      Top = 36
+      Width = 42
       BorderSpacing.Top = 6
       Caption = 'Errors:'
       ParentColor = False
     end
     object lblImport: TLabel
       AnchorSideLeft.Control = lbFile
-      AnchorSideTop.Control = lbFile
+      AnchorSideTop.Control = lblError
       AnchorSideTop.Side = asrBottom
       Left = 4
-      Height = 15
-      Top = 34
-      Width = 71
+      Height = 17
+      Top = 59
+      Width = 67
       BorderSpacing.Top = 6
       Caption = 'Importing:'
       ParentColor = False
@@ -261,10 +261,11 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Control = lblError
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lblError
-      Left = 56
-      Height = 15
-      Top = 55
-      Width = 59
+      AnchorSideTop.Side = asrCenter
+      Left = 52
+      Height = 17
+      Top = 36
+      Width = 54
       Alignment = taRightJustify
       BorderSpacing.Left = 6
       Caption = 'lblErrors'
@@ -274,10 +275,11 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Control = lblImport
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lblImport
-      Left = 81
-      Height = 15
-      Top = 34
-      Width = 57
+      AnchorSideTop.Side = asrCenter
+      Left = 77
+      Height = 17
+      Top = 59
+      Width = 54
       BorderSpacing.Left = 6
       Caption = 'lblCount'
       ParentColor = False
@@ -287,9 +289,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Control = chkLotOfQSO
       AnchorSideTop.Side = asrBottom
       Left = 4
-      Height = 15
-      Top = 177
-      Width = 138
+      Height = 17
+      Top = 183
+      Width = 134
       BorderSpacing.Top = 6
       Caption = 'Comment to QSO(s):'
       ParentColor = False
@@ -299,10 +301,10 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
-      Left = 315
-      Height = 15
-      Top = 75
-      Width = 70
+      Left = 383
+      Height = 17
+      Top = 144
+      Width = 68
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 6
       BorderSpacing.Right = 6
@@ -317,9 +319,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Control = edtRemarks
       AnchorSideTop.Side = asrBottom
       Left = 4
-      Height = 15
-      Top = 232
-      Width = 77
+      Height = 17
+      Top = 240
+      Width = 74
       BorderSpacing.Top = 6
       Caption = 'QTH Profile'
       ParentColor = False
@@ -330,7 +332,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Control = lblError
       Left = 112
       Height = 1
-      Top = 55
+      Top = 36
       Width = 1
       BorderSpacing.Left = 6
       Font.Color = clRed
@@ -341,12 +343,12 @@ object frmAdifImport: TfrmAdifImport
       OnMouseEnter = lblErrorLogMouseEnter
     end
     object btnImport: TButton
-      AnchorSideTop.Control = lbFile
+      AnchorSideTop.Control = lblFilteredOutCount
       AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
-      Left = 310
+      Left = 376
       Height = 25
-      Top = 13
+      Top = 82
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
@@ -362,8 +364,8 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 34
-      Top = 192
-      Width = 145
+      Top = 200
+      Width = 334
       AutoSize = False
       TabOrder = 1
     end
@@ -372,9 +374,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
-      Left = 310
+      Left = 376
       Height = 25
-      Top = 44
+      Top = 113
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 6
@@ -391,8 +393,8 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 315
-      Width = 222
+      Top = 326
+      Width = 215
       BorderSpacing.Top = 6
       Caption = 'Filter: only import date range'
       OnChange = chkFilterDateRangeChange
@@ -400,12 +402,12 @@ object frmAdifImport: TfrmAdifImport
     end
     object lblFilteredOut: TLabel
       AnchorSideLeft.Control = lbFile
-      AnchorSideTop.Control = lblError
+      AnchorSideTop.Control = lblImport
       AnchorSideTop.Side = asrBottom
       Left = 4
-      Height = 15
-      Top = 76
-      Width = 83
+      Height = 17
+      Top = 82
+      Width = 77
       BorderSpacing.Top = 6
       Caption = 'Filtered out:'
       ParentColor = False
@@ -415,8 +417,8 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Control = lblQthProfile
       AnchorSideTop.Side = asrBottom
       Left = 4
-      Height = 33
-      Top = 247
+      Height = 34
+      Top = 257
       Width = 334
       ItemHeight = 0
       TabOrder = 4
@@ -427,8 +429,8 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 148
-      Width = 293
+      Top = 154
+      Width = 292
       Caption = 'ADIF file contains more than 10 000 QSO'
       TabOrder = 5
     end
@@ -436,10 +438,11 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Control = lblFilteredOut
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lblFilteredOut
-      Left = 93
-      Height = 15
-      Top = 76
-      Width = 135
+      AnchorSideTop.Side = asrCenter
+      Left = 87
+      Height = 17
+      Top = 82
+      Width = 125
       BorderSpacing.Left = 6
       Caption = 'lblFilteredOutCount'
       ParentColor = False
@@ -450,19 +453,19 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 125
-      Width = 293
+      Top = 131
+      Width = 284
       Caption = 'No Check For Duplicates (faster Import)'
       TabOrder = 6
     end
     object chkRemember: TCheckBox
       AnchorSideLeft.Control = lbFile
-      AnchorSideTop.Control = lblErrors
+      AnchorSideTop.Control = lblImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 102
-      Width = 303
+      Top = 108
+      Width = 302
       BorderSpacing.Top = 32
       Caption = 'Case of duplicates; Remember my answer'
       TabOrder = 7
@@ -473,8 +476,8 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 286
-      Width = 263
+      Top = 297
+      Width = 254
       BorderSpacing.Top = 6
       Caption = 'Override locator grid from ADIF log'
       TabOrder = 8
@@ -486,8 +489,8 @@ object frmAdifImport: TfrmAdifImport
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 25
-    Top = 395
-    Width = 392
+    Top = 417
+    Width = 458
     AutoSize = False
     BorderSpacing.InnerBorder = 3
     Panels = <    
@@ -500,55 +503,58 @@ object frmAdifImport: TfrmAdifImport
     Active = False
     Action = caNone
     Left = 152
-    Top = 144
+    Top = 200
   end
   object Q1: TSQLQuery
     FieldDefs = <>
     Transaction = tr
     Params = <>
+    Macros = <>
     Left = 184
-    Top = 144
+    Top = 200
   end
   object Q2: TSQLQuery
     FieldDefs = <>
     Transaction = tr
     Params = <>
+    Macros = <>
     Left = 216
-    Top = 144
+    Top = 200
   end
   object Q3: TSQLQuery
     FieldDefs = <>
     Transaction = tr
     Params = <>
+    Macros = <>
     Left = 248
-    Top = 144
+    Top = 200
   end
   object Q4: TSQLQuery
     FieldDefs = <>
     Transaction = tr
     Params = <>
+    Macros = <>
     Left = 280
-    Top = 144
+    Top = 200
   end
   object popErrFile: TPopupMenu
-    Left = 320
-    Top = 144
+    Left = 312
+    Top = 200
     object mnuedit: TMenuItem
-      Caption = 'Open with text editor'
+      Caption = 'Open file with text editor'
       OnClick = mnueditClick
     end
     object mnuImport: TMenuItem
-      Caption = 'Adif import file'
+      Caption = 'Adif import fixed error file'
       OnClick = mnuImportClick
     end
     object mnuDelImport: TMenuItem
-      Caption = 'Delete imported Err file'
+      Caption = 'Delete imported file'
       Visible = False
-      OnClick = mnuDelImportClick
     end
     object mnuDelete: TMenuItem
-      Caption = 'Delete file'
-      OnClick = mnuDeleteClick
+      Caption = 'Delete error file'
+      OnClick = mnuDelImportClick
     end
   end
 end

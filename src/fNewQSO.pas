@@ -2178,7 +2178,7 @@ begin
               edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
               repeat
                 begin
-                  if frmAdifImport.getNextAdifTag(Buf,prik,data) then
+                  if frmAdifImport.getNextAdifTag(Buf,prik,data,True) then
                     if dmData.DebugLevel>=1 then
                                                 Begin
                                                  write(prik,'->');
