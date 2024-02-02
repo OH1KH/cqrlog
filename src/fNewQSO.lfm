@@ -2517,7 +2517,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 64
           BorderSpacing.Top = 2
           CharCase = ecUppercase
-          OnChange = edtDXCCRefChange
+          OnChange = edtCountyChange
           OnEnter = edtDXCCRefEnter
           OnExit = edtDXCCRefExit
           OnKeyDown = edtDXCCRefKeyDown
@@ -2737,7 +2737,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           CharCase = ecUppercase
           MaxLength = 10
-          OnChange = edtPWRChange
+          OnChange = edtCountyChange
           OnEnter = edtPWREnter
           OnKeyDown = edtPWRKeyDown
           ParentShowHint = False
@@ -2816,7 +2816,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 42
           BorderSpacing.Top = 2
           CharCase = ecUppercase
-          OnChange = edtITUChange
+          OnChange = edtCountyChange
           OnEnter = edtITUEnter
           OnExit = edtITUExit
           OnKeyDown = edtITUKeyDown
@@ -2837,7 +2837,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 50
-          OnChange = edtAwardChange
+          OnChange = edtCountyChange
           OnEnter = edtAwardEnter
           OnExit = edtAwardExit
           OnKeyDown = edtAwardKeyDown
@@ -2859,7 +2859,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           CharCase = ecUppercase
-          OnChange = edtWAZChange
+          OnChange = edtCountyChange
           OnEnter = edtWAZEnter
           OnExit = edtWAZExit
           OnKeyDown = edtCQKeyDown
@@ -2922,7 +2922,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           CharCase = ecUppercase
           MaxLength = 30
-          OnChange = edtQSL_VIAChange
+          OnChange = edtCountyChange
           OnEnter = edtQSL_VIAEnter
           OnKeyDown = edtQSL_VIAKeyDown
           ParentShowHint = False
@@ -3073,7 +3073,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           CharCase = ecUppercase
           MaxLength = 4
-          OnChange = edtStateChange
+          OnChange = edtCountyChange
           OnEnter = edtStateEnter
           OnExit = edtStateExit
           OnKeyDown = edtStateKeyDown
@@ -3495,7 +3495,7 @@ object frmNewQSO: TfrmNewQSO
             BorderSpacing.Top = 3
             BorderSpacing.Right = 3
             MaxLength = 40
-            OnChange = edtContestNameChange
+            OnChange = edtCountyChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
@@ -3512,7 +3512,6 @@ object frmNewQSO: TfrmNewQSO
             Width = 64
             BorderSpacing.Top = 3
             MaxLength = 6
-            OnChange = edtContestSerialSentChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 1
@@ -3528,7 +3527,6 @@ object frmNewQSO: TfrmNewQSO
             Width = 64
             BorderSpacing.Top = 6
             MaxLength = 6
-            OnChange = edtContestSerialReceivedChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 2
@@ -3548,7 +3546,7 @@ object frmNewQSO: TfrmNewQSO
             BorderSpacing.Top = 6
             BorderSpacing.Right = 3
             MaxLength = 50
-            OnChange = edtContestExchangeMessageSentChange
+            OnChange = edtCountyChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
@@ -3568,7 +3566,7 @@ object frmNewQSO: TfrmNewQSO
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Right = 3
             MaxLength = 50
-            OnChange = edtContestExchangeMessageReceivedChange
+            OnChange = edtCountyChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 4
@@ -3603,7 +3601,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           CharCase = ecUppercase
           MaxLength = 12
-          OnChange = edtDOKChange
+          OnChange = edtCountyChange
           OnEnter = edtStateEnter
           OnExit = edtStateExit
           OnKeyDown = edtStateKeyDown

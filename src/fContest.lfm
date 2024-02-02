@@ -74,7 +74,7 @@ object frmContest: TfrmContest
     OnChange = edtSTXStrChange
     OnEnter = edtSTXStrEnter
     OnExit = edtSTXStrExit
-    OnKeyDown = edtCallKeyDown
+    OnKeyDown = edtSTXStrKeyDown
     ParentShowHint = False
     ShowHint = True
     TabOrder = 14
@@ -139,7 +139,7 @@ object frmContest: TfrmContest
     MaxLength = 50
     OnChange = edtSRXStrChange
     OnEnter = edtRSTrEnter
-    OnKeyDown = edtCallKeyDown
+    OnKeyDown = edtSRXStrKeyDown
     OnKeyPress = edtSRXStrKeyPress
     ParentShowHint = False
     ShowHint = True
@@ -258,6 +258,7 @@ object frmContest: TfrmContest
     Top = 161
     Width = 113
     Caption = 'SPACE is TAB'
+    OnChange = chkSpaceChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 18

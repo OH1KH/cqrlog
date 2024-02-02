@@ -241,7 +241,7 @@ type
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
-    function  NoNonAsciiChrs(s:string):String;
+    function  NoNonAsciiChrs(s:string;drop:Boolean=false):String;
     function  UTF8TransToASCII(s:string):string;
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
@@ -1760,7 +1760,7 @@ Begin
        end;
      end;
 end;
-function TdmUtils.NoNonAsciiChrs(s:string):String;  //remove illegal chars in tag data See adif.org
+function TdmUtils.NoNonAsciiChrs(s:string;drop:Boolean=false):String;  //remove illegal chars in tag data See adif.org
 var
  i:integer;
 Begin
@@ -1769,9 +1769,10 @@ Begin
      begin
       if  not (s[i] in [' '..'~'] ) then
        begin
+         if drop then continue;
          s[i]:='_';
        end;
-       Result:=Result+s[i];
+        Result:=Result+s[i];
      end;
 end;
 

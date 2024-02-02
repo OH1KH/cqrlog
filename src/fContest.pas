@@ -128,6 +128,7 @@ type
     procedure chkSetFilterClick(Sender: TObject);
     procedure chkSetFilterMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure chkSpaceChange(Sender: TObject);
     procedure chkSPClick(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
@@ -136,8 +137,12 @@ type
     procedure cmbContestNameExit(Sender: TObject);
     procedure edtRSTrEnter(Sender: TObject);
     procedure edtRSTsEnter(Sender: TObject);
+    procedure edtSRXStrKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure edtSRXStrKeyPress(Sender: TObject; var Key: char);
     procedure edtSTXStrChange(Sender: TObject);
+    procedure edtSTXStrKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure lblCqFreqClick(Sender: TObject);
     procedure LoadClick(Sender: TObject);
     procedure mnuReSetAllCountersClick(Sender: TObject);
@@ -697,6 +702,12 @@ begin
     popQuickExport.PopUp;
    end;
 end;
+
+procedure TfrmContest.chkSpaceChange(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmContest.chkSPClick(Sender: TObject);
 begin
      if chkSP.Checked then
@@ -729,7 +740,8 @@ end;
 
 procedure TfrmContest.cmbContestNameChange(Sender: TObject);
 begin
-  cmbContestName.Caption:= dmUtils.MyTrim(cmbContestName.Caption);
+  cmbContestName.Caption:= dmUtils.NoNonAsciiChrs(cmbContestName.Caption,True);
+  cmbContestName.SelStart:=length(cmbContestName.Caption);
 end;
 
 procedure TfrmContest.cmbContestNameEnter(Sender: TObject);
@@ -885,6 +897,16 @@ begin
      end;
 end;
 
+procedure TfrmContest.edtSRXStrKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if ((Key = VK_SPACE) and (chkSpace.Checked)) then
+  begin
+    Key := 0;
+    SelectNext(Sender as TWinControl, True, True);
+  end;
+end;
+
 procedure TfrmContest.edtSRXStrKeyPress(Sender: TObject; var Key: char);
 begin
    if ((chkLoc.Checked) and (MsgIs=1 ))then
@@ -893,7 +915,18 @@ end;
 
 procedure TfrmContest.edtSTXStrChange(Sender: TObject);
 begin
-  dmUtils.AdifAsciiTrim(edtSTXStr);
+  edtSTXStr.Text := dmUtils.NoNonAsciiChrs(edtSTXStr.Text, true);
+  edtSTXStr.SelStart:=length(edtSTXStr.Text);
+end;
+
+procedure TfrmContest.edtSTXStrKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if ((Key = VK_SPACE) and (chkSpace.Checked)) then
+  begin
+    Key := 0;
+    SelectNext(Sender as TWinControl, True, True);
+  end;
 end;
 
 procedure TfrmContest.lblCqFreqClick(Sender: TObject);
@@ -951,7 +984,8 @@ procedure TfrmContest.edtSRXStrChange(Sender: TObject);
 var
    Key:char;
 begin
-  dmUtils.AdifAsciiTrim(edtSRXStr);
+  edtSRXStr.Text := dmUtils.NoNonAsciiChrs(edtSRXStr.Text, true);
+  edtSRXStr.SelStart:=length(edtSRXStr.Text);
   if ((chkLoc.Checked) and (MsgIs=1 ))then
   begin
    edtSRXStr.Text := dmUtils.StdFormatLocator(edtSRXStr.Text);
