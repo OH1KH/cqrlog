@@ -45,7 +45,6 @@ type
     procedure ZooMapClick(Sender: TObject);
   private
     { private declarations }
-    csWG : TRTLCriticalSection;
     procedure DrawFullMap;
     procedure DrawSubMap;
     procedure DrawGridLines(BCanvas: TCanvas; SubBase: boolean);
@@ -159,7 +158,6 @@ end;
 
 function TfrmWorkedGrids.RecordCount: string;
 begin
-  EnterCriticalSection(csWG);
   dmData.W1.Close;
   if dmData.trW1.Active then
     dmData.trW1.Rollback;
@@ -176,7 +174,6 @@ begin
   finally
     dmData.trW1.Rollback;
   end;
-  LeaveCriticalSection(csWG);
 end;
 
 function TfrmWorkedGrids.WkdMainGrid(loc, band, mode: String): integer;
@@ -191,7 +188,6 @@ var
   L4: String;
 
   Begin
-    EnterCriticalSection(csWG);
     if LocalDbg then Writeln('Start WkdMainGrid');
     WkdMainGrid := 0;
     L4:= copy(loc, 1, 4);
@@ -232,7 +228,6 @@ var
       dmData.trW.Rollback;
     end;
      if LocalDbg then  Writeln('WkdMainGrid is:', WkdMainGrid);
-     LeaveCriticalSection(csWG);
   end;
 
 function TfrmWorkedGrids.WkdGrid(loc, band, mode: String): integer;
@@ -251,7 +246,6 @@ var
   L4: String;
 
 begin
-  EnterCriticalSection(csWG);
   if LocalDbg then Writeln('Start WkdGrid');
   WkdGrid := 0;
   L4:= copy(loc, 1, 4);
@@ -302,7 +296,6 @@ begin
     dmData.trW.Rollback;
   end;
    if LocalDbg then  Writeln('WkdGrid is:', WkdGrid);
-   LeaveCriticalSection(csWG);
 end;
 
 function TfrmWorkedGrids.WkdCall(call, band, mode: string): integer;
@@ -316,7 +309,6 @@ var
   daylimit : String;
 
 begin
-  EnterCriticalSection(csWG);
   if LocalDbg then Writeln('Start WkdCall');
   //in case we were called from contest form open
   if ((frmContest.Showing) and ((frmContest.rbDupeCheck.Checked) or (frmContest.rbNoMode4Dupe.Checked)))
@@ -360,7 +352,6 @@ begin
       dmData.trW.Rollback;
     end;
   if LocalDbg then  Writeln('WkdCall is:', WkdCall);
-  LeaveCriticalSection(csWG);
 end;
 function TfrmWorkedGrids.WkdState(state, band, mode: string): integer;
 //returns 0=not wkd
@@ -373,7 +364,6 @@ var
   daylimit : String;
 
 begin
-  EnterCriticalSection(csWG);
   if LocalDbg then Writeln('Start WkdState');
   if cqrini.ReadBool('wsjt','wb4CCall', False) then
             daylimit := ' and qsodate >= '+QuotedStr(cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')) //default date check all qsos
@@ -410,7 +400,6 @@ begin
       dmData.trW.Rollback;
     end;
   if LocalDbg then  Writeln('WkdState is:', WkdState);
-  LeaveCriticalSection(csWG);
 end;
 
 //mark grid worked with confirmed status (red/green)
@@ -617,7 +606,6 @@ begin
   finally
     ImgStream.Free
   end;
-  InitCriticalSection(csWG);
   AutoUpdate.Enabled := False;
   AutoUpdate.Interval := 5000;
   WsMode.ItemIndex := -1;
@@ -663,7 +651,6 @@ begin
   cqrini.WriteBool('Worked_grids', 'ShowWkdOnly', ShoWkdOnly.Checked);
   dmUtils.SaveWindowPos(frmWorkedGrids);
   frmWorkedGrids.hide;
-  DoneCriticalSection(csWG);
 end;
 
 procedure TfrmWorkedGrids.SaveMapImageClose(Sender: TObject);
