@@ -1042,6 +1042,8 @@ type
     procedure edtPdfFilesExit(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure edtRigCountChange(Sender: TObject);
+    procedure edtRigCtldPathChange(Sender: TObject);
+    procedure edtRotCtldPathChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
     procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
@@ -2741,6 +2743,32 @@ procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
 begin
   cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
   InitRigCmb;                                             //load names and set currently edited rig
+end;
+
+procedure TfrmPreferences.edtRigCtldPathChange(Sender: TObject);
+var
+  rp:string;
+begin
+  cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
+  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
+
+  rp:=cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
+  if FileExistsUTF8(rp) then
+    dmUtils.LoadRigsToComboBox(IntToStr(cmbRadioNr.ItemIndex),rp,cmbModelRig);
+
+  TRXChanged := True
+
+end;
+
+procedure TfrmPreferences.edtRotCtldPathChange(Sender: TObject);
+begin
+ cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
+ if (FileExistsUTF8(edtRotCtldPath.Text)) then
+  begin
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT1', 'model', ''),edtRotCtldPath.Text,cmbModelRot1);
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT2', 'model', ''),edtRotCtldPath.Text,cmbModelRot2)
+  end;
+  TRXChanged := True
 end;
 
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
