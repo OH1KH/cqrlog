@@ -4559,11 +4559,22 @@ end;
 
 
 procedure TfrmNewQSO.edtCountyChange(Sender: TObject);   //works for all columns
+var
+  tmp, tmp1 :String;
+  caret     :longint;
 begin
   if (sender is Tedit) then
    begin
-    (Sender as Tedit).Text := dmUtils.NoNonAsciiChrs((Sender as Tedit).Text, true);
-    (Sender as Tedit).SelStart:= length((Sender as Tedit).Text);
+    writeln((Sender as Tedit).CaretPos.x);
+    tmp:= (Sender as Tedit).Text;
+    caret:=(Sender as Tedit).CaretPos.x;
+    tmp1:= dmUtils.NoNonAsciiChrs(tmp,true);
+    (Sender as Tedit).Text := tmp1;
+    if tmp <> tmp1 then
+      Begin
+        if caret<1 then caret:=1;
+       (Sender as Tedit).SelStart:= caret-1;
+      end;
    end;
 end;
 
