@@ -3,13 +3,12 @@ object frmChangelog: TfrmChangelog
   Height = 480
   Top = 275
   Width = 628
-  BorderStyle = bsDialog
   Caption = 'Changelog'
   ClientHeight = 480
   ClientWidth = 628
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30'
+  LCLVersion = '2.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 34
@@ -47,10 +46,14 @@ object frmChangelog: TfrmChangelog
     PrintSettings.MarginTop = 0.5
     PrintSettings.MarginRight = 0.5
     PrintSettings.MarginBottom = 0.5
+    PrintSettings.Preview.Left = 360
+    PrintSettings.Preview.Top = 225
+    PrintSettings.Preview.Width = 1080
+    PrintSettings.Preview.Height = 675
     TabOrder = 1
   end
   object IpFileDataProvider1: TIpFileDataProvider
-    left = 63
-    top = 35
+    Left = 63
+    Top = 35
   end
 end

@@ -1,7 +1,7 @@
 object frmContest: TfrmContest
-  Left = 473
+  Left = 461
   Height = 636
-  Top = 164
+  Top = 139
   Width = 827
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
@@ -378,8 +378,6 @@ object frmContest: TfrmContest
     Top = 6
     Width = 432
     Anchors = [akTop, akRight]
-    AutoComplete = True
-    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
     BorderSpacing.Top = 6
     ItemHeight = 0
     Items.Strings = (

@@ -4565,7 +4565,6 @@ var
 begin
   if (sender is Tedit) then
    begin
-    writeln((Sender as Tedit).CaretPos.x);
     tmp:= (Sender as Tedit).Text;
     caret:=(Sender as Tedit).CaretPos.x;
     tmp1:= dmUtils.NoNonAsciiChrs(tmp,true);

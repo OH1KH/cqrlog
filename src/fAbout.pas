@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, lclintf, ComCtrls;
+  StdCtrls, lclintf, ComCtrls, Grids;
 
 type
 
@@ -20,11 +20,13 @@ type
     Label1 : TLabel;
     Label2 : TLabel;
     Label3 : TLabel;
+    Label4: TLabel;
     Label5 : TLabel;
     lblLink : TLabel;
+    lblLink1: TLabel;
     lblVerze : TLabel;
-    mContributors : TMemo;
     PageControl1 : TPageControl;
+    sgContributors: TStringGrid;
     tabAbout : TTabSheet;
     tabContributors : TTabSheet;
     procedure btnChangelogClick(Sender: TObject);

@@ -739,9 +739,10 @@ begin
 end;
 
 procedure TfrmContest.cmbContestNameChange(Sender: TObject);
+
 begin
   cmbContestName.Caption:= dmUtils.NoNonAsciiChrs(cmbContestName.Caption,True);
-  cmbContestName.SelStart:=length(cmbContestName.Caption);
+  //cmbContestName.SelStart:=length(cmbContestName.Caption);
 end;
 
 procedure TfrmContest.cmbContestNameEnter(Sender: TObject);
