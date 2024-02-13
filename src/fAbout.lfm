@@ -987,15 +987,15 @@ object frmAbout: TfrmAbout
         Left = 199
         Height = 17
         Top = 186
-        Width = 123
+        Width = 119
         BorderSpacing.Top = 3
-        Caption = 'https://t.me/cqrlog.'
+        Caption = 'https://t.me/cqrlog'
         Font.Color = clBlue
         Font.Style = [fsUnderline]
         ParentColor = False
         ParentFont = False
-        OnClick = lblLinkClick
-        OnMouseEnter = lblLinkMouseEnter
+        OnClick = lblLink1Click
+        OnMouseEnter = lblLink1MouseEnter
       end
     end
     object tabContributors: TTabSheet

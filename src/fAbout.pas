@@ -31,6 +31,8 @@ type
     tabContributors : TTabSheet;
     procedure btnChangelogClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure lblLink1Click(Sender: TObject);
+    procedure lblLink1MouseEnter(Sender: TObject);
     procedure lblLinkClick(Sender: TObject);
     procedure lblLinkMouseEnter(Sender: TObject);
   private
@@ -72,6 +74,16 @@ end;
 procedure TfrmAbout.FormShow(Sender: TObject);
 begin
   lblVerze.Caption := cVERSION + '  ' + cBUILD_DATE
+end;
+
+procedure TfrmAbout.lblLink1Click(Sender: TObject);
+begin
+   openURl(lblLink1.Caption)
+end;
+
+procedure TfrmAbout.lblLink1MouseEnter(Sender: TObject);
+begin
+   lblLink1.Cursor := crHandPoint
 end;
 
 end.
