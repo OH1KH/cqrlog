@@ -950,17 +950,20 @@ object frmAbout: TfrmAbout
         TabOrder = 1
       end
       object lblVerze: TLabel
+        AnchorSideLeft.Control = Image1
+        AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label1
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = Label1
         AnchorSideRight.Side = asrBottom
-        Left = 269
+        Left = 146
         Height = 18
         Top = 86
-        Width = 163
+        Width = 286
         Alignment = taRightJustify
-        Anchors = [akTop, akRight]
+        Anchors = [akTop, akLeft, akRight]
         AutoSize = False
+        BorderSpacing.Left = 12
         BorderSpacing.Top = 16
         Caption = 'lblVerze'
         ParentColor = False
