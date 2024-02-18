@@ -12,7 +12,7 @@ object frmLoTWExport: TfrmLoTWExport
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.2.6.0'
   object pgLoTWExport: TPageControl
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -77,7 +77,7 @@ object frmLoTWExport: TfrmLoTWExport
         Width = 460
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 6
-        ClientHeight = 87
+        ClientHeight = 103
         ClientWidth = 458
         TabOrder = 1
         object Label1: TLabel
@@ -139,7 +139,7 @@ object frmLoTWExport: TfrmLoTWExport
           AnchorSideTop.Side = asrCenter
           Left = 14
           Height = 23
-          Top = 16
+          Top = 8
           Width = 260
           BorderSpacing.Left = 14
           Caption = 'Mark QSOs as exported after export'
@@ -376,13 +376,13 @@ object frmLoTWExport: TfrmLoTWExport
   object dlgSave: TSaveDialog
     DefaultExt = '.adi'
     Filter = 'ADIF|*.adi;*.ADI'
-    left = 54
-    top = 350
+    Left = 54
+    Top = 350
   end
   object tmrLoTW: TTimer
     Enabled = False
     OnTimer = tmrLoTWTimer
-    left = 148
-    top = 388
+    Left = 148
+    Top = 388
   end
 end

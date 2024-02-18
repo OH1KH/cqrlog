@@ -145,11 +145,15 @@ begin
       if Pos('<!-- .UPL.  accepted -->',l.Text) > 0 then
       begin
         mStat.Lines.Add('Uploading was successful');
+        mStat.Lines.Add('---------');
+        mStat.Lines.Add(' ');
         suc := True
       end
       else begin
         mStat.Lines.Add('File was rejected with this error:');
-        mStat.Lines.Add(l.Text)
+        mStat.Lines.Add(l.Text);
+        mStat.Lines.Add('---------');
+        mStat.Lines.Add(' ');
       end;
       if dmData.DebugLevel >= 1 then Writeln(l.Text);
     end
@@ -195,6 +199,10 @@ begin
     m.Free
   end;
   btnUpload.Enabled:=true; //allow only one click
+  mStat.SelStart:=length(mStat.Text);
+  mStat.SelLength:=0;
+  mStat.Refresh;
+  Application.ProcessMessages;
 end;
 
 procedure TfrmLoTWExport.mStatChange(Sender: TObject);
@@ -227,17 +235,30 @@ begin
       OutputLines.Free;
     end;
 
-    if Aprocess.ExitCode = 0 then begin
-      mStat.Lines.Add('Signed ...');
-      mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
+    if Aprocess.ExitCode = 0 then
+      begin
+       mStat.Lines.Add('Signed ...');
+       mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
                       ' pressing Upload button');
-      btnUpload.Enabled := True;
-    end;
+       btnUpload.Enabled := True;
+      end
+     else
+      Begin
+        mStat.Lines.Add('Sign failed somehow. The exit code was '+IntToStr(Aprocess.ExitCode)+ ' it should be 0 (zero)');
+        mStat.Lines.Add('Try to find reason for this!');
+      end;
+    mStat.Lines.Add('---------');
+    mStat.Lines.Add(' ');
+
     grbWebExport.Enabled := True;
     grbTqsl.Enabled      := True;
     pnlUpload.Enabled    := True;
     pnlClose.Enabled     := True;
     tmrLoTW.Enabled      := False;
+    mStat.SelStart:=length(mStat.Text);
+    mStat.SelLength:=0;
+    mStat.Refresh;
+    Application.ProcessMessages;
   end
 end;
 
@@ -332,7 +353,7 @@ begin
   mStat.Lines.Add('Export to the adif file completed.');
   mStat.Lines.Add('File:');
   mStat.Lines.Add(FileName);
-  mStat.Lines.Add('Signing adif file ...');
+  mStat.Lines.Add('Signing adif file, running (one parameter shown on each line):');
   Application.ProcessMessages;
 
   index:=0;
@@ -349,6 +370,8 @@ begin
   paramList.Free;
   AProcess.Options := [poUsePipes];
   if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+  mStat.Lines.Add(AProcess.Executable);
+  mStat.Lines.Add(AProcess.Parameters.Text);
   AProcess.Execute;
 
   grbWebExport.Enabled := False;
