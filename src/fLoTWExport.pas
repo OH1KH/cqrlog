@@ -109,6 +109,7 @@ var
   url  : String = '';
 begin
   btnUpload.Enabled:=false; //allow only one click
+  btnExportSign.Enabled:=True;
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
@@ -338,6 +339,7 @@ begin
   end;
   mStat.Lines.Add('Starting export to adif ...');
   mStat.Repaint;
+  btnExportSign.Enabled:=false;
   res := ExportToAdif;
   if res > 1 then
   begin
