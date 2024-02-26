@@ -94,6 +94,7 @@ type
     cbTxLo: TCheckBox;
     cbRxLo: TCheckBox;
     cbSpotRX: TCheckBox;
+    cbSplitTX: TCheckBox;
     chkAutoMode: TCheckBox;
     cmbPropagation : TComboBox;
     cmbSatellite : TComboBox;
@@ -146,6 +147,8 @@ type
     MenuItem63: TMenuItem;
     MenuItem84: TMenuItem;
     MenuItem94 : TMenuItem;
+    MenuItem95: TMenuItem;
+    MenuItem96: TMenuItem;
     mnueQSLView: TMenuItem;
     mnuRemoteModeADIF: TMenuItem;
     mnuReminder: TMenuItem;
@@ -413,6 +416,7 @@ type
     procedure acPropExecute(Sender: TObject);
     procedure btnClearSatelliteClick(Sender : TObject);
     procedure cbRxLoChange(Sender: TObject);
+    procedure cbSplitTXChange(Sender: TObject);
     procedure cbTxLoChange(Sender: TObject);
     procedure cbSpotRXChange(Sender: TObject);
     procedure chkAutoModeChange(Sender: TObject);
@@ -1348,6 +1352,7 @@ begin
   cbSpotRX.Checked := cqrini.ReadBool('DXCluster', 'SpotRX', False);
 
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
+  cbSplitTX.Checked:= cqrini.ReadBool('NewQSO', 'UseSplitTX', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
   cbRxLo.Checked := cqrini.ReadBool('NewQSO', 'UseRXLO', False);
   edtRXLO.Text   := cqrini.ReadString('NewQSO', 'RXLO', '');
@@ -4806,6 +4811,12 @@ begin
     edtRXFreq.Text := '';
 end;
 
+procedure TfrmNewQSO.cbSplitTXChange(Sender: TObject);
+begin
+  cqrini.WriteBool('NewQSO', 'UseSplitTX', cbSplitTX.Checked);
+  frmTRXControl.SetSplitTXRead(cbSplitTX.Checked);
+end;
+
 procedure TfrmNewQSO.cbTxLoChange(Sender: TObject);
 begin
   cqrini.WriteBool('NewQSO', 'UseTXLO', cbTxLo.Checked);
@@ -6163,6 +6174,7 @@ procedure TfrmNewQSO.pgDetailsChange(Sender: TObject);
 begin
   cqrini.WriteInteger('NewQSO','DetailsTabIndex', pgDetails.TabIndex);
 end;
+
 
 procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
 var

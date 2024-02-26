@@ -191,6 +191,7 @@ type
     procedure CloseRigs;
     procedure Split(up : Integer);
     procedure DisableSplit;
+    procedure SetSplitTXRead(b:boolean);
     procedure ClearRIT;
     procedure DisableRitXit;
     procedure LoadUsrButtonCaptions;
@@ -243,7 +244,7 @@ end;
 procedure TfrmTRXControl.SynTRX;
 var
   b : String = '';
-  f : Double;
+  f,fs : Double;
   m : String;
   oldG : Integer;
   mG : Integer;
@@ -253,6 +254,7 @@ begin
   if Assigned(radio) then
   begin
     f := radio.GetFreqMHz;
+    if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) then fs:= radio.GetSplitTXFreqMHz;
     m := radio.GetModeOnly;
     if cqrini.ReadBool('NewQSO', 'UseTXLO', False) then
     begin
@@ -267,6 +269,8 @@ begin
         if not frmNewQSO.cbOffline.Checked then
           frmNewQSO.edtRXFreq.Text := FloatToStr((f + rxlo));
     end;
+     if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) then
+         f:=fs
   end
   else
     f := 0;
@@ -1549,6 +1553,11 @@ end;
 procedure TfrmTRXControl.DisableSplit;
 begin
   if Assigned(radio) then  radio.DisableSplit;
+end;
+
+procedure TfrmTRXControl.SetSplitTXRead(b:boolean);
+begin
+  if Assigned(radio) then  radio.GetSplitTX:=b;
 end;
 
 function TfrmTRXControl.GetFreqHz : Double;

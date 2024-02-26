@@ -29,6 +29,7 @@ type TRigControl = class
     fRunRigCtld  : Boolean;
     fMode        : TRigMode;
     fFreq        : Double;
+    fSFreq       : Double;
     fRigPoll     : Word;
     fRigCtldPort : Word;
     fLastError   : String;
@@ -49,6 +50,7 @@ type TRigControl = class
     fCompoundPoll: Boolean;
     fVoice       : Boolean;
     fIsNewHamlib : Boolean;
+    fGetSplitTX  : Boolean;
 
     AllowCommand        : integer; //for command priority
     ErrorRigctldConnect : Boolean;
@@ -116,9 +118,10 @@ public
 
     //RX offset for transvertor in MHz
     property RXOffset : Double read fRXOffset write fRXOffset;
-
     //TX offset for transvertor in MHz
     property TXOffset : Double read fTXOffset write fTXOffset;
+    //TX freq from split vfo
+    property GetSplitTX : Boolean read fGetSplitTX write  fGetSplitTX;
     //Char to use between compound commands. Default is space, can be also LineEnding that breaks compound
     property CompoundPoll : Boolean read fCompoundPoll  write  fCompoundPoll;
 
@@ -129,6 +132,7 @@ public
     function  GetFreqHz   : Double;
     function  GetFreqKHz  : Double;
     function  GetFreqMHz  : Double;
+    function  GetSplitTXFreqMHz  : Double;
     function  GetModePass(vfo : TVFO) : TRigMode;  overload;
     function  GetModeOnly(vfo : TVFO) : String; overload;
     function  GetFreqHz(vfo : TVFO)   : Double; overload;
@@ -177,6 +181,7 @@ begin
   fMorse       := true;
   fVoice       := false;
   fIsNewHamlib := false;
+  fGetSplitTX  := false;  //poll rig polls also split TX vfo
   PowerOffIssued := false;
   fCompoundPoll:=True;
   if DebugMode then Writeln('All objects created');
@@ -455,6 +460,10 @@ function TRigControl.GetFreqMHz : Double;
 begin
   result := (fFreq + fRXOffset*1000000) / 1000000
 end;
+function TRigControl.GetSplitTXFreqMHz : Double;
+begin
+  result := fSFreq / 1000000
+end;
 
 function TRigControl.GetModePass(vfo : TVFO) : TRigMode;
 var
@@ -565,6 +574,18 @@ begin
            end
           else
            fFReq := 0;
+          Hit:=true;
+          AllowCommand:=1; //check pending commands
+       end;
+
+      if ((b[0]='TX') and (b[1]='FREQUENCY:') )then    //get split TX freq
+       Begin
+         if TryStrToFloat(b[2],f) then
+           Begin
+             fSFReq := f;
+           end
+          else
+           fSFReq := 0;
           Hit:=true;
           AllowCommand:=1; //check pending commands
        end;
@@ -735,7 +756,7 @@ var
 procedure DoRigPoll;
 var
    f:integer;
-   s:array[1..3] of string=('','','');
+   s:array[1..4] of string=('','','','');
 
 begin
  if PowerOffIssued then exit;
@@ -744,14 +765,16 @@ begin
      if fGetVfo then
         begin
           s[1]:='+f'+VfoStr;
-          s[2]:='+m'+VfoStr;
-          s[3]:='+v'+VfoStr;
+          if fGetSplitTX then s[2]:='+i'+VfoStr;
+          s[3]:='+m'+VfoStr;
+          s[4]:='+v'+VfoStr;
           //cmd := '+f'+VfoStr+' +m'+VfoStr+' +v'+VfoStr+LineEnding //chk this with rigctld v3.1
         end
       else
         begin
           s[1]:='+f'+VfoStr;
-          s[2]:='+m'+VfoStr;
+          if fGetSplitTX then s[2]:='+i'+VfoStr;
+          s[3]:='+m'+VfoStr;
           //cmd := '+f'+VfoStr+' +m'+VfoStr+LineEnding //do not ask vfo if rig can't
         end
 
@@ -761,14 +784,16 @@ begin
      if fGetVfo then
         begin
           s[1]:='+f'+VfoStr;
-          s[2]:='+m'+VfoStr;
-          s[3]:='+v';
+          if fGetSplitTX then s[2]:='+i'+VfoStr;
+          s[3]:='+m'+VfoStr;
+          s[4]:='+v';
           //cmd := '+f'+VfoStr+' +m'+VfoStr+' +v'+LineEnding
         end
       else
       begin
           s[1]:='+f'+VfoStr;
-          s[2]:='+m'+VfoStr;
+          if fGetSplitTX then s[2]:='+i'+VfoStr;
+          s[3]:='+m'+VfoStr;
           //cmd := '+f'+VfoStr+' +m'+VfoStr+LineEnding //do not ask vfo if rig can't
         end
    end;
@@ -777,12 +802,12 @@ begin
  if fCompoundPoll then
        Begin
         if DebugMode then
-           Write(LineEnding+'Poll Sending:'+s[1]+' '+s[2]+' '+s[3]+LineEnding);
-        RigctldConnect.SendMessage(s[1]+' '+s[2]+' '+s[3]+LineEnding);
+           Write(LineEnding+'Poll Sending:'+s[1]+' '+s[2]+' '+s[3]+' '+s[4]+LineEnding);
+        RigctldConnect.SendMessage(s[1]+' '+s[2]+' '+s[3]+' '+s[4]+LineEnding);
        end
       else
         Begin
-          for f:=1 to 3 do
+          for f:=1 to 4 do
             Begin
               if DebugMode and (s[f]<>'') then
                  Write(LineEnding+'Poll Sending:'+s[f]+LineEnding);

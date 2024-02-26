@@ -3125,11 +3125,11 @@ object frmNewQSO: TfrmNewQSO
           Height = 163
           Top = 368
           Width = 759
-          ActivePage = tabCallStat
+          ActivePage = tabLOConfig
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 3
-          TabIndex = 1
+          TabIndex = 3
           TabOrder = 27
           OnChange = pgDetailsChange
           object tabDXCCStat: TTabSheet
@@ -3402,6 +3402,20 @@ object frmNewQSO: TfrmNewQSO
               BorderSpacing.Left = 6
               Caption = 'MHz'
               ParentColor = False
+            end
+            object cbSplitTX: TCheckBox
+              AnchorSideLeft.Control = Label37
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = cbTxLo
+              AnchorSideTop.Side = asrCenter
+              Left = 249
+              Height = 23
+              Top = 16
+              Width = 134
+              BorderSpacing.Left = 24
+              Caption = 'Use split TX freq'
+              OnChange = cbSplitTXChange
+              TabOrder = 4
             end
           end
         end

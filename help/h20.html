@@ -438,7 +438,11 @@
     the QSO window. If the RX LO is activated the RX frequency is derived 
     from the TX frequency and synchronized to the field "RX frequency" in 
     the "Satellite" tab.<br><br>
-    <img src="img/h123.png" border="0"><br><br>
+    Other possibility is to use rigctld command "get_split_freq" to get Split TX frequency from rig if it supports that.
+    <br>Then checking <b>Use RX LO:</b> with value <b> 0.0</b> and checking <b>
+    Use Split TX freq</b> will set TX vfo freq as " NewQSO/frequency" and RX vfo freq as "RX frequency" in Satellite tab.
+    <br>That way also crossband qsos elsewhere than satellite bands can be saved.<br><br>
+    <img src="img/h123.png" border="0">&nbsp;&nbsp;<img src="img/h123b.png" border="0"><br><br>
     If a call sign is entered, the grayline map displays a line from your QTH to
     the target point.<br><br>
 
