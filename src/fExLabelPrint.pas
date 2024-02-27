@@ -222,14 +222,12 @@ begin
 
       if dmUtils.IsQSLViaValid(qsl_via) then
       begin
-        writeln('True:',qsl_via);
         dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(qsl_via);
         dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
                                                                      dmData.qCQRLOG.FieldByName('qsodate').AsDateTime);
         dmData.Q.ParamByName('qsl_via').AsString := qsl_via
       end
       else begin
-        writeln('False:',qsl_via);
         qsl_via := '';
         dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(dmData.qCQRLOG.FieldByName('callsign').AsString);
         dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
