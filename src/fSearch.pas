@@ -63,17 +63,18 @@ begin
   cmbSearch.Items.Add('Callsign');
   cmbSearch.Items.Add('Name');
   cmbSearch.Items.Add('QTH');
-  if dmData.IsFilter then
-    cmbSearch.ItemIndex := 1
-  else
-    LoadSettings;
+ // if dmData.IsFilter then
+ //   cmbSearch.ItemIndex := 1
+ // else
+  LoadSettings;
   edtText.SetFocus;
   cmbSearchChange(nil);
   if dmData.IsFilter and (not dmData.IsSFilter) then
   begin
-    mHelp.Visible := False;
-    Height := Height-90;
-    grbOptions.Enabled := False
+    mHelp.Visible := True;
+    Height := Height+90;
+    chkSortByDate.Enabled := False;
+    chkSortByDate.Checked := False;
   end
 end;
 
@@ -85,6 +86,16 @@ end;
 procedure TfrmSearch.btnSearchClick(Sender: TObject);
 var
   sql : String = '';
+  c   : integer;
+
+procedure NoneFound;
+Begin
+  ShowMessage(edtText.Text + ' not found');
+  frmMain.acCancelFilterExecute(nil);
+  sql:='';
+  Close;
+end;
+
 begin
   SaveSettings;
   if edtText.Text = '' then
@@ -100,11 +111,12 @@ begin
           begin
             if  dmData.QueryLocate(dmData.qCQRLOG,'qsodate',edtText.Text,True) then
             begin
+              frmMain.sbMain.Panels[2].Text := 'FSearch is ACTIVE!';
               Close;
               exit
             end
             else
-              ShowMessage(edtText.Text + ' not found')
+              NoneFound
           end
           else begin
             sql := sql + ' where qsodate = '+ QuotedStr(edtText.Text);
@@ -115,13 +127,14 @@ begin
     1 : begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
-            if dmData.QueryLocate(dmData.qCQRLOG,'callsign',edtText.Text,False) then
+            if dmData.QueryLocate(dmData.qCQRLOG,'callsign',edtText.Text,False,not chkInclude.Checked) then
             begin
+              frmMain.sbMain.Panels[2].Text := 'FSearch is ACTIVE!';
               Close;
               exit
             end
             else
-              ShowMessage(edtText.Text + ' not found')
+              NoneFound
           end
           else begin
             if chkInclude.Checked then
@@ -135,13 +148,14 @@ begin
     2 : begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
-            if dmData.QueryLocate(dmData.qCQRLOG,'name',edtText.Text,False) then
+            if dmData.QueryLocate(dmData.qCQRLOG,'name',edtText.Text,False,not chkInclude.Checked) then
             begin
+              frmMain.sbMain.Panels[2].Text := 'FSearch is ACTIVE!';
               Close;
               exit
             end
             else
-              ShowMessage(edtText.Text + ' not found')
+              NoneFound
           end
           else begin
             if chkInclude.Checked then
@@ -155,13 +169,14 @@ begin
     3 : begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
-            if dmData.QueryLocate(dmData.qCQRLOG,'qth',edtText.Text,False) then
+            if dmData.QueryLocate(dmData.qCQRLOG,'qth',edtText.Text,False,not chkInclude.Checked) then
             begin
+              frmMain.sbMain.Panels[2].Text := 'FSearch is ACTIVE!';
               Close;
               exit
             end
             else
-              ShowMessage(edtText.Text + ' not found')
+              NoneFound
           end
           else begin
             if chkInclude.Checked then
@@ -174,30 +189,45 @@ begin
         end
   end; //case
 
-  dmData.Q.Close;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := sql + ' LIMIT 1';
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open;
-  if dmData.Q.Fields[0].AsInteger = 0 then
-    ShowMessage(edtText.Text + ' not found')
-  else begin
-    dmData.qCQRLOG.DisableControls;
+  if sql<>'' then
+   begin
+     writeln(sql);
     try
+      dmData.qCQRLOG.DisableControls;
+      dmData.Q.Close;
+      if dmData.trQ.Active then dmData.trQ.Rollback;
+      dmData.Q.SQL.Text := sql + ' LIMIT 1';
+      dmData.trQ.StartTransaction;
+      dmData.Q.Open;
+      c:= dmData.Q.Fields[0].AsInteger;
       dmData.qCQRLOG.Close;
       dmData.trCQRLOG.Rollback;
-      dmData.qCQRLOG.SQL.Text := sql;
-      dmData.trCQRLOG.StartTransaction;
-      dmData.qCQRLOG.Open;
-      Close
     finally
-      dmData.IsFilter  := True;
-      dmData.IsSFilter := True;
-      frmMain.RefreshQSODXCCCount;
       dmData.qCQRLOG.EnableControls
-    end
-  end;
-  frmMain.CheckAttachment
+    end;
+
+    if c = 0 then
+     NoneFound
+    else
+     begin
+      dmData.qCQRLOG.DisableControls;
+      try
+        dmData.qCQRLOG.Close;
+        dmData.trCQRLOG.Rollback;
+        dmData.qCQRLOG.SQL.Text := sql;
+        dmData.trCQRLOG.StartTransaction;
+        dmData.qCQRLOG.Open;
+      finally
+        dmData.IsFilter  := True;
+        dmData.IsSFilter := True;
+        frmMain.sbMain.Panels[2].Text := 'Search is ACTIVE!';
+        frmMain.RefreshQSODXCCCount;
+        dmData.qCQRLOG.EnableControls;
+        Close
+      end
+     end;
+    frmMain.CheckAttachment;
+   end;
 end;
 
 procedure TfrmSearch.cmbSearchChange(Sender: TObject);

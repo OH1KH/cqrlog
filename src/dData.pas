@@ -1788,7 +1788,7 @@ begin
           qry.Next
       end
       else begin
-        if Pos(UTF8UpperCase(Value),UTF8UpperCase(qry.FieldByName(Column).AsVariant))=1 then
+        if Pos(UTF8UpperCase(Value),UTF8UpperCase(qry.FieldByName(Column).AsVariant))>0 then
         begin
           Result := True;
           break

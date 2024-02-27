@@ -21,6 +21,7 @@ type
     btnExport: TButton;
     btnHelp: TButton;
     btnExportFieldsPref : TButton;
+    btnOpenExpFile: TButton;
     Cancel: TButton;
     chkKeepCsvStructure: TCheckBox;
     chkRemoveSep: TCheckBox;
@@ -40,6 +41,7 @@ type
     rbOwnRemarks: TRadioButton;
     dlgSave: TSaveDialog;
     procedure btnExportFieldsPrefClick(Sender : TObject);
+    procedure btnOpenExpFileClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure btnExportClick(Sender: TObject);
@@ -220,12 +222,14 @@ begin
 
       if dmUtils.IsQSLViaValid(qsl_via) then
       begin
+        writeln('True:',qsl_via);
         dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(qsl_via);
         dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
                                                                      dmData.qCQRLOG.FieldByName('qsodate').AsDateTime);
         dmData.Q.ParamByName('qsl_via').AsString := qsl_via
       end
       else begin
+        writeln('False:',qsl_via);
         qsl_via := '';
         dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(dmData.qCQRLOG.FieldByName('callsign').AsString);
         dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
@@ -644,9 +648,13 @@ begin
       dmData.trQ1.Commit;
     dmData.trQ.Rollback;
     dmData.DropQSLTmpTable;
+
     lblProgress.Caption := 'Complete!';
     CloseFile(f);
     dmData.RefreshMainDatabase();
+
+    Cancel.Caption:='Close';
+    btnOpenExpFile.Visible:=True;
 
     if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
      dmLogUpload.EnableOnlineLogSupport;
@@ -690,6 +698,11 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmExLabelPrint.btnOpenExpFileClick(Sender: TObject);
+begin
+  dmUtils.ViewTextFile(edtFile.Text);
 end;
 
 procedure TfrmExLabelPrint.edtRemarksEnter(Sender: TObject);

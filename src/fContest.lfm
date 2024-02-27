@@ -582,7 +582,7 @@ object frmContest: TfrmContest
       'UKRAINIAN DX'
       'UKSMG-6M-MARATHON'
       'UKSMG-SUMMER-ES'
-      'URE-DX  (import-only)'
+      'URE-DX (import-only)'
       'US-COUNTIES-QSO'
       'UT-QSO-PARTY'
       'VA-QSO-PARTY'

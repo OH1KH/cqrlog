@@ -487,6 +487,7 @@ begin
   cmbProfile.Items.Insert(0,'Any profile');
   cmbProfile.ItemIndex := 0;
   DirectLoad:=False;
+  dmData.IsSFilter:=false;
 end;
 //actually form create and show are common procedure as filter is opened in showModal and it always
 //creates and shows itself in every opening

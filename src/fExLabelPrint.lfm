@@ -14,15 +14,15 @@ object frmExLabelPrint: TfrmExLabelPrint
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.6.0'
   object Label1: TLabel
     AnchorSideLeft.Control = gchkExport
     AnchorSideTop.Control = edtQSOsToLabel
     AnchorSideTop.Side = asrCenter
     Left = 5
-    Height = 15
+    Height = 17
     Top = 139
-    Width = 36
+    Width = 34
     BorderSpacing.Top = 11
     Caption = 'Print '
     ParentColor = False
@@ -32,10 +32,10 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtQSOsToLabel
     AnchorSideTop.Side = asrCenter
-    Left = 96
-    Height = 15
+    Left = 94
+    Height = 17
     Top = 139
-    Width = 121
+    Width = 119
     BorderSpacing.Left = 4
     Caption = 'QSOs on one label'
     ParentColor = False
@@ -46,12 +46,14 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 20
-    Top = 456
+    Top = 457
     Width = 412
     Alignment = taCenter
     AutoSize = False
     BorderSpacing.Top = 5
+    Font.Color = clGreen
     ParentColor = False
+    ParentFont = False
   end
   object gchkExport: TCheckGroup
     AnchorSideLeft.Control = chkAllQSOs
@@ -93,7 +95,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 97
-    Top = 302
+    Top = 303
     Width = 412
     Caption = ' Export to '
     ClientHeight = 79
@@ -106,7 +108,7 @@ object frmExLabelPrint: TfrmExLabelPrint
       AnchorSideRight.Side = asrBottom
       Left = 320
       Height = 25
-      Top = 42
+      Top = 43
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 3
@@ -119,11 +121,24 @@ object frmExLabelPrint: TfrmExLabelPrint
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = GroupBox1
       Left = 16
-      Height = 33
+      Height = 34
       Top = 6
       Width = 379
       BorderSpacing.Top = 6
       TabOrder = 1
+    end
+    object btnOpenExpFile: TButton
+      AnchorSideLeft.Control = edtFile
+      AnchorSideTop.Control = edtBrowse
+      AnchorSideTop.Side = asrCenter
+      Left = 16
+      Height = 25
+      Top = 43
+      Width = 197
+      Caption = 'Open exported file'
+      OnClick = btnOpenExpFileClick
+      TabOrder = 2
+      Visible = False
     end
   end
   object edtQSOsToLabel: TEdit
@@ -131,8 +146,8 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gchkExport
     AnchorSideTop.Side = asrBottom
-    Left = 44
-    Height = 33
+    Left = 42
+    Height = 34
     Top = 130
     Width = 48
     BorderSpacing.Left = 3
@@ -147,7 +162,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 136
-    Top = 166
+    Top = 167
     Width = 412
     BorderSpacing.Top = 3
     Caption = ' Remarks '
@@ -160,7 +175,7 @@ object frmExLabelPrint: TfrmExLabelPrint
       Left = 9
       Height = 23
       Top = 3
-      Width = 203
+      Width = 198
       BorderSpacing.Left = 9
       BorderSpacing.Top = 3
       Caption = 'Print ''Comment(s) to QSO'''
@@ -185,7 +200,7 @@ object frmExLabelPrint: TfrmExLabelPrint
       AnchorSideTop.Control = rbOwnRemarks
       AnchorSideTop.Side = asrBottom
       Left = 17
-      Height = 33
+      Height = 34
       Top = 52
       Width = 376
       BorderSpacing.Top = 3
@@ -198,8 +213,8 @@ object frmExLabelPrint: TfrmExLabelPrint
       AnchorSideTop.Side = asrBottom
       Left = 9
       Height = 23
-      Top = 86
-      Width = 262
+      Top = 87
+      Width = 257
       BorderSpacing.Top = 1
       Caption = 'Remove separator (;) from remarks'
       TabOrder = 3
@@ -211,8 +226,8 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 23
-    Top = 402
-    Width = 215
+    Top = 403
+    Width = 208
     BorderSpacing.Top = 3
     Caption = 'Mark QSLs sent after export'
     TabOrder = 4
@@ -223,7 +238,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 11
     Height = 25
-    Top = 488
+    Top = 489
     Width = 75
     BorderSpacing.Left = 6
     BorderSpacing.Top = 12
@@ -238,7 +253,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 174
     Height = 25
-    Top = 488
+    Top = 489
     Width = 75
     BorderSpacing.Top = 12
     Caption = 'Help'
@@ -252,7 +267,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideRight.Side = asrBottom
     Left = 336
     Height = 25
-    Top = 488
+    Top = 489
     Width = 75
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 12
@@ -268,7 +283,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     Left = 5
     Height = 23
     Top = 3
-    Width = 131
+    Width = 127
     BorderSpacing.Left = 5
     BorderSpacing.Top = 3
     Caption = 'Export all QSOs'
@@ -280,9 +295,9 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtQSOsToLabel
     AnchorSideTop.Side = asrCenter
-    Left = 233
+    Left = 229
     Height = 25
-    Top = 134
+    Top = 135
     Width = 184
     BorderSpacing.Left = 16
     Caption = 'Choose fields for export'
@@ -295,8 +310,8 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 23
-    Top = 428
-    Width = 149
+    Top = 429
+    Width = 146
     BorderSpacing.Top = 3
     Caption = 'Keep csv structure'
     TabOrder = 10

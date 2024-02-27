@@ -109,7 +109,6 @@ type
     function CabrilloPower(power: integer): String;
     procedure saveCabLay(filename:string);
     procedure loadCabLay(filename:string);
-    procedure ViewFile(f:string);
   public
     { public declarations }
   end;
@@ -164,26 +163,11 @@ begin
   btnResultFile.Visible:=False;
 end;
 
-procedure TfrmCabrilloExport.ViewFile(f:string);
-var
-  prg: string;
-begin
-  try
-    prg := cqrini.ReadString('ExtView', 'txt', '');
-    if prg<>'' then
-      dmUtils.RunOnBackground(prg + ' ' + AnsiQuotedStr(f, '"'))
-     else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
-  finally
-   //done
-  end;
-
-end;
-
 procedure TfrmCabrilloExport.lblCabErrorClick(Sender: TObject);
 begin
   if  lblCabError.Font.Color = clRed then
     Begin
-      ViewFile('/tmp/CabrilloReject.log');
+      dmUtils.ViewTextFile('/tmp/CabrilloReject.log');
     end;
 end;
 
@@ -323,7 +307,7 @@ end;
 
 procedure TfrmCabrilloExport.btnResultFileClick(Sender: TObject);
 Begin
-  ViewFile(edtCabFileName.Text);
+  dmUtils.ViewTextFile(edtCabFileName.Text);
 end;
 
 procedure TfrmCabrilloExport.cmbCabContestNameChange(Sender: TObject);

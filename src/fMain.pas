@@ -672,7 +672,6 @@ begin
   tmp   := '';
   sDate := '';
   dmUtils.DateInRightFormat(now , tmp, sDate);
-  //sbMain.Panels[0].Text :=sDate;              //why we have 2 timers for showing date in panel???
   sbMain.Panels[0].Text :=uVersion.cBUILD_DATE;
 end;
 
@@ -2294,7 +2293,6 @@ begin
   lblLongest.Caption := '';
 
   sbMain.Panels[1].Text := 'Ver. ' + dmData.VersionString;
-  sbMain.Panels[1].Width := 140;
   tmrTime.Enabled := True;
 
   ShowFields;

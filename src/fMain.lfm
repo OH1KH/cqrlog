@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = 208
+  Left = 209
   Height = 669
-  Top = 41
+  Top = 44
   Width = 986
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -170,22 +170,21 @@ object frmMain: TfrmMain
     Width = 986
     Panels = <    
       item
-        Text = 'QSO:'
+        Width = 100
+      end    
+      item
         Width = 150
       end    
       item
-        Width = 100
+        Width = 140
       end    
       item
-        Width = 100
-      end    
-      item
-        Width = 100
+        Width = 130
       end    
       item
         Alignment = taRightJustify
         BidiMode = bdRightToLeft
-        Width = 50
+        Width = 100
       end>
     SimplePanel = False
   end

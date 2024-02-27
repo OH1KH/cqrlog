@@ -238,6 +238,7 @@ type
     procedure ShowStatistic(ref_adif,old_stat_adif:Word; g:TStringGrid; call:String='');
     procedure KeyInLoc(loc:string; var key:char);
     procedure AdifAsciiTrim(var col:TEdit);
+    procedure ViewTextFile(f:string);
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
@@ -3388,10 +3389,32 @@ end;
 function TdmUtils.IsQSLViaValid(Text: string): boolean;
 begin
   Result :=false;
+  Text:=trim(uppercase(Text)); //this it should be already, but to be sure
   if Text='' then exit; //do not allow empty RegExp
+  if length(Text)>20 then exit; //cant be callsign.
+  if (Text[1]='Q') or (Text[1]='0') or (Text[1]='1')
+    or ((Text[1] in ['0'..'9']) and (Text[2] in ['0'..'9']))  then exit; //start can not be Q,0,1 or two numbers (by ITU)
+  if not (
+      ((Text[1] in ['0'..'9']) and (Text[2] in ['A'..'Z']) and (Text[3] in ['0'..'9']) )  //4X1...
+   or ((Text[1] in ['0'..'9']) and (Text[2] in ['A'..'Z']) and (Text[3] in ['A'..'Z']) and (Text[4] in ['0'..'9']) )  //3DA1...
+   or ((Text[1] in ['A'..'Z']) and (Text[2] in ['A'..'Z']) and (Text[3] in ['0'..'9']) )  //OH1...
+   or ((Text[1] in ['A'..'Z']) and (Text[2] in ['0'..'9']) and (Text[3] in ['A'..'Z']) )  //M9M
+   or ((Text[1] in ['A'..'Z']) and (Text[2] in ['0'..'9']) and (Text[3] in ['0'..'9']) )  //A61...
+   or ((Text[1] in ['A'..'Z']) and (Text[2] in ['A'..'Z']) and (Text[3] in ['A'..'Z']) and (Text[4] in ['0'..'9']))  //  SSA1....
+    ) then exit;
+
+  //we should check also suffix part having numbers only at beginning
+  //(if prefix number has more than one digit it is counted in suffix start)
+  //but we leave suffix unchecked for now as it is more random.
+  Result:=true;
+
+  {OH1KH: I have seen a case where regexp does not work. Trying other way above...
+  orignal is below:
+
   reg.InputString := Text;
   reg.Expression := '\A\w{1,2}\d[A-Z]{1,3}\Z';
   Result := reg.ExecPos(1);
+  }
 end;
 
 function TdmUtils.GetShortState(state: string): string;
@@ -5700,6 +5723,19 @@ begin
          dmData.qCQRLOG.Next;
     end;
 end;
+procedure  TdmUtils.ViewTextFile(f:string);
+var
+  prg: string;
+begin
+  try
+    prg := cqrini.ReadString('ExtView', 'txt', '');
+    if prg<>'' then
+      dmUtils.RunOnBackground(prg + ' ' + AnsiQuotedStr(f, '"'))
+     else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
+  finally
+   //done
+  end;
 
+end;
 end.
 
