@@ -74,7 +74,7 @@ var
 implementation
   {$R *.lfm}
 
-uses dData, dDXCluster, uMyIni;
+uses dData, dDXCluster, uMyIni, dSatellite;
 
 procedure TdmLogUpload.DataModuleCreate(Sender: TObject);
 var
@@ -380,6 +380,7 @@ end;
 function TdmLogUpload.GetQSOInAdif(id_cqrlog_main : Integer) : String;
 var
   data : String;
+  Rf,Tf: String;
 begin
   Result := '';
   Q1.Close;
@@ -504,6 +505,17 @@ begin
 
       Result := Result + GetAdifValue('EQSL_QSL_RCVD','Y');
       Result := Result + GetAdifValue('EQSL_QSLRDATE',data)
+    end;
+
+    if (Q1.FieldByName('satellite').AsString<>'')
+     and (Q1.FieldByName('prop_mode').AsString='SAT') then
+    begin
+      data   := Q1.FieldByName('satellite').AsString;
+      Result := Result + GetAdifValue('SAT_NAME',data);
+      Rf     := Q1.FieldByName('rxfreq').AsString;
+      Tf     := Q1.FieldByName('freq').AsString;
+      data   := dmSatellite.GetSatMode(Tf, Rf);
+      Result := Result + GetAdifValue('SAT_MODE',data);
     end;
 
     if (Result <> '') then

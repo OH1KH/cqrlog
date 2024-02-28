@@ -4994,11 +4994,10 @@ end;
 
 procedure TfrmNewQSO.cmbSatelliteChange(Sender : TObject);
 begin
-  if ((cmbSatellite.Text <> '') and (cmbPropagation.Text = '')) then
+  if (cmbSatellite.Text <> '') then // and (cmbPropagation.Text = '')) then
     cmbPropagation.Text := 'SAT|Satellite';
 
   old_sat := dmSatellite.GetSatShortName(cmbSatellite.Text);  //old_sat is now selected value
-  cmbPropagationChange(nil);
 end;
 
 procedure TfrmNewQSO.dbgrdQSOBeforeColumnSized(Sender: TObject);
@@ -5085,12 +5084,12 @@ begin
   //no jokes...
   if (pos('999999.9999',edtRXFreq.Text)>0) or (pos('999999,9999',edtRXFreq.Text)>0) then
     edtRXFreq.Text:= '';
-  frmNewQSO.cmbPropagationChange(nil);
 end;
 
 procedure TfrmNewQSO.edtRXFreqExit(Sender: TObject);
 begin
   edtRXFreq.Text := CheckFreq(edtRXFreq.Text);
+  old_rxfreq:=edtRXFreq.Text
 end;
 
 procedure TfrmNewQSO.edtRXLOExit(Sender: TObject);
