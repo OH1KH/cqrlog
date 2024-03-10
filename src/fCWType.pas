@@ -15,9 +15,11 @@ type
   TfrmCWType = class(TForm)
     btnClose: TButton;
     btnClear: TButton;
+    chkHideCW: TCheckBox;
+    chkHideMemBtns: TCheckBox;
     edtSpeed: TSpinEdit;
     fraCWKeys1: TfraCWKeys;
-    lblSpeed: TLabel;
+    gbCWSpeed: TGroupBox;
     lblToShowMouseOverText: TLabel;
     lblWpm: TLabel;
     m: TMemo;
@@ -60,6 +62,8 @@ type
     procedure btnPgUpClick(Sender: TObject);
     procedure btnPgUpMouseEnter(Sender: TObject);
     procedure btnPgUpMouseLeave(Sender: TObject);
+    procedure chkHideCWChange(Sender: TObject);
+    procedure chkHideMemBtnsChange(Sender: TObject);
     procedure edtSpeedMouseLeave(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -124,8 +128,14 @@ begin
   case Key of
    VK_F1 .. VK_F10,
    33,
-   34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
-   VK_ESCAPE       : frmNewQSO.CWint.StopSending;
+   34              : Begin
+                          frmNewQSO.FormKeyDown(Sender,Key,Shift);
+                          key:=0;
+                     end;
+   VK_ESCAPE       : Begin
+                          frmNewQSO.CWint.StopSending;
+                          key:=0;
+                     end;
    end;
 end;
 
@@ -133,7 +143,10 @@ procedure TfrmCWType.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+                    begin
                       frmNewQSO.FormKeyUp(Sender,Key,Shift);
+                      key:=0;
+                    end;
 end;
 
 procedure TfrmCWType.btnF1MouseEnter(Sender: TObject);
@@ -413,6 +426,18 @@ begin
   frmCWType.lblToShowMouseOverText.Caption:='';
 end;
 
+procedure TfrmCWType.chkHideCWChange(Sender: TObject);
+begin
+  pnlTop.Visible:=not chkHideCW.Checked;
+  cqrini.WriteBool('CW','HideCWProp',chkHideCW.Checked);
+end;
+
+procedure TfrmCWType.chkHideMemBtnsChange(Sender: TObject);
+begin
+  fraCWKeys1.Visible:=not chkHideMemBtns.Checked;
+  cqrini.WriteBool('CW','HideMemBtns',chkHideMemBtns.Checked);
+end;
+
 procedure TfrmCWType.edtSpeedMouseLeave(Sender: TObject);
 begin
    m.SetFocus; //after click focus back to memo
@@ -423,7 +448,9 @@ var
    n:string;
 begin
   dmUtils.LoadWindowPos(frmCWType);
-  rgMode.ItemIndex := cqrini.ReadInteger('CW','Mode',1);
+  rgMode.ItemIndex :=      cqrini.ReadInteger('CW','Mode',1);
+  chkHideCW.Checked:=      cqrini.ReadBool('CW','HideCWProp',False);
+  chkHideMemBtns.Checked:= cqrini.ReadBool('CW','HideMemBtns',False);
   fraCWKeys1.UpdateFKeyLabels;
   m.SetFocus;
   m.Clear;
