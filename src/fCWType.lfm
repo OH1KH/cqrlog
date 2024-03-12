@@ -206,14 +206,14 @@ object frmCWType: TfrmCWType
   end
   object m: TMemo
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = fraCWKeys1
+    AnchorSideTop.Control = pnlMid
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = pnlBottom
     Left = 0
-    Height = 204
-    Top = 168
+    Height = 212
+    Top = 160
     Width = 870
     Anchors = [akTop, akLeft, akRight, akBottom]
     OnChange = mChange
@@ -228,6 +228,7 @@ object frmCWType: TfrmCWType
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
     Left = 0
     Height = 90
     Top = 0
@@ -325,97 +326,106 @@ object frmCWType: TfrmCWType
       end
     end
   end
-  inline fraCWKeys1: TfraCWKeys
+  object pnlMid: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = pnlTop
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Side = asrBottom
-    Left = 24
-    Height = 78
-    Hint = 'Buttons are same as window "Memory keys" have.'
+    Left = 0
+    Height = 70
     Top = 90
-    Width = 822
+    Width = 870
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 24
-    BorderSpacing.Right = 24
-    ClientHeight = 78
-    ClientWidth = 822
-    OnResize = fraCWKeys1Resize
-    ParentShowHint = False
-    ShowHint = True
+    ClientHeight = 70
+    ClientWidth = 870
     TabOrder = 3
-    inherited btnF1: TButton
-      OnClick = btnF1Click
-      OnMouseEnter = btnF1MouseEnter
-      OnMouseLeave = btnF1MouseLeave
-    end
-    inherited btnF2: TButton
-      AnchorSideLeft.Side = asrBottom
-      OnClick = btnF2Click
-      OnMouseEnter = btnF2MouseEnter
-      OnMouseLeave = btnF2MouseLeave
-    end
-    inherited btnF3: TButton
-      OnClick = btnF3Click
-      OnMouseEnter = btnF3MouseEnter
-      OnMouseLeave = btnF3MouseLeave
-    end
-    inherited btnF4: TButton
-      OnClick = btnF4Click
-      OnMouseEnter = btnF4MouseEnter
-      OnMouseLeave = btnF4MouseLeave
-    end
-    inherited btnF5: TButton
-      OnClick = btnF5Click
-      OnMouseEnter = btnF5MouseEnter
-      OnMouseLeave = btnF5MouseLeave
-    end
-    inherited btnPgUp: TButton
-      OnClick = btnPgUpClick
-      OnMouseEnter = btnPgUpMouseEnter
-      OnMouseLeave = btnPgUpMouseLeave
-    end
-    inherited btnF6: TButton
-      OnClick = btnF6Click
-      OnMouseEnter = btnF6MouseEnter
-      OnMouseLeave = btnF6MouseLeave
-    end
-    inherited btnF7: TButton
-      OnClick = btnF7Click
-      OnMouseEnter = btnF7MouseEnter
-      OnMouseLeave = btnF7MouseLeave
-    end
-    inherited btnF8: TButton
-      OnClick = btnF8Click
-      OnMouseEnter = btnF8MouseEnter
-      OnMouseLeave = btnF8MouseLeave
-    end
-    inherited btnF9: TButton
-      OnClick = btnF9Click
-      OnMouseEnter = btnF9MouseEnter
-      OnMouseLeave = btnF9MouseLeave
-    end
-    inherited btnF10: TButton
-      Top = 32
-      OnClick = btnF10Click
-      OnMouseEnter = btnF10MouseEnter
-      OnMouseLeave = btnF10MouseLeave
-    end
-    inherited btnPgDn: TButton
-      OnClick = btnPgDnClick
-      OnMouseEnter = btnPgDnMouseEnter
-      OnMouseLeave = btnPgDnMouseLeave
-    end
-    inherited lblToShowMouseOverTextCwKeys: TLabel
-      AnchorSideLeft.Control = nil
-      AnchorSideBottom.Control = nil
-      Left = 0
-      Top = 61
-      Width = 16
-      Anchors = [akLeft]
-      Caption = '    '
+    inline fraCWKeys1: TfraCWKeys
+      Left = 25
+      Height = 68
+      Hint = 'Buttons are same as window "Memory keys" have.'
+      Top = 1
+      Width = 820
+      Align = alClient
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 24
+      BorderSpacing.Right = 24
+      ClientHeight = 68
+      ClientWidth = 820
+      OnResize = fraCWKeys1Resize
+      ParentShowHint = False
+      ShowHint = True
+      inherited btnF1: TButton
+        OnClick = btnF1Click
+        OnMouseEnter = btnF1MouseEnter
+        OnMouseLeave = btnF1MouseLeave
+      end
+      inherited btnF2: TButton
+        AnchorSideLeft.Side = asrBottom
+        OnClick = btnF2Click
+        OnMouseEnter = btnF2MouseEnter
+        OnMouseLeave = btnF2MouseLeave
+      end
+      inherited btnF3: TButton
+        OnClick = btnF3Click
+        OnMouseEnter = btnF3MouseEnter
+        OnMouseLeave = btnF3MouseLeave
+      end
+      inherited btnF4: TButton
+        OnClick = btnF4Click
+        OnMouseEnter = btnF4MouseEnter
+        OnMouseLeave = btnF4MouseLeave
+      end
+      inherited btnF5: TButton
+        OnClick = btnF5Click
+        OnMouseEnter = btnF5MouseEnter
+        OnMouseLeave = btnF5MouseLeave
+      end
+      inherited btnPgUp: TButton
+        OnClick = btnPgUpClick
+        OnMouseEnter = btnPgUpMouseEnter
+        OnMouseLeave = btnPgUpMouseLeave
+      end
+      inherited btnF6: TButton
+        OnClick = btnF6Click
+        OnMouseEnter = btnF6MouseEnter
+        OnMouseLeave = btnF6MouseLeave
+      end
+      inherited btnF7: TButton
+        OnClick = btnF7Click
+        OnMouseEnter = btnF7MouseEnter
+        OnMouseLeave = btnF7MouseLeave
+      end
+      inherited btnF8: TButton
+        OnClick = btnF8Click
+        OnMouseEnter = btnF8MouseEnter
+        OnMouseLeave = btnF8MouseLeave
+      end
+      inherited btnF9: TButton
+        OnClick = btnF9Click
+        OnMouseEnter = btnF9MouseEnter
+        OnMouseLeave = btnF9MouseLeave
+      end
+      inherited btnF10: TButton
+        Top = 32
+        OnClick = btnF10Click
+        OnMouseEnter = btnF10MouseEnter
+        OnMouseLeave = btnF10MouseLeave
+      end
+      inherited btnPgDn: TButton
+        OnClick = btnPgDnClick
+        OnMouseEnter = btnPgDnMouseEnter
+        OnMouseLeave = btnPgDnMouseLeave
+      end
+      inherited lblToShowMouseOverTextCwKeys: TLabel
+        AnchorSideLeft.Control = nil
+        AnchorSideBottom.Control = nil
+        Left = 0
+        Top = 52
+        Width = 16
+        Anchors = [akLeft]
+        Caption = '    '
+      end
     end
   end
 end

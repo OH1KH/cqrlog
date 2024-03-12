@@ -23,6 +23,7 @@ type
     lblToShowMouseOverText: TLabel;
     lblWpm: TLabel;
     m: TMemo;
+    pnlMid: TPanel;
     pnlBottom: TPanel;
     pnlTop: TPanel;
     rgMode: TRadioGroup;
@@ -434,7 +435,7 @@ end;
 
 procedure TfrmCWType.chkHideMemBtnsChange(Sender: TObject);
 begin
-  fraCWKeys1.Visible:=not chkHideMemBtns.Checked;
+  pnlMid.Visible:=not chkHideMemBtns.Checked;
   cqrini.WriteBool('CW','HideMemBtns',chkHideMemBtns.Checked);
 end;
 
