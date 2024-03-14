@@ -269,7 +269,7 @@ begin
         if not frmNewQSO.cbOffline.Checked then
           frmNewQSO.edtRXFreq.Text := FloatToStr((f + rxlo));
     end;
-     if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) then
+     if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) and radio.RigSplitActive then
          f:=fs
   end
   else

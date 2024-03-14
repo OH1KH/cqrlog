@@ -4814,6 +4814,7 @@ end;
 procedure TfrmNewQSO.cbSplitTXChange(Sender: TObject);
 begin
   cqrini.WriteBool('NewQSO', 'UseSplitTX', cbSplitTX.Checked);
+  cbRxLo.Checked:=cbSplitTX.Checked;
   frmTRXControl.SetSplitTXRead(cbSplitTX.Checked);
 end;
 
