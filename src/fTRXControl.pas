@@ -1158,6 +1158,7 @@ begin
   radio.RigChkVfo := cqrini.ReadBool('TRX' + RigInUse, 'ChkVfo', True);
   radio.PowerON:=cqrini.ReadBool('TRX'+ RigInUse, 'RigPwrON', True);
   radio.CompoundPoll:=cqrini.ReadBool('TRX'+RigInUse, 'CPollR', True);
+  radio.GetSplitTX:=cqrini.ReadBool('NewQSO', 'UseSplitTX', False);
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled := True;
   Result := True;
