@@ -52,7 +52,8 @@ type TRigControl = class
     fIsNewHamlib : Boolean;
     fGetSplitTX  : Boolean;
     fRigSplitActive: Boolean;
-
+    fPollTimeout : integer;
+    fPollCount   : integer;
     AllowCommand        : integer; //for command priority
     ErrorRigctldConnect : Boolean;
     ConnectionDone      : Boolean;
@@ -127,6 +128,7 @@ public
 
     //Char to use between compound commands. Default is space, can be also LineEnding that breaks compound
     property CompoundPoll : Boolean read fCompoundPoll  write  fCompoundPoll;
+    property PollTimeout  : integer read fPollTimeout write fPolltimeout; //if ever needed to read or change from main program
 
     function  GetCurrVFO  : TVFO;
     function  GetModePass : TRigMode;
@@ -187,6 +189,8 @@ begin
   fGetSplitTX  := false;  //poll rig polls also split TX vfo
   PowerOffIssued := false;
   fCompoundPoll:=True;
+  fPollTimeout := 15;  //max count of false responses when polled
+  fPollCount := fPollTimeout;
   fRigSplitActive:=False;
   if DebugMode then Writeln('All objects created');
   tmrRigPoll.OnTimer       := @OnRigPollTimer;
@@ -718,7 +722,7 @@ begin
          else
           Begin
             if DebugMode then Writeln('Power off, stop polling (0)');
-            AllowCommand:=-1;
+            AllowCommand:=-2; //there is no timeout for this
           end;
        end;
 
@@ -846,6 +850,7 @@ begin
             end;
         end;
  AllowCommand:=-1; //waiting for reply
+ fPollCount :=  fPollTimeout;
 end;
 
 //-----------------------------------------------------------
@@ -853,7 +858,18 @@ begin
  if DebugMode then
                Writeln('Polling - allowcommand:',AllowCommand);
  case AllowCommand of
-     -1:  Exit;   //no sending allowed
+     -2:  Exit;
+     -1:  Begin
+               dec(fPollCount);
+               if fPollCount<1 then
+                  Begin
+                    if DebugMode then
+                                Writeln('Rig/rigctld did not respond to command within timeout!');
+                    fPollCount :=  fPollTimeout;
+                    AllowCommand:=1;
+                  end;
+               Exit;   //no sending allowed
+           end;
 
      //delay up to 10 timer rounds with this selecting one of numbers
      99:  AllowCommand:=98;
@@ -873,6 +889,7 @@ begin
                      Write(LineEnding+'Sending: '+cmd);
                RigctldConnect.SendMessage(cmd);
                AllowCommand:=-1; //waiting for reply
+               fPollCount :=  fPollTimeout;
           end;
       9:  Begin
                cmd:='+\dump_caps'+LineEnding;
@@ -880,6 +897,7 @@ begin
                      Write(LineEnding+'Sending: '+cmd);
                RigctldConnect.SendMessage(cmd);
                AllowCommand:=-1; //waiting for reply
+               fPollCount :=  fPollTimeout;
           end;
       8:  Begin
                cmd:= '+\set_powerstat 1'+LineEnding;
@@ -887,6 +905,7 @@ begin
                      Write(LineEnding+'Sending: '+cmd);
                RigctldConnect.SendMessage(cmd);
                AllowCommand:=-1; //waiting for reply
+               fPollCount :=  fPollTimeout;
           end;
 
       //lower priority commands queue handled here
@@ -905,6 +924,7 @@ begin
                      write('Queue out:'+LineEnding,RigCommand.Text);
                   RigctldConnect.SendMessage(cmd);
                   AllowCommand:=-1; //wait answer
+                  fPollCount :=  fPollTimeout;
                end
               else
                DoRigPOll;
