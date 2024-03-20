@@ -6,7 +6,10 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Spin, inifiles, lcltype,ActnList,frCWKeys, Types;
+  StdCtrls, Spin, inifiles, lcltype,ActnList, Menus,frCWKeys, Types;
+
+const
+  CWTypeMode: Array [0..2] of String=(', Ltr',', Ltr/Word',', Word');
 
 type
 
@@ -15,18 +18,17 @@ type
   TfrmCWType = class(TForm)
     btnClose: TButton;
     btnClear: TButton;
-    chkHideCW: TCheckBox;
-    chkHideMemBtns: TCheckBox;
-    edtSpeed: TSpinEdit;
     fraCWKeys1: TfraCWKeys;
-    gbCWSpeed: TGroupBox;
     lblToShowMouseOverText: TLabel;
-    lblWpm: TLabel;
     m: TMemo;
-    pnlMid: TPanel;
+    mnuHead: TMenuItem;
+    mnuLtr: TMenuItem;
+    mnuWordLtr: TMenuItem;
+    mnuWord: TMenuItem;
+    pnlMem: TPanel;
     pnlBottom: TPanel;
-    pnlTop: TPanel;
-    rgMode: TRadioGroup;
+    popCWmode: TPopupMenu;
+    Separator1: TMenuItem;
     procedure btnF10Click(Sender: TObject);
     procedure btnF10MouseEnter(Sender: TObject);
     procedure btnF10MouseLeave(Sender: TObject);
@@ -63,30 +65,33 @@ type
     procedure btnPgUpClick(Sender: TObject);
     procedure btnPgUpMouseEnter(Sender: TObject);
     procedure btnPgUpMouseLeave(Sender: TObject);
-    procedure chkHideCWChange(Sender: TObject);
-    procedure chkHideMemBtnsChange(Sender: TObject);
     procedure edtSpeedMouseLeave(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
     procedure btnCloseClick(Sender: TObject);
-    procedure edtSpeedChange(Sender: TObject);
     procedure fraCWKeys1Resize(Sender: TObject);
     procedure mChange(Sender: TObject);
     procedure mKeyPress(Sender: TObject; var Key: char);
-    procedure rgModeClick(Sender: TObject);
+    procedure mnuLtrClick(Sender: TObject);
+    procedure mnuWordClick(Sender: TObject);
+    procedure mnuWordLtrClick(Sender: TObject);
+    procedure popCWmodeClose(Sender: TObject);
   private
     { private declarations }
     LocalDbg : boolean; // bit 4, %01000, -8 for cw routines including this form
     Switch2Word   : boolean;
     WasMemoLen : integer;
+    CWMode:integer;
     function PassedKey(key:char):boolean;
     procedure blocksend;
     procedure SetSpeed(change:integer);
   public
     { public declarations }
+    procedure UpdateTop;
   end; 
 
 var
@@ -97,6 +102,11 @@ implementation
 
 { TfrmCWType }
 uses fTRXControl,fNewQSO,dUtils,dData, uMyIni, fContest;
+
+procedure TfrmCWType.UpdateTop;
+Begin
+ frmCWType.Caption:='CW Type: '+frmNewQSO.sbNewQSO.Panels[4].Text+CWTypeMode[CWMode];
+end;
 
 function TfrmCWType.PassedKey(key:char):boolean;
 Begin
@@ -118,8 +128,9 @@ begin
 end;
 
 procedure TfrmCWType.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var f:integer;
 begin
-  cqrini.WriteInteger('CW','Mode',rgMode.ItemIndex);
+  popCWmodeClose(nil);
   dmUtils.SaveWindowPos(frmCWType)
 end;
 
@@ -127,15 +138,14 @@ procedure TfrmCWType.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   case Key of
-   VK_F1 .. VK_F10,
-   33,
-   34              : Begin
-                          frmNewQSO.FormKeyDown(Sender,Key,Shift);
-                          key:=0;
+   VK_F1 .. VK_F10 : frmNewQSO.FormKeyDown(Sender,Key,Shift);
+   33,34           : Begin
+                      SetSpeed((Key-33)*-4+2);
+                      Key:=0;
                      end;
    VK_ESCAPE       : Begin
-                          frmNewQSO.CWint.StopSending;
-                          key:=0;
+                      frmNewQSO.CWint.StopSending;
+                      Key:=0;
                      end;
    end;
 end;
@@ -427,18 +437,6 @@ begin
   frmCWType.lblToShowMouseOverText.Caption:='';
 end;
 
-procedure TfrmCWType.chkHideCWChange(Sender: TObject);
-begin
-  pnlTop.Visible:=not chkHideCW.Checked;
-  cqrini.WriteBool('CW','HideCWProp',chkHideCW.Checked);
-end;
-
-procedure TfrmCWType.chkHideMemBtnsChange(Sender: TObject);
-begin
-  pnlMid.Visible:=not chkHideMemBtns.Checked;
-  cqrini.WriteBool('CW','HideMemBtns',chkHideMemBtns.Checked);
-end;
-
 procedure TfrmCWType.edtSpeedMouseLeave(Sender: TObject);
 begin
    m.SetFocus; //after click focus back to memo
@@ -449,23 +447,19 @@ var
    n:string;
 begin
   dmUtils.LoadWindowPos(frmCWType);
-  rgMode.ItemIndex :=      cqrini.ReadInteger('CW','Mode',1);
-  chkHideCW.Checked:=      cqrini.ReadBool('CW','HideCWProp',False);
-  chkHideMemBtns.Checked:= cqrini.ReadBool('CW','HideMemBtns',False);
+  CWMode:=  cqrini.ReadInteger('CW','Mode',1);
+  case CWMode of
+   0: mnuLtr.Checked:=True;
+   1: mnuWordLtr.Checked:=True;
+   2: mnuWord.Checked:=True;
+  end;
+  UpdateTop;
   fraCWKeys1.UpdateFKeyLabels;
   m.SetFocus;
   m.Clear;
   Switch2Word :=false;
   WasMemoLen := length(m.lines.text);
   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
-  if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-     Begin
-         frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM';
-         edtSpeed.Enabled:=False;
-     end
-   else
-     edtSpeed.Enabled:=True;
-
    //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
@@ -477,19 +471,13 @@ begin
   Close
 end;
 
-procedure TfrmCWType.edtSpeedChange(Sender: TObject);
-var
-    n:string;
+procedure TfrmCWType.FormResize(Sender: TObject);
 begin
- if Assigned(frmNewQSO.CWint) then
- begin
-  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
-  frmNewQSO.CWint.SetSpeed(edtSpeed.Value);
-   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
-       else
-        frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
- end;
+  if frmCWType.Height<200 then
+    Begin
+       fraCWKeys1.Height:=(frmCWType.Height-pnlBottom.Height)div 2;
+       m.Height:=(frmCWType.Height-pnlBottom.Height)div 2;
+    end;
 end;
 procedure TfrmCWType.fraCWKeys1Resize(Sender: TObject);
  var
@@ -497,13 +485,12 @@ procedure TfrmCWType.fraCWKeys1Resize(Sender: TObject);
   i: integer;
   c: word;
 begin
-  with fraCWKeys1 do
+ with fraCWKeys1 do
   Begin
   h := Round(Height / 2) - 2;
   w := Round(Width / 6) - 2;
   t := Round(Height / 2);
   c := 0;
-
 
   for i := 0 to ComponentCount - 1 do
    begin
@@ -566,7 +553,7 @@ begin
   if LocalDbg then Writeln('Len:',  length(m.lines.text),' Was:',WasMemoLen);
   if ( ((length(m.lines.text)-WasMemoLen) > 1 )
        and not(Switch2Word)
-       and not(rgMode.ItemIndex=2)
+       and not(CWMode=2)
      ) then
      Begin
        if LocalDbg then Writeln('Pasted text, more than 1chr at same go');
@@ -578,7 +565,7 @@ begin
          if PassedKey(l) then
            begin
             if LocalDbg then Write(ord(l),'_');
-            case rgMode.ItemIndex of
+            case CWMode of
 
                  0:               Begin
                                        if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
@@ -623,9 +610,35 @@ begin
    end;
 end;
 
-procedure TfrmCWType.rgModeClick(Sender: TObject);
+
+procedure TfrmCWType.mnuLtrClick(Sender: TObject);
 begin
-  m.SetFocus; //after mode change focus back to memo
+  mnuLtr.Checked:=True;
+  //by this way QT5 and GTK2 both work same
+  CWMode:=0;
+  UpdateTop;
+end;
+
+procedure TfrmCWType.mnuWordLtrClick(Sender: TObject);
+begin
+  mnuWordLtr.Checked:=True;
+  //by this way QT5 and GTK2 both work same
+  CWMode:=1;
+  UpdateTop;
+end;
+
+procedure TfrmCWType.mnuWordClick(Sender: TObject);
+begin
+  mnuWord.Checked:=True;
+  //by this way QT5 and GTK2 both work same
+  CWMode:=2;
+  UpdateTop;
+end;
+
+procedure TfrmCWType.popCWmodeClose(Sender: TObject);
+begin
+      cqrini.WriteInteger('CW','Mode',CWMode);
+      m.SetFocus; //after mode change focus back to memo
 end;
 
 procedure TfrmCWType.SetSpeed(change:integer);
@@ -639,12 +652,15 @@ begin
       speed := frmNewQSO.CWint.GetSpeed+change;
       frmNewQSO.CWint.SetSpeed(speed);
       if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
-       else
+       Begin
+        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM';
+       end
+      else
+       begin
         frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
-      edtSpeed.Value := speed;
+       end;
+      UpdateTop;
     end;
 end;
 
 end.
-

@@ -4509,9 +4509,8 @@ end;
 procedure TfrmNewQSO.acCWTypeExecute(Sender: TObject);
 begin
   frmCWType.Show;
-  if (CWint<>nil) then
-     frmCWType.edtSpeed.Value:= CWint.GetSpeed
-    else ShowMessage('CW interface:  No keyer defined for current radio!');
+  if (CWint=nil) then
+     ShowMessage('CW interface:  No keyer defined for current radio!');
 end;
 
 procedure TfrmNewQSO.FormActivate(Sender: TObject);
@@ -5836,32 +5835,18 @@ begin
   end;
 
   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
-  if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
-  begin
-    if Assigned(CWint) then
-    begin
-      speed := CWint.GetSpeed+2;
-      CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-        sbNewQSO.Panels[4].Text := 'Pot WPM'
-       else
-        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
-      if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
-    end
-  end;
 
-  if (key = 34) and (not dbgrdQSOBefore.Focused) then//pgdn
+  if( (key in [33,34]) and (not dbgrdQSOBefore.Focused) and (Assigned(CWint)) )then
   begin
-    if Assigned(CWint) then
-    begin
-      speed := CWint.GetSpeed-2;
-      CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+     speed := CWint.GetSpeed+((key-33)*-4+2);
+    CWint.SetSpeed(speed);
+    if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
         sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
-      if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
-    end
+    if (frmCWType <> nil ) then
+         frmCWType.UpdateTop;
+    key:=0;
   end;
 
   // CTRL-Key > Keyboard Shortcuts for NewQSO GUI with CTRL
@@ -7423,10 +7408,15 @@ begin
      if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
    if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-     sbNewQSO.Panels[4].Text := 'Pot WPM'
+    Begin
+     sbNewQSO.Panels[4].Text := 'Pot WPM';
+     if frmCWType.Showing then frmCWType.Caption:='CW Type: Pot WPM';
+    end
     else
-     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
-   if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
+     begin
+      sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
+      if frmCWType.Showing then frmCWType.Caption:='CW Type: '+ IntToStr(UseSpeed)+'WPM';
+     end;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);

@@ -1,27 +1,32 @@
 object frmCWKeys: TfrmCWKeys
   Left = 253
-  Height = 93
+  Height = 95
   Top = 106
-  Width = 820
+  Width = 821
   Caption = 'Memory keys'
-  ClientHeight = 93
-  ClientWidth = 820
+  ClientHeight = 95
+  ClientWidth = 821
+  Constraints.MinHeight = 60
+  Constraints.MinWidth = 300
   KeyPreview = True
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.2.6.0'
   inline fraCWKeys: TfraCWKeys
-    Height = 93
-    Width = 820
+    Height = 95
+    Width = 821
     Align = alClient
-    ClientHeight = 93
-    ClientWidth = 820
+    ClientHeight = 95
+    ClientWidth = 821
+    Constraints.MaxHeight = 100
+    Constraints.MinHeight = 20
+    Constraints.MinWidth = 100
     inherited lblToShowMouseOverTextCwKeys: TLabel
       AnchorSideLeft.Control = fraCWKeys
       AnchorSideBottom.Control = fraCWKeys
-      Top = 74
+      Top = 76
     end
   end
 end

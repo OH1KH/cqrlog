@@ -194,8 +194,7 @@ var
   sDate     : String = '';
 begin
   if chkRemember.Checked then saveFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
-  //if empty date-to make it as today. NOTE that empty calendar.Text is not empty string, but Date is =0!
-  if edtDateTo.Date = 0 then edtDateTo.Date := now;
+  if edtDateTo.Date = NullDate then edtDateTo.Date := now;
 
   tmp := '';
   if (edtCallSign.Text <> '') then
@@ -231,8 +230,7 @@ begin
 
   if (edtSRXstr.Text <> '') then  tmp := tmp + ' (UPPER(srx_string) = ' + QuotedStr(upcase(edtSRXstr.Text))+') AND';
 
-  //NOTE that empty calendar.Text is not empty string, but Date is =0!
-  if edtDateFrom.Date <> 0 then tmp := tmp + ' (qsodate >= ' + QuotedStr(dmUtils.MyDateToStr(edtDateFrom.Date)) +
+  if edtDateFrom.Date <> NullDate then tmp := tmp + ' (qsodate >= ' + QuotedStr(dmUtils.MyDateToStr(edtDateFrom.Date)) +
                                              ') AND (qsodate <= ' + QuotedStr(dmUtils.MyDateToStr(edtDateTo.Date)) +
                                              ') AND';
 
@@ -516,11 +514,17 @@ begin
   cmbMembers.ItemIndex := 0;
   cmbSort.ItemIndex := 0;
 
+  edtDateFrom.Text         := '1900-01-01';
+  edtDateFrom.Date         :=dmUtils.MyStrToDate(edtDateFrom.Text);
+  edtDateTo.Text           := '2100-12-31';
+  edtDateTo.Date           :=dmUtils.MyStrToDate(edtDateTo.Text);
+
   if DirectLoad then
           btnLoadClick(nil);
   chkRemember.Checked:= cqrini.ReadBool('frmFilter','Remember',false);
   if chkRemember.Checked then
           loadFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
+
 end;
 
 procedure TfrmFilter.btnSelectDXCCClick(Sender: TObject);
@@ -694,10 +698,10 @@ begin
       edtFreqFrom.Text         := '';
       edtFreqTo.Text           := '';
       cmbMode.Text             := '';
-      edtDateFrom.Text         := '';    //
-      edtDateFrom.Date         := 0;     //I think one (date or Text) is enough, but for sure ...
-      edtDateTo.Text           := '';    //
-      edtDateTo.Date           := 0;     //
+      edtDateFrom.Text         := '1900-01-01';
+      edtDateFrom.Date         :=dmUtils.MyStrToDate(edtDateFrom.Text);
+      edtDateTo.Text           := '2100-12-31';
+      edtDateTo.Date           :=dmUtils.MyStrToDate(edtDateTo.Text);
       edtLocator.Text          := '';
       edtQTH.Text              := '';
       cmbQSL_S.Text            := '';
@@ -774,11 +778,8 @@ begin
       filini.WriteString('freq','freq_from',edtFreqFrom.Text);
       filini.WriteString('freq','freq_to',edtFreqTo.Text);
       filini.WriteString('mode','mode',cmbMode.Text);
-      //NOTE that empty calendar is not empty string, but date is 0!
-      if edtDateFrom.Date = 0 then filini.WriteString('date','date_from','')
-       else filini.WriteString('date','date_from',dmUtils.MyDateToStr(edtDateFrom.Date));
-      if edtDateTo.Date = 0 then  filini.WriteString('date','date_to','')
-       else filini.WriteString('date','date_to',dmUtils.MyDateToStr(edtDateTo.Date));
+      filini.WriteString('date','date_from',dmUtils.MyDateToStr(edtDateFrom.Date));
+      filini.WriteString('date','date_to',dmUtils.MyDateToStr(edtDateTo.Date));
       filini.WriteString('locator','locator',edtLocator.Text);
       filini.WriteBool('locator','exactly',rbExactlyLoc.Checked);
       filini.WriteString('qth','qth',edtQTH.Text);
@@ -835,9 +836,10 @@ var
       edtFreqFrom.Text        := filini.ReadString('freq','freq_from','');
       edtFreqTo.Text          := filini.ReadString('freq','freq_to','');
       cmbMode.Text            := filini.ReadString('mode','mode','');
-      //I think setting just .Text sets also .Date in case of empty
-      edtDateFrom.Text        := filini.ReadString('date','date_from','');
-      edtDateTo.Text          := filini.ReadString('date','date_to','');
+      edtDateFrom.Text        := filini.ReadString('date','date_from','1900-01-01');
+      edtDateTo.Text          := filini.ReadString('date','date_to','2100-12-31');
+      edtDateFrom.Date        := dmUtils.MyStrToDate(edtDateFrom.Text);
+      edtDateTo.Date          := dmUtils.MyStrToDate(edtDateTo.Text);
       edtLocator.Text         := filini.ReadString('locator','locator','');
       rbIncludeLoc.Checked    := not filini.ReadBool('locator','exactly',True);
       edtQTH.Text             := filini.ReadString('qth','qth','');

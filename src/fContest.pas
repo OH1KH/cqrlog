@@ -261,7 +261,7 @@ var
   tmp: string;
   speed: integer = 0;
   i: integer = 0;
-
+  n: string;
 begin
   // enter anywhere
   if key = VK_RETURN then
@@ -338,17 +338,22 @@ begin
      key:=0;
    end;
 
-  if (key = 33) then//pgup
-  begin
-    if Assigned(frmNewQSO.CWint) then
-    begin
-      speed := frmNewQSO.CWint.GetSpeed + 2;
-      frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
-      lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
-    end;
-    key := 0;
-  end;
+   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+
+  if( (key in [33,34]) and (Assigned(frmNewQSO.CWint)) )then
+   begin
+     speed := frmNewQSO.CWint.GetSpeed+((key-33)*-4+2);
+    frmNewQSO.CWint.SetSpeed(speed);
+    if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
+    lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
+    if (frmCWType <> nil ) then
+         frmCWType.UpdateTop;
+    key:=0;
+   end;
+
 
   //S&P mode
   if (key = VK_Tab) then
@@ -364,18 +369,6 @@ begin
           key:=0;
       end;
    end;
-
-  if (key = 34) then//pgup
-  begin
-    if Assigned(frmNewQSO.CWint) then
-    begin
-      speed := frmNewQSO.CWint.GetSpeed - 2;
-      frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
-      lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
-    end;
-    key := 0;
-  end;
 
   if ((Shift = [ssCtrl]) and (key = VK_A)) then
   begin

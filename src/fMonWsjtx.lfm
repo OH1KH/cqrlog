@@ -7,6 +7,8 @@ object frmMonWsjtx: TfrmMonWsjtx
   Caption = 'Wsjt-x CQ-monitor'
   ClientHeight = 345
   ClientWidth = 582
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 300
   OnClose = FormClose
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles

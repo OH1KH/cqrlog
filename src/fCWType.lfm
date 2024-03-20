@@ -8,6 +8,8 @@ object frmCWType: TfrmCWType
   Caption = 'CW type'
   ClientHeight = 407
   ClientWidth = 870
+  Constraints.MinHeight = 100
+  Constraints.MinWidth = 350
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -116,15 +118,12 @@ object frmCWType: TfrmCWType
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
+  OnResize = FormResize
   OnShow = FormShow
+  PopupMenu = popCWmode
   Position = poMainFormCenter
   LCLVersion = '2.2.6.0'
   object pnlBottom: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 35
     Top = 372
@@ -175,47 +174,14 @@ object frmCWType: TfrmCWType
       BorderSpacing.Left = 6
       ParentColor = False
     end
-    object chkHideCW: TCheckBox
-      AnchorSideTop.Control = pnlBottom
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = chkHideMemBtns
-      Left = 326
-      Height = 23
-      Top = 6
-      Width = 207
-      Anchors = [akTop, akRight]
-      BorderSpacing.Right = 6
-      Caption = 'Hide CW sending properties'
-      OnChange = chkHideCWChange
-      TabOrder = 2
-    end
-    object chkHideMemBtns: TCheckBox
-      AnchorSideTop.Control = pnlBottom
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = btnClear
-      Left = 539
-      Height = 23
-      Top = 6
-      Width = 167
-      Anchors = [akTop, akRight]
-      BorderSpacing.Right = 6
-      Caption = 'Hide Memory buttons'
-      OnChange = chkHideMemBtnsChange
-      TabOrder = 3
-    end
   end
   object m: TMemo
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = pnlMid
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = pnlBottom
     Left = 0
-    Height = 212
-    Top = 160
+    Height = 302
+    Top = 70
     Width = 870
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Align = alClient
+    Anchors = [akLeft, akRight, akBottom]
     OnChange = mChange
     OnKeyDown = FormKeyDown
     OnKeyPress = mKeyPress
@@ -224,208 +190,116 @@ object frmCWType: TfrmCWType
     ScrollBars = ssAutoBoth
     TabOrder = 1
   end
-  object pnlTop: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 0
-    Height = 90
-    Top = 0
+  inline fraCWKeys1: TfraCWKeys
+    Height = 70
+    Hint = 'Buttons are same as window "Memory keys" have.'
     Width = 870
     Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 90
-    ClientWidth = 870
-    TabOrder = 2
-    object rgMode: TRadioGroup
-      AnchorSideLeft.Control = pnlTop
-      AnchorSideTop.Control = pnlTop
-      AnchorSideTop.Side = asrCenter
-      AnchorSideBottom.Side = asrBottom
-      Left = 24
-      Height = 70
-      Hint = 'Set the way typed text will be sent.'
-      Top = 10
-      Width = 568
-      AutoFill = True
-      BorderSpacing.Left = 24
-      BorderSpacing.Top = 2
-      Caption = 'Send CW using'
-      ChildSizing.LeftRightSpacing = 6
-      ChildSizing.TopBottomSpacing = 6
-      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-      ChildSizing.EnlargeVertical = crsHomogenousChildResize
-      ChildSizing.ShrinkHorizontal = crsScaleChilds
-      ChildSizing.ShrinkVertical = crsScaleChilds
-      ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ChildSizing.ControlsPerLine = 3
-      ClientHeight = 52
-      ClientWidth = 566
-      Columns = 3
-      ItemIndex = 0
-      Items.Strings = (
-        'letter mode'
-        'word mode, first word in letter mode'
-        'word mode'
-      )
-      OnClick = rgModeClick
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-    end
-    object gbCWSpeed: TGroupBox
-      AnchorSideLeft.Control = pnlTop
-      AnchorSideTop.Control = pnlTop
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = pnlTop
-      AnchorSideRight.Side = asrBottom
-      Left = 648
-      Height = 70
-      Hint = 'You can set speed also with PgUp and PgDn keys when cursor is in text area,'#10'even when the CW speed panel is hidden.'
-      Top = 10
-      Width = 198
-      Anchors = [akTop, akRight]
-      BorderSpacing.Right = 24
-      Caption = 'CWSpeed'
-      ClientHeight = 52
-      ClientWidth = 196
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-      object lblWpm: TLabel
-        AnchorSideLeft.Control = edtSpeed
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = gbCWSpeed
-        AnchorSideTop.Side = asrCenter
-        AnchorSideRight.Side = asrBottom
-        Left = 102
-        Height = 17
-        Top = 18
-        Width = 32
-        BorderSpacing.Left = 6
-        Caption = 'wpm'
-        ParentColor = False
-      end
-      object edtSpeed: TSpinEdit
-        AnchorSideLeft.Control = gbCWSpeed
-        AnchorSideTop.Control = gbCWSpeed
-        AnchorSideTop.Side = asrCenter
-        Left = 22
-        Height = 34
-        Top = 9
-        Width = 74
-        BorderSpacing.Left = 22
-        Increment = 2
-        MaxValue = 99
-        MinValue = 5
-        OnChange = edtSpeedChange
-        OnMouseLeave = edtSpeedMouseLeave
-        TabOrder = 0
-        Value = 15
-      end
-    end
-  end
-  object pnlMid: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = pnlTop
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 0
-    Height = 70
-    Top = 90
-    Width = 870
-    Anchors = [akTop, akLeft, akRight]
     ClientHeight = 70
     ClientWidth = 870
-    TabOrder = 3
-    inline fraCWKeys1: TfraCWKeys
-      Left = 25
-      Height = 68
-      Hint = 'Buttons are same as window "Memory keys" have.'
-      Top = 1
-      Width = 820
-      Align = alClient
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 24
-      BorderSpacing.Right = 24
-      ClientHeight = 68
-      ClientWidth = 820
-      OnResize = fraCWKeys1Resize
-      ParentShowHint = False
-      ShowHint = True
-      inherited btnF1: TButton
-        OnClick = btnF1Click
-        OnMouseEnter = btnF1MouseEnter
-        OnMouseLeave = btnF1MouseLeave
-      end
-      inherited btnF2: TButton
-        AnchorSideLeft.Side = asrBottom
-        OnClick = btnF2Click
-        OnMouseEnter = btnF2MouseEnter
-        OnMouseLeave = btnF2MouseLeave
-      end
-      inherited btnF3: TButton
-        OnClick = btnF3Click
-        OnMouseEnter = btnF3MouseEnter
-        OnMouseLeave = btnF3MouseLeave
-      end
-      inherited btnF4: TButton
-        OnClick = btnF4Click
-        OnMouseEnter = btnF4MouseEnter
-        OnMouseLeave = btnF4MouseLeave
-      end
-      inherited btnF5: TButton
-        OnClick = btnF5Click
-        OnMouseEnter = btnF5MouseEnter
-        OnMouseLeave = btnF5MouseLeave
-      end
-      inherited btnPgUp: TButton
-        OnClick = btnPgUpClick
-        OnMouseEnter = btnPgUpMouseEnter
-        OnMouseLeave = btnPgUpMouseLeave
-      end
-      inherited btnF6: TButton
-        OnClick = btnF6Click
-        OnMouseEnter = btnF6MouseEnter
-        OnMouseLeave = btnF6MouseLeave
-      end
-      inherited btnF7: TButton
-        OnClick = btnF7Click
-        OnMouseEnter = btnF7MouseEnter
-        OnMouseLeave = btnF7MouseLeave
-      end
-      inherited btnF8: TButton
-        OnClick = btnF8Click
-        OnMouseEnter = btnF8MouseEnter
-        OnMouseLeave = btnF8MouseLeave
-      end
-      inherited btnF9: TButton
-        OnClick = btnF9Click
-        OnMouseEnter = btnF9MouseEnter
-        OnMouseLeave = btnF9MouseLeave
-      end
-      inherited btnF10: TButton
-        Top = 32
-        OnClick = btnF10Click
-        OnMouseEnter = btnF10MouseEnter
-        OnMouseLeave = btnF10MouseLeave
-      end
-      inherited btnPgDn: TButton
-        OnClick = btnPgDnClick
-        OnMouseEnter = btnPgDnMouseEnter
-        OnMouseLeave = btnPgDnMouseLeave
-      end
-      inherited lblToShowMouseOverTextCwKeys: TLabel
-        AnchorSideLeft.Control = nil
-        AnchorSideBottom.Control = nil
-        Left = 0
-        Top = 52
-        Width = 16
-        Anchors = [akLeft]
-        Caption = '    '
-      end
+    Constraints.MaxHeight = 100
+    Constraints.MinHeight = 20
+    Constraints.MinWidth = 100
+    OnResize = fraCWKeys1Resize
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 2
+    inherited btnF1: TButton
+      OnClick = btnF1Click
+      OnMouseEnter = btnF1MouseEnter
+      OnMouseLeave = btnF1MouseLeave
+    end
+    inherited btnF2: TButton
+      AnchorSideLeft.Side = asrBottom
+      OnClick = btnF2Click
+      OnMouseEnter = btnF2MouseEnter
+      OnMouseLeave = btnF2MouseLeave
+    end
+    inherited btnF3: TButton
+      OnClick = btnF3Click
+      OnMouseEnter = btnF3MouseEnter
+      OnMouseLeave = btnF3MouseLeave
+    end
+    inherited btnF4: TButton
+      OnClick = btnF4Click
+      OnMouseEnter = btnF4MouseEnter
+      OnMouseLeave = btnF4MouseLeave
+    end
+    inherited btnF5: TButton
+      OnClick = btnF5Click
+      OnMouseEnter = btnF5MouseEnter
+      OnMouseLeave = btnF5MouseLeave
+    end
+    inherited btnPgUp: TButton
+      OnClick = btnPgUpClick
+      OnMouseEnter = btnPgUpMouseEnter
+      OnMouseLeave = btnPgUpMouseLeave
+    end
+    inherited btnF6: TButton
+      OnClick = btnF6Click
+      OnMouseEnter = btnF6MouseEnter
+      OnMouseLeave = btnF6MouseLeave
+    end
+    inherited btnF7: TButton
+      OnClick = btnF7Click
+      OnMouseEnter = btnF7MouseEnter
+      OnMouseLeave = btnF7MouseLeave
+    end
+    inherited btnF8: TButton
+      OnClick = btnF8Click
+      OnMouseEnter = btnF8MouseEnter
+      OnMouseLeave = btnF8MouseLeave
+    end
+    inherited btnF9: TButton
+      OnClick = btnF9Click
+      OnMouseEnter = btnF9MouseEnter
+      OnMouseLeave = btnF9MouseLeave
+    end
+    inherited btnF10: TButton
+      Top = 32
+      OnClick = btnF10Click
+      OnMouseEnter = btnF10MouseEnter
+      OnMouseLeave = btnF10MouseLeave
+    end
+    inherited btnPgDn: TButton
+      OnClick = btnPgDnClick
+      OnMouseEnter = btnPgDnMouseEnter
+      OnMouseLeave = btnPgDnMouseLeave
+    end
+    inherited lblToShowMouseOverTextCwKeys: TLabel
+      AnchorSideLeft.Control = nil
+      AnchorSideBottom.Control = nil
+      Left = 0
+      Top = 54
+      Width = 16
+      Anchors = [akLeft]
+      Caption = '    '
+    end
+  end
+  object popCWmode: TPopupMenu
+    OnClose = popCWmodeClose
+    Left = 880
+    Top = 16
+    object mnuHead: TMenuItem
+      Caption = 'Send CW using mode:'
+    end
+    object Separator1: TMenuItem
+      Caption = '-'
+    end
+    object mnuLtr: TMenuItem
+      Caption = 'letter'
+      RadioItem = True
+      OnClick = mnuLtrClick
+    end
+    object mnuWordLtr: TMenuItem
+      Caption = '1st word letter, then word'
+      RadioItem = True
+      OnClick = mnuWordLtrClick
+    end
+    object mnuWord: TMenuItem
+      Caption = 'word'
+      RadioItem = True
+      OnClick = mnuWordClick
     end
   end
 end
