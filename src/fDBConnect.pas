@@ -39,6 +39,7 @@ type
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
+    mnuClearQsos: TMenuItem;
     mnuRepair : TMenuItem;
     MenuItem5 : TMenuItem;
     mnuClearLog: TMenuItem;
@@ -70,6 +71,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure mnuClearLogClick(Sender: TObject);
+    procedure mnuClearQsosClick(Sender: TObject);
     procedure mnuExportClick(Sender: TObject);
     procedure mnuImportClick(Sender: TObject);
     procedure mnuRepairClick(Sender : TObject);
@@ -274,12 +276,13 @@ begin
     exit;
   end;
 
-  if Application.MessageBox('Do you really want to delete this log?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
+  if Application.MessageBox('Do you really want to DELETE this log?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
   begin
     exit;
   end;
 
-  if Application.MessageBox('LOG WILL BE _DELETED_. Are you sure?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
+  if Application.MessageBox('LOG WILL BE _DELETED!'+LineEnding+LineEnding+
+       'Do you really want do this ?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
   begin
     exit;
   end;
@@ -538,16 +541,21 @@ begin
 end;
 
 procedure TfrmDBConnect.mnuClearLogClick(Sender: TObject);
-var
-  s : PChar;
 begin
-  s := 'YOUR ENTIRE LOG WILL BE DELETED!'+LineEnding+LineEnding+
-       'Do you want to CANCEL this operation?';
-  if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton1) in [idNo, idCancel] then
-  begin
-    dmData.TruncateTables(dmData.qLogList.Fields[0].AsInteger);
-    ShowMessage('Log is empty')
-  end
+  if Application.MessageBox('All QSOS and SETTINGS will be DELETED!'+LineEnding+LineEnding+
+       'Do you really want do this ?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton1) in [idNo, idCancel] then exit;
+
+  dmData.TruncateTables(dmData.qLogList.Fields[0].AsInteger);
+  ShowMessage('Log is empty')
+end;
+
+procedure TfrmDBConnect.mnuClearQsosClick(Sender: TObject);
+begin
+  if Application.MessageBox('All QSOS will be DELETED!'+LineEnding+LineEnding+
+       'Do you really want do this ?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton1) in [idNo, idCancel] then exit;
+
+  dmData.TruncateTables(dmData.qLogList.Fields[0].AsInteger,False);
+  ShowMessage('All qsos deleted')
 end;
 
 procedure TfrmDBConnect.mnuExportClick(Sender: TObject);

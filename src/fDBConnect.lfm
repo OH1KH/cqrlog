@@ -2490,8 +2490,12 @@ object frmDBConnect: TfrmDBConnect
       Caption = '-'
     end
     object mnuClearLog: TMenuItem
-      Caption = 'Clear log'
+      Caption = 'Clear log (all qsos && settings)'
       OnClick = mnuClearLogClick
+    end
+    object mnuClearQsos: TMenuItem
+      Caption = 'Clear all qsos from log'
+      OnClick = mnuClearQsosClick
     end
   end
   object dlgOpen: TOpenDialog

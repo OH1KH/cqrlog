@@ -314,7 +314,7 @@ type
     procedure OpenDatabase(nr : Word);
     procedure SaveConfigFile;
     procedure CloseDatabases;
-    procedure TruncateTables(nr : Word);
+    procedure TruncateTables(nr : Word; all:Boolean=True); //all or just qsos
     procedure PrepareProfileExport;
     procedure CloseProfileExport;
     procedure LoadLoTWCalls;
@@ -2628,7 +2628,7 @@ begin
   end
 end;
 
-procedure TdmData.TruncateTables(nr : Word);
+procedure TdmData.TruncateTables(nr : Word; all:Boolean=True); //all or just qsos
 var
   lQ  : TSQLQuery;
   lTr : TSQLTransaction;
@@ -2646,40 +2646,45 @@ begin
     lTr.Commit;
 
     lTr.StartTransaction;
-    lQ.SQL.Text := 'TRUNCATE club1;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club2;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club3;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club4;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club5;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE cqrlog_config;';
-    lQ.ExecSQL;
+
     lQ.SQL.Text := 'delete from cqrlog_main;';
     lQ.ExecSQL;
     lQ.SQL.Text := 'delete from upload_status';
     lQ.ExecSQL;
     lQ.SQL.Text := 'delete from log_changes';
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE dxcc_id;';
-    lQ.ExecSQL;
     lQ.SQL.Text := 'TRUNCATE long_note;';
     lQ.ExecSQL;
     lQ.SQL.Text := 'TRUNCATE notes;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE profiles;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE version;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE zipcode1;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE zipcode2;';
-    lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE zipcode3;';
-    lQ.ExecSQL;
+
+    if all then
+     begin
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE cqrlog_config;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE dxcc_id;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE profiles;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE version;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE zipcode1;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE zipcode2;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE zipcode3;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE club1;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE club2;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE club3;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE club4;';
+      lQ.ExecSQL;
+      lQ.SQL.Text := 'TRUNCATE club5;';
+      lQ.ExecSQL;
+     end;
     lTr.Commit
   finally
     lQ.Close;
