@@ -5755,10 +5755,13 @@ begin
       end
       else
       begin
-        if (cmbMode.Text='CW') and (Assigned(CWint)) then
-                                                             CWint.StopSending;
-        if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
-                                                             frmTRXControl.StopVoice;
+        case cmbMode.Text of
+         'CW'  : if (Assigned(CWint)) then
+                                    CWint.StopSending;
+         'SSB',
+         'FM',
+         'AM'  : frmTRXControl.StopVoice;
+        end;
         EscFirstPressDone   := True;
         tmrESC.Enabled := True
       end
@@ -5805,18 +5808,16 @@ begin
           frmContest.lblCqMode.Caption:=frmTRXControl.GetRawMode;
           frmContest.lblCqFreq.Caption := FormatFloat('0.00',frmTRXControl.GetFreqkHz);
         end;
-      if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
-       begin
-        RunVK(dmUtils.GetDescKeyFromCode(Key));
-       end
-      else
-       Begin
-          if Assigned(CWint) and (cmbMode.Text='CW') then
+      case cmbMode.Text of
+         'SSB',
+         'FM',
+         'AM'  : RunVK(dmUtils.GetDescKeyFromCode(Key));
+         'CW'  : if Assigned(CWint) then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
             frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
             frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
-           else if (cmbMode.Text='CW') then ShowMessage('CW interface:  No keyer defined for current radio!');
+            else ShowMessage('CW interface:  No keyer defined for current radio!');
        end;
       end;
     key := 0

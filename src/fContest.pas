@@ -280,12 +280,18 @@ begin
   begin
     case EscTimes of
 
-      0:Begin  //1st press stops CW;
-         if Assigned(frmNewQSO.CWint) then
-               frmNewQSO.CWint.StopSending;
+      0:Begin  //1st press stops CW/voice memory;
+        case frmNewQSO.cmbMode.Text of
+         'SSB',
+         'FM',
+         'AM'  :  frmTRXControl.StopVoice;
+         'CW'  :   if Assigned(frmNewQSO.CWint)then
+                                                   frmNewQSO.CWint.StopSending;
+         end;
          inc(EscTimes);
          tmrESC2.Enabled := True;
         end;
+
       1:Begin //2nd returns to callsign column
          frmNewQSO.old_call:='';             //this is stupid hack but only way to reproduce
          frmNewQSO.edtName.Text :='';        //new seek from log (important to see if wkd before,
@@ -306,33 +312,33 @@ begin
          tmrESC2Timer(nil);
          end;
     end; //case
-
     key := 0;
   end;
 
   //memory keys
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
   begin
-     SendFmemory(key);
+
      if key=VK_F1 then
         Begin
           lblCqMode.Caption:=frmTRXControl.GetRawMode;
           lblCqFreq.Caption := FormatFloat('0.00',frmTRXControl.GetFreqkHz);
+
+          if Assigned(frmNewQSO.CWint) and (chkSP.Checked=False) and (edtCall.Text<>'') then//run mode with uncomplete call
+           Begin
+              frmNewQSO.CWint.SendText(edtCall.Text);
+              Key:=0;
+              exit;
+            end;
+
         end;
-     key := 0;
-    if (frmNewQSO.cmbMode.Text = 'SSB') then
-      frmNewQSO.RunVK(dmUtils.GetDescKeyFromCode(Key))
-    else
-    if Assigned(frmNewQSO.CWint) then
-      frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(
-        dmUtils.GetDescKeyFromCode(Key),edtCall.Text,
-      edtRSTs.Text, edtSTX.Text,edtSTXStr.Text,edtSRX.Text,edtSRXStr.Text,
-      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+
+    SendFmemory(key);
     key := 0;
   end;
 
   //CQ timer
-  if (Key = VK_F1) and (Shift = [ssShift]) and (CQpanel.Enabled=True)then
+  if (Key = VK_F1) and (Shift = [ssShift]) and (edtCall.Text='') then
    begin
      CQstart(true);
      key:=0;
@@ -1661,12 +1667,15 @@ end;
 
 procedure TfrmContest.SendFmemory(key:word);
 Begin
-    if (frmNewQSO.cmbMode.Text = 'CW') and Assigned(frmNewQSO.CWint)  then
-         frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,
+  case frmNewQSO.cmbMode.Text of
+    'CW' :if Assigned(frmNewQSO.CWint)  then
+            frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,
             edtRSTs.Text, edtSTX.Text,edtSTXStr.Text, edtSRX.Text, edtSRXstr.Text, frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
-     else
-      if ((frmNewQSO.cmbMode.Text = 'SSB') or (frmNewQSO.cmbMode.Text = 'FM') or (frmNewQSO.cmbMode.Text = 'AM')) then
-         frmNewQSO.RunVK(dmUtils.GetDescKeyFromCode(Key));
+            else ShowMessage('CW interface:  No keyer defined for current radio!');
+     'SSB',
+     'AM',
+     'FM': frmNewQSO.RunVK(dmUtils.GetDescKeyFromCode(Key));
+  end
 end;
 
 function TfrmContest.CheckDupe(call:string):boolean;
