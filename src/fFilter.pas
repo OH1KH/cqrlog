@@ -159,6 +159,8 @@ type
     procedure cmbPropModeExit(Sender: TObject);
     procedure cmbSatNameExit(Sender: TObject);
     procedure edtCallSignChange(Sender: TObject);
+    procedure edtDateFromButtonClick(Sender: TObject);
+    procedure edtDateToButtonClick(Sender: TObject);
     procedure edtLocatorChange(Sender: TObject);
     procedure edtMyLocChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -167,6 +169,7 @@ type
     procedure btnCancelClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
   private
+    NoDate    :TDate;
     procedure saveFilter(filename:String);
     procedure loadFilter(filename:string);
   public
@@ -194,7 +197,7 @@ var
   sDate     : String = '';
 begin
   if chkRemember.Checked then saveFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
-  if edtDateTo.Date = NullDate then edtDateTo.Date := now;
+  if (edtDateTo.Date = NoDate) and (edtDateFrom.Date <> NoDate)  then edtDateTo.Date:=now;
 
   tmp := '';
   if (edtCallSign.Text <> '') then
@@ -230,7 +233,7 @@ begin
 
   if (edtSRXstr.Text <> '') then  tmp := tmp + ' (UPPER(srx_string) = ' + QuotedStr(upcase(edtSRXstr.Text))+') AND';
 
-  if edtDateFrom.Date <> NullDate then tmp := tmp + ' (qsodate >= ' + QuotedStr(dmUtils.MyDateToStr(edtDateFrom.Date)) +
+  if edtDateFrom.Date <> NoDate then tmp := tmp + ' (qsodate >= ' + QuotedStr(dmUtils.MyDateToStr(edtDateFrom.Date)) +
                                              ') AND (qsodate <= ' + QuotedStr(dmUtils.MyDateToStr(edtDateTo.Date)) +
                                              ') AND';
 
@@ -486,6 +489,7 @@ begin
   cmbProfile.ItemIndex := 0;
   DirectLoad:=False;
   dmData.IsSFilter:=false;
+  NoDate:=dmUtils.MyStrToDate('1900-01-01');
 end;
 //actually form create and show are common procedure as filter is opened in showModal and it always
 //creates and shows itself in every opening
@@ -514,10 +518,11 @@ begin
   cmbMembers.ItemIndex := 0;
   cmbSort.ItemIndex := 0;
 
-  edtDateFrom.Text         := '1900-01-01';
-  edtDateFrom.Date         :=dmUtils.MyStrToDate(edtDateFrom.Text);
-  edtDateTo.Text           := '2100-12-31';
-  edtDateTo.Date           :=dmUtils.MyStrToDate(edtDateTo.Text);
+
+  edtDateFrom.Date         := NoDate;
+  edtDateTo.Date           := Now;
+  edtDateTo.Text           := '';
+  edtDateFrom.Text         := '';
 
   if DirectLoad then
           btnLoadClick(nil);
@@ -618,6 +623,16 @@ begin
    end;
 end;
 
+procedure TfrmFilter.edtDateFromButtonClick(Sender: TObject);
+begin
+  edtDateFrom.Date:=Now;
+end;
+
+procedure TfrmFilter.edtDateToButtonClick(Sender: TObject);
+begin
+   edtDateTo.Date:=Now;
+end;
+
 procedure TfrmFilter.edtLocatorChange(Sender: TObject);
 var i:    integer;
     s:    string;
@@ -698,10 +713,10 @@ begin
       edtFreqFrom.Text         := '';
       edtFreqTo.Text           := '';
       cmbMode.Text             := '';
-      edtDateFrom.Text         := '1900-01-01';
-      edtDateFrom.Date         :=dmUtils.MyStrToDate(edtDateFrom.Text);
-      edtDateTo.Text           := '2100-12-31';
-      edtDateTo.Date           :=dmUtils.MyStrToDate(edtDateTo.Text);
+      edtDateFrom.Date         := NoDate;
+      edtDateTo.Date           := Now;
+      edtDateTo.Text           := '';
+      edtDateFrom.Text         := '';
       edtLocator.Text          := '';
       edtQTH.Text              := '';
       cmbQSL_S.Text            := '';
@@ -836,10 +851,12 @@ var
       edtFreqFrom.Text        := filini.ReadString('freq','freq_from','');
       edtFreqTo.Text          := filini.ReadString('freq','freq_to','');
       cmbMode.Text            := filini.ReadString('mode','mode','');
-      edtDateFrom.Text        := filini.ReadString('date','date_from','1900-01-01');
-      edtDateTo.Text          := filini.ReadString('date','date_to','2100-12-31');
-      edtDateFrom.Date        := dmUtils.MyStrToDate(edtDateFrom.Text);
-      edtDateTo.Date          := dmUtils.MyStrToDate(edtDateTo.Text);
+      edtDateFrom.Text        := filini.ReadString('date','date_from','');
+      if edtDateFrom.Text=''  then edtDateFrom.Date:=NoDate
+                              else edtDateFrom.Date:= dmUtils.MyStrToDate(edtDateFrom.Text);
+      edtDateTo.Text          := filini.ReadString('date','date_to','');
+      if edtDateTo.Text=''    then edtDateTo.Date:=NoDate
+                              else edtDateTo.Date:= dmUtils.MyStrToDate(edtDateTo.Text);
       edtLocator.Text         := filini.ReadString('locator','locator','');
       rbIncludeLoc.Checked    := not filini.ReadBool('locator','exactly',True);
       edtQTH.Text             := filini.ReadString('qth','qth','');

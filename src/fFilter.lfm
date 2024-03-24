@@ -438,6 +438,7 @@ object frmFilter: TfrmFilter
       BorderSpacing.Right = 6
       NumGlyphs = 1
       MaxLength = 10
+      OnButtonClick = edtDateFromButtonClick
       TabOrder = 0
       Text = '    .  .  '
     end
@@ -460,6 +461,7 @@ object frmFilter: TfrmFilter
       BorderSpacing.Right = 6
       NumGlyphs = 1
       MaxLength = 10
+      OnButtonClick = edtDateToButtonClick
       TabOrder = 1
       Text = '    .  .  '
     end
