@@ -23,7 +23,7 @@ object frmPreferences: TfrmPreferences
     Height = 788
     Top = 0
     Width = 846
-    ActivePage = TabROTcontrol
+    ActivePage = TabProgram
     Align = alClient
     TabIndex = 6
     TabOrder = 0

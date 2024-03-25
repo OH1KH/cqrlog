@@ -231,7 +231,7 @@ begin
     on Ex : Exception do
     begin
       dmData.trQ.Rollback;
-      mLoad.Lines.Add('EX: '+ Ex.Message);
+      mLoad.Lines.Add('EX: '+ Ex.Message+LineEnding+LineEnding+dmData.Q.SQL.Text);
       e := True
     end
   end
