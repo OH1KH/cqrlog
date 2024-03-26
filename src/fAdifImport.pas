@@ -212,12 +212,12 @@ var z,x:longint;
 
 begin
     getNextAdifTag:=false;
-    z:=pos('<',AdifRemaining);
+    z:=UTF8pos('<',AdifRemaining);
     if z=0 then exit;//  there is no other record. The last one - disappearing.
 
-    CopyOfAdifRemaining:=UTF8copy(AdifRemaining,z+1,length(AdifRemaining));
-    z:=pos(':',CopyOfAdifRemaining);
-    x:=pos('>',CopyOfAdifRemaining);
+    CopyOfAdifRemaining:=UTF8copy(AdifRemaining,z+1,UTF8length(AdifRemaining));
+    z:=UTF8pos(':',CopyOfAdifRemaining);
+    x:=UTF8pos('>',CopyOfAdifRemaining);
     if (x=0) then exit; //  the record tag was not terminated ... disappearing
 
     //detect given length of ADIF from AdifTag
@@ -233,13 +233,13 @@ begin
     //if LocalDbg then Write('Got length:',AdifDataLen);
 
     if z<>0 then
-      AdifTag:=trim(copy(CopyOfAdifRemaining,1,z-1))
+      AdifTag:=trim(UTF8copy(CopyOfAdifRemaining,1,z-1))
     else
-      AdifTag:=trim(copy(CopyOfAdifRemaining,1,x-1));
+      AdifTag:=trim(UTF8copy(CopyOfAdifRemaining,1,x-1));
 
     CopyOfAdifRemaining:=UTF8copy(CopyOfAdifRemaining,x+1,UTF8length(CopyOfAdifRemaining));
-    z:=pos('<',CopyOfAdifRemaining);
-    IntlPos:= pos('_INTL',upcase(AdifTag));
+    z:=UTF8pos('<',CopyOfAdifRemaining);
+    IntlPos:= UTF8pos('_INTL',upcase(AdifTag));
     AdifData:=trim(UTF8copy(CopyOfAdifRemaining,1,AdifDataLen));
 
     //if LocalDbg then Write(' pos INTL:',i);
@@ -273,12 +273,12 @@ begin
      end;
 
     if IntlPos>0 then  //tags with '_intl' have UTF8 charactes
-          AdifTag:= copy(AdifTag,1,IntlPos-1); //remove '_INTL'
+          AdifTag:= UTF8copy(AdifTag,1,IntlPos-1); //remove '_INTL'
 
     if z=0 then
         AdifRemaining:=''
      else
-        AdifRemaining:=UTF8copy(CopyOfAdifRemaining,z,length(CopyOfAdifRemaining));
+        AdifRemaining:=UTF8copy(CopyOfAdifRemaining,z,UTF8length(CopyOfAdifRemaining));
 
     //if LocalDbg then Writeln(' for tag:',AdifTag,' with AdifData:',AdifData);
     getNextAdifTag:=true
