@@ -1547,6 +1547,7 @@ procedure TWebThread.Execute;
     S: string;
   begin
     S := vString;
+    Result:=nil;
     SetLength(Result, 0);
     i := 0;
     while Pos(cSeparator, S) > 0 do
