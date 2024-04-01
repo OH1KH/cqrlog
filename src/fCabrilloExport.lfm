@@ -18,10 +18,10 @@ object frmCabrilloExport: TfrmCabrilloExport
     Left = 6
     Height = 17
     Top = 6
-    Width = 126
+    Width = 122
     BorderSpacing.Left = 6
     BorderSpacing.Top = 6
-    Caption = 'Filename to export:'
+    Caption = 'Filename to export'
     ParentColor = False
   end
   object edtCabFileName: TEdit
@@ -37,16 +37,16 @@ object frmCabrilloExport: TfrmCabrilloExport
     TabOrder = 0
   end
   object btnCabBrowse: TButton
+    AnchorSideLeft.Control = btnFileNameFrmFlt
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = edtCabFileName
+    AnchorSideTop.Control = lblCabfileName
     AnchorSideTop.Side = asrCenter
-    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 435
+    Left = 370
     Height = 25
-    Top = 40
+    Top = 2
     Width = 75
-    Anchors = [akTop, akRight]
+    BorderSpacing.Left = 9
     BorderSpacing.Right = 6
     Caption = 'Browse'
     OnClick = btnCabBrowseClick
@@ -211,13 +211,14 @@ object frmCabrilloExport: TfrmCabrilloExport
     TabOrder = 2
   end
   object btnCabHelp: TSpeedButton
-    AnchorSideTop.Control = Owner
+    AnchorSideTop.Control = lblCabfileName
+    AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 485
     Height = 25
     Hint = 'Help'
-    Top = 6
+    Top = 2
     Width = 25
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 6
@@ -262,17 +263,17 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideLeft.Control = lblCabfileName
     AnchorSideTop.Control = gbCabQsoHeader
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = btnCabBrowse
+    AnchorSideRight.Control = edtCabFileName
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 80
     Top = 292
-    Width = 504
+    Width = 421
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 6
     Caption = 'info sent'
     ClientHeight = 62
-    ClientWidth = 502
+    ClientWidth = 419
     TabOrder = 8
     object chkCabInfoSrst: TCheckBox
       AnchorSideLeft.Control = gbCabInfoSent
@@ -330,7 +331,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = cmbCabInfoSEx1
       AnchorSideRight.Control = edtCabInfoSEx2Wdt
-      Left = 318
+      Left = 260
       Height = 29
       Hint = 'Exhange2 selection'
       Top = 23
@@ -352,13 +353,13 @@ object frmCabrilloExport: TfrmCabrilloExport
       AnchorSideTop.Control = cmbCabInfoSEx1
       AnchorSideRight.Control = gbCabInfoSent
       AnchorSideRight.Side = asrBottom
-      Left = 424
+      Left = 366
       Height = 34
       Hint = 'Width of stx_string field '
       Top = 23
       Width = 38
       Anchors = [akTop, akRight]
-      BorderSpacing.Right = 40
+      BorderSpacing.Right = 15
       MaxLength = 2
       NumbersOnly = True
       OnExit = edtCabInfoSEx2WdtExit
@@ -380,7 +381,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     object lblCabSEx2Cmb: TLabel
       AnchorSideLeft.Control = cmbCabInfoSEx2
       AnchorSideTop.Control = gbCabInfoSent
-      Left = 318
+      Left = 260
       Height = 17
       Top = 0
       Width = 143
@@ -420,17 +421,17 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideLeft.Control = lblCabfileName
     AnchorSideTop.Control = gbCabInfoSent
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = btnCabBrowse
+    AnchorSideRight.Control = edtCabFileName
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 80
     Top = 378
-    Width = 504
+    Width = 421
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 6
     Caption = 'info rcvd'
     ClientHeight = 62
-    ClientWidth = 502
+    ClientWidth = 419
     TabOrder = 9
     object chkCabInfoRrst: TCheckBox
       AnchorSideLeft.Control = gbCabInfoRcvd
@@ -475,7 +476,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = cmbCabInfoREx1
       AnchorSideRight.Control = edtCabInfoREx2Wdt
-      Left = 318
+      Left = 260
       Height = 29
       Hint = 'Exhange2 selection'
       Top = 23
@@ -497,13 +498,13 @@ object frmCabrilloExport: TfrmCabrilloExport
       AnchorSideTop.Control = cmbCabInfoREx1
       AnchorSideRight.Control = gbCabInfoRcvd
       AnchorSideRight.Side = asrBottom
-      Left = 424
+      Left = 366
       Height = 34
       Hint = 'Width of stx_string field '
       Top = 23
       Width = 38
       Anchors = [akTop, akRight]
-      BorderSpacing.Right = 40
+      BorderSpacing.Right = 15
       MaxLength = 2
       NumbersOnly = True
       OnExit = edtCabInfoREx2WdtExit
@@ -525,7 +526,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     object lblCabSrxStCmb: TLabel
       AnchorSideLeft.Control = cmbCabInfoREx2
       AnchorSideTop.Control = gbCabInfoRcvd
-      Left = 318
+      Left = 260
       Height = 17
       Top = 0
       Width = 143
@@ -583,17 +584,17 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideLeft.Control = lblCabfileName
     AnchorSideTop.Control = edtCabSoapBox
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = btnCabBrowse
+    AnchorSideRight.Control = edtCabFileName
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 80
     Top = 206
-    Width = 504
+    Width = 421
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 6
     Caption = 'QSO: common header'
     ClientHeight = 62
-    ClientWidth = 502
+    ClientWidth = 419
     TabOrder = 7
     object lblCabQsoHeader: TLabel
       AnchorSideLeft.Control = gbCabQsoHeader
@@ -611,7 +612,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       AnchorSideTop.Control = gbCabQsoHeader
       AnchorSideRight.Control = gbCabQsoHeader
       AnchorSideRight.Side = asrBottom
-      Left = 458
+      Left = 375
       Height = 34
       Hint = 'Width of sent and rcvd callsign field'
       Top = 0
@@ -630,7 +631,7 @@ object frmCabrilloExport: TfrmCabrilloExport
       AnchorSideTop.Control = edtCabCallWdt
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = edtCabCallWdt
-      Left = 373
+      Left = 290
       Height = 17
       Top = 9
       Width = 82
@@ -749,7 +750,7 @@ object frmCabrilloExport: TfrmCabrilloExport
   object gbCabLayout: TGroupBox
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbCabQsoTail
-    AnchorSideRight.Control = btnCabBrowse
+    AnchorSideRight.Control = btnResultFile
     AnchorSideRight.Side = asrBottom
     Left = 336
     Height = 65
@@ -837,7 +838,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     Left = 6
     Height = 44
     Top = 567
-    Width = 504
+    Width = 439
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 6
     BorderSpacing.Bottom = 6
@@ -877,18 +878,46 @@ object frmCabrilloExport: TfrmCabrilloExport
     OnClick = btnResultFileClick
     TabOrder = 14
   end
+  object btnFileNameFrmFlt: TButton
+    AnchorSideLeft.Control = btnNameClear
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = btnCabBrowse
+    AnchorSideTop.Side = asrCenter
+    Left = 221
+    Height = 25
+    Top = 2
+    Width = 140
+    BorderSpacing.Left = 9
+    Caption = 'Name frm flt'
+    OnClick = btnFileNameFrmFltClick
+    TabOrder = 18
+  end
+  object btnNameClear: TButton
+    AnchorSideLeft.Control = lblCabfileName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblCabfileName
+    AnchorSideTop.Side = asrCenter
+    Left = 137
+    Height = 25
+    Top = 2
+    Width = 75
+    BorderSpacing.Left = 9
+    Caption = 'Clear'
+    OnClick = btnNameClearClick
+    TabOrder = 19
+  end
   object dlgCabSave: TSaveDialog
     Title = 'Save with file name'
     DefaultExt = '.cbr'
     Filter = 'Cabrillo file|*.cbr'
-    Left = 448
-    Top = 112
+    Left = 240
+    Top = 104
   end
   object dlgCabOpen: TOpenDialog
     Title = 'Open file'
     DefaultExt = '.templ'
     Filter = 'Cabrillo template|*.templ'
-    Left = 448
-    Top = 160
+    Left = 304
+    Top = 104
   end
 end

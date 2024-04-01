@@ -32,6 +32,8 @@ type
     btCabSave: TButton;
     btCabLoad: TButton;
     btnResultFile: TButton;
+    btnFileNameFrmFlt: TButton;
+    btnNameClear: TButton;
     chkUpCase: TCheckBox;
     chkCabInfoSrst: TCheckBox;
     chkCabInfoRrst: TCheckBox;
@@ -86,6 +88,8 @@ type
     procedure btnCabBrowseClick(Sender: TObject);
     procedure btnCabFrmFltClick(Sender: TObject);
     procedure btnCabHelpClick(Sender: TObject);
+    procedure btnFileNameFrmFltClick(Sender: TObject);
+    procedure btnNameClearClick(Sender: TObject);
     procedure btnResultFileClick(Sender: TObject);
     procedure cmbCabContestNameChange(Sender: TObject);
     procedure cmbCabContestNameExit(Sender: TObject);
@@ -283,9 +287,17 @@ begin
 end;
 
 procedure TfrmCabrilloExport.btnCabBrowseClick(Sender : TObject);
+var tmp:String;
 begin
-  dlgCabSave.InitialDir:=dmData.UsrHomeDir;
   dlgCabSave.DefaultExt:='.cbr';
+  dlgCabSave.InitialDir:=dmData.UsrHomeDir;
+  if edtCabFileName.Text<>'' then
+     Begin
+       tmp:=ExtractFilePath(edtCabFileName.Text);
+       if tmp<>'' then
+            dlgCabSave.InitialDir:=tmp;
+       dlgCabSave.FileName:=ExtractFileName(edtCabFileName.Text);
+     end;
   if dlgCabSave.Execute then
     edtCabFileName.Text := dlgCabSave.FileName
 end;
@@ -303,6 +315,29 @@ end;
 procedure TfrmCabrilloExport.btnCabHelpClick(Sender: TObject);
 begin
   ShowHelp;
+end;
+
+procedure TfrmCabrilloExport.btnFileNameFrmFltClick(Sender: TObject);
+var
+   tmp:String;
+begin
+ if not dmData.IsFilter then
+  begin
+      Application.MessageBox('You must first use Contest Filter for qsos to export!','Error ...',mb_OK+mb_IconError);
+      exit
+  end;
+  if  edtCabFileName.Text<> '' then
+    Begin
+      tmp:=ExtractFilePath(edtCabFileName.Text);
+      edtCabFileName.Text:=tmp+dmUtils.ContestNameFromFilteredQsos+'.cbr';
+    end
+   else
+      edtCabFileName.Text:=dmData.UsrHomeDir+dmUtils.ContestNameFromFilteredQsos+'.cbr';
+end;
+
+procedure TfrmCabrilloExport.btnNameClearClick(Sender: TObject);
+begin
+  edtCabFileName.Text:='';
 end;
 
 procedure TfrmCabrilloExport.btnResultFileClick(Sender: TObject);

@@ -18,6 +18,8 @@ type
     btnExport: TButton;
     btnBrowse: TButton;
     btnResultFile: TButton;
+    btnFileNameClear: TButton;
+    btnFileNameFrmFlt: TButton;
     chcSerialNr: TCheckBox;
     dlgSave: TSaveDialog;
     edtAntennaHeightSeaLevel: TEdit;
@@ -44,6 +46,8 @@ type
     pbExport: TProgressBar;
     procedure btnExportClick(Sender: TObject);
     procedure btnBrowseClick(Sender: TObject);
+    procedure btnFileNameClearClick(Sender: TObject);
+    procedure btnFileNameFrmFltClick(Sender: TObject);
     procedure btnFrmFltClick(Sender: TObject);
     procedure btnResultFileClick(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
@@ -149,9 +153,42 @@ begin
 end;
 
 procedure TfrmEDIExport.btnBrowseClick(Sender : TObject);
+var tmp:String;
+    begin
+      dlgSave.DefaultExt:='.edi';
+      dlgSave.InitialDir:=dmData.UsrHomeDir;
+      if edtFileName.Text<>'' then
+         Begin
+           tmp:=ExtractFilePath(edtFileName.Text);
+           if tmp<>'' then
+                dlgSave.InitialDir:=tmp;
+           dlgSave.FileName:=ExtractFileName(edtFileName.Text);
+         end;
+      if dlgSave.Execute then
+        edtFileName.Text := dlgSave.FileName
+end;
+
+procedure TfrmEDIExport.btnFileNameClearClick(Sender: TObject);
 begin
-  if dlgSave.Execute then
-    edtFileName.Text := dlgSave.FileName
+   edtFileName.Text:='';
+end;
+
+procedure TfrmEDIExport.btnFileNameFrmFltClick(Sender: TObject);
+  var
+   tmp:String;
+begin
+ if not dmData.IsFilter then
+  begin
+      Application.MessageBox('You must first use Contest Filter for qsos to export!','Error ...',mb_OK+mb_IconError);
+      exit
+  end;
+  if  edtFileName.Text<> '' then
+    Begin
+      tmp:=ExtractFilePath(edtFileName.Text);
+      edtFileName.Text:=tmp+dmUtils.ContestNameFromFilteredQsos+'.edi';
+    end
+   else
+      edtFileName.Text:=dmData.UsrHomeDir+dmUtils.ContestNameFromFilteredQsos+'.edi';
 end;
 
 procedure TfrmEDIExport.btnFrmFltClick(Sender: TObject);
