@@ -73,10 +73,10 @@ var
   nr : Integer;
 begin
   if not TryStrToInt(edtQSOsToLabel.Text, nr) then
-    edtQSOsToLabel.Text := '100'
+    edtQSOsToLabel.Text := '1'
   else begin
     if not ((nr > 0) and (nr<100)) then
-      edtQSOsToLabel.Text := '100'
+      edtQSOsToLabel.Text := '1'
   end
 end;
 
@@ -87,7 +87,7 @@ begin
   gchkExport.Checked[0] := True;
   gchkExport.Checked[2] := True;
   gchkExport.Checked[4] := True;
-  edtQSOsToLabel.Text   := cqrini.ReadString('QslExport','QSOs','6');
+  edtQSOsToLabel.Text   := cqrini.ReadString('QslExport','QSOs','1');
   edtRemarks.Text       := cqrini.ReadString('QslExport','Remarks','');
   chkRemoveSep.Checked  := cqrini.ReadBool('QslExport','RemoveSep',True);
   chkKeepCsvStructure.Checked := cqrini.ReadBool('QSLExport', 'KeepCsvStructure', False);
@@ -576,7 +576,9 @@ begin
     Rewrite(f);
     dmData.trQ.StartTransaction;
     dmData.trQ1.StartTransaction;
-    dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,idcall';
+    //dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,idcall';
+    //OH1KH 2024-04: To get "Print X QSOs on one label" work properly sorting must be made 1st-callsign,2nd-qsodate
+    dmData.Q.SQL.Text := 'select * from qslexport order by callsign,qsodate';
     dmData.Q.Open;
 
     while not dmData.Q.Eof do

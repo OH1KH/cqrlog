@@ -1,7 +1,7 @@
 object frmExLabelPrint: TfrmExLabelPrint
-  Left = 2485
+  Left = 897
   Height = 522
-  Top = 248
+  Top = 108
   Width = 424
   HelpType = htKeyword
   HelpKeyword = 'help/h22.html#bh4'
@@ -34,11 +34,14 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrCenter
     Left = 94
     Height = 17
+    Hint = 'Normally one (1) is used. That will place one qso in one line of csv file.'#10#10'Selecting number bigger than one (1) will put selected amount of qsos '#10'with **same callsign** in same csv line.'
     Top = 139
     Width = 119
     BorderSpacing.Left = 4
     Caption = 'QSOs on one label'
     ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
   end
   object lblProgress: TLabel
     AnchorSideLeft.Control = chkMarkSent
@@ -148,13 +151,17 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 42
     Height = 34
+    Hint = 'Normally one (1) is used. That will place one qso in one line of csv file.'#10#10'Selecting number bigger than one (1) will put selected amount of qsos '#10'with **same callsign** in same csv line.'
     Top = 130
     Width = 48
     BorderSpacing.Left = 3
     BorderSpacing.Top = 6
+    NumbersOnly = True
     OnExit = edtQSOsToLabelExit
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
-    Text = '6'
+    Text = '1'
   end
   object GroupBox2: TGroupBox
     AnchorSideLeft.Control = Label1
@@ -310,10 +317,13 @@ object frmExLabelPrint: TfrmExLabelPrint
     AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 23
+    Hint = 'Selecting this will put all,also unselected, qso fields to one csv file line.'#10'If field is not selected there are just two commas ,, shown for each '#10'unselected field in csv line.'#10#10'If this is *not* selected csv line has only selected qso fields, comma'#10'separated.'
     Top = 429
     Width = 146
     BorderSpacing.Top = 3
     Caption = 'Keep csv structure'
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 10
   end
   object dlgSave: TSaveDialog
