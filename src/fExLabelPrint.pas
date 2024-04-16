@@ -577,8 +577,8 @@ begin
     dmData.trQ.StartTransaction;
     dmData.trQ1.StartTransaction;
     //dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,idcall';
-    //OH1KH 2024-04: To get "Print X QSOs on one label" work properly sorting must be made 1st-callsign,2nd-qsodate
-    dmData.Q.SQL.Text := 'select * from qslexport order by callsign,qsodate';
+    //OH1KH 2024-04: To get "Print X QSOs on one label" work properly sorting must be made callsign, not idcall
+    dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,callsign,qsodate,qsl_via';
     dmData.Q.Open;
 
     while not dmData.Q.Eof do
