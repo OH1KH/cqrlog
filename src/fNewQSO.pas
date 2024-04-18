@@ -598,6 +598,8 @@ type
     procedure sbtnQRZClick(Sender: TObject);
     procedure sbtnHamQTHClick(Sender : TObject);
     procedure sbtnUsrbtnClick(Sender: TObject);
+    procedure sgrdCallStatisticPrepareCanvas(Sender: TObject; aCol,
+      aRow: Integer; aState: TGridDrawState);
     procedure tmrESCTimer(Sender: TObject);
     procedure tmrEndStartTimer(Sender: TObject);
     procedure tmrEndTimer(Sender: TObject);
@@ -6221,6 +6223,46 @@ end;
 procedure TfrmNewQSO.sbtnUsrbtnClick(Sender: TObject);
 begin
   dmUtils.ShowUsrUrl;
+end;
+
+//this is used for both DXCC- and Callstatistics grid painting
+procedure TfrmNewQSO.sgrdCallStatisticPrepareCanvas(Sender: TObject; aCol,
+  aRow: Integer; aState: TGridDrawState);
+var
+  c,r:integer;
+  gr:TStringGrid;
+begin
+   gr:=TStringGrid(Sender);
+   for c:=1 to gr.ColCount-1 do
+     Begin
+       if dmUtils.GetBandFromFreq(cmbFreq.Text) =dmUtils.GetBandFromFreq(gr.Cells[c,0]) then
+       break;
+     end;
+    Writeln(dmUtils.GetBandFromFreq(gr.Cells[c,0]));
+
+    if (aCol=c) then
+         Begin
+         case aRow of
+           0: gr.Canvas.Brush.Color:=clYellow;
+           1: if (cmbMode.Text='SSB') then
+              gr.Canvas.Brush.Color:=clLime
+              else
+               gr.Canvas.Brush.Color:=clYellow;
+           2: if (cmbMode.Text='CW') then
+              gr.Canvas.Brush.Color:=clLime
+              else
+              gr.Canvas.Brush.Color:=clYellow;
+           3: case cmbMode.Text of
+                   'SSB': gr.Canvas.Brush.Color:=clYellow;
+                   'CW' : gr.Canvas.Brush.Color:=clYellow;
+                   'AM' : gr.Canvas.Brush.Color:=clYellow;
+                   'FM' : gr.Canvas.Brush.Color:=clYellow;
+                   else
+                     //must be some of digital modes
+                     gr.Canvas.Brush.Color:=clLime;
+               end;
+           end;
+          end;
 end;
 
 procedure TfrmNewQSO.sbtnLocatorMapClick(Sender: TObject);

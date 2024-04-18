@@ -9,7 +9,7 @@ object frmNewQSO: TfrmNewQSO
   VertScrollBar.Page = 638
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 709
+  ClientHeight = 684
   ClientWidth = 1032
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
@@ -3125,18 +3125,18 @@ object frmNewQSO: TfrmNewQSO
           Height = 163
           Top = 368
           Width = 759
-          ActivePage = tabLOConfig
+          ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 3
-          TabIndex = 3
+          TabIndex = 0
           TabOrder = 27
           OnChange = pgDetailsChange
           object tabDXCCStat: TTabSheet
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
             Caption = 'DXCC statistic'
-            ClientHeight = 129
+            ClientHeight = 132
             ClientWidth = 749
             object sgrdStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
@@ -3157,15 +3157,16 @@ object frmNewQSO: TfrmNewQSO
               TitleFont.Color = clBlue
               TitleFont.Height = 8
               TitleStyle = tsNative
+              OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
+                373
                 374
-                375
               )
             end
           end
           object tabCallStat: TTabSheet
             Caption = 'Call statistic'
-            ClientHeight = 129
+            ClientHeight = 132
             ClientWidth = 749
             object sgrdCallStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
@@ -3186,16 +3187,17 @@ object frmNewQSO: TfrmNewQSO
               TitleFont.Color = clBlue
               TitleFont.Height = 8
               TitleStyle = tsNative
+              OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
+                373
                 374
-                375
               )
             end
           end
           object tabSatellite: TTabSheet
             AnchorSideBottom.Side = asrBottom
             Caption = 'Satellite'
-            ClientHeight = 129
+            ClientHeight = 132
             ClientWidth = 749
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
@@ -3329,7 +3331,7 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
             Caption = 'LO Config'
-            ClientHeight = 129
+            ClientHeight = 132
             ClientWidth = 749
             object cbTxLo: TCheckBox
               Left = 8
