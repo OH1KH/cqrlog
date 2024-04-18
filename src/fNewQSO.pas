@@ -6232,6 +6232,7 @@ var
   c,r:integer;
   gr:TStringGrid;
 begin
+   if edtCall.Text='' then exit;
    gr:=TStringGrid(Sender);
    for c:=1 to gr.ColCount-1 do
      Begin
