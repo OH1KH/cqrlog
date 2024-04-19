@@ -6238,7 +6238,7 @@ begin
    BandColor:=$CCFEFF;
    ModeColor:=$CCFECD;
    c:=dmUtils.GetBandPos(dmUtils.GetBandFromFreq(cmbFreq.Text))+1;
-
+   if c<1 then exit; //error, should not happen.
     if (aCol=c) then
          Begin
          case aRow of
