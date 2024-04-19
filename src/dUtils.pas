@@ -4127,7 +4127,7 @@ begin
   end;
 
 end;
-
+ //used band pos in selected bands list (zero based)
 function TdmUtils.GetBandPos(band: string): integer;
 var
   i: integer;

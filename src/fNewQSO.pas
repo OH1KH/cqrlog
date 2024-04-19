@@ -6229,38 +6229,36 @@ end;
 procedure TfrmNewQSO.sgrdCallStatisticPrepareCanvas(Sender: TObject; aCol,
   aRow: Integer; aState: TGridDrawState);
 var
-  c,r:integer;
+  c:integer;
+  BandColor,ModeColor:TColor;
   gr:TStringGrid;
 begin
    if edtCall.Text='' then exit;
    gr:=TStringGrid(Sender);
-   for c:=1 to gr.ColCount-1 do
-     Begin
-       if dmUtils.GetBandFromFreq(cmbFreq.Text) =dmUtils.GetBandFromFreq(gr.Cells[c,0]) then
-       break;
-     end;
-    Writeln(dmUtils.GetBandFromFreq(gr.Cells[c,0]));
+   BandColor:=$CCFEFF;
+   ModeColor:=$CCFECD;
+   c:=dmUtils.GetBandPos(dmUtils.GetBandFromFreq(cmbFreq.Text))+1;
 
     if (aCol=c) then
          Begin
          case aRow of
-           0: gr.Canvas.Brush.Color:=clYellow;
+           0: gr.Canvas.Brush.Color:=BandColor;
            1: if (cmbMode.Text='SSB') then
-              gr.Canvas.Brush.Color:=clLime
+              gr.Canvas.Brush.Color:=ModeColor
               else
-               gr.Canvas.Brush.Color:=clYellow;
+               gr.Canvas.Brush.Color:=BandColor;
            2: if (cmbMode.Text='CW') then
-              gr.Canvas.Brush.Color:=clLime
+              gr.Canvas.Brush.Color:=ModeColor
               else
-              gr.Canvas.Brush.Color:=clYellow;
+              gr.Canvas.Brush.Color:=BandColor;
            3: case cmbMode.Text of
-                   'SSB': gr.Canvas.Brush.Color:=clYellow;
-                   'CW' : gr.Canvas.Brush.Color:=clYellow;
-                   'AM' : gr.Canvas.Brush.Color:=clYellow;
-                   'FM' : gr.Canvas.Brush.Color:=clYellow;
+                   'SSB',
+                   'CW',
+                   'AM',
+                   'FM' : gr.Canvas.Brush.Color:=BandColor;
                    else
                      //must be some of digital modes
-                     gr.Canvas.Brush.Color:=clLime;
+                     gr.Canvas.Brush.Color:=ModeColor;
                end;
            end;
           end;

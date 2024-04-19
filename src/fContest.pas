@@ -1372,7 +1372,7 @@ begin
    if dUtils.cBands[ContestBandPtr[f]] <> dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) then
        exit;   //not in contest band list
    if (aCol = f+2) and ((aRow >= 1) and (aRow <= 7)) then
-      sgStatus.Canvas.Brush.Color := clYellow;
+      sgStatus.Canvas.Brush.Color := $CCFEFF;
 end;
 
 
