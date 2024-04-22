@@ -15,6 +15,8 @@ type
 
   TfrmMonWsjtx = class(TForm)
     chkSort: TCheckBox;
+    chkFlt: TCheckBox;
+    edtFltMap: TEdit;
     mnuSort1: TMenuItem;
     mnuSort2: TMenuItem;
     mnuSort3: TMenuItem;
@@ -74,6 +76,7 @@ type
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
+    procedure chkFltClick(Sender: TObject);
     procedure chkSortClick(Sender: TObject);
     procedure chkSortMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -100,6 +103,12 @@ type
     procedure edtFollowCallKeyDown(Sender: TObject; var Key: word;
       Shift: TShiftState);
     procedure edtFollowDblClick(Sender: TObject);
+    procedure edtFltMapChange(Sender: TObject);
+    procedure edtFltMapEnter(Sender: TObject);
+    procedure edtFltMapExit(Sender: TObject);
+    procedure edtFltMapKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtFltMapMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
@@ -653,6 +662,39 @@ begin
   SendQsoInit(RepFlw);
 end;
 
+procedure TfrmMonWsjtx.edtFltMapChange(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmMonWsjtx.edtFltMapEnter(Sender: TObject);
+begin
+  edtFltMap.Text:='';
+  chkFlt.Checked:=false;
+end;
+
+procedure TfrmMonWsjtx.edtFltMapExit(Sender: TObject);
+begin
+  edtFltMap.Text := trim(UpperCase(edtFltMap.Text));   //sure upcase-trimmed
+  cqrini.WriteString('MonWsjtx', 'MapFilterString', edtFltMap.Text);
+end;
+
+procedure TfrmMonWsjtx.edtFltMapKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key=VK_RETURN then
+   Begin
+     if edtFltMap.Text<>'' then chkFlt.Checked:=True;
+     sgMonitor.SetFocus;
+   end;
+end;
+
+procedure TfrmMonWsjtx.edtFltMapMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button=mbRight then edtFltMap.Text:='';
+end;
+
 
 
 procedure TfrmMonWsjtx.chknoHistoryChange(Sender: TObject);
@@ -733,6 +775,8 @@ begin
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
   chkSort.Visible:=chkMap.Checked;
+  chkFlt.Visible:=chkMap.Checked;
+  edtFltMap.Visible:=chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -756,6 +800,8 @@ begin
       chknoHistory.Checked := True;
       chkCbCQ.Checked := cqrini.ReadBool('MonWsjtx', 'ColorBacCQkMap', False);
       chkdB.Checked := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
+      chkFlt.Checked:= cqrini.ReadBool('MonWsjtx', 'MapFilter', False);
+      edtFltMap.Text:= cqrini.ReadString('MonWsjtx', 'MapFilterString', '');
       //map mode allows text printing. Printing stays on when return to monitor mode.
       chknoHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
@@ -942,6 +988,11 @@ begin
     else
     btFtxtName.Visible:=false;
   end;
+end;
+
+procedure TfrmMonWsjtx.chkFltClick(Sender: TObject);
+begin
+  cqrini.WriteBool('MonWsjtx', 'MapFilter', chkFlt.Checked);
 end;
 
 procedure TfrmMonWsjtx.chkSortClick(Sender: TObject);
@@ -1479,6 +1530,8 @@ begin
             Writeln('Other call:', msgCall, '    loc:', msgLocator);
           //print only DX drops here
           if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
+          //print filter callsign drops here
+          if chkFlt.Checked and (pos(edtFltMap.Text,msgCall)=0) then exit;
 
           if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
                   msgLocator := '';
@@ -2135,6 +2188,9 @@ begin
   begin
     //print only DX drops here
     if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
+    //print filter callsign drops here
+    if chkFlt.Checked and chkMap.Checked and (pos(edtFltMap.Text,msgCall)=0) then exit;
+
 
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);

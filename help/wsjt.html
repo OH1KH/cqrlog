@@ -247,10 +247,12 @@ cd ~/.config/cqrlog/ctyfiles
 #done
 --------------cut here---------------------------------------------------------
 </pre></p>
-<p><img src="img/wsjt29.png" name="29" width="144" height="383">
-</img><img src="img/wsjt35.png" name="35" width="144" height="383">
-</img><img src="img/wsjt36.png" name="35" width="144" height="383">
-</img>
+<p>
+<img src="img/wsjt29.png" name="29" width="144" height="383"></img>
+<img src="img/wsjt35.png" name="35" width="144" height="383"></img>
+<img src="img/wsjt36.png" name="36" width="144" height="383"></img>
+<img src="img/wsjt38.png" name="38" width="144" height="383"></img>
+<img src="img/wsjt39.png" name="39" width="144" height="383"></img>
 </p>
 <p>CQ-monitor can be turned to "Band map"- type Wsjt-x map by checking "<strong>Map</strong>". It hides all other controls.
 How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Exception is that <strong>Text alert</strong> does not find continents and comments like "New country","QSL needed" etc.
@@ -263,7 +265,11 @@ How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Excep
 </br></br>You can initiate qso same way as in CQ-monitor by double click on line  <strong>without </strong> parentheses.
  Double click on line  <strong>with </strong> parentheses loads call to Std messages of Wsjt-x and sets frequency, but  <strong>does not initiate TX</strong>.
 </br>This is a new property of Wsjt-x 1.9.0-rc3 and up. With previous versions this does not make any action.
-</p><p><strong>dB</strong> selection shows station snr report, like it shows up in Band Activity of wsjt-x.
+</p>
+<p>
+<strong>Filter</strong> selection activates filter that passes only lines having callsign, or part of it, entered in Filter box
+</br><strong>Sort</strong> selection activates sorting of lines, but then you loose color coding. You can still see newer worked calls on bold and already worked calls on lowcase (current band). All other uppercase calls you have worked on another band or mode.
+<strong>dB</strong> selection shows station snr report, like it shows up in Band Activity of wsjt-x.
 </br><strong>ColorBackCQs </strong> selection work so that all <strong>CQs</strong> are printed (colored) <strong>back to Wsjt-x</strong> Band Activity window and <strong>rest of the traffic</strong> will appear to Wsjt-x <strong>band map</strong>.
 </p>
 If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 

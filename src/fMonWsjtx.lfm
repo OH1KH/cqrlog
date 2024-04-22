@@ -604,6 +604,47 @@ object frmMonWsjtx: TfrmMonWsjtx
     ShowHint = True
     TabOrder = 7
   end
+  object edtFltMap: TEdit
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = chkSort
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 499
+    Height = 34
+    Hint = 'Put here a callsign or part of it to see only those in Map when filter is checked.'
+    Top = 304
+    Width = 80
+    Anchors = [akTop, akRight]
+    AutoSize = False
+    BorderSpacing.Right = 3
+    OnChange = edtFltMapChange
+    OnEnter = edtFltMapEnter
+    OnExit = edtFltMapExit
+    OnKeyDown = edtFltMapKeyDown
+    OnMouseUp = edtFltMapMouseUp
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 8
+  end
+  object chkFlt: TCheckBox
+    AnchorSideLeft.Control = chkSort
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = chkdB
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Side = asrCenter
+    Left = 179
+    Height = 23
+    Hint = 'Enable or disable filtering'
+    Top = 310
+    Width = 58
+    BorderSpacing.Left = 3
+    Caption = 'Filter'
+    OnClick = chkFltClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 9
+  end
   object popColors: TPopupMenu
     Left = 104
     Top = 88
