@@ -62,6 +62,7 @@ type
     mQ: TSQLQuery;
     Q2: TSQLQuery;
     CQ: TSQLQuery;
+    QStatNewQSO: TSQLQuery;
     Qstate: TSQLQuery;
     qFreqMemGrid: TSQLQuery;
     qFreqs: TSQLQuery;
@@ -94,6 +95,7 @@ type
     qRbnMon: TSQLQuery;
     qFreqMem: TSQLQuery;
     trCQ: TSQLTransaction;
+    trQStatNewQSO: TSQLTransaction;
     trQstate: TSQLTransaction;
     trW: TSQLTransaction;
     trWorkedContests: TSQLTransaction;
