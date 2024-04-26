@@ -6235,8 +6235,19 @@ var
 begin
    if edtCall.Text='' then exit;
    gr:=TStringGrid(Sender);
-   BandColor:=$CCFEFF;
-   ModeColor:=$CCFECD;
+   //BandColor:=$CCFEFF;
+   //ModeColor:=$CCFECD;
+   if ((Red(ColorToRGB(GetDefaultColor(dctBrush))))>$77) then
+    Begin             //this is selected if background is light
+      BandColor:=$CCFEFF;
+      ModeColor:=$CCFECD;
+    end
+   else
+    Begin             //this is selected if background is dark
+      BandColor:=$054445;
+      ModeColor:=$074505;
+    end;
+
    c:=dmUtils.GetBandPos(dmUtils.GetBandFromFreq(cmbFreq.Text))+1;
    if c<1 then exit; //error, should not happen.
     if (aCol=c) then

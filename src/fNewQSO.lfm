@@ -3189,8 +3189,8 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
+                372
                 373
-                374
               )
             end
           end

@@ -1361,6 +1361,7 @@ end;
 procedure TfrmContest.sgStatusPrepareCanvas(Sender: TObject; aCol,aRow: Integer; aState: TGridDrawState);
 var
   f:integer;
+  BandColor:TColor;
 begin
    if (aCol = 0) and (aRow = 0)then
       sgStatus.Canvas.Brush.Color := clLime;
@@ -1371,8 +1372,18 @@ begin
     end;
    if dUtils.cBands[ContestBandPtr[f]] <> dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) then
        exit;   //not in contest band list
+
+   if ((Red(ColorToRGB(GetDefaultColor(dctBrush))))>$77) then
+    Begin             //this is selected if background is light
+      BandColor:=$CCFEFF;
+    end
+   else
+    Begin             //this is selected if background is dark
+      BandColor:=$054445;
+    end;
+
    if (aCol = f+2) and ((aRow >= 1) and (aRow <= 7)) then
-      sgStatus.Canvas.Brush.Color := $CCFEFF;
+      sgStatus.Canvas.Brush.Color := BandColor;
 end;
 
 
