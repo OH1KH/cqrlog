@@ -1102,4 +1102,20 @@ object dmData: TdmData
     Left = 888
     Top = 144
   end
+  object QDXCCStat: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = QBeforeOpen
+    Transaction = trQDXCCStat
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 800
+    Top = 224
+  end
+  object trQDXCCStat: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 800
+    Top = 288
+  end
 end

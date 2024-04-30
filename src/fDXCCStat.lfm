@@ -114,7 +114,7 @@ object frmDXCCStat: TfrmDXCCStat
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.6.0'
   object pnlStatSum: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
@@ -182,7 +182,7 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideLeft.Control = gbCW
         AnchorSideTop.Control = gbCW
         Left = 6
-        Height = 15
+        Height = 17
         Top = 0
         Width = 31
         BorderSpacing.Left = 6
@@ -194,8 +194,8 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideTop.Control = lblCWWKD
         AnchorSideTop.Side = asrBottom
         Left = 6
-        Height = 15
-        Top = 18
+        Height = 17
+        Top = 20
         Width = 29
         BorderSpacing.Top = 3
         Caption = 'cfm:'
@@ -221,7 +221,7 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideLeft.Control = gbPhone
         AnchorSideTop.Control = gbPhone
         Left = 6
-        Height = 15
+        Height = 17
         Top = 0
         Width = 31
         BorderSpacing.Left = 6
@@ -233,8 +233,8 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideTop.Control = lblFoneWKD
         AnchorSideTop.Side = asrBottom
         Left = 6
-        Height = 15
-        Top = 18
+        Height = 17
+        Top = 20
         Width = 29
         BorderSpacing.Top = 3
         Caption = 'cfm:'
@@ -260,7 +260,7 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideLeft.Control = gbDigi
         AnchorSideTop.Control = gbDigi
         Left = 6
-        Height = 15
+        Height = 17
         Top = 0
         Width = 31
         BorderSpacing.Left = 6
@@ -272,8 +272,8 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideTop.Control = lblDIGIWKD
         AnchorSideTop.Side = asrBottom
         Left = 6
-        Height = 15
-        Top = 18
+        Height = 17
+        Top = 20
         Width = 29
         BorderSpacing.Top = 3
         Caption = 'cfm:'
@@ -299,7 +299,7 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideLeft.Control = gbMix
         AnchorSideTop.Control = gbMix
         Left = 6
-        Height = 15
+        Height = 17
         Top = 0
         Width = 31
         BorderSpacing.Left = 6
@@ -311,8 +311,8 @@ object frmDXCCStat: TfrmDXCCStat
         AnchorSideTop.Control = lblWkdMix
         AnchorSideTop.Side = asrBottom
         Left = 6
-        Height = 15
-        Top = 18
+        Height = 17
+        Top = 20
         Width = 29
         BorderSpacing.Top = 3
         Caption = 'cfm:'
@@ -341,7 +341,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       Left = 447
       Height = 25
-      Top = 13
+      Top = 14
       Width = 147
       BorderSpacing.Left = 32
       Caption = 'Refresh statistic'
@@ -355,7 +355,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       Left = 155
       Height = 29
-      Top = 11
+      Top = 12
       Width = 260
       BorderSpacing.Left = 32
       ItemHeight = 0
@@ -377,7 +377,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideLeft.Control = PnlDXCCStat
       AnchorSideTop.Control = PnlDXCCStat
       Left = 18
-      Height = 15
+      Height = 17
       Top = 18
       Width = 105
       BorderSpacing.Left = 18

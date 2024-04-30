@@ -2189,7 +2189,7 @@ begin
     //print only DX drops here
     if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
     //print filter callsign drops here
-    if chkFlt.Checked and chkMap.Checked and (pos(edtFltMap.Text,msgCall)=0) then exit;
+    //if chkFlt.Checked and chkMap.Checked and (pos(edtFltMap.Text,msgCall)=0) then exit;
 
 
     if LocalDbg then

@@ -224,9 +224,9 @@ begin
   else
     where := where + '(qsl_r = '+QuotedStr('Q')+')';
 
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
+  Q.Close;
+  if trQ.Active then
+        trQ.Rollback;
   Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
                 'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif<>0 and '+where+') as foo';
 
