@@ -2182,6 +2182,7 @@ begin
   if (pref = '') or (pref='!') or (pref='#') or (pref = '?') then
    exit;
   Q.Close();
+  if trQ.Active then trQ.Rollback;
   Q.SQL.Text := 'SELECT iota_nr,pref FROM cqrlog_common.iota_list WHERE dxcc_ref = ' + QuotedStr(pref) +
                 ' ORDER BY iota_nr';
   trQ.StartTransaction;
