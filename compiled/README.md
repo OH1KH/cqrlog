@@ -219,7 +219,7 @@ You need "sudo" for this copy.
 
 
 
-### A list what is not included into official cqrlog GitHub source and exist only in Alpha test versions can be found from [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
+### Alpha test version changes can be found from [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
  
 ### Some Cqrlog related videos can be found from  <https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ>
 
