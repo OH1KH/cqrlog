@@ -1,6 +1,14 @@
+This folder holds ready compiled binary files of source branch "loc_testing" that is the version of Cqrlog that I am using myself daily.
+I call it Alpha version.
+At the moment (2024-05-01) it is mostly compatible with official version. Depending what happens to official version development it may not be so in future.
+
+Note that source (one step backwards from this "compiled" folder)  may have bigger version number and have changes and fixes made after ready compiled versions are released.
+Source is more as "daily snapshot" and may have more bugs.
+Compiled binary versions are released after it seems that biggest bugs are found and fixed.
+
+## NOTES:
 
  #### NOTE: Upgrading instructions for using script, manual install or compile from shource can be foud below. Just scroll down ...
-
 
 
  #### NOTE: Upgrading to 2.6.0.(125) ,or higer, will add database table "cqrlog_common.states" and set version to 7.
@@ -11,62 +19,42 @@ If you can not start Cqrlog after update check your GLIBC version with command c
 Update GLIBC if it is below 2.3.5.
 If you do not want to do that you can compile this source (see 1 folder up) with your current OS version and get it running.
 Note that the Alpha source version is usually one step higher than ready compiled versions.
- 
- #### NOTE: At the moment there is no new official version release.  Alpha 2.6.0(125) is ahead of official source that identifies itself now as 2.6.0(119) 
-From [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
-you can see all changes.  Changelog appears also at first start of (122), and can be accessed via "Help" when Cqrlog is running.
 
 
-This folder holds ready compiled binary files of source branch "loc_testing" that is the version of Cqrlog that I am using myself daily. That is called Alpha version.
-They contain all accepted pull requests from official source (that may not be released offically yet) plus some test code that is not pull requested yet (and may not be pull requested ever)
-Note that source (one step backwards from this "compiled" folder)  may have bigger subversion number and have changes and fixes made after ready compiled versions are released.
-Source is more as "daily snapshot" and may have (more) bugs. Compiled binary versions are released after it seems that biggest bugs are found and fixed.
-
-## ABOUT THESE BINARIES:
- These binaries (cqr0,cqr1,cqr4 zips) include latest official source compiled, having updates up to commit:
-
-    Commits on Nov 26, 2023 Fix: maxlength of MASTER.SCP file
+## ABOUT THESE BINARY FILES:
 
  Binaries (cqr2,cqr3,cqr5,cqr6 zips) include latest Alpha versions.
  
- To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
  
-BINARIES:
+Alpha BINARIES:
 ---------
-  - **cqr0.zip  holds binary for  64bit systems compiled for GTK2 widgets (official release )**
-  - **cqr1.zip  holds binary for  32bit systems compiled for GTK2 widgets (official release )**
-  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (Alpha release)**
-  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (Alpha release)**
-  - **cqr4.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets (official release )**
-  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (Alpha release,you may need to install libqt5pas1 (Fedora qt5pas) to run this)**
-  - **cqr6.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets (Alpha release)**
+  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets**
+  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets**
+  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (You may need to install libqt5pas1 (Fedora: qt5pas) to run this)**
+  - **cqr6.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets**
   - **help.tgz  holds latest help files**
   - **newupdate.zip holds the newupdate.sh script for easy update**
 
-**All binaries must be copied over complete, working, official installation. These do not work alone.**
-========================================================================================================
-     
+**These binary files do not work alone. All binaries must be either copied over complete, working, official installation**
+** or used with required dependency packages and with folder /usr/share/cqrlog having all files from official install**
 
 
 ------------------WARNINGS-----------------
 ===========================================
    
-**This is NOT official release !**
+**This is NOT official Cqrlog release !**
 
    ***ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!***
    
    If you use script-install (see below) it makes backups for you.
    Otherwise see "manual-install (below).
    
-   In some cases it has happen that alpha binary compiled using Fedora linux may not run flawlessly with Ubuntu derivates.
+   In some cases it has happen that Alpha compiled using Fedora Linux may not run flawlessly with Ubuntu derivates.
    if you start to get mysterious errors it might be the reason.
-   I have now added version that has no special additions from me. It is compiled with Mint20 from up to date official source.
-   You could try that or otherwise consider to compile cqrlog either from official or from my alpha source.
-   I have written few messages to Cqrlog forum how to make the compile.
    
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
@@ -193,6 +181,10 @@ When lazarus-ide is installed you need to change to source directory, either git
 After that start the compile process, issue:
 
 	make
+	
+	In case you want QT5 version add cqrlog_qt5 after make.
+	
+	make cqrlog_qt5
 
 When compile has finished install the new Cqrlog with command
 
