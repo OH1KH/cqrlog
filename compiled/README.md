@@ -219,7 +219,7 @@ You need "sudo" for this copy.
 
 
 
-### Alpha test version changes can be found from [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
+### Alpha version changes can be found from [Changelog](https://htmlpreview.github.io/?https://github.com/OH1KH/cqrlog/blob/loc_testing/src/changelog.html) 
  
 ### Some Cqrlog related videos can be found from  <https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ>
 
