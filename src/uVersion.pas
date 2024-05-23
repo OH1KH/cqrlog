@@ -5,7 +5,7 @@ interface
 
 const
 
-  cVersionBase     ='α_(126)_';
+  cVersionBase     ='α_(127)_';
 
   {$IFDEF LCLGtk2}
   cVERSION    = cVersionBase+'Gtk2';
@@ -15,6 +15,9 @@ const
   {$ENDIF}
   {$IFDEF LCLQt5}
   cVERSION    = cVersionBase+'QT5';
+  {$ENDIF}
+  {$IFDEF LCLQt6}
+  cVERSION    = cVersionBase+'QT6';
   {$ENDIF}
 
   cMAJOR      = 2;

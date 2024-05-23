@@ -2325,7 +2325,7 @@ var
   sr : TSearchRec;
 begin
   Result := '';
-  if FindFirst('/dev/ttyS*', $FFFFFFFF, sr) = 0 then
+  if FindFirst('/dev/ttyS*', faAnyFile, sr) = 0 then //OH1KH $FFFFFFFF replaced with faAnyFile to avoid compile error with Laz 3.2
     repeat
       if (sr.Attr and $FFFFFFFF) = Sr.Attr then
       begin
@@ -2335,7 +2335,7 @@ begin
       end;
     until FindNext(sr) <> 0;
   FindClose(sr);
-  if FindFirst('/dev/ttyUSB*', $FFFFFFFF, sr) = 0 then begin
+  if FindFirst('/dev/ttyUSB*', faAnyFile, sr) = 0 then begin //OH1KH $FFFFFFFF replaced with faAnyFile
     repeat
       if (sr.Attr and $FFFFFFFF) = Sr.Attr then begin
         if Result <> '' then Result := Result + ',';
@@ -2344,7 +2344,7 @@ begin
     until FindNext(sr) <> 0;
   end;
   FindClose(sr);
-  if FindFirst('/dev/ttyAM*', $FFFFFFFF, sr) = 0 then begin
+  if FindFirst('/dev/ttyAM*', faAnyFile, sr) = 0 then begin //OH1KH $FFFFFFFF replaced with faAnyFile
     repeat
       if (sr.Attr and $FFFFFFFF) = Sr.Attr then begin
         if Result <> '' then Result := Result + ',';
@@ -2356,4 +2356,4 @@ begin
 end;
 {$ENDIF}
 
-end.
+end.

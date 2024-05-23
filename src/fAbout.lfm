@@ -20,9 +20,9 @@ object frmAbout: TfrmAbout
     Height = 294
     Top = 0
     Width = 453
-    ActivePage = tabAbout
+    ActivePage = tabContributors
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object tabAbout: TTabSheet
       AnchorSideLeft.Control = PageControl1
@@ -1028,7 +1028,7 @@ object frmAbout: TfrmAbout
           189
         )
         Cells = (
-          34
+          36
           0
           0
           'Saku'
@@ -1080,6 +1080,9 @@ object frmAbout: TfrmAbout
           0
           16
           'Thomas'
+          0
+          17
+          'George'
           1
           0
           'OH1KH'
@@ -1131,6 +1134,9 @@ object frmAbout: TfrmAbout
           1
           16
           'EA5AKM'
+          1
+          17
+          'N3GB'
         )
       end
     end
