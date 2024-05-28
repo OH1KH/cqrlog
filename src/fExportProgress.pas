@@ -189,10 +189,9 @@ var
                      srx, stx_string, srx_string, contestname, Darc_Dok : String);
 
   var
-     station_callsign  : String;
-     OutMode,
-     OutSubmode        :String;
-
+     station_callsign  :String = '';
+     OutMode           :String = '';
+     OutSubmode        :String = '';
   begin
     station_callsign := cqrini.ReadString('Station', 'Call', '');
     leng := 0;

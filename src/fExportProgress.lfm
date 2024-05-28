@@ -145,7 +145,7 @@ object frmExportProgress: TfrmExportProgress
   }
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.2.6.0'
   object lblComment: TLabel
     Left = 0
     Height = 17
@@ -167,7 +167,7 @@ object frmExportProgress: TfrmExportProgress
   object tmrExport: TTimer
     Enabled = False
     OnTimer = tmrExportTimer
-    left = 23
-    top = 32
+    Left = 23
+    Top = 32
   end
 end

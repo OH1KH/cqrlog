@@ -52,13 +52,13 @@ const
   empty_freq = '0.00000';
   empty_azimuth = '0.0';
 
-  cMaxModes = 48; //One less than count 49 modes (loops have 0..MaxModes)
+  cMaxModes = 46; //One less than count 47 modes (loops have 0..MaxModes)
   cModes: array [0..cMaxModes] of string =
-    ('CW',    'SSB',  'AM',    'FM',    'RTTY',  'SSTV',  'PACTOR','PSK',   'ATV',         'CLOVER',
-     'GTOR',  'MTOR', 'PSK31', 'HELL',  'MT63',  'QRSS',  'CWQ',   'BPSK31','MFSK',        'JT44',
-     'FSK44', 'WSJT', 'AMTOR', 'THROB', 'BPSK63','PACKET','OLIVIA','MFSK16','JS8',         'JT4',
-     'JT6M',  'JT65', 'JT65A', 'JT65B', 'JT65C', 'JT9',   'QRA64', 'ISCAT', 'MSK144',      'FT8',
-     'FT4',   'FST4', 'FSK441','PSK125','PSK63', 'WSPR',  'PSK250','ROS',   'DIGITALVOICE');
+    ('CW', 'SSB', 'FT8', 'FT4', 'RTTY', 'AM', 'AMTOR', 'ATV', 'CLOVER', 'CWQ',
+    'DIGITALVOICE', 'FM', 'FSK44', 'FSK441', 'FST4', 'GTOR', 'HELL', 'ISCAT', 'JS8', 'JT4',
+    'JT44', 'JT65', 'JT65A', 'JT65B', 'JT65C', 'JT6M', 'JT9', 'MFSK', 'MFSK16', 'MSK144',
+    'MT63', 'MTOR', 'OLIVIA', 'PACKET', 'PACTOR', 'PSK', 'PSK125', 'PSK250', 'PSK31', 'PSK63',
+    'QRA64', 'QRSS', 'ROS', 'SSTV', 'THROB', 'WSJT', 'WSPR');
 
   cMaxBandsCount = 31; //True count of bands. (loops have 0..MaxBandsCount-1)
                        //when you change this check also frmContest.CommonStatus.ContestBandPtr
@@ -231,7 +231,7 @@ type
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
     procedure BandFromDbase;
     procedure UpdateHelpBrowser;
-    procedure ModeFromCqr(CqrMode:String;var OutMode,OutSubmode:String;dbg:Boolean);
+    procedure ModeFromCqr(CqrMode:String;var Mode,Submode:String;dbg:Boolean);
     procedure UpdateCallBookcnf;
     procedure ClearStatGrid(g:TStringGrid);
     procedure AddBandsToStatGrid(g:TStringGrid);
@@ -5275,7 +5275,7 @@ begin
 
 end;
 
-procedure TdmUtils.ModeFromCqr(CqrMode:String;var OutMode,OutSubmode:String;dbg:Boolean);
+procedure TdmUtils.ModeFromCqr(CqrMode:String;var Mode,Submode:String;dbg:Boolean);
 //encodes Cqrlog's mode to mode and submode pair
 //returns empty string to submode if not exist
 var
@@ -5289,12 +5289,12 @@ Begin
       e:= ExceptMode.IndexOfName(CqrMode);
       if e > -1 then
         Begin
-          OutMode := uppercase(ExceptMode.Values[CqrMode]);
-          OutSubmode:='';
+          Mode := uppercase(ExceptMode.Values[CqrMode]);
+          Submode:='';
           if dbg then
                       begin
                         Writeln('ex_mode=cqrlogmode line: ',e+1);
-                        Writeln('Cqrlog will export adif as mode: ',OutMode,'  submode: ',OutSubmode);
+                        Writeln('Cqrlog will export adif as mode: ',Mode,'  submode: ',Submode);
                       end;
           exit;
         end;
@@ -5302,8 +5302,8 @@ Begin
       e:= SubmodeMode.IndexOfName(CqrMode);
       if e > -1 then
          Begin
-           OutMode    := uppercase(SubmodeMode.Values[CqrMode]);
-           OutSubmode := CqrMode;
+           Mode    := uppercase(SubmodeMode.Values[CqrMode]);
+           Submode := CqrMode;
            if dbg then
                       Writeln('submode=mode line: ',e+1);
 
@@ -5313,17 +5313,17 @@ Begin
                            begin
                              if dbg then
                                         Writeln('submode for_import_only line: ',e+1);
-                             OutSubmode :='';
+                             Submode :='';
                            end;
          end
         else
          //no submodes
          Begin
-           OutMode := CqrMode;
-           OutSubmode:='';
+           Mode := CqrMode;
+           Submode:='';
          end;
      if dbg then
-                Writeln('Cqrlog will export adif as mode: ',OutMode,'  submode: ',OutSubmode);
+                Writeln('Cqrlog will export adif as mode: ',Mode,'  submode: ',Submode);
 end;
 function  TdmUtils.ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
 //decodes mode and submode pair to mode used by Cqrlog internally
