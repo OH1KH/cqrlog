@@ -139,6 +139,10 @@ type
     lblSumDist: TLabel;
     lblSumDistances: TLabel;
     MenuItem1:  TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuItem108: TMenuItem;
+    MenuItem109: TMenuItem;
+    MenuItem110: TMenuItem;
     MenuItem2: TMenuItem;
     mnuOR: TMenuItem;
     MenuItemStats: TMenuItem;
@@ -400,6 +404,7 @@ type
     procedure acWAZCfmExecute(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure MenuItem107Click(Sender: TObject);
+    procedure MenuItem10Click(Sender: TObject);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
@@ -1359,6 +1364,11 @@ begin
      end;
 end;
 
+procedure TfrmMain.MenuItem10Click(Sender: TObject);
+begin
+  if Application.MessageBox('Do you want to backup your log data?','Backup log',mb_YesNo+mb_IconQuestion)= idYes then
+      frmNewQSO.CreateAutoBackup;
+end;
 
 procedure TfrmMain.mnueQSLViewClick(Sender: TObject);
 var

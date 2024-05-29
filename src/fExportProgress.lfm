@@ -1,11 +1,11 @@
 object frmExportProgress: TfrmExportProgress
   Left = 408
-  Height = 56
+  Height = 65
   Top = 477
-  Width = 313
+  Width = 350
   Caption = 'Exporting ...'
-  ClientHeight = 56
-  ClientWidth = 313
+  ClientHeight = 65
+  ClientWidth = 350
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
     0000400000000100200000000000001000006400000064000000000000000000
@@ -147,19 +147,29 @@ object frmExportProgress: TfrmExportProgress
   OnShow = FormShow
   LCLVersion = '2.2.6.0'
   object lblComment: TLabel
-    Left = 0
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 23
     Height = 17
-    Top = 8
+    Top = 3
     Width = 304
     Alignment = taCenter
     AutoSize = False
+    BorderSpacing.Top = 3
     ParentColor = False
   end
   object pBarProg: TProgressBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 20
-    Top = 36
-    Width = 313
+    Height = 25
+    Top = 40
+    Width = 350
     Align = alBottom
     Step = 1
     TabOrder = 0

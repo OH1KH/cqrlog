@@ -476,7 +476,7 @@ begin
       tmp := dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(dmData.Q1.FieldByName('callsign').AsString));
       Writeln(f,tmp);
 
-      dmUtils.ModeFromCqr(dmData.Q1.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
+      dmUtils.ModeFromCqr(dmData.Q1.FieldByName('mode').AsString,0,dmData.DebugLevel >= 1,ModeOut,SubmodeOut);
       tmp := dmUtils.StringToADIF('<MODE',ModeOut);
       Writeln(f,tmp);
       if SubmodeOut<>'' then

@@ -160,6 +160,7 @@ object frmMain: TfrmMain
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
+  ShowHint = True
   LCLVersion = '2.2.6.0'
   object sbMain: TStatusBar
     AnchorSideRight.Side = asrBottom
@@ -1116,6 +1117,11 @@ object frmMain: TfrmMain
         object MenuItem102: TMenuItem
           Action = acCabrilloExport
         end
+      end
+      object MenuItem10: TMenuItem
+        Caption = 'Backup log (ADIF)'
+        Hint = 'Same as Auto backup on program exit.'#10'Check preferences/Exit & Auto backup settings.'
+        OnClick = MenuItem10Click
       end
       object MenuItem14: TMenuItem
         Caption = '-'

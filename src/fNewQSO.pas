@@ -676,7 +676,6 @@ type
     procedure SaveSettings;
     procedure ChangeCallBookCaption;
     procedure SendSpot;
-    procedure CreateAutoBackup();
     procedure RefreshInfoLabels;
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
@@ -769,6 +768,7 @@ type
     procedure UpdateFKeyLabels;
     procedure RunVK(key_pressed: String);
     procedure RunST(script: String);
+    procedure CreateAutoBackup;
   end;
 
   type
@@ -4123,7 +4123,7 @@ begin
   begin
     if cqrini.ReadBool('Backup','AskFirst',False) then
     begin
-      case Application.MessageBox('Do you want to backup your data?'+#13+#13+'("Cancel" = Do not exit cqrlog)','Exit & backup',mb_YesNoCancel+mb_IconQuestion) of
+      case Application.MessageBox('Do you want to backup your log data?'+#13+#13+'("Cancel" = Do not exit cqrlog)','Exit & backup',mb_YesNoCancel+mb_IconQuestion) of
         idCancel : begin
                      CloseAction := TCloseAction(caNone);
                      exit
@@ -7477,7 +7477,7 @@ begin
   NewQSOFromSpot(Call,FloatToStr(Freq),Mode)
 end;
 
-procedure TfrmNewQSO.CreateAutoBackup();
+procedure TfrmNewQSO.CreateAutoBackup;
 var
   call, path1, path2 : String;
 begin

@@ -231,7 +231,7 @@ type
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
     procedure BandFromDbase;
     procedure UpdateHelpBrowser;
-    procedure ModeFromCqr(CqrMode:String;var Mode,Submode:String;dbg:Boolean);
+    procedure ModeFromCqr(CqrMode:String;ExportType:integer;dbg:Boolean;var Mode,Submode:String);
     procedure UpdateCallBookcnf;
     procedure ClearStatGrid(g:TStringGrid);
     procedure AddBandsToStatGrid(g:TStringGrid);
@@ -5275,7 +5275,7 @@ begin
 
 end;
 
-procedure TdmUtils.ModeFromCqr(CqrMode:String;var Mode,Submode:String;dbg:Boolean);
+procedure TdmUtils.ModeFromCqr(CqrMode:String;ExportType:integer;dbg:Boolean;var Mode,Submode:String);
 //encodes Cqrlog's mode to mode and submode pair
 //returns empty string to submode if not exist
 var
@@ -5307,14 +5307,17 @@ Begin
            if dbg then
                       Writeln('submode=mode line: ',e+1);
 
-           //is submode import only
-           e:=ImportMode.IndexOf(CqrMode);
-           if e > -1 then
+           //is submode import only? Backup bypasses this adif standard
+           if ExportType <> 2 then
+            begin
+             e:=ImportMode.IndexOf(CqrMode);
+             if e > -1 then
                            begin
                              if dbg then
                                         Writeln('submode for_import_only line: ',e+1);
                              Submode :='';
                            end;
+            end;
          end
         else
          //no submodes

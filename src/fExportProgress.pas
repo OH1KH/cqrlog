@@ -71,14 +71,18 @@ begin
   begin
     running := True;
     case ExportType of
-    0,2 : begin
+    0 : begin
             lblComment.Caption := 'Exporting to ADIF file ...';
             ExportADIF;
           end;
-      1 : begin
+    1 : begin
             lblComment.Caption := 'Exporting to HTML file ...';
             ExportHTML;
-          end
+          end;
+    2 : begin
+            lblComment.Caption := 'Backup to ADIF file ...';
+            ExportADIF;
+          end;
     end // case
   end
 end;
@@ -223,7 +227,7 @@ var
       SaveTag(dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(call)),leng);
     if ExMode then
     Begin
-        dmUtils.ModeFromCqr(mode,OutMode,OutSubmode,dmData.DebugLevel>=1);
+        dmUtils.ModeFromCqr(mode,ExportType,dmData.DebugLevel>=1,OutMode,OutSubmode);
         SaveTag(dmUtils.StringToADIF('<MODE',OutMode),leng);
         if OutSubmode<>'' then
                           SaveTag(dmUtils.StringToADIF('<SUBMODE',OutSubmode),leng);
