@@ -34,8 +34,10 @@ Alpha BINARIES:
 ---------
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets**
   - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets**
+  - **cqr4.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets**
   - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (You may need to install libqt5pas1 (Fedora: qt5pas) to run this)**
-  - **cqr6.zip  holds binary for  32bit Arm (Rpi4) compiled for GTK2 widgets**
+  - **cqr6.zip  holds binary for  64bit systems compiled for QT6 widgets (You may need to install libqt6pas1 (Fedora: qt6pas) to run this)**
+
   - **help.tgz  holds latest help files**
   - **newupdate.zip holds the newupdate.sh script for easy update**
 
