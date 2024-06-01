@@ -425,7 +425,8 @@ begin
         dmData.Q.Close();
         dmData.trQ1.Commit;
         dmData.trQ.Rollback;
-        lblInfo.Caption := 'Upload complete!'
+        lblInfo.Caption := 'Upload complete!';
+        btnUpload.Enabled:=false;
       end
     end
   finally

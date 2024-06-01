@@ -29,6 +29,7 @@ uses
   fDbSqlSel, fProgress, fDbError, fCountyStat;
 var
   Splash : TfrmSplash;
+  SFL   : integer;
 
 {$IFDEF WINDOWS}{$R cqrlog.rc}{$ENDIF}
 
@@ -42,12 +43,13 @@ begin
   Application.CaseSensitiveOptions:=False;
   if ((Application.HasOption('v','version')) or (Application.HasOption('h','help'))) then
      Begin
-        Writeln('Cqrlog Ver:',cVERSION,' Date:',cBUILD_DATE);
+        Writeln('Cqrlog Ver:',cVERSION,' Build:',cBuild,' Date:',cBUILD_DATE);
         if Application.HasOption('v','version') then exit;
         Writeln;
         Writeln('-h     --help           Print this help and exit');
         Writeln('-r KEY --remote=KEY     Start with remote mode KEY= one of J,M,K');
         Writeln('                        (for KEY see: NewQSO shortcut keys)');
+        Writeln('-q     --quiet          Start without spash at beginning');
         Writeln('-v     --version        Print version and exit');
         Writeln('       --debug=NR       Set debug level to NR');
         Writeln;
@@ -65,13 +67,17 @@ begin
      end;
 
   Application.Initialize;
-  Splash := TfrmSplash.create(application);
-  Splash.show;
-  Splash.Update;
-  application.ProcessMessages;
-  Splash.Update;
-  application.ProcessMessages;
-  Sleep(500);
+  if (not Application.HasOption('q','quiet')) then
+  Begin
+    Splash := TfrmSplash.create(application);
+    Splash.show;
+    for SFL:=1 to 5 do
+     Begin
+       sleep(100);
+       Application.ProcessMessages;
+     end;
+  end;
+
   Application.CreateForm(TfrmNewQSO, frmNewQSO);
   Application.CreateForm(TdmData, dmData);
   Application.CreateForm(TdmLogUpload, dmLogUpload);
@@ -101,11 +107,23 @@ begin
   Application.CreateForm(TdmSatellite, dmSatellite);
   Application.CreateForm(TfrmProgress, frmProgress);
 
-  Splash.Update;
-  application.ProcessMessages;
-  sleep(800);
-  Splash.close;
-  Splash.Release;
+   if (not Application.HasOption('q','quiet')) then
+  Begin
+    Splash.Image2.Visible:=true;
+    for SFL:=1 to 5 do
+     Begin
+       sleep(100);
+       Application.ProcessMessages;
+     end;
+    Splash.ImageVText(Splash.Image1,$FF0000);
+    for SFL:=1 to 15 do
+     Begin
+       sleep(100);
+       Application.ProcessMessages;
+     end;
+    Splash.close;
+    Splash.Release;
+  end;
   Application.Run;
 end.
 

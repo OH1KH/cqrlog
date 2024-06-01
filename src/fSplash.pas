@@ -25,35 +25,16 @@ type
 
   TfrmSplash = class(TForm)
     Image1: TImage;
+    Image2: TImage;
     procedure FormCreate(Sender: TObject);
-    procedure Image1Paint(Sender: TObject);
+
   private
     { private declarations }
   public
-
     { public declarations }
-  end; 
+    procedure ImageVText(I:TImage;c:Tcolor=clRed);
+  end;
 
-
-var
-  frmSplash: TfrmSplash;
-
-implementation
-{$R *.lfm}
-
-uses uVersion;
-
-{ TfrmSplash }
-
-procedure TfrmSplash.FormCreate(Sender: TObject);
-begin
-  Width  := Image1.Picture.Width;
-  Height := Image1.Picture.Height;
-  Repaint
-end;
-
-
-procedure TfrmSplash.Image1Paint(Sender: TObject);
 const
   VersionPos: TPoint = (X:270; Y:245);
   VersionStyle: TTextStyle =
@@ -71,13 +52,32 @@ const
      EndEllipsis: False
    );
 var
-  ATextRect: TRect;
+  frmSplash: TfrmSplash;
+
+implementation
+{$R *.lfm}
+
+uses uVersion;
+
+{ TfrmSplash }
+
+procedure TfrmSplash.FormCreate(Sender: TObject);
 begin
+  Width  := Image1.Picture.Width;
+  Height := Image1.Picture.Height;
+end;
+
+procedure TfrmSplash.ImageVText(I:Timage;c:Tcolor=clRed);
+var
+  ATextRect: TRect;
+Begin
   ATextRect.TopLeft := VersionPos;
-  ATextRect.BottomRight := Point(Image1.Picture.Width, Image1.Picture.Height);
-  Image1.Canvas.Font.Style := [fsBold];
-  Image1.Canvas.Font.Color := clRed;
-  Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y, cVERSION, VersionStyle)
+  ATextRect.BottomRight := Point(Width, Height);
+  I.Picture.Bitmap.Canvas.Font.Style := [fsBold];
+  I.Picture.Bitmap.Canvas.Font.Color := c;
+  I.Picture.Bitmap.Canvas.Brush.Style:=bsClear;
+  I.Picture.Bitmap.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y, cVERSION, VersionStyle);
+  Application.ProcessMessages;
 end;
 
 end.
