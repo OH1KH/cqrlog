@@ -536,7 +536,8 @@ end;
 procedure TCWDaemon.TuneStop;
 begin
   if fActive then
-    udp.SendMessage(Chr(27)+'c0')
+    udp.SendMessage(Chr(27)+'4')
+    //udp.SendMessage(Chr(27)+'c0')  this does not work with versions 0.12.0, 0.13.0. Does it work with earlier ones ??
 end;
 
 procedure TCWDaemon.StopSending;
