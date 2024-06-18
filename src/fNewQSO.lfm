@@ -4889,7 +4889,7 @@ object frmNewQSO: TfrmNewQSO
         Top = 9
         Width = 49
         BorderSpacing.Left = 12
-        Caption = 'QSO nr.'
+        Caption = 'QSO#:'
         Layout = tlBottom
         ParentColor = False
         ParentFont = False

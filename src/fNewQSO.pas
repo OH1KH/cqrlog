@@ -654,6 +654,7 @@ type
     eQSLcfm,
     LoTWcfm    : String;
     UsrAssignedProfile : String;
+    EditId             : longint;     //id_cqrlog_main of qso in edit mode
     procedure showDOK(stat:boolean);
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -3384,7 +3385,7 @@ begin
                    dmSatellite.GetPropShortName(cmbPropagation.Text),
                    dmSatellite.GetSatShortName(cmbSatellite.Text),
                    RxFreq,
-                   id,
+                   Editid,
                    edtContestSerialReceived.Text,
                    edtContestSerialSent.Text,
                    edtContestExchangeMessageReceived.Text,
@@ -5547,6 +5548,7 @@ var
   QRZ        : TQRZThread;
   SearchQRZ  : Boolean = False;
   qsl_via    : String = '';
+  i          : integer;
 begin
   mode := '';
   freq := '';
@@ -5614,11 +5616,36 @@ begin
     dmUtils.LoadFontSettings(frmNewQSO)
   end;
 
-  dmData.qQSOBefore.Last; // to be sure the count is proper in next if
-  if fViewQSO or fEditQSO then
-    lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount)
-  else
-    lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount+1);
+// setting the  "NewQSO/QSO#:"
+  if (fViewQSO or fEditQSO) then
+   Begin
+    if dmData.IsFilter then                                             //filtered from "Qso list"
+      //this sets "NewQSO/QSO Nr:" to show selected qsos "grid row/qso rows total" in QSOlist/Filtered qsos
+      lblQSONr.Caption :=  frmMain.dbgrdMain.DataSource.DataSet.RecNo.ToString +'/'+ frmMain.dbgrdMain.DataSource.DataSet.RecordCount.ToString+'-F';
+
+    if FromNewQSO then                                                  //selected from NewQSO/WB4 grid
+        //this sets "NewQSO/QSO Nr:" to show selected qsos "grid row/qso rows total" in NewQSO/WB4grid
+        lblQSONr.Caption :=  dbgrdQSOBefore.DataSource.DataSet.RecNo.ToString +'/'+ dbgrdQSOBefore.DataSource.DataSet.RecordCount.ToString+'-W'
+     else
+      Begin //set WB4 grid RecNr point to same qso that was selected from QSO list for edit (without filtering)
+         for i:=1 to dbgrdQSOBefore.DataSource.DataSet.RecordCount do
+          Begin
+             dbgrdQSOBefore.DataSource.DataSet.RecNo:=i;
+             if dbgrdQSOBefore.DataSource.DataSet.FieldValues['id_cqrlog_main']= EditId then
+              Begin
+               lblQSONr.Caption :=  dbgrdQSOBefore.DataSource.DataSet.RecNo.ToString +'/'+ dbgrdQSOBefore.DataSource.DataSet.RecordCount.ToString+'-W';
+               break;
+              end;
+         end;
+      end;
+   end
+ else                                                                  //total NewQSO entered
+  Begin
+     //this sets "NewQSO/QSO Nr:" to show the new qsos orderNr in log using currently entered callsign
+     dmData.qQSOBefore.Last; // to be sure the total count from log is proper
+     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount+1)+'-N';
+  end;
+
 
   if (not (fViewQSO or fEditQSO)) then
   begin
@@ -6565,6 +6592,7 @@ begin
 
   if fromNewQSO then
   begin
+    EditId            := dmData.qQSOBefore.FieldByName('id_cqrlog_main').AsLongInt;
     cmbProfiles.Text  := dmData.GetProfileText(dmData.qQSOBefore.FieldByName('profile').AsInteger);
     edtDate.Text      := dmData.qQSOBefore.FieldByName('qsodate').AsString;
     edtStartTime.Text := dmData.qQSOBefore.FieldByName('time_on').AsString;
@@ -6620,7 +6648,8 @@ begin
     EditViewMyLoc :=  dmData.qQSOBefore.FieldByName('my_loc').AsString;
   end
   else begin
-    cmbProfiles.Text := dmData.GetProfileText(dmData.qCQRLOG.FieldByName('profile').AsInteger);
+    EditId            := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsLongInt;
+    cmbProfiles.Text  := dmData.GetProfileText(dmData.qCQRLOG.FieldByName('profile').AsInteger);
     edtDate.Text      := dmData.qCQRLOG.FieldByName('qsodate').AsString;
     edtStartTime.Text := dmData.qCQRLOG.FieldByName('time_on').AsString;
     edtEndTime.Text   := dmData.qCQRLOG.FieldByName('time_off').AsString;

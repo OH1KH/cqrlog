@@ -1028,7 +1028,7 @@ object frmAbout: TfrmAbout
           189
         )
         Cells = (
-          36
+          38
           0
           0
           'Saku'
@@ -1083,6 +1083,9 @@ object frmAbout: TfrmAbout
           0
           17
           'George'
+          0
+          18
+          'Stefan'
           1
           0
           'OH1KH'
@@ -1137,6 +1140,9 @@ object frmAbout: TfrmAbout
           1
           17
           'N3GB'
+          1
+          18
+          'DG0OAT'
         )
       end
     end

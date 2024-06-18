@@ -1119,7 +1119,7 @@ end;
 
 procedure TfrmMain.acImpQslMgrsExecute(Sender: TObject);
 begin
-  dlgOpen.Filter     := 'QSL manages|*.csv';
+  dlgOpen.Filter     := 'QSL managers|*.csv';
   dlgOpen.DefaultExt := '.csv';
   if dlgOpen.Execute then
   begin
