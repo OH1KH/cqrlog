@@ -5633,6 +5633,7 @@ begin
              dbgrdQSOBefore.DataSource.DataSet.RecNo:=i;
              if dbgrdQSOBefore.DataSource.DataSet.FieldValues['id_cqrlog_main']= EditId then
               Begin
+               if pos('-F', lblQSONr.Caption)=0 then
                lblQSONr.Caption :=  dbgrdQSOBefore.DataSource.DataSet.RecNo.ToString +'/'+ dbgrdQSOBefore.DataSource.DataSet.RecordCount.ToString+'-W';
                break;
               end;

@@ -54,7 +54,7 @@ begin
         Writeln('       --debug=NR       Set debug level to NR');
         Writeln;
         Writeln('Debug level NRs:');
-        Writeln('     0  No debug meesages');
+        Writeln('     0  No debug messages');
         Writeln('     1  All debug messages');
         Writeln('     2  All debug messages + some additional RBNmonitor & DXCluster debugs');
         Writeln('Negative values can be combined (binary bitwise OR)');
