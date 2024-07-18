@@ -4869,7 +4869,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 67
+        Left = 61
         Height = 17
         Top = 9
         Width = 8
@@ -4887,7 +4887,7 @@ object frmNewQSO: TfrmNewQSO
         Left = 12
         Height = 17
         Top = 9
-        Width = 49
+        Width = 43
         BorderSpacing.Left = 12
         Caption = 'QSO#:'
         Layout = tlBottom
@@ -4900,7 +4900,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Side = asrBottom
-        Left = 477
+        Left = 471
         Height = 17
         Top = 9
         Width = 123
@@ -4918,7 +4918,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Side = asrBottom
-        Left = 610
+        Left = 604
         Height = 17
         Top = 9
         Width = 115
@@ -4936,7 +4936,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Side = asrBottom
-        Left = 95
+        Left = 89
         Height = 17
         Top = 9
         Width = 86
@@ -4951,7 +4951,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
-        Left = 186
+        Left = 180
         Height = 34
         Top = 0
         Width = 281
@@ -6562,15 +6562,9 @@ object frmNewQSO: TfrmNewQSO
   end
   object tmrWsjtx: TTimer
     Enabled = False
+    Interval = 10
     OnTimer = tmrWsjtxTimer
     Left = 280
-    Top = 720
-  end
-  object tmrWsjtSpd: TTimer
-    Enabled = False
-    Interval = 490
-    OnTimer = tmrWsjtSpdTimer
-    Left = 392
     Top = 720
   end
   object tmrADIF: TTimer

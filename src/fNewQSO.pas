@@ -375,7 +375,6 @@ type
     tabLOConfig: TTabSheet;
     tabCallStat: TTabSheet;
     tmrADIF: TTimer;
-    tmrWsjtSpd: TTimer;
     tmrWsjtx: TTimer;
     tmrUploadAll: TTimer;
     tmrFldigi: TTimer;
@@ -609,7 +608,6 @@ type
     procedure tmrStartStartTimer(Sender: TObject);
     procedure tmrStartTimer(Sender: TObject);
     procedure tmrUploadAllTimer(Sender: TObject);
-    procedure tmrWsjtSpdTimer(Sender: TObject);
     procedure tmrWsjtxTimer(Sender: TObject);
   private
     StartUpCount : integer;
@@ -721,8 +719,7 @@ type
 
     WsjtxMode             : String;    //Moved from private
     WsjtxBand             : String;
-    wHiSpeed              : integer;   // when packets received :udp polling speeds (tmrWsjtx)
-    wLoSpeed              : integer;   // when running idle
+    wSpeed                : integer;   // udp polling speeds (tmrWsjtx)
     old_call              : String;    //Moved from private
     was_call              : String;    //holds recent edtCallsign.text before it was cleared
     FldigiXmlRpc          : Boolean;
@@ -2371,72 +2368,6 @@ begin
                   end
     end //case
   end
-end;
-
-procedure TfrmNewQSO.tmrWsjtSpdTimer(Sender: TObject);
-var
-  Hour,Min,Sec,HSec : word;
-begin
-  case WsjtxMode of
-
-   'FT4':begin
-           DecodeTime(Time,Hour,Min,Sec,HSec);
-           if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
-           case Sec of
-            4,10,16,22,28,34,40,46,52,58  :
-                           begin  //set hispeed  decode time is coming
-                              if ( tmrWsjtx.Interval = wLoSpeed ) then
-                                begin
-                                 if dmData.DebugLevel>=1 then Writeln ('Timer >> Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
-                                 tmrWsjtx.Interval := wHiSpeed;
-                                 if dmData.DebugLevel>=1 then Writeln(' Timer >> Setting UDP decode to FT HiSpeed ', tmrWsjtx.Interval);
-                                end;
-                           end;
-            0,6,12,18,24,30,36,42,48,54  :
-                           begin //set lospeed  decode time is over
-                               if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
-                                Begin
-                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
-                                 tmrWsjtx.Interval := wLoSpeed;
-                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
-                                end;
-                            end;
-             end;
-          end;
-
-   'FT8','FST4':begin
-           DecodeTime(Time,Hour,Min,Sec,HSec);
-           if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
-           case Sec of
-             12,27,42,57 :
-                           begin  //set hispeed  decode time is coming
-                              if ( tmrWsjtx.Interval = wLoSpeed ) then
-                                begin
-                                 if dmData.DebugLevel>=1 then Writeln ('Timer >> Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
-                                 tmrWsjtx.Interval := wHiSpeed;
-                                 if dmData.DebugLevel>=1 then Writeln(' Timer >> Setting UDP decode to FT HiSpeed ', tmrWsjtx.Interval);
-                                end;
-                           end;
-             2,17,32,47  :
-                           begin //set lospeed  decode time is over
-                               if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
-                                Begin
-                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
-                                 tmrWsjtx.Interval := wLoSpeed;
-                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
-                                end;
-                            end;
-             end;
-          end;
-
-   else   Begin
-            if (  tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
-             Begin
-               tmrWsjtx.Interval := wLoSpeed;       // turn it off then
-               if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to LoSpeed not in FT mode ',tmrWsjtx.Interval);
-             end;
-            end;
-   end;
 end;
 procedure TfrmNewQSO.tmrWsjtxTimer(Sender: TObject);
 const
@@ -7660,12 +7591,10 @@ begin
 
                   WsjtxMode := '';    //will be set by type1 'status'-message
                   WsjtxBand := '';
-                  wHiSpeed  := 10;    //mS will be shorter when FT8
-                  wLoSpeed  := 1000;
+                  wSpeed    := 10;    //mS polling speed of wsjt remote
+                  tmrWsjtx.Interval := wSpeed;
 
                   frmTRXControl.DisableRitXit; //wsjtx does not do this, so we have to ...
-
-                  tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do
 
                   //multicast is 239.0.0.0/8
                   multicast:=pos('239.',cqrini.ReadString('wsjt','ip','127.0.0.1'))=1; //check multicast
@@ -7714,8 +7643,7 @@ begin
                          end;
 
                       end;
-                     tmrWsjtx.Enabled  := True;          //  so timer can run more seldom.
-                     tmrWsjtSpd.Enabled:= True;
+                     tmrWsjtx.Enabled  := True;
                   except
                       {if dmData.DebugLevel>=1 then} Writeln('Could not bind socket for wsjtx!');
                       edtRemQSO.Text := 'Could not bind socket for wsjtx!';
@@ -7790,7 +7718,6 @@ begin
   if  mnuRemoteModeWsjt.Checked then
   begin
       tmrWsjtx.Enabled := False;
-      tmrWsjtSpd.Enabled:=false;
       while ((WsjtxDecodeRunning) and (tries > 0)) do
       begin
         dec(tries);
