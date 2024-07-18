@@ -2256,6 +2256,8 @@ procedure TfrmNewQSO.tmrRadioTimer(Sender: TObject);
 var
   mode, freq, band : String;
   dfreq : Double;
+  actTab  : TTabSheet;
+
 begin
   mode := '';
   freq := '';
@@ -2281,6 +2283,14 @@ begin
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
+          if edtCall.Text<>'' then //this sets statistic grid to have right coloring, specially when NewQSO from DXCluster spot click
+           begin
+             actTab:=pgDetails.ActivePage;
+             pgDetails.ActivePage:=tabCallStat;
+             pgDetails.ActivePage:=tabDXCCStat;
+             pgDetails.ActivePage:=actTab;
+           end;
+
           if ClearAfterFreqChange and sbtnHamQTH.Visible then
           begin
             dfreq := frmTRXControl.GetFreqMHz;
