@@ -2,10 +2,10 @@ object frmDXCCStat: TfrmDXCCStat
   Left = 293
   Height = 612
   Top = 37
-  Width = 768
+  Width = 954
   Caption = 'DXCC Statistic'
   ClientHeight = 612
-  ClientWidth = 768
+  ClientWidth = 954
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -125,17 +125,17 @@ object frmDXCCStat: TfrmDXCCStat
     Left = 0
     Height = 80
     Top = 532
-    Width = 768
+    Width = 954
     Anchors = [akLeft, akRight, akBottom]
     ClientHeight = 80
-    ClientWidth = 768
+    ClientWidth = 954
     TabOrder = 0
     object btClose: TButton
       AnchorSideRight.Control = pnlStatSum
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = pnlStatSum
       AnchorSideBottom.Side = asrBottom
-      Left = 686
+      Left = 872
       Height = 25
       Top = 48
       Width = 75
@@ -152,7 +152,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideRight.Control = btClose
       AnchorSideBottom.Control = btClose
       AnchorSideBottom.Side = asrBottom
-      Left = 565
+      Left = 751
       Height = 25
       Top = 48
       Width = 115
@@ -328,22 +328,24 @@ object frmDXCCStat: TfrmDXCCStat
     Left = 0
     Height = 60
     Top = 0
-    Width = 768
+    Width = 954
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
     ClientHeight = 60
-    ClientWidth = 768
+    ClientWidth = 954
     TabOrder = 1
     object btnRefresh: TButton
-      AnchorSideLeft.Control = cmbCfmType
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = cmbCfmType
       AnchorSideTop.Side = asrCenter
-      Left = 447
-      Height = 25
-      Top = 14
+      AnchorSideRight.Control = PnlDXCCStat
+      AnchorSideRight.Side = asrBottom
+      Left = 783
+      Height = 29
+      Top = 12
       Width = 147
-      BorderSpacing.Left = 32
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 24
       Caption = 'Refresh statistic'
       OnClick = btnRefreshClick
       TabOrder = 1
@@ -353,11 +355,11 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lblDXCCType
       AnchorSideTop.Side = asrCenter
-      Left = 155
+      Left = 135
       Height = 29
       Top = 12
       Width = 260
-      BorderSpacing.Left = 32
+      BorderSpacing.Left = 12
       ItemHeight = 0
       ItemIndex = 6
       Items.Strings = (
@@ -369,6 +371,7 @@ object frmDXCCStat: TfrmDXCCStat
         'eQSL only'
         'paper QSL, LoTW and eQSL'
       )
+      OnChange = cmbCfmTypeChange
       Style = csDropDownList
       TabOrder = 0
       Text = 'paper QSL, LoTW and eQSL'
@@ -385,6 +388,37 @@ object frmDXCCStat: TfrmDXCCStat
       Caption = 'Confirmed type:'
       ParentColor = False
     end
+    object lblDigiOnly: TLabel
+      AnchorSideLeft.Control = cmbCfmType
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbCfmType
+      AnchorSideTop.Side = asrCenter
+      Left = 407
+      Height = 17
+      Top = 18
+      Width = 102
+      BorderSpacing.Left = 12
+      Caption = 'Change DIGI to:'
+      ParentColor = False
+    end
+    object cmbOnlyMode: TComboBox
+      AnchorSideLeft.Control = lblDigiOnly
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbCfmType
+      AnchorSideTop.Side = asrCenter
+      Left = 521
+      Height = 29
+      Top = 12
+      Width = 90
+      BorderSpacing.Left = 12
+      ItemHeight = 0
+      Items.Strings = (
+        ''
+      )
+      OnChange = cmbCfmTypeChange
+      Style = csDropDownList
+      TabOrder = 2
+    end
   end
   object grdDXCCStat: TStringGrid
     AnchorSideLeft.Control = Owner
@@ -396,7 +430,7 @@ object frmDXCCStat: TfrmDXCCStat
     Left = 0
     Height = 212
     Top = 60
-    Width = 768
+    Width = 954
     Anchors = [akTop, akLeft, akRight, akBottom]
     ColCount = 27
     DefaultColWidth = 55
@@ -417,7 +451,7 @@ object frmDXCCStat: TfrmDXCCStat
     Left = 0
     Height = 260
     Top = 272
-    Width = 768
+    Width = 954
     Anchors = [akLeft, akRight, akBottom]
     ColCount = 27
     DefaultColWidth = 50
@@ -431,7 +465,8 @@ object frmDXCCStat: TfrmDXCCStat
   end
   object dlgSave: TSaveDialog
     FilterIndex = 0
-    Left = 568
-    Top = 232
+    Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+    Left = 480
+    Top = 552
   end
 end

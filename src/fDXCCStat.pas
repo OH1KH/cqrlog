@@ -28,12 +28,14 @@ type
     btClose: TButton;
     btnHTMLExport: TButton;
     cmbCfmType: TComboBox;
+    cmbOnlyMode: TComboBox;
     grdDXCCStat: TStringGrid;
     gbCW: TGroupBox;
     gbPhone: TGroupBox;
     gbDigi: TGroupBox;
     gbMix: TGroupBox;
     grdStatSum: TStringGrid;
+    lblDigiOnly: TLabel;
     lblDXCCType: TLabel;
     lblCfmMix: TLabel;
     lblWkdMix: TLabel;
@@ -48,6 +50,7 @@ type
     dlgSave: TSaveDialog;
     procedure btnHTMLExportClick(Sender: TObject);
     procedure btnRefreshClick(Sender : TObject);
+    procedure cmbCfmTypeChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -87,7 +90,7 @@ procedure TfrmDXCCStat.ChangeCaption;
 const
   C_CAPTION = 'DXCC statistics - ';
 begin
-  case StatType of
+   case StatType of
     stCfmOnly  : Caption := C_CAPTION + 'confirmed only';
     stCfmLoTW  : Caption := C_CAPTION + 'LoTW and confirmed';
     stLoTWOnly : Caption := C_CAPTION + 'LoTW only';
@@ -99,6 +102,8 @@ begin
 end;
 
 procedure TfrmDXCCStat.FormShow(Sender: TObject);
+var
+   i:integer;
 begin
   dmUtils.LoadFontSettings(self);
   grdStatSum.Constraints.MinHeight:=(grdStatSum.Font.Size+6)*10;
@@ -123,8 +128,13 @@ begin
 
   cmbCfmType.ItemIndex := cqrini.ReadInteger('DXCC','LastStat',6);
   StatType := TStat(cmbCfmType.ItemIndex);
+
+  dmUtils.InsertModes(cmbOnlyMode);
+  cmbOnlyMode.Items.Insert(0,'DIGI');
+  cmbOnlyMode.ItemIndex:=0;
   btnRefresh.Click
 end;
+
 
 procedure TfrmDXCCStat.btnHTMLExportClick(Sender: TObject);
 begin
@@ -147,6 +157,13 @@ var
   dxcc_digi_cfm : Integer = 0;
   ShowDel  : Boolean = False;
 begin
+  btnRefresh.Font.Color:=clDefault;
+  btnRefresh.Font.Style:=[];
+
+  grdStatSum.Clean;
+  grdDXCCStat.Clean;
+
+  gbDigi.Caption:=cmbOnlyMode.Items[cmbOnlyMode.ItemIndex];
   Cursor := crSQLWait;
   try
     cqrini.WriteInteger('DXCC','LastStat',cmbCfmType.ItemIndex);
@@ -179,6 +196,13 @@ begin
   finally
     Cursor := crDefault
   end
+end;
+
+procedure TfrmDXCCStat.cmbCfmTypeChange(Sender: TObject);
+begin
+     btnRefresh.Font.Color:=clRed;
+     btnRefresh.Font.Style:=[fsBold];
+     btnRefresh.Repaint;
 end;
 
 procedure TfrmDXCCStat.FormClose(Sender: TObject; var CloseAction: TCloseAction
@@ -383,7 +407,7 @@ begin
 
   Writeln(f,'<TR>');
   Writeln(f,'<TD WIDTH=200 bgcolor="#333366" class="hlava">');
-  Writeln(f,'<div align="center" class="popis">DXCC DIGI</div>');
+  Writeln(f,'<div align="center" class="popis">DXCC '+cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]+'</div>');
   Writeln(f,'</TD>');
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
@@ -396,7 +420,7 @@ begin
 
   Writeln(f,'<TR>');
   Writeln(f,'<TD WIDTH=200 bgcolor="#333366" class="hlava">');
-  Writeln(f,'<div align="center" class="popis">DXCC CFM DIGI</div>');
+  Writeln(f,'<div align="center" class="popis">DXCC CFM '+cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]+'</div>');
   Writeln(f,'</TD>');
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
@@ -429,7 +453,7 @@ begin
 
   Writeln(f,'<br><br>');
   Writeln(f,'<fieldset style="width:100">');
-  Writeln(f,'<legend>DIGI</legend>');
+  Writeln(f,'<legend>'+cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]+'</legend>');
   Writeln(f,lblDIGIWKD.Caption);
   Writeln(f,'<br>');
   Writeln(f,lblDIGICmf.Caption);
@@ -593,8 +617,8 @@ begin
   grdStatSum.Cells[0,6] := 'DXCC CW';
   grdStatSum.Cells[0,7] := 'DXCC CFM CW';
 
-  grdStatSum.Cells[0,8] := 'DXCC DIGI';
-  grdStatSum.Cells[0,9] := 'DXCC CFM DIGI';
+  grdStatSum.Cells[0,8] := 'DXCC '+cmbOnlyMode.Items[cmbOnlyMode.ItemIndex];
+  grdStatSum.Cells[0,9] := 'DXCC CFM '+cmbOnlyMode.Items[cmbOnlyMode.ItemIndex];
 
   ShowDel := cqrini.ReadBool('Program','ShowDeleted',False);
 
@@ -670,16 +694,23 @@ begin
     WriteToGrid(7);
     dmData.QDXCCStat.Close;
 
-
-    GetSQLMode('((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
-               'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
-               'and (mode<>'+QuotedStr('AM')+'))');
+    if (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex] = 'DIGI') then
+      GetSQLMode('((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
+                 'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
+                 'and (mode<>'+QuotedStr('AM')+'))')
+     else
+      GetSQLMode( '(mode='+QuotedStr(cmbOnlyMode.Items[cmbOnlyMode.ItemIndex])+')');
     dmData.QDXCCStat.Open;
     WriteToGrid(8);
     dmData.QDXCCStat.Close;
-    GetCfmSQLMode('((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
+
+    if (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex] = 'DIGI') then
+      GetCfmSQLMode('((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
                   'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
-                  'and (mode<>'+QuotedStr('AM')+'))');
+                  'and (mode<>'+QuotedStr('AM')+'))')
+     else
+      GetSQLMode( '(mode='+QuotedStr(cmbOnlyMode.Items[cmbOnlyMode.ItemIndex])+')');
+
     dmData.QDXCCStat.Open;
     WriteToGrid(9);
     dmData.QDXCCStat.Close
@@ -740,7 +771,6 @@ begin
                              'left join dxcc_id d on c.adif = d.adif where (d.dxcc_ref<>'+QuotedStr('')+') and d.dxcc_ref<>'+QuotedStr('!')+
                              ' and (d.dxcc_ref not like '+QuotedStr('%*')+') group by d.dxcc_ref,c.band,c.mode,'+
                              'c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd order by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd';
-
 
       dmData.trQDXCCStat.StartTransaction;
       dmData.QDXCCStat.Open;
@@ -825,11 +855,14 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
+                          if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                           begin
                            if QSLR = 'Q' then
                              BandMode[BandPos].DIGI := 'Q'
                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
-                         end
+                           end
+                          end
                        end
                      end;
         stCfmLoTW  : begin
@@ -853,12 +886,15 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
-                           if QSLR = 'Q' then
+                         if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                          begin
+                            if QSLR = 'Q' then
                              BandMode[BandPos].DIGI := 'Q'
                            else if (LoTW='L') then
                              BandMode[BandPos].DIGI := 'L'
                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
+                          end
                          end
                        end
                      end;
@@ -879,11 +915,14 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
+                         if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                          begin
                            if LoTW = 'L' then
                              BandMode[BandPos].DIGI := 'L'
                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
-                         end
+                          end
+                          end
                        end
                      end;
         stCfmeQSL  : begin
@@ -907,12 +946,15 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
-                           if QSLR = 'Q' then
+                          if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                           begin
+                             if QSLR = 'Q' then
                              BandMode[BandPos].DIGI := 'Q'
                            else if (eQSL='E') then
                              BandMode[BandPos].DIGI := 'E'
                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
+                           end
                          end
                        end
                      end;
@@ -937,12 +979,15 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
-                           if LoTW = 'L' then
+                          if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                           begin
+                            if LoTW = 'L' then
                              BandMode[BandPos].DIGI := 'L'
                            else if (eQSL='E') then
                              BandMode[BandPos].DIGI := 'E'
                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
+                           end
                          end
                        end
                      end;
@@ -963,10 +1008,13 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
-                           if eQSL = 'E' then
+                          if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                           begin
+                            if eQSL = 'E' then
                              BandMode[BandPos].DIGI := 'E'
-                           else if BandMode[BandPos].DIGI = space then
+                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
+                           end
                          end
                        end
                      end;
@@ -995,7 +1043,8 @@ begin
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
-                           if QSLR = 'Q' then
+                          if ((cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]='DIGI') or (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex]=mode)) then
+                           begin if QSLR = 'Q' then
                              BandMode[BandPos].DIGI := 'Q'
                            else if (LoTW='L') then
                              BandMode[BandPos].DIGI := 'L'
@@ -1003,6 +1052,7 @@ begin
                              BandMode[BandPos].DIGI := 'E'
                            else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
+                           end
                          end
                        end
                      end;
@@ -1129,13 +1179,19 @@ var
 begin
   Result := 0;
   dmData.QDXCCStat.Close;
-  tmp := '(mode<>'+QuotedStr('CW')+') and (mode <> '+QuotedStr('CWR')+')'+
-         'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+') '+
-         'and (mode<>'+QuotedStr('AM')+')';
+  if (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex] = 'DIGI') then
+      tmp := '(mode<>'+QuotedStr('CW')+') and (mode <> '+QuotedStr('CWR')+')'+
+             'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+') '+
+             'and (mode<>'+QuotedStr('AM')+')'
+    else
+      tmp := '(mode='+QuotedStr(cmbOnlyMode.Items[cmbOnlyMode.ItemIndex])+')';
+
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
+
   dmData.QDXCCStat.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
                        'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+
   dmData.trQDXCCStat.StartTransaction;
   dmData.QDXCCStat.Open();
   Result := dmData.QDXCCStat.Fields[0].AsInteger;
@@ -1150,13 +1206,18 @@ begin
   Result := 0;
   dmData.QDXCCStat.Close;
   tmp := GetStatTypeWhere(StatType);
-  tmp := tmp +' and (mode<>'+QuotedStr('CW')+') and (mode <> '+QuotedStr('CWR')+')'+
-         'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+') '+
-         'and (mode<>'+QuotedStr('AM')+')';
+  if (cmbOnlyMode.Items[cmbOnlyMode.ItemIndex] = 'DIGI') then
+      tmp := tmp +' and (mode<>'+QuotedStr('CW')+') and (mode <> '+QuotedStr('CWR')+')'+
+             'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+') '+
+             'and (mode<>'+QuotedStr('AM')+')'
+    else
+      tmp := tmp +' and (mode='+QuotedStr(cmbOnlyMode.Items[cmbOnlyMode.ItemIndex])+')';
+
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
   dmData.QDXCCStat.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
                        'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+
   dmData.trQDXCCStat.StartTransaction;
   dmData.QDXCCStat.Open();
   Result := dmData.QDXCCStat.Fields[0].AsInteger;
