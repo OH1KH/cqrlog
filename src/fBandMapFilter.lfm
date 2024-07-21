@@ -10,7 +10,7 @@ object frmBandMapFilter: TfrmBandMapFilter
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.6.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -30,9 +30,9 @@ object frmBandMapFilter: TfrmBandMapFilter
       Left = 6
       Height = 23
       Top = 41
-      Width = 256
+      Width = 233
       BorderSpacing.Top = 12
-      Caption = 'Do not show station worked in last '
+      Caption = 'Do not show call worked in last '
       TabOrder = 0
     end
     object rbNoWkdDate: TRadioButton
@@ -42,21 +42,19 @@ object frmBandMapFilter: TfrmBandMapFilter
       Left = 6
       Height = 23
       Top = 76
-      Width = 335
+      Width = 224
       BorderSpacing.Top = 12
-      Caption = 'Do not show station that was aleady QSO after '
+      Caption = 'Do not show call worked after '
       TabOrder = 1
     end
     object edtDate: TEdit
-      AnchorSideLeft.Control = rbNoWkdDate
-      AnchorSideLeft.Side = asrBottom
+      AnchorSideLeft.Control = edtLastHours
       AnchorSideTop.Control = rbNoWkdDate
       AnchorSideTop.Side = asrCenter
-      Left = 347
+      Left = 245
       Height = 34
       Top = 70
       Width = 96
-      BorderSpacing.Left = 6
       TabOrder = 2
       Text = '2000-10-10'
     end
@@ -65,7 +63,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = rbNoWkdDate
       AnchorSideTop.Side = asrCenter
-      Left = 449
+      Left = 347
       Height = 34
       Top = 70
       Width = 56
@@ -78,7 +76,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtTime
       AnchorSideTop.Side = asrCenter
-      Left = 511
+      Left = 409
       Height = 17
       Top = 79
       Width = 77
@@ -90,7 +88,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Control = chkShowActiveBandFil
       AnchorSideTop.Control = rbNoWkdHour
       AnchorSideTop.Side = asrCenter
-      Left = 268
+      Left = 245
       Height = 34
       Top = 35
       Width = 41
@@ -102,7 +100,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtLastHours
       AnchorSideTop.Side = asrCenter
-      Left = 315
+      Left = 292
       Height = 17
       Top = 44
       Width = 226
@@ -128,7 +126,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Control = rbNoWkdHour
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = rbShowAll
-      Left = 268
+      Left = 245
       Height = 23
       Top = 6
       Width = 173
@@ -137,13 +135,14 @@ object frmBandMapFilter: TfrmBandMapFilter
       TabOrder = 6
     end
     object chkRevOrder: TCheckBox
-      AnchorSideLeft.Control = edtTime
+      AnchorSideLeft.Control = chkShowActiveBandFil
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = rbShowAll
-      Left = 505
+      Left = 427
       Height = 23
       Top = 6
       Width = 117
+      BorderSpacing.Left = 9
       Caption = 'Reverse order'
       TabOrder = 7
     end
