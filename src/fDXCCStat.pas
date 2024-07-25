@@ -709,7 +709,7 @@ begin
                   'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
                   'and (mode<>'+QuotedStr('AM')+'))')
      else
-      GetSQLMode( '(mode='+QuotedStr(cmbOnlyMode.Items[cmbOnlyMode.ItemIndex])+')');
+      GetCfmSQLMode( '(mode='+QuotedStr(cmbOnlyMode.Items[cmbOnlyMode.ItemIndex])+')');
 
     dmData.QDXCCStat.Open;
     WriteToGrid(9);
