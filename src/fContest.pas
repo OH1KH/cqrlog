@@ -1109,12 +1109,18 @@ Begin
    SaveSettings;
    cqrini.WriteBool('CW','S&P',True);  //set default CW memories
    frmNewQSO.UpdateFKeyLabels;
+   tmrScore.Enabled:=false;
+   tmrESC2.Enabled:=false;
+   tmrCQ.Enabled:=false;
 end;
 
 procedure TfrmContest.FormHide(Sender: TObject);
 begin
   frmNewQSO.gbContest.Visible := false;
   dmUtils.SaveWindowPos(frmContest);
+  tmrScore.Enabled:=false;
+  tmrESC2.Enabled:=false;
+  tmrCQ.Enabled:=false;
   frmContest.Hide;
 end;
 
@@ -1191,11 +1197,11 @@ begin
   MyAdif:= dmDXCC.id_country(cqrini.ReadString('Station', 'Call', ''), Now(), Mypfx, Mycont,  Mycountry, MyWAZ, Myposun, MyITU, Mylat, Mylong);
   mnuOwnCountryCount.Caption:=Mycont+' country count';
   mnuOwnCountryList.Caption:=Mycont+' country list';
-  cmbContestNameExit(nil);  //updates status view
   FmemorySent:=False;
 
   tmrCQ.Enabled:=False;
   tmrCQ.Interval:=spCQperiod.Value;
+  tmrScore.Enabled:=(cmbContestName.Text<>'');
   CQcount:=0;
   chkSPClick(nil); //to set the right color to TX labels
   sgStatus.Visible:=False;

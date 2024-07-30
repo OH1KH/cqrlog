@@ -1318,7 +1318,8 @@ object frmContest: TfrmContest
     Top = 320
   end
   object tmrScore: TTimer
-    Interval = 3000
+    Enabled = False
+    Interval = 5000
     OnTimer = tmrScoreTimer
     Left = 568
     Top = 320
