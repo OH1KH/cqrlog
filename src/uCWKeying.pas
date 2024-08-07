@@ -238,6 +238,10 @@ procedure TCWWinKeyerUSB.SetSpeed(speed : Word);
 begin
   if fDebugMode then Writeln('Speed: ',speed);
   if cqrini.ReadBool('CW'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'PotSpeed',False) then exit;
+
+  if Speed>fMaxSpeed then speed:= fMaxSpeed;
+  if Speed<fMinSpeed then speed:= fMinSpeed;
+
   fSpeed := speed;
   ser.Flush;
   ser.SendByte(2);
@@ -295,6 +299,8 @@ begin
      exit
     end;
   spd  := fSpeed;
+  if spd>fMaxSpeed then spd:= fMaxSpeed;
+  if spd<fMinSpeed then spd:= fMinSpeed;
   text := UpperCase(text);
   if fDebugMode then Writeln('Sending text: ',text);
   if (Pos('+',text) > 0) or (Pos('-',text) > 0) then
@@ -304,7 +310,6 @@ begin
       if text[i] = '+' then
       begin
         spd := spd+5;
-        if spd>fMaxSpeed then spd:=fMaxSpeed;
         ser.SendByte($1C);
         ser.SendByte(spd);
         Continue
@@ -313,7 +318,6 @@ begin
         if text[i] = '-' then
         begin
           spd := spd-5;
-          if spd<fMinSpeed then spd:=fMinSpeed;
           ser.SendByte($1C);
           ser.SendByte(spd);
           Continue
@@ -502,6 +506,9 @@ end;
 
 procedure TCWDaemon.SetSpeed(speed : Word);
 begin
+  if Speed>fMaxSpeed then speed:= fMaxSpeed;
+  if Speed<fMinSpeed then speed:= fMinSpeed;
+
   fSpeed := speed;
   if fActive then
     udp.SendMessage(Chr(27)+'2'+IntToStr(speed))
@@ -567,15 +574,13 @@ begin
       if text[i] = '+' then
       begin
         spd := spd+5;
-        if spd>fMaxSpeed then spd:=fMaxSpeed;
-        udp.SendMessage(Chr(27)+'2'+IntToStr(spd))
+        SetSpeed(spd)
       end
       else begin
         if text[i] = '-' then
         begin
           spd := spd-5;
-          if spd<fMinSpeed then spd:=fMinSpeed;
-          udp.SendMessage(Chr(27)+'2'+IntToStr(spd))
+          SetSpeed(spd)
         end
         else
           udp.SendMessage(text[i])
@@ -642,7 +647,11 @@ end;
 
 procedure TCWK3NG.SetSpeed(speed : Word);
 begin
-  Writeln(Speed);
+  if Speed>fMaxSpeed then speed:= fMaxSpeed;
+  if Speed<fMinSpeed then speed:= fMinSpeed;
+
+  if fDebugMode then
+                Writeln(Speed);
   fSpeed := speed;
   ser.SendByte($5C);
   ser.SendByte($57);
@@ -692,14 +701,6 @@ end;
 
 procedure TCWK3NG.SendText(text : String);
 
-  procedure ChangeSpeed(spd : Word);
-  begin
-    ser.SendByte($5C);
-    ser.SendByte($57);
-    ser.SendString(IntToStr(spd));
-    ser.SendString(CR)
-  end;
-
 var
   i   : Integer;
   spd : Word;
@@ -720,21 +721,19 @@ begin
       if text[i] = '+' then
       begin
         spd := spd+5;
-        if spd>fMaxSpeed then spd:=fMaxSpeed;
-        ChangeSpeed(spd)
+        SetSpeed(spd)
       end
       else begin
         if text[i] = '-' then
         begin
           spd := spd-5;
-          if spd<fMinSpeed then spd:=fMinSpeed;
-          ChangeSpeed(spd)
+          SetSpeed(spd)
         end
         else
           ser.SendString(text[i])
       end
     end;
-    ChangeSpeed(old_spd)
+    SetSpeed(old_spd)
   end
   else
     ser.SendString(text)
