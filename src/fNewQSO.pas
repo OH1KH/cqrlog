@@ -7385,8 +7385,10 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW'+n,'wk_port','');
-          CWint.Device  := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.Port      := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.Device    := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.MinSpeed  := cqrini.ReadInteger('CW'+n, 'wk_min', 5);
+          CWint.MaxSpeed  := cqrini.ReadInteger('CW'+n, 'wk_max', 60);
           CWint.PortSpeed := 1200;
           if not  cqrini.ReadBool('CW'+n,'PotSpeed',False) then
             UseSpeed := cqrini.ReadInteger('CW'+n,'wk_speed',30)
@@ -7399,8 +7401,11 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW'+n,'cw_port','');
-          CWint.Device  := cqrini.ReadString('CW'+n,'cw_address','');
+          CWint.Port      := cqrini.ReadString('CW'+n,'cw_port','');
+          CWint.Device    := cqrini.ReadString('CW'+n,'cw_address','');
+          CWint.MinSpeed  := cqrini.ReadInteger('CW'+n, 'cw_min', 5);
+          CWint.MaxSpeed  := cqrini.ReadInteger('CW'+n, 'cw_max', 60);
+          CWint.SetMinMaxSpeed(CWint.MinSpeed,CWint.MaxSpeed-CWint.MinSpeed);
           CWint.PortSpeed := 0;
           UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
         end;
@@ -7409,10 +7414,12 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
-          CWint.Device  := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.Port      := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.Device    := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.MinSpeed  := cqrini.ReadInteger('CW'+n, 'K3NG_min', 5);
+          CWint.MaxSpeed  := cqrini.ReadInteger('CW'+n, 'K3NG_max', 60);
           CWint.PortSpeed := cqrini.ReadInteger('CW'+n,'K3NGSerSpeed',115200);
-          UseSpeed := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
+          UseSpeed        := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
           Menuitem45.Visible:=True;
         end;
     4 : begin
@@ -7420,9 +7427,11 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
-          CWint.Device := cqrini.ReadString('TRX'+n,'host','localhost');
-          CWint.HamlibBuffer:=cqrini.ReadBool('CW'+n, 'UseHamlibBuffer', False);
+          CWint.Port         := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
+          CWint.Device       := cqrini.ReadString('TRX'+n,'host','localhost');
+          CWint.MinSpeed     := cqrini.ReadInteger('CW'+n, 'HamLib_min', 5);
+          CWint.MaxSpeed     := cqrini.ReadInteger('CW'+n, 'HamLib_max', 60);
+          CWint.HamlibBuffer := cqrini.ReadBool('CW'+n, 'UseHamlibBuffer', False);
           UseSpeed := cqrini.ReadInteger('CW'+n,'HamLibSpeed',30);
         end;
   end; //case
@@ -7438,8 +7447,8 @@ begin
     end
     else
      begin
-      sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
-      if frmCWType.Showing then frmCWType.Caption:='CW Type: '+ IntToStr(UseSpeed)+'WPM';
+      sbNewQSO.Panels[4].Text := IntToStr(CWint.GetSpeed) + 'WPM';
+      if frmCWType.Showing then frmCWType.Caption:='CW Type: '+ IntToStr(CWint.GetSpeed)+'WPM';
      end;
 end;
 

@@ -3630,19 +3630,31 @@ Begin
   nr:=IntToStr(RigNr);
   cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, 'Type', 0);
   cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, 'NoReset', false);
+
   edtWinPort.Text        := cqrini.ReadString('CW'+nr, 'wk_port', '');
   chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, 'PotSpeed', False);
   edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
+  edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
+  edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
+
   edtCWAddress.Text      := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
   edtCWPort.Text         := cqrini.ReadString('CW'+nr, 'cw_port', '6789');
   edtCWDSpeed.Value       := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
-  edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
-  edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
+  edtCWDMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'cw_min', 5);
+  edtCWDMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'cw_max', 60);
+
   edtK3NGPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
   edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
   edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
-  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
+  edtK3NGMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_min', 5);
+  edtK3NGMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_max', 60);
+
   chkUseHLBuffer.checked := cqrini.ReadBool('CW'+nr, 'UseHamlibBuffer', False);
+  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
+  edtHamlibMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_min', 5);
+  edtHamlibMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_max', 60);
+
+
   CWifLoaded := RigNr;
   if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
     lblNoRigForCW.Visible:=True
@@ -3657,19 +3669,29 @@ Begin
   if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
   cqrini.WriteInteger('CW'+nr, 'Type', cmbIfaceType.ItemIndex);
   cqrini.WriteBool('CW'+nr, 'NoReset', cbNoKeyerReset.Checked);
+
   cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort.Text);
   cqrini.WriteBool('CW'+nr, 'PotSpeed', chkPotSpeed.Checked);
   cqrini.WriteInteger('CW'+nr, 'wk_speed', edtWinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'wk_min', edtWinMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'wk_max', edtWinMaxSpeed.Value);
+
   cqrini.WriteString('CW'+nr, 'cw_address', edtCWAddress.Text);
   cqrini.WriteString('CW'+nr, 'cw_port', edtCWPort.Text);
   cqrini.WriteInteger('CW'+nr, 'cw_speed', edtCWDSpeed.Value);
-  cqrini.WriteInteger('CW'+nr, 'wk_min', edtWinMinSpeed.Value);
-  cqrini.WriteInteger('CW'+nr, 'wk_max', edtWinMaxSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'cw_min', edtCWDMinSpeed.Value );
+  cqrini.WriteInteger('CW'+nr, 'cw_max', edtCWDMaxSpeed.Value);
+
   cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NGPort.Text);
   cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
   cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
-  cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
+  cqrini.WriteInteger('CW'+nr, 'K3NG_min', edtK3NGMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'K3NG_max', edtK3NGMaxSpeed.Value);
+
   cqrini.WriteBool('CW'+nr, 'UseHamlibBuffer', chkUseHLBuffer.checked);
+  cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
+  cqrini.WriteInteger('CW'+nr, 'HamLib_min', edtHamlibMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'HamLib_max', edtHamlibMaxSpeed.Value);
 end;
 
 procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes

@@ -29,8 +29,8 @@ type
       property LastErrNr : Word read fLastErrNr;
       property LastErrSt : String read fLastErrSt;
       property DebugMode : Boolean read fDebugMode write fDebugMode;
-      property MinSpeed  : Word read fMinSpeed;
-      property MaxSpeed  : Word read fMaxSpeed;
+      property MinSpeed  : Word read fMinSpeed write fMinSpeed;
+      property MaxSpeed  : Word read fMaxSpeed write fMaxSpeed;
       property PortSpeed : dWord read fPortSpeed write fPortSpeed;
       property HamlibBuffer : Boolean read  fHamlibBuffer write fHamlibBuffer;
       property IsNewHamlib : Boolean read  fIsNewHamlib; //used internally, but can give info out
@@ -47,7 +47,7 @@ type
       procedure SendHex(text:String);  virtual; abstract;
       procedure StopSending; virtual; abstract;
       procedure DelLastChar; virtual; abstract;
-      procedure SetMixManSpeed(min,max : Word); virtual; abstract;
+      procedure SetMinMaxSpeed(min,max : Word); virtual; abstract;
       procedure TuneStart; virtual; abstract;
       procedure TuneStop; virtual; abstract;
   end;
@@ -72,7 +72,7 @@ type
       procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
-      procedure SetMixManSpeed(min,max : Word); override;
+      procedure SetMinMaxSpeed(min,max : Word); override;
       procedure TuneStart; override;
       procedure TuneStop; override;
   end;
@@ -96,7 +96,7 @@ type
       procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
-      procedure SetMixManSpeed(min,max : Word); override;
+      procedure SetMinMaxSpeed(min,max : Word); override;
       procedure TuneStart; override;
       procedure TuneStop; override;
   end;
@@ -120,7 +120,7 @@ type
       procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
-      procedure SetMixManSpeed(min,max : Word); override;
+      procedure SetMinMaxSpeed(min,max : Word); override;
       procedure TuneStart; override;
       procedure TuneStop; override;
   end;
@@ -154,7 +154,7 @@ type
       procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
-      procedure SetMixManSpeed(min,max : Word); override;
+      procedure SetMinMaxSpeed(min,max : Word); override;
       procedure TuneStart; override;
       procedure TuneStop; override;
   end;
@@ -264,11 +264,13 @@ begin
   ser.SendByte($8)
 end;
 
-procedure TCWWinKeyerUSB.SetMixManSpeed(min,max : Word);
+procedure TCWWinKeyerUSB.SetMinMaxSpeed(min,max : Word);
 begin
-  ser.SendByte(5);
+  ser.SendByte(5);     //Setup Speed Pot <05><nn1><nn2><nn3> nn1 = MIN, nn2 = RANGE, nn3 = 0
   ser.SendByte(min);
-  ser.SendByte(max)
+  ser.SendByte(max);   //Max is RANGE+MIN
+  ser.SendByte(0);     //The value of the third parameter is not used but it must be included to maintain backward compatibility for
+                       //applications supporting only WK1 keyers. Recommendation is to set this to zero but any value is accepted.
 end;
 
 procedure TCWWinKeyerUSB.TuneStart;
@@ -529,7 +531,7 @@ begin
   //not implemented
 end;
 
-procedure TCWDaemon.SetMixManSpeed(min,max : Word);
+procedure TCWDaemon.SetMinMaxSpeed(min,max : Word);
 begin
   //not supported in cwdaemon
 end;
@@ -674,7 +676,7 @@ begin
   //not implemented
 end;
 
-procedure TCWK3NG.SetMixManSpeed(min,max : Word);
+procedure TCWK3NG.SetMinMaxSpeed(min,max : Word);
 begin
   //not supported
 end;
@@ -939,7 +941,7 @@ begin
   //not implemented
 end;
 
-procedure TCWHamLib.SetMixManSpeed(min,max : Word);
+procedure TCWHamLib.SetMinMaxSpeed(min,max : Word);
 begin
   //not supported
 end;
