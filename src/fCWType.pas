@@ -88,7 +88,7 @@ type
     CWMode:integer;
     function PassedKey(key:char):boolean;
     procedure blocksend;
-    procedure SetSpeed(change:integer);
+    procedure SetSpeedChange(change:integer);
   public
     { public declarations }
     procedure UpdateTop;
@@ -139,8 +139,12 @@ procedure TfrmCWType.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   case Key of
    VK_F1 .. VK_F10 : frmNewQSO.FormKeyDown(Sender,Key,Shift);
-   33,34           : Begin
-                      SetSpeed((Key-33)*-4+2);
+   33              : Begin
+                      SetSpeedChange(cqrini.ReadInteger('CW','SpeedStep', 2));
+                      Key:=0;
+                     end;
+   34              : Begin
+                      SetSpeedChange(-1*cqrini.ReadInteger('CW','SpeedStep', 2));
                       Key:=0;
                      end;
    VK_ESCAPE       : Begin
@@ -409,12 +413,12 @@ end;
 
 procedure TfrmCWType.btnPgDnClick(Sender: TObject);
 begin
-  SetSpeed(-2);
+  SetSpeedChange(-1*cqrini.ReadInteger('CW','SpeedStep', 2));
 end;
 
 procedure TfrmCWType.btnPgDnMouseEnter(Sender: TObject);
 begin
-  frmCWType.lblToShowMouseOverText.Caption:='cw keyspeed -2 wpm';
+  frmCWType.lblToShowMouseOverText.Caption:='cw keyspeed -'+IntToStr(cqrini.ReadInteger('CW','SpeedStep', 2))+' wpm';
 end;
 
 procedure TfrmCWType.btnPgDnMouseLeave(Sender: TObject);
@@ -424,12 +428,12 @@ end;
 
 procedure TfrmCWType.btnPgUpClick(Sender: TObject);
 begin
-  SetSpeed(2);
+  SetSpeedChange(cqrini.ReadInteger('CW','SpeedStep', 2));
 end;
 
 procedure TfrmCWType.btnPgUpMouseEnter(Sender: TObject);
 begin
-  frmCWType.lblToShowMouseOverText.Caption:='cw keyspeed +2 wpm';
+  frmCWType.lblToShowMouseOverText.Caption:='cw keyspeed +'+IntToStr(cqrini.ReadInteger('CW','SpeedStep', 2))+' wpm';
 end;
 
 procedure TfrmCWType.btnPgUpMouseLeave(Sender: TObject);
@@ -641,7 +645,7 @@ begin
       m.SetFocus; //after mode change focus back to memo
 end;
 
-procedure TfrmCWType.SetSpeed(change:integer);
+procedure TfrmCWType.SetSpeedChange(change:integer);
 var
   speed : Integer = 0;
     n   : string;

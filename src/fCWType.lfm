@@ -126,12 +126,15 @@ object frmCWType: TfrmCWType
   object pnlBottom: TPanel
     Left = 0
     Height = 35
+    Hint = 'Right click to select CW mode.'
     Top = 372
     Width = 870
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 35
     ClientWidth = 870
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 0
     object btnClose: TButton
       AnchorSideTop.Control = pnlBottom
@@ -192,7 +195,7 @@ object frmCWType: TfrmCWType
   end
   inline fraCWKeys1: TfraCWKeys
     Height = 70
-    Hint = 'Buttons are same as window "Memory keys" have.'
+    Hint = 'Buttons are same as window "Memory keys" have.'#10'Right click to select CW mode.'
     Width = 870
     Align = alTop
     ClientHeight = 70

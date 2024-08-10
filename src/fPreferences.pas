@@ -497,6 +497,7 @@ type
     edtRot2Host: TEdit;
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
+    edtSpdStep: TSpinEdit;
     edtXLeft: TEdit;
     edtXTop: TEdit;
     edtZipCity: TEdit;
@@ -669,6 +670,8 @@ type
     Label108: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    lblSpdStep: TLabel;
+    lblSpdStepWpm: TLabel;
     lblCWDMinSpeed: TLabel;
     lblCWDMaxSpeed: TLabel;
     lblFile1: TLabel;
@@ -1048,7 +1051,6 @@ type
     procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtHtmlFilesExit(Sender: TObject);
     procedure edtImgFilesExit(Sender: TObject);
-    procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtK3NGSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtLocExit(Sender: TObject);
@@ -1059,6 +1061,7 @@ type
     procedure edtRigCountChange(Sender: TObject);
     procedure edtRigCtldPathChange(Sender: TObject);
     procedure edtRotCtldPathChange(Sender: TObject);
+    procedure edtWinMinSpeedChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
     procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
@@ -2689,15 +2692,18 @@ begin
         edtImgFiles.Text:=SeekExecFile(edtImgFiles.Text,'Find image viewer');
 end;
 
-procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
 begin
+  if edtWinMinSpeed.Value > edtWinMaxSpeed.Value then  edtWinMinSpeed.Value := edtWinMaxSpeed.Value;
+  if edtWinMaxSpeed.Value < edtWinMinSpeed.Value then  edtWinMaxSpeed.Value := edtWinMinSpeed.Value;
   if edtWinSpeed.Value < edtWinMinSpeed.Value then edtWinSpeed.Value := edtWinMinSpeed.Value;
   if edtWinSpeed.Value > edtWinMaxSpeed.Value then edtWinSpeed.Value := edtWinMaxSpeed.Value;
+  CWKeyerChanged := True
+end;
+procedure TfrmPreferences.edtWinMinSpeedChange(Sender: TObject);
+begin
+  if edtWinMinSpeed.Value > edtWinMaxSpeed.Value then  edtWinMinSpeed.Value := edtWinMaxSpeed.Value;
+  if edtWinMaxSpeed.Value < edtWinMinSpeed.Value then  edtWinMaxSpeed.Value := edtWinMinSpeed.Value;
   CWKeyerChanged := True
 end;
 procedure TfrmPreferences.edtCWDSpeedChange(Sender: TObject);
@@ -2810,6 +2816,8 @@ begin
   end;
   TRXChanged := True
 end;
+
+
 
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
 begin
@@ -3630,6 +3638,7 @@ Begin
   nr:=IntToStr(RigNr);
   cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, 'Type', 0);
   cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, 'NoReset', false);
+  edtSpdStep.Value       := cqrini.ReadInteger('CW','SpeedStep', 2);
 
   edtWinPort.Text        := cqrini.ReadString('CW'+nr, 'wk_port', '');
   chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, 'PotSpeed', False);
@@ -3669,6 +3678,7 @@ Begin
   if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
   cqrini.WriteInteger('CW'+nr, 'Type', cmbIfaceType.ItemIndex);
   cqrini.WriteBool('CW'+nr, 'NoReset', cbNoKeyerReset.Checked);
+  cqrini.Writeinteger('CW','SpeedStep', edtSpdStep.Value);
 
   cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort.Text);
   cqrini.WriteBool('CW'+nr, 'PotSpeed', chkPotSpeed.Checked);

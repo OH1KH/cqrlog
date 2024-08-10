@@ -233,7 +233,7 @@ end;
 
 procedure TfraCWKeys.btnPgDnMouseEnter(Sender: TObject);
 begin
-  self.lblToShowMouseOverTextCwKeys.Caption:='cw keyspeed -2 wpm';
+  self.lblToShowMouseOverTextCwKeys.Caption:='cw keyspeed -'+IntToStr(cqrini.ReadInteger('CW','SpeedStep', 2))+' wpm';
 end;
 
 procedure TfraCWKeys.btnPgDnMouseLeave(Sender: TObject);
@@ -243,7 +243,7 @@ end;
 
 procedure TfraCWKeys.btnPgUpMouseEnter(Sender: TObject);
 begin
-  self.lblToShowMouseOverTextCwKeys.Caption:='cw keyspeed +2 wpm';
+  self.lblToShowMouseOverTextCwKeys.Caption:='cw keyspeed +'+IntToStr(cqrini.ReadInteger('CW','SpeedStep', 2))+' wpm';
 end;
 
 procedure TfraCWKeys.btnPgUpMouseLeave(Sender: TObject);

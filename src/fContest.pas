@@ -348,7 +348,10 @@ begin
 
   if( (key in [33,34]) and (Assigned(frmNewQSO.CWint)) )then
    begin
-     speed := frmNewQSO.CWint.GetSpeed+((key-33)*-4+2);
+     case key of
+       33 : speed := frmNewQSO.CWint.GetSpeed+ cqrini.ReadInteger('CW','SpeedStep', 2);
+       34 : speed := frmNewQSO.CWint.GetSpeed+ -1*cqrini.ReadInteger('CW','SpeedStep', 2);
+     end;
     frmNewQSO.CWint.SetSpeed(speed);
     if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
         frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'

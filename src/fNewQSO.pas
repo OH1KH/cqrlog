@@ -5810,12 +5810,15 @@ begin
 
   if( (key in [33,34]) and (not dbgrdQSOBefore.Focused) and (Assigned(CWint)) )then
   begin
-     speed := CWint.GetSpeed+((key-33)*-4+2);
+    case key of
+       33 : speed := frmNewQSO.CWint.GetSpeed+ cqrini.ReadInteger('CW','SpeedStep', 2);
+       34 : speed := frmNewQSO.CWint.GetSpeed+ -1*cqrini.ReadInteger('CW','SpeedStep', 2);
+     end;
     CWint.SetSpeed(speed);
     if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
         sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
-        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
+        sbNewQSO.Panels[4].Text := IntToStr(CWint.GetSpeed) + 'WPM';
     if (frmCWType <> nil ) then
          frmCWType.UpdateTop;
     key:=0;
