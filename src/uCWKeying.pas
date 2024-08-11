@@ -217,7 +217,7 @@ begin
     fActive := True
   else begin
     fLastErrNr := 1000;
-    fLastErrSt := 'WinKeyer USB inicialization failed';
+    fLastErrSt := 'WinKeyer USB initialization failed';
     if fDebugMode then Writeln(fLastErrSt);
     exit
   end;
@@ -228,7 +228,8 @@ begin
   begin
     rec := (ser.recvByte(0))
   end;
-  if fDebugMode then Writeln('Firmware version: ',rec);
+  if fDebugMode then
+     Writeln('Firmware version: ',rec);
   fActive := True;
 
   SetSpeed(fSpeed)
@@ -269,7 +270,7 @@ begin
   ser.SendByte(5);     //Setup Speed Pot <05><nn1><nn2><nn3> nn1 = MIN, nn2 = RANGE, nn3 = 0
   ser.SendByte(min);
   ser.SendByte(max);   //Max is RANGE+MIN
-  ser.SendByte(0);     //The value of the third parameter is not used but it must be included to maintain backward compatibility for
+  //ser.SendByte(0);     //The value of the third parameter is not used but it must be included to maintain backward compatibility for
                        //applications supporting only WK1 keyers. Recommendation is to set this to zero but any value is accepted.
 end;
 

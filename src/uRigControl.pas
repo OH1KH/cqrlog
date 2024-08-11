@@ -312,7 +312,7 @@ begin
    Begin
      repeat
      begin
-        //if fDebugMode then
+        if fDebugMode then
                       Writeln('Waiting for rigctld ',RetryCount,' @ ',fRigCtldHost,':',fRigCtldPort);
         if  ErrorRigctldConnect then
             Begin

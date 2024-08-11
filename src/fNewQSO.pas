@@ -7398,6 +7398,8 @@ begin
            else
             UseSpeed:=-1;
           Menuitem45.Visible:=True;
+          if cqrini.ReadString('CW'+n,'wk_hex','')<>'' then    //additional init values
+            CWint.SendHex(Uppercase(cqrini.ReadString('CW'+n,'wk_hex','')));
         end;
     2 : begin
           CWint    := TCWDaemon.Create;

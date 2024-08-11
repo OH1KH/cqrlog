@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, inifiles, DB, process, Spin, ColorBox, lcltype,
-  Calendar, EditBtn, uCWKeying, frExportPref, types, fileutil, LazFileUtils,LCLIntf, Dos;
+  Calendar, EditBtn, uCWKeying, frExportPref, types, fileutil, LazFileUtils,LCLIntf, Dos, strutils;
 
 type
 
@@ -457,10 +457,10 @@ type
     edtCbQRZCQUser: TEdit;
     edtCWDMinSpeed: TSpinEdit;
     edtCWDMaxSpeed: TSpinEdit;
-    edtHamLibMinSpeed: TSpinEdit;
-    edtHamLibMaxSpeed: TSpinEdit;
-    edtK3NGMinSpeed: TSpinEdit;
-    edtK3NGMaxSpeed: TSpinEdit;
+    edtHamMinSpeed: TSpinEdit;
+    edtHamMaxSpeed: TSpinEdit;
+    edtK3NMinSpeed: TSpinEdit;
+    edtK3NMaxSpeed: TSpinEdit;
     edtUdAddress: TEdit;
     edtOperator: TEdit;
     edtCondxTextUrl: TEdit;
@@ -498,6 +498,7 @@ type
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
     edtSpdStep: TSpinEdit;
+    edtWinHex: TEdit;
     edtXLeft: TEdit;
     edtXTop: TEdit;
     edtZipCity: TEdit;
@@ -508,9 +509,9 @@ type
     edtCondxImageUrl: TEdit;
     edtBackupPath1: TEdit;
     edtWsjtDefaultFreq: TEdit;
-    edtK3NGSerSpeed: TEdit;
+    edtK3NSerSpeed: TEdit;
     edtAlertCmd: TEdit;
-    edtHamLibSpeed: TSpinEdit;
+    edtHamSpeed: TSpinEdit;
     edtRBNServer : TEdit;
     edtClEmail: TEdit;
     edtHrCode: TEdit;
@@ -568,8 +569,8 @@ type
     edtCWDSpeed: TSpinEdit;
     edtWinMinSpeed: TSpinEdit;
     edtWinMaxSpeed: TSpinEdit;
-    edtK3NGPort: TEdit;
-    edtK3NGSpeed: TSpinEdit;
+    edtK3NPort: TEdit;
+    edtK3NSpeed: TSpinEdit;
     edtFldigiIp: TEdit;
     edtADIFIp: TEdit;
     edtWsjtPath: TEdit;
@@ -802,6 +803,7 @@ type
     Label187: TLabel;
     Label188: TLabel;
     Label189: TLabel;
+    lblWinHex: TLabel;
     lnlRbnServer : TLabel;
     lblRbnAdrFormat : TLabel;
     Label192: TLabel;
@@ -1040,18 +1042,15 @@ type
     procedure cmbRadioNrChange(Sender: TObject);
     procedure cmbRadioNrCloseUp(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
-    procedure edtCWDSpeedChange(Sender: TObject);
     procedure edtDataCmdChange(Sender: TObject);
     procedure edtDigiModesExit(Sender: TObject);
     procedure edtGCBeamWidthChange(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
     procedure edtGCStepExit(Sender: TObject);
-    procedure edtHamLibSpeedChange(Sender: TObject);
     procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtHtmlFilesExit(Sender: TObject);
     procedure edtImgFilesExit(Sender: TObject);
-    procedure edtK3NGSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtLocExit(Sender: TObject);
     procedure edtLocKeyPress(Sender: TObject; var Key: char);
@@ -1061,7 +1060,8 @@ type
     procedure edtRigCountChange(Sender: TObject);
     procedure edtRigCtldPathChange(Sender: TObject);
     procedure edtRotCtldPathChange(Sender: TObject);
-    procedure edtWinMinSpeedChange(Sender: TObject);
+    procedure edtMinMaxSpeedChange(Sender: TObject);
+    procedure edtWinHexExit(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
     procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
@@ -1072,7 +1072,7 @@ type
     procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
     procedure edtWebBrowserExit(Sender: TObject);
-    procedure edtWinSpeedChange(Sender: TObject);
+    procedure edtSpeedChange(Sender: TObject);
     procedure edtXplanetLocChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
     procedure btnDefineProfileClick(Sender: TObject);
@@ -2493,6 +2493,11 @@ end;
 
 procedure TfrmPreferences.cmbIfaceTypeChange(Sender: TObject);
 begin
+  gbWinkeyer.Enabled:=(cmbIfaceType.Text = 'Winkeyer');
+  gbCWkeyer.Enabled:=(cmbIfaceType.Text  = 'cwdaemon');
+  gbK3NGkey.Enabled:=(cmbIfaceType.Text  = 'K3NG Key');
+  gbHamlib.Enabled:= (cmbIfaceType.Text  = 'Hamlib');
+
   CWKeyerChanged:=true;
 end;
 
@@ -2692,39 +2697,84 @@ begin
         edtImgFiles.Text:=SeekExecFile(edtImgFiles.Text,'Find image viewer');
 end;
 
-procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
+procedure TfrmPreferences.edtSpeedChange(Sender: TObject);
 begin
-  if edtWinMinSpeed.Value > edtWinMaxSpeed.Value then  edtWinMinSpeed.Value := edtWinMaxSpeed.Value;
-  if edtWinMaxSpeed.Value < edtWinMinSpeed.Value then  edtWinMaxSpeed.Value := edtWinMinSpeed.Value;
-  if edtWinSpeed.Value < edtWinMinSpeed.Value then edtWinSpeed.Value := edtWinMinSpeed.Value;
-  if edtWinSpeed.Value > edtWinMaxSpeed.Value then edtWinSpeed.Value := edtWinMaxSpeed.Value;
   CWKeyerChanged := True
 end;
-procedure TfrmPreferences.edtWinMinSpeedChange(Sender: TObject);
+procedure TfrmPreferences.edtMinMaxSpeedChange(Sender: TObject);
+var n:string;
+
+ procedure domin(var spd,mi,ma:TSpinedit);
+ Begin
+     if mi.Value >= ma.Value then  mi.Value:=ma.Value-1;
+     spd.MinValue   := mi.Value;
+ end;
+ procedure domax(var spd,mi,ma:TSpinedit);
+ begin
+     if ma.Value <= mi.Value then  ma.Value:=mi.Value+1;
+     spd.MaxValue   := ma.Value;
+ end;
+
 begin
-  if edtWinMinSpeed.Value > edtWinMaxSpeed.Value then  edtWinMinSpeed.Value := edtWinMaxSpeed.Value;
-  if edtWinMaxSpeed.Value < edtWinMinSpeed.Value then  edtWinMaxSpeed.Value := edtWinMinSpeed.Value;
-  CWKeyerChanged := True
-end;
-procedure TfrmPreferences.edtCWDSpeedChange(Sender: TObject);
-begin
-  if edtCWDSpeed.Value < edtCWDMinSpeed.Value then edtCWDSpeed.Value := edtCWDMinSpeed.Value;
-  if edtCWDSpeed.Value > edtCWDMaxSpeed.Value then edtCWDSpeed.Value := edtCWDMaxSpeed.Value;
-  CWKeyerChanged := True
-end;
-procedure TfrmPreferences.edtK3NGSpeedChange(Sender: TObject);
-begin
-  if edtK3NGSpeed.Value < edtK3NGMinSpeed.Value then edtK3NGSpeed.Value := edtK3NGMinSpeed.Value;
-  if edtK3NGSpeed.Value > edtK3NGMaxSpeed.Value then edtK3NGSpeed.Value := edtK3NGMaxSpeed.Value;
+  n:=copy((Sender as TSpinEdit).Name,4,6);
+  case n of
+    'WinMin' :  domin( edtWinSpeed, edtWinMinSpeed,  edtWinMaxSpeed);
+    'WinMax' :  domax( edtWinSpeed, edtWinMinSpeed,  edtWinMaxSpeed);
+    'CWDMin' :  domin( edtCWDSpeed, edtCWDMinSpeed, edtCWDMaxSpeed);
+    'CWDMax' :  domax( edtCWDSpeed, edtCWDMinSpeed, edtCWDMaxSpeed);
+    'K3NMin' :  domin( edtK3NSpeed, edtK3NMinSpeed, edtK3NMaxSpeed);
+    'K3NMax' :  domax( edtK3NSpeed, edtK3NMinSpeed, edtK3NMaxSpeed);
+    'HamMin' :  domin( edtHamSpeed, edtHamMinSpeed, edtHamMaxSpeed);
+    'HamMax' :  domax( edtHamSpeed, edtHamMinSpeed, edtHamMaxSpeed);
+  end;
   CWKeyerChanged := True
 end;
 
-procedure TfrmPreferences.edtHamLibSpeedChange(Sender: TObject);
-begin
-  if edtHamLibSpeed.Value < edtHamLibMinSpeed.Value then edtHamLibSpeed.Value := edtHamLibMinSpeed.Value;
-  if edtHamLibSpeed.Value > edtHamLibMaxSpeed.Value then edtHamLibSpeed.Value := edtHamLibMaxSpeed.Value;
+procedure TfrmPreferences.edtWinHexExit(Sender: TObject);
+var
+  H       : String;
+  p       : integer;
+  index     :integer;
+  paramList :TStringList;
+   // check hex values here, erase if false and return focus
+  Begin
+  if edtWinHex.Text='' then exit;
+  edtWinHex.Text:=UpperCase(edtWinHex.Text);
+  try
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ',';
+    paramList.DelimitedText := edtWinHex.Text;
+    while index < paramList.Count do
+    begin
+      try
+       if Pos('X', paramList[index])>0 then
+          H:=copy(paramList[index],Pos('X', paramList[index])+1,2)
+        else
+          H:= paramList[index];
+       p:=Hex2Dec(H);
+      except
+       on E: Exception do
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+           exit;
+         end;
+      end;
+      if p>255 then
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+           exit;
+         end;
+      inc(index);
+    end;
+
+    paramList.Free;
+   finally
+     //Done all
+   end;
   CWKeyerChanged := True
 end;
+
 procedure TfrmPreferences.edtPdfFilesExit(Sender: TObject);
 begin
    if ExtractFilePath(edtPdfFiles.Text)='' then
@@ -3425,6 +3475,7 @@ begin
   chkSysUTCClick(nil);
   TRXChanged      := False;
   RotChanged      := False;
+  cmbIfaceTypeChange(nil);
   CWKeyerChanged := False;
 
   pgPreferences.ActivePageIndex := ActPageIdx;    //set wanted tab for showing when open. ActTab is public variable.
@@ -3645,6 +3696,7 @@ Begin
   edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
   edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
   edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
+  edtWinHex.Text        := cqrini.ReadString('CW'+nr, 'wk_hex', '');
 
   edtCWAddress.Text      := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
   edtCWPort.Text         := cqrini.ReadString('CW'+nr, 'cw_port', '6789');
@@ -3652,16 +3704,16 @@ Begin
   edtCWDMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'cw_min', 5);
   edtCWDMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'cw_max', 60);
 
-  edtK3NGPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
-  edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
-  edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
-  edtK3NGMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_min', 5);
-  edtK3NGMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_max', 60);
+  edtK3NPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
+  edtK3NSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
+  edtK3NSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
+  edtK3NMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_min', 5);
+  edtK3NMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_max', 60);
 
   chkUseHLBuffer.checked := cqrini.ReadBool('CW'+nr, 'UseHamlibBuffer', False);
-  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
-  edtHamlibMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_min', 5);
-  edtHamlibMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_max', 60);
+  edtHamSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
+  edtHamMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_min', 5);
+  edtHamMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_max', 60);
 
 
   CWifLoaded := RigNr;
@@ -3685,6 +3737,7 @@ Begin
   cqrini.WriteInteger('CW'+nr, 'wk_speed', edtWinSpeed.Value);
   cqrini.WriteInteger('CW'+nr, 'wk_min', edtWinMinSpeed.Value);
   cqrini.WriteInteger('CW'+nr, 'wk_max', edtWinMaxSpeed.Value);
+  cqrini.WriteString('CW'+nr, 'wk_hex', edtWinHex.Text);
 
   cqrini.WriteString('CW'+nr, 'cw_address', edtCWAddress.Text);
   cqrini.WriteString('CW'+nr, 'cw_port', edtCWPort.Text);
@@ -3692,16 +3745,16 @@ Begin
   cqrini.WriteInteger('CW'+nr, 'cw_min', edtCWDMinSpeed.Value );
   cqrini.WriteInteger('CW'+nr, 'cw_max', edtCWDMaxSpeed.Value);
 
-  cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NGPort.Text);
-  cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
-  cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
-  cqrini.WriteInteger('CW'+nr, 'K3NG_min', edtK3NGMinSpeed.Value);
-  cqrini.WriteInteger('CW'+nr, 'K3NG_max', edtK3NGMaxSpeed.Value);
+  cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NPort.Text);
+  cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NSerSpeed.Text));
+  cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NSpeed.Text));
+  cqrini.WriteInteger('CW'+nr, 'K3NG_min', edtK3NMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'K3NG_max', edtK3NMaxSpeed.Value);
 
   cqrini.WriteBool('CW'+nr, 'UseHamlibBuffer', chkUseHLBuffer.checked);
-  cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
-  cqrini.WriteInteger('CW'+nr, 'HamLib_min', edtHamlibMinSpeed.Value);
-  cqrini.WriteInteger('CW'+nr, 'HamLib_max', edtHamlibMaxSpeed.Value);
+  cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamSpeed.Text));
+  cqrini.WriteInteger('CW'+nr, 'HamLib_min', edtHamMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'HamLib_max', edtHamMaxSpeed.Value);
 end;
 
 procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes
