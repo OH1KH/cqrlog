@@ -595,8 +595,58 @@ begin
     udp.SendMessage(text)
 end;
 procedure TCWDaemon.SendHex(text : String);
+var
+  H       : String;
+  p       : integer;
+  index     :integer;
+  paramList :TStringList;
+
+function send(ok:boolean):boolean;
 Begin
-  //not implemented
+  Result:=true;
+  try
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ',';
+    paramList.DelimitedText := text;
+    while index < paramList.Count do
+    begin
+      try
+       if Pos('X', paramList[index])>0 then
+          H:=copy(paramList[index],Pos('X', paramList[index])+1,2)
+        else
+          H:= paramList[index];
+       p:=Hex2Dec(H);
+      except
+       on E: Exception do
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+           Result:=false;
+           exit;
+         end;
+      end;
+      if p>255 then
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+           Result:=false;
+           exit;
+         end;
+      if fDebugMode and ok then Writeln('Sending value: ',paramList[index],'=',p);
+      if ok then udp.SendMessage(chr(p));
+      inc(index);
+    end;
+
+    paramList.Free;
+   finally
+     //Done all
+   end;
+end;
+
+begin
+  //test hex conversion
+  if not send(false) then exit;
+  //if passed do real send
+  send(true);
 end;
 
 procedure TCWDaemon.Close;

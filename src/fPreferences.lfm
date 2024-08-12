@@ -7777,9 +7777,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 155
           Height = 34
-          Hint = 'Comma separated hex bytes without 0x or $ prefix.'#10'00, 01, 0A, FF  etc.'#10'You can send additional admin commands to set keyer properties.'#10'There is no feedback from sending.'
+          Hint = 'Comma separated hex bytes in 0xFF, xFF or FF formats allowed.'#10'You can send additional admin commands to set keyer properties.'#10'There is no feedback from sending.'
           Top = 23
-          Width = 320
+          Width = 317
           BorderSpacing.Left = 9
           OnExit = edtWinHexExit
           ParentShowHint = False
@@ -7793,9 +7793,8 @@ object frmPreferences: TfrmPreferences
           Left = 155
           Height = 17
           Top = 6
-          Width = 204
-          BorderSpacing.Top = 2048
-          Caption = 'Hex bytes send to keyer at init:'
+          Width = 169
+          Caption = 'Hex bytes to keyer at init:'
           ParentColor = False
         end
       end
@@ -7824,16 +7823,16 @@ object frmPreferences: TfrmPreferences
           Caption = 'Address:'
           ParentColor = False
         end
-        object lblCWPort1: TLabel
+        object lblCWPort: TLabel
           AnchorSideLeft.Control = edtCWAddress
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = lblCWAddr
           Left = 155
           Height = 17
           Top = 6
-          Width = 111
+          Width = 71
           BorderSpacing.Left = 9
-          Caption = 'Radio keyer Port:'
+          Caption = 'Keyer Port:'
           ParentColor = False
         end
         object lblCWDefSpeed: TLabel
@@ -7872,8 +7871,8 @@ object frmPreferences: TfrmPreferences
           TabOrder = 0
         end
         object edtCWPort: TEdit
-          AnchorSideLeft.Control = lblCWPort1
-          AnchorSideTop.Control = lblCWPort1
+          AnchorSideLeft.Control = lblCWPort
+          AnchorSideTop.Control = lblCWPort
           AnchorSideTop.Side = asrBottom
           Left = 155
           Height = 34
@@ -7948,6 +7947,29 @@ object frmPreferences: TfrmPreferences
           OnChange = edtMinMaxSpeedChange
           TabOrder = 4
           Value = 60
+        end
+        object lblCWDHex: TLabel
+          AnchorSideLeft.Control = edtCWDHex
+          AnchorSideTop.Control = lblCWPort
+          AnchorSideTop.Side = asrCenter
+          Left = 244
+          Height = 17
+          Top = 6
+          Width = 169
+          Caption = 'Hex bytes to keyer at init:'
+          ParentColor = False
+        end
+        object edtCWDHex: TEdit
+          AnchorSideLeft.Control = edtCWPort
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtCWPort
+          AnchorSideTop.Side = asrCenter
+          Left = 244
+          Height = 34
+          Top = 23
+          Width = 228
+          BorderSpacing.Left = 9
+          TabOrder = 5
         end
       end
       object btnKeyMacros: TButton
@@ -8053,9 +8075,9 @@ object frmPreferences: TfrmPreferences
           Left = 155
           Height = 17
           Top = 6
-          Width = 114
+          Width = 84
           BorderSpacing.Left = 9
-          Caption = 'Serial port speed:'
+          Caption = 'Serial speed:'
           ParentColor = False
         end
         object lblK3NGMinSpeed: TLabel
@@ -8111,6 +8133,29 @@ object frmPreferences: TfrmPreferences
           OnChange = edtMinMaxSpeedChange
           TabOrder = 4
           Value = 60
+        end
+        object lblK3NGHex: TLabel
+          AnchorSideLeft.Control = edtK3NHex
+          AnchorSideTop.Control = lblK3NGPort
+          AnchorSideTop.Side = asrCenter
+          Left = 244
+          Height = 17
+          Top = 6
+          Width = 169
+          Caption = 'Hex bytes to keyer at init:'
+          ParentColor = False
+        end
+        object edtK3NHex: TEdit
+          AnchorSideLeft.Control = edtK3NSerSpeed
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtK3NSerSpeed
+          AnchorSideTop.Side = asrCenter
+          Left = 244
+          Height = 34
+          Top = 23
+          Width = 228
+          BorderSpacing.Left = 9
+          TabOrder = 5
         end
       end
       object gbHamlib: TGroupBox

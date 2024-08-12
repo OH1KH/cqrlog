@@ -451,6 +451,8 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtK3NHex: TEdit;
+    edtCWDHex: TEdit;
     edtCbQRZPass: TEdit;
     edtCbQRZCQPass: TEdit;
     edtCbQRZUser: TEdit;
@@ -671,6 +673,7 @@ type
     Label108: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    lblK3NGHex: TLabel;
     lblSpdStep: TLabel;
     lblSpdStepWpm: TLabel;
     lblCWDMinSpeed: TLabel;
@@ -804,6 +807,7 @@ type
     Label188: TLabel;
     Label189: TLabel;
     lblWinHex: TLabel;
+    lblCWDHex: TLabel;
     lnlRbnServer : TLabel;
     lblRbnAdrFormat : TLabel;
     Label192: TLabel;
@@ -883,7 +887,7 @@ type
     lblWinSpeed: TLabel;
     lblWinWPM: TLabel;
     lblCWAddr: TLabel;
-    lblCWPort1: TLabel;
+    lblCWPort: TLabel;
     lblCWDefSpeed: TLabel;
     lblCWWPM: TLabel;
     lblWinMinSpeed: TLabel;
@@ -3696,22 +3700,24 @@ Begin
   edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
   edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
   edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
-  edtWinHex.Text        := cqrini.ReadString('CW'+nr, 'wk_hex', '');
+  edtWinHex.Text         := cqrini.ReadString('CW'+nr, 'wk_hex', '');
 
   edtCWAddress.Text      := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
   edtCWPort.Text         := cqrini.ReadString('CW'+nr, 'cw_port', '6789');
-  edtCWDSpeed.Value       := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
+  edtCWDSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
   edtCWDMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'cw_min', 5);
   edtCWDMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'cw_max', 60);
+  edtCWDHex.Text         := cqrini.ReadString('CW'+nr, 'cw_hex', '');
 
-  edtK3NPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
-  edtK3NSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
-  edtK3NSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
+  edtK3NPort.Text        := cqrini.ReadString('CW'+nr,'K3NGPort','');
+  edtK3NSerSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
+  edtK3NSpeed.Text       := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
   edtK3NMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_min', 5);
   edtK3NMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'K3NG_max', 60);
+  edtK3NHex.Text         := cqrini.ReadString('CW'+nr, 'K3NG_hex', '');
 
   chkUseHLBuffer.checked := cqrini.ReadBool('CW'+nr, 'UseHamlibBuffer', False);
-  edtHamSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
+  edtHamSpeed.Text       := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
   edtHamMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_min', 5);
   edtHamMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'HamLib_max', 60);
 
@@ -3744,12 +3750,14 @@ Begin
   cqrini.WriteInteger('CW'+nr, 'cw_speed', edtCWDSpeed.Value);
   cqrini.WriteInteger('CW'+nr, 'cw_min', edtCWDMinSpeed.Value );
   cqrini.WriteInteger('CW'+nr, 'cw_max', edtCWDMaxSpeed.Value);
+  cqrini.WriteString('CW'+nr, 'cw_hex', edtCWDHex.Text);
 
   cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NPort.Text);
   cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NSerSpeed.Text));
   cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NSpeed.Text));
   cqrini.WriteInteger('CW'+nr, 'K3NG_min', edtK3NMinSpeed.Value);
   cqrini.WriteInteger('CW'+nr, 'K3NG_max', edtK3NMaxSpeed.Value);
+  cqrini.WriteString('CW'+nr, 'K3NG_hex', edtK3NHex.Text);
 
   cqrini.WriteBool('CW'+nr, 'UseHamlibBuffer', chkUseHLBuffer.checked);
   cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamSpeed.Text));

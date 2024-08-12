@@ -7413,6 +7413,9 @@ begin
           CWint.SetMinMaxSpeed(CWint.MinSpeed,CWint.MaxSpeed-CWint.MinSpeed);
           CWint.PortSpeed := 0;
           UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
+          Menuitem45.Visible:=True;
+          if cqrini.ReadString('CW'+n,'cw_hex','')<>'' then    //additional init values
+            CWint.SendHex(Uppercase(cqrini.ReadString('CW'+n,'cw_hex','')));
         end;
     3 : begin
           CWint := TCWK3NG.Create;
@@ -7426,6 +7429,8 @@ begin
           CWint.PortSpeed := cqrini.ReadInteger('CW'+n,'K3NGSerSpeed',115200);
           UseSpeed        := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
           Menuitem45.Visible:=True;
+          if cqrini.ReadString('CW'+n,'K3NG_hex','')<>'' then    //additional init values
+            CWint.SendHex(Uppercase(cqrini.ReadString('CW'+n,'K3NG_hex','')));
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
