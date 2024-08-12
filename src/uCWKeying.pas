@@ -828,8 +828,7 @@ procedure TCWK3NG.SendHex(text : String);
              Result:=false;
              exit;
            end;
-        //if fDebugMode and
-        if ok then Writeln('Sending value: ',paramList[index],'=',p);
+        if fDebugMode and ok then Writeln('Sending value: ',paramList[index],'=',p);
         if ok then ser.SendByte(p);
         inc(index);
       end;
