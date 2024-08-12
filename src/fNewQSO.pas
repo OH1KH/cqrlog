@@ -7365,11 +7365,12 @@ end;
 
 procedure TfrmNewQSO.InitializeCW;
 var
-  KeyType: TKeyType;
-  UseSpeed: integer;
-  KeyerType: integer;
-  n         : String;
+  KeyType    : TKeyType;
+  UseSpeed   : integer;
+  KeyerType  : integer;
+  n,i        : String;
 begin
+  i:='';
   if (CWint<>nil) then
    Begin
     sbNewQSO.Panels[2].Text := '';
@@ -7399,7 +7400,7 @@ begin
             UseSpeed:=-1;
           Menuitem45.Visible:=True;
           if cqrini.ReadString('CW'+n,'wk_hex','')<>'' then    //additional init values
-            CWint.SendHex(Uppercase(cqrini.ReadString('CW'+n,'wk_hex','')));
+             i:=Uppercase(cqrini.ReadString('CW'+n,'wk_hex',''));
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
@@ -7414,8 +7415,9 @@ begin
           CWint.PortSpeed := 0;
           UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
           Menuitem45.Visible:=True;
+          writeln( cqrini.ReadString('CW'+n,'cw_hex',''));
           if cqrini.ReadString('CW'+n,'cw_hex','')<>'' then    //additional init values
-            CWint.SendHex(Uppercase(cqrini.ReadString('CW'+n,'cw_hex','')));
+            i:=Uppercase(cqrini.ReadString('CW'+n,'cw_hex',''));
         end;
     3 : begin
           CWint := TCWK3NG.Create;
@@ -7430,7 +7432,7 @@ begin
           UseSpeed        := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
           Menuitem45.Visible:=True;
           if cqrini.ReadString('CW'+n,'K3NG_hex','')<>'' then    //additional init values
-            CWint.SendHex(Uppercase(cqrini.ReadString('CW'+n,'K3NG_hex','')));
+            i:=Uppercase(cqrini.ReadString('CW'+n,'K3NG_hex',''));
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
@@ -7460,6 +7462,11 @@ begin
       sbNewQSO.Panels[4].Text := IntToStr(CWint.GetSpeed) + 'WPM';
       if frmCWType.Showing then frmCWType.Caption:='CW Type: '+ IntToStr(CWint.GetSpeed)+'WPM';
      end;
+    if i<>'' then
+             Begin
+              sleep(300);
+              CWint.SendHex(i);
+             end;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);

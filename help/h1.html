@@ -714,12 +714,20 @@ There are no known dependencies issues.<br><br>
     <br>There are 5 options: None, WinKeyer ,cwdaemon, K3NG keyer and HamLib in <strong>CW interface type</strong> selector list.
     <br>We strongly recommend <strong>Winkeyer</strong> by Steve Elliot, K1EL, which provides 'all in one' keying, including one of most 
     advanced paddle keyers available.
-    <br>When checking <strong>Use potentiometer's CW speed</strong> Cqrlog does not send <strong>Default CW speed</strong> command to keyer
+    <br><br><strong>Use potentiometer's CW speed</strong> Cqrlog does not send <strong>given default CW speed</strong> command to Winkeyer
     when it is initialized.
-    <br><br>
-    <strong>cwdaemon</strong> should be seen as a backup option with many limitations, which may need a custom linux kernel to avoid 
-    sloppy CW at speeds above 25 WPM. If cwdaemon is used, only keyboard keying is possible.
-    <br><br>If you use <strong>Do not reset when switching radios</strong> it prevents keyer reset (that sets CW speed to default). 
+    <br>
+    <strong>cwdaemon</strong> should be seen as a backup option with many limitations, which may need a custom linux kernel to avoid. If cwdaemon is used, only keyboard keying is possible.
+    <br>
+    <strong>Send hex bytes to keyer</strong> (not for Hamlib) as the final stage of keyer initialization. Hex bytes 00-FF can be used and they must be comma separated.
+    <br>Format of entered bytes can be 0xFF,xFF or plain FF. This allows special settings to be entered to keyer like weighting, iambic A or B etc. 
+    <br>You must consult your keyer's manual to find suitable hex values for your needs.
+    
+    <br><strong>Min speed/Max speed </strong> can be defined (within 5-99WPM). These are limits you can access using PgUp/PgDn to adjust CW speed. Consult your keyer's manual to find speed limits of the keyer.
+    <br><strong>Speed step</strong> of PgUp/PgDn keys can also be defined. This is same value for all keyer types.
+    
+    
+    <br><strong>Do not reset when switching radios</strong> prevents keyer reset (that sets CW speed to given default). 
     This option does not apply with Hamlib keyer in use.
     <br><br>
     Detailed setup of the CW devices are here:
@@ -770,7 +778,6 @@ There are no known dependencies issues.<br><br>
     WB4 can be handy when working <strong>ARRL International Grid Chase </strong>or <strong>ARRL RTTY-FT8</strong> like contests if one does not like to create separate log for that purpose.
     <br><br><img src="img/h101b.png"><br><br>
     Pressing calendar icon is easy way to set date. Double click on selected date closes calendar and sets the date. Pressing ESC closes calendar, but does not set date. Date can also be typed in manually.
-    <br><br>Checking <b>Show LoTW, eQSL usage in CQ-monitor</b> will show <b>L</b> or/and <b>E</b> in front of continent in CQ-monitor<br>
     </p>
     <a name=ch2c></a>
     <h2><strong>ADIF interface</strong></h2>

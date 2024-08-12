@@ -1065,7 +1065,7 @@ type
     procedure edtRigCtldPathChange(Sender: TObject);
     procedure edtRotCtldPathChange(Sender: TObject);
     procedure edtMinMaxSpeedChange(Sender: TObject);
-    procedure edtWinHexExit(Sender: TObject);
+    procedure edtHexExit(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
     procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
@@ -2734,21 +2734,21 @@ begin
   CWKeyerChanged := True
 end;
 
-procedure TfrmPreferences.edtWinHexExit(Sender: TObject);
+procedure TfrmPreferences.edtHexExit(Sender: TObject);
 var
   H       : String;
   p       : integer;
   index     :integer;
   paramList :TStringList;
-   // check hex values here, erase if false and return focus
+   // check hex values of TEdit here, if false give error and return focus
   Begin
-  if edtWinHex.Text='' then exit;
-  edtWinHex.Text:=UpperCase(edtWinHex.Text);
+  if (Sender as TEdit).Text='' then exit;
+  (Sender as TEdit).Text:=UpperCase((Sender as TEdit).Text);
   try
     index:=0;
     paramList := TStringList.Create;
     paramList.Delimiter := ',';
-    paramList.DelimitedText := edtWinHex.Text;
+    paramList.DelimitedText := (Sender as TEdit).Text;
     while index < paramList.Count do
     begin
       try
@@ -2761,12 +2761,14 @@ var
        on E: Exception do
          Begin
            ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+           (Sender as TEdit).SetFocus;
            exit;
          end;
       end;
       if p>255 then
          Begin
            ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+           (Sender as TEdit).SetFocus;
            exit;
          end;
       inc(index);
