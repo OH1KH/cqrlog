@@ -1384,11 +1384,17 @@ begin
 
    if ((Red(ColorToRGB(GetDefaultColor(dctBrush))))>$77) then
     Begin             //this is selected if background is light
-      BandColor:=$CCFEFF;
+      if cqrini.ReadBool('Fonts', 'GridGreenBar', False) then
+       BandColor:=$E1A3A1
+      else
+       BandColor:=$CCFEFF;
     end
    else
     Begin             //this is selected if background is dark
-      BandColor:=$054445;
+      if cqrini.ReadBool('Fonts', 'GridGreenBar', False) then
+       BandColor:=$054445        //this may need fixing!!!
+      else
+       BandColor:=$054445;
     end;
 
    if (aCol = f+2) and ((aRow >= 1) and (aRow <= 7)) then

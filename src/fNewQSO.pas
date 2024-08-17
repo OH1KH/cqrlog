@@ -6211,14 +6211,28 @@ begin
    //ModeColor:=$CCFECD;
    if ((Red(ColorToRGB(GetDefaultColor(dctBrush))))>$77) then
     Begin             //this is selected if background is light
-      BandColor:=$CCFEFF;
-      ModeColor:=$CCFECD;
+      if cqrini.ReadBool('Fonts', 'GridGreenBar', False) then
+        Begin
+         BandColor:=$E1A3A1;
+          ModeColor:=$A1E1A7;
+        end
+      else
+        Begin
+         ModeColor:=$CCFECD;
+         BandColor:=$CCFEFF;
+        end;
     end
-   else
-    Begin             //this is selected if background is dark
-      BandColor:=$054445;
-      ModeColor:=$074505;
-    end;
+   else  //this is selected if background is dark
+    if cqrini.ReadBool('Fonts', 'GridGreenBar', False) then
+        Begin
+          BandColor:=$054445; //these may need fixing !!!!
+          ModeColor:=$074505;
+        end
+      else
+        Begin
+          BandColor:=$054445;
+          ModeColor:=$074505;
+        end;
 
    c:=dmUtils.GetBandPos(dmUtils.GetBandFromFreq(cmbFreq.Text))+1;
    if c<1 then exit; //error, should not happen.
