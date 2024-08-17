@@ -7451,7 +7451,7 @@ begin
    Begin
      CWint.Open;
      if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
-   end;
+
    if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
     Begin
      sbNewQSO.Panels[4].Text := 'Pot WPM';
@@ -7467,6 +7467,7 @@ begin
               sleep(300);
               CWint.SendHex(i);
              end;
+   end;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
