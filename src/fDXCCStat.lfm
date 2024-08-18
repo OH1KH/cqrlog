@@ -131,15 +131,16 @@ object frmDXCCStat: TfrmDXCCStat
     ClientWidth = 954
     TabOrder = 0
     object btClose: TButton
+      AnchorSideTop.Control = btnHTMLExport
+      AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = pnlStatSum
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = pnlStatSum
       AnchorSideBottom.Side = asrBottom
       Left = 872
       Height = 25
-      Top = 48
+      Top = 26
       Width = 75
-      Anchors = [akRight, akBottom]
+      Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
       BorderSpacing.Bottom = 6
       BorderSpacing.InnerBorder = 4
@@ -149,14 +150,15 @@ object frmDXCCStat: TfrmDXCCStat
       TabOrder = 0
     end
     object btnHTMLExport: TButton
+      AnchorSideTop.Control = gbPhone
+      AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btClose
-      AnchorSideBottom.Control = btClose
       AnchorSideBottom.Side = asrBottom
       Left = 751
       Height = 25
-      Top = 48
+      Top = 26
       Width = 115
-      Anchors = [akRight, akBottom]
+      Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
       BorderSpacing.InnerBorder = 4
       Caption = 'Export to HTML'
@@ -166,16 +168,16 @@ object frmDXCCStat: TfrmDXCCStat
     object gbCW: TGroupBox
       AnchorSideLeft.Control = gbPhone
       AnchorSideLeft.Side = asrBottom
-      AnchorSideBottom.Control = gbPhone
+      AnchorSideTop.Control = gbPhone
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 117
-      Height = 61
-      Top = 12
+      Height = 62
+      Top = 7
       Width = 104
-      Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
       Caption = ' CW '
-      ClientHeight = 43
+      ClientHeight = 44
       ClientWidth = 102
       TabOrder = 2
       object lblCWWKD: TLabel
@@ -204,17 +206,18 @@ object frmDXCCStat: TfrmDXCCStat
     end
     object gbPhone: TGroupBox
       AnchorSideLeft.Control = pnlStatSum
-      AnchorSideBottom.Control = pnlStatSum
+      AnchorSideTop.Control = pnlStatSum
       AnchorSideBottom.Side = asrBottom
       Left = 7
-      Height = 61
-      Top = 12
+      Height = 62
+      Top = 7
       Width = 104
-      Anchors = [akLeft, akBottom]
+      Anchors = [akTop, akLeft, akBottom]
       BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
       BorderSpacing.Bottom = 6
       Caption = ' PHONE'
-      ClientHeight = 43
+      ClientHeight = 44
       ClientWidth = 102
       TabOrder = 3
       object lblFoneWKD: TLabel
@@ -244,16 +247,16 @@ object frmDXCCStat: TfrmDXCCStat
     object gbDigi: TGroupBox
       AnchorSideLeft.Control = gbCW
       AnchorSideLeft.Side = asrBottom
-      AnchorSideBottom.Control = gbCW
+      AnchorSideTop.Control = gbPhone
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 227
-      Height = 61
-      Top = 12
+      Height = 62
+      Top = 7
       Width = 104
-      Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
       Caption = ' DIGI '
-      ClientHeight = 43
+      ClientHeight = 44
       ClientWidth = 102
       TabOrder = 4
       object lblDIGIWKD: TLabel
@@ -283,16 +286,16 @@ object frmDXCCStat: TfrmDXCCStat
     object gbMix: TGroupBox
       AnchorSideLeft.Control = gbDigi
       AnchorSideLeft.Side = asrBottom
-      AnchorSideBottom.Control = gbDigi
+      AnchorSideTop.Control = gbPhone
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 337
-      Height = 61
-      Top = 12
+      Height = 62
+      Top = 7
       Width = 104
-      Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
       Caption = ' MIX '
-      ClientHeight = 43
+      ClientHeight = 44
       ClientWidth = 102
       TabOrder = 5
       object lblWkdMix: TLabel
