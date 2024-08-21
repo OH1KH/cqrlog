@@ -138,7 +138,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideBottom.Side = asrBottom
       Left = 872
       Height = 25
-      Top = 26
+      Top = 25
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
@@ -156,7 +156,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideBottom.Side = asrBottom
       Left = 751
       Height = 25
-      Top = 26
+      Top = 25
       Width = 115
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
@@ -172,12 +172,12 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 117
-      Height = 62
-      Top = 7
+      Height = 66
+      Top = 4
       Width = 104
       BorderSpacing.Left = 6
       Caption = ' CW '
-      ClientHeight = 44
+      ClientHeight = 48
       ClientWidth = 102
       TabOrder = 2
       object lblCWWKD: TLabel
@@ -209,15 +209,15 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Control = pnlStatSum
       AnchorSideBottom.Side = asrBottom
       Left = 7
-      Height = 62
-      Top = 7
+      Height = 66
+      Top = 4
       Width = 104
       Anchors = [akTop, akLeft, akBottom]
       BorderSpacing.Left = 6
-      BorderSpacing.Top = 6
+      BorderSpacing.Top = 3
       BorderSpacing.Bottom = 6
       Caption = ' PHONE'
-      ClientHeight = 44
+      ClientHeight = 48
       ClientWidth = 102
       TabOrder = 3
       object lblFoneWKD: TLabel
@@ -251,12 +251,12 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 227
-      Height = 62
-      Top = 7
+      Height = 66
+      Top = 4
       Width = 104
       BorderSpacing.Left = 6
       Caption = ' DIGI '
-      ClientHeight = 44
+      ClientHeight = 48
       ClientWidth = 102
       TabOrder = 4
       object lblDIGIWKD: TLabel
@@ -290,12 +290,12 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 337
-      Height = 62
-      Top = 7
+      Height = 66
+      Top = 4
       Width = 104
       BorderSpacing.Left = 6
       Caption = ' MIX '
-      ClientHeight = 44
+      ClientHeight = 48
       ClientWidth = 102
       TabOrder = 5
       object lblWkdMix: TLabel
