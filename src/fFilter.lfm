@@ -1,16 +1,20 @@
 object frmFilter: TfrmFilter
   Left = 198
-  Height = 733
+  Height = 750
   Top = 12
-  Width = 819
+  Width = 827
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
+  HorzScrollBar.Page = 806
+  VertScrollBar.Page = 724
   ActiveControl = edtCallSign
+  AutoScroll = True
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'Filter'
-  ClientHeight = 733
-  ClientWidth = 819
+  ClientHeight = 750
+  ClientWidth = 827
+  Constraints.MinHeight = 400
+  Constraints.MinWidth = 500
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -224,15 +228,14 @@ object frmFilter: TfrmFilter
   end
   object btnOK: TButton
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = cmbProfile
-    AnchorSideRight.Control = gbIota
+    AnchorSideTop.Control = btClear
+    AnchorSideRight.Control = gbSatName
     AnchorSideRight.Side = asrBottom
-    Left = 733
+    Left = 731
     Height = 26
     Top = 634
     Width = 75
-    Anchors = [akTop]
-    BorderSpacing.Left = 6
+    Anchors = [akTop, akRight]
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
     OnClick = btnOKClick
@@ -242,7 +245,7 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Control = btnOK
     AnchorSideTop.Control = btnOK
     AnchorSideTop.Side = asrBottom
-    Left = 733
+    Left = 731
     Height = 26
     Top = 666
     Width = 75
@@ -1219,7 +1222,7 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Control = btnOK
     AnchorSideTop.Control = btnCancel
     AnchorSideTop.Side = asrBottom
-    Left = 733
+    Left = 731
     Height = 26
     Top = 698
     Width = 75
@@ -1863,13 +1866,12 @@ object frmFilter: TfrmFilter
     end
   end
   object btClear: TButton
-    AnchorSideTop.Control = btnOK
-    AnchorSideRight.Control = btnOK
+    AnchorSideLeft.Control = gbSatName
+    AnchorSideTop.Control = chkNot
     Left = 652
     Height = 25
     Top = 634
     Width = 75
-    Anchors = [akTop, akRight]
     BorderSpacing.Right = 3
     Caption = 'Clear filter'
     OnClick = btClearClick
