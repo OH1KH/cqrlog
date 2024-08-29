@@ -49,7 +49,7 @@ implementation
 {$R *.lfm}
 
 { TfrmExportProgress }
-uses dUtils, dData, uMyIni, dDXCC, uVersion, dSatellite;
+uses dUtils, dData, uMyIni, dDXCC, uVersion, dSatellite, fMain;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -461,14 +461,13 @@ begin   //TfrmExportProgress
   try
     pBarProg.Max := dmData.GetQSOCount;
     dmData.PrepareProfileExport;
-
     if AutoBackup or (not dmData.IsFilter) then
     begin
       dmData.Q.Close;
       if ExAscTime then
-        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
+        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'+frmMain.idlist
       else
-        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
+        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate'+frmMain.idlist;
       dmData.trQ.StartTransaction;
       dmData.Q.Open;
       Source := dmData.Q

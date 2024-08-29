@@ -1119,9 +1119,13 @@ object frmMain: TfrmMain
         end
       end
       object MenuItem10: TMenuItem
-        Caption = 'Backup log (ADIF)'
+        Caption = 'Backup whole log (ADIF)'
         Hint = 'Same as Auto backup on program exit.'#10'Check preferences/Exit & Auto backup settings.'
         OnClick = MenuItem10Click
+      end
+      object MenuItem15: TMenuItem
+        Caption = 'Backup selected qsos (ADIF)'
+        OnClick = MenuItem15Click
       end
       object MenuItem14: TMenuItem
         Caption = '-'

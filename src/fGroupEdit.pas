@@ -600,7 +600,8 @@ begin
       begin
         dmData.qCQRLOG.GotoBookmark(Pointer(frmMain.dbgrdMain.SelectedRows.Items[i]));
         aid[i] := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
-        Writeln('id: ',dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger)
+        if dmData.DebugLevel>=1 then
+          Writeln('id: ',dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger)
       end;
       for i:=0 to Length(aid)-1 do
         ChangeQSO(aid[i])

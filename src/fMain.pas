@@ -143,6 +143,7 @@ type
     MenuItem108: TMenuItem;
     MenuItem109: TMenuItem;
     MenuItem110: TMenuItem;
+    MenuItem15: TMenuItem;
     MenuItem2: TMenuItem;
     mnuOR: TMenuItem;
     MenuItemStats: TMenuItem;
@@ -405,6 +406,7 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure MenuItem107Click(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
+    procedure MenuItem15Click(Sender: TObject);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
@@ -472,6 +474,7 @@ type
     { private declarations }
   public
     ShowWidths : Boolean;
+    idlist     :string;
     procedure RefreshQSODXCCCount;
     procedure MarkQSLSend(symbol: string);
     procedure ShowFields;
@@ -1368,6 +1371,30 @@ procedure TfrmMain.MenuItem10Click(Sender: TObject);
 begin
   if Application.MessageBox('Do you want to backup your log data?','Backup log',mb_YesNo+mb_IconQuestion)= idYes then
       frmNewQSO.CreateAutoBackup;
+end;
+
+procedure TfrmMain.MenuItem15Click(Sender: TObject);
+var
+    i: integer;
+begin
+  if not dbgrdMain.SelectedRows.Count > 0 then exit;
+  idlist:=' where ';
+  for i := 0 to frmMain.dbgrdMain.SelectedRows.Count-1 do
+  begin
+    dmData.qCQRLOG.GotoBookmark(Pointer(frmMain.dbgrdMain.SelectedRows.Items[i]));
+    idlist:=idlist+ 'id_cqrlog_main='+dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsString+' or ';
+        if dmData.DebugLevel>=1 then
+      Begin
+       Writeln('id: ',dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger);
+       writeln(idlist);
+      end;
+  end;
+  if pos(' or',idlist)=0 then exit;
+  idlist:= copy(idlist,1,(length(idlist)-4));
+if dmData.DebugLevel>=1 then
+           writeln(idlist);
+  acExADIFExecute(nil);
+  idlist:='';
 end;
 
 procedure TfrmMain.mnueQSLViewClick(Sender: TObject);
@@ -2331,6 +2358,7 @@ begin
   mnuShowDetails.Checked := pnlDetails.Visible;
   //Sets AutoSizeColumns to saved value
   acAutoSizeColumnsExecute(nil);
+  idlist:='';
 end;
 
 procedure TfrmMain.ShowFields;
