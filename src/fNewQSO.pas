@@ -902,9 +902,13 @@ begin
 end;
 
 procedure TfrmNewQSO.GetCallInfo(callTOinfo,mode,rsts:string);
+var
+  m,f :String;
 begin
   if  edtCall.Text <> callTOinfo then  //call (and web info) maybe there already ok from pevious status packet
   begin
+    m:= cmbMode.Text; //keep these while call is cleared
+    f:= cmbFreq.Text;
     edtCall.Text := '';//clean grid like double ESC does
     Sleep(200); //to be sure edtCallChange has time to run;
     old_ccall := '';
@@ -912,6 +916,8 @@ begin
     old_cmode := '';
     edtCall.Text := callTOinfo;
     c_lock:=False;
+    cmbMode.Text:=m;   //return these after new call is given
+    cmbFreq.Text:=f;
     edtCallExit(nil);    //<--------this will fetch web info
     if dmData.DebugLevel>=1 then Writeln('GetCallInfo: Call was not there already');
     WaitWeb(2); // give time for web
@@ -1151,7 +1157,6 @@ var
 begin
   if (edtCall.Text = '') then
     exit;
-
   index := 0;
   lblCountryInfo.Caption := dmDXCC.DXCCInfo(adif, cmbFreq.Text, cmbMode.Text,index);
   if pos('UNKN',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clRed;

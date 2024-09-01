@@ -238,9 +238,9 @@ begin
   trQ.Rollback
 end;
 
-function TdmDXCC.DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String; // zjisti jestli je o nova zeme, nova zeme
-var               // index : 0 - Nepotrebujes QSL (neznama zeme, potvrzena)
-                 // index : 1 - Potrebujes QSL (nova zeme, nova na pasmu, modu)
+function TdmDXCC.DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String; // zjisti jestli je o nova zeme, nova zeme  find out if it's about a new country, a new country
+var               // index : 0 - Nepotrebujes QSL (neznama zeme, potvrzena)     You don't need a QSL (unknown country, confirmed)
+                 // index : 1 - Potrebujes QSL (nova zeme, nova na pasmu, modu) You need a QSL (new country, new band, mode)
   band : String;
   lotw   : Boolean = False;
   sAdif : String = '';
@@ -262,8 +262,10 @@ begin
   try
     if lotw then
       Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                    sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                    QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
+                    sAdif+' AND band='+QuotedStr(band)+
+                    ' AND ((qsl_r='+QuotedStr('Q')+
+                    ') OR (lotw_qslr='+QuotedStr('L')+
+                    ') OR (eqsl_qsl_rcvd='+QuotedStr('E')+ ')) AND mode='+
                     QuotedStr(mode)+' LIMIT 1'
     else
       Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
