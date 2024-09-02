@@ -1,11 +1,16 @@
 object frmeQSLUpload: TfrmeQSLUpload
-  Left = 547
-  Height = 482
-  Top = 158
-  Width = 616
+  Left = 693
+  Height = 520
+  Top = 166
+  Width = 520
+  HorzScrollBar.Page = 372
+  VertScrollBar.Page = 308
+  AutoScroll = True
   Caption = 'Upload QSO to eQSL.cc'
-  ClientHeight = 482
-  ClientWidth = 616
+  ClientHeight = 520
+  ClientWidth = 520
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 500
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
     0000400000000100200000000000001000006400000064000000000000000000
@@ -148,22 +153,22 @@ object frmeQSLUpload: TfrmeQSLUpload
   LCLVersion = '2.2.6.0'
   object grbWebExport: TGroupBox
     Left = 0
-    Height = 64
+    Height = 88
     Top = 0
-    Width = 616
+    Width = 520
     Align = alTop
-    ClientHeight = 62
-    ClientWidth = 614
+    ClientHeight = 86
+    ClientWidth = 518
     TabOrder = 0
     object rbWebExportAll: TRadioButton
       AnchorSideLeft.Control = grbWebExport
       AnchorSideTop.Control = grbWebExport
       Left = 12
       Height = 23
-      Top = 3
+      Top = 6
       Width = 131
       BorderSpacing.Left = 12
-      BorderSpacing.Top = 3
+      BorderSpacing.Top = 6
       Caption = ' Export all QSOs'
       TabOrder = 0
     end
@@ -173,7 +178,7 @@ object frmeQSLUpload: TfrmeQSLUpload
       AnchorSideTop.Side = asrBottom
       Left = 12
       Height = 23
-      Top = 29
+      Top = 32
       Width = 358
       BorderSpacing.Top = 3
       Caption = 'Export only QSOs which have never been uploaded'
@@ -183,60 +188,66 @@ object frmeQSLUpload: TfrmeQSLUpload
     end
   end
   object GroupBox1: TGroupBox
-    AnchorSideLeft.Control = grbWebExport
-    AnchorSideTop.Control = grbWebExport
     Left = 0
-    Height = 56
-    Top = 64
-    Width = 616
+    Height = 89
+    Top = 88
+    Width = 520
     Align = alTop
-    ClientHeight = 54
-    ClientWidth = 614
+    ClientHeight = 87
+    ClientWidth = 518
     TabOrder = 1
     object Label1: TLabel
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = GroupBox1
+      AnchorSideTop.Control = edtQTH
       AnchorSideTop.Side = asrCenter
-      Left = 12
+      AnchorSideRight.Control = edtQTH
+      Left = 6
       Height = 17
-      Top = 19
+      Top = 15
       Width = 102
-      BorderSpacing.Left = 12
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 12
+      BorderSpacing.Right = 1
       Caption = 'QTH Nickname:'
       ParentColor = False
     end
     object edtQTH: TEdit
-      AnchorSideLeft.Control = Label1
-      AnchorSideLeft.Side = asrBottom
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = GroupBox1
-      AnchorSideTop.Side = asrCenter
-      Left = 152
+      Left = 109
       Height = 34
-      Top = 10
-      Width = 174
-      BorderSpacing.Left = 38
+      Top = 6
+      Width = 300
+      BorderSpacing.Top = 6
       TabOrder = 0
     end
+    object lblInfo: TLabel
+      AnchorSideLeft.Control = Label1
+      AnchorSideTop.Control = edtQTH
+      AnchorSideTop.Side = asrBottom
+      Left = 6
+      Height = 1
+      Top = 58
+      Width = 1
+      BorderSpacing.Top = 18
+      ParentColor = False
+    end
   end
-  object GroupBox6: TGroupBox
-    AnchorSideLeft.Control = GroupBox1
-    AnchorSideTop.Control = GroupBox1
+  object gbProgress: TGroupBox
     Left = 0
-    Height = 362
-    Top = 120
-    Width = 616
+    Height = 343
+    Top = 177
+    Width = 520
     Align = alClient
     Caption = ' Upload '
-    ClientHeight = 344
-    ClientWidth = 614
+    ClientHeight = 325
+    ClientWidth = 518
     TabOrder = 2
     object mStat: TMemo
-      AnchorSideLeft.Control = GroupBox6
-      AnchorSideTop.Control = GroupBox6
       Left = 0
-      Height = 306
+      Height = 275
       Top = 0
-      Width = 614
+      Width = 518
       Align = alClient
       Lines.Strings = (
         ''
@@ -247,57 +258,40 @@ object frmeQSLUpload: TfrmeQSLUpload
       TabOrder = 0
     end
     object pnlUpload: TPanel
-      AnchorSideLeft.Control = GroupBox6
-      AnchorSideBottom.Control = GroupBox6
+      AnchorSideRight.Side = asrBottom
       Left = 0
-      Height = 38
-      Top = 306
-      Width = 614
+      Height = 50
+      Top = 275
+      Width = 518
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 38
-      ClientWidth = 614
+      ClientHeight = 50
+      ClientWidth = 518
       TabOrder = 1
       object btnUpload: TButton
-        AnchorSideLeft.Side = asrBottom
+        AnchorSideLeft.Control = pnlUpload
+        AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = pnlUpload
         AnchorSideTop.Side = asrCenter
-        AnchorSideRight.Control = btnClose
-        Left = 462
+        Left = 109
         Height = 25
-        Top = 7
-        Width = 70
-        Anchors = [akTop, akRight]
-        BorderSpacing.Left = 1
-        BorderSpacing.Right = 3
-        Caption = 'Upload'
+        Top = 13
+        Width = 300
+        Caption = 'Upload to eQSL.cc'
         OnClick = btnUploadClick
         TabOrder = 0
-      end
-      object lblInfo: TLabel
-        AnchorSideLeft.Control = btnPreferences
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = pnlUpload
-        AnchorSideTop.Side = asrCenter
-        Left = 111
-        Height = 19
-        Top = 10
-        Width = 337
-        AutoSize = False
-        BorderSpacing.Left = 3
-        ParentColor = False
       end
       object btnClose: TButton
         AnchorSideTop.Control = pnlUpload
         AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = pnlUpload
         AnchorSideRight.Side = asrBottom
-        Left = 535
+        Left = 416
         Height = 25
-        Top = 7
-        Width = 67
+        Top = 13
+        Width = 96
         Anchors = [akTop, akRight]
-        BorderSpacing.Right = 12
+        BorderSpacing.Right = 6
         Cancel = True
         Caption = 'Close'
         ModalResult = 2
@@ -307,11 +301,11 @@ object frmeQSLUpload: TfrmeQSLUpload
         AnchorSideLeft.Control = pnlUpload
         AnchorSideTop.Control = pnlUpload
         AnchorSideTop.Side = asrCenter
-        Left = 12
+        Left = 6
         Height = 25
-        Top = 7
+        Top = 13
         Width = 96
-        BorderSpacing.Left = 12
+        BorderSpacing.Left = 6
         Caption = 'Preferences'
         OnClick = btnPreferencesClick
         TabOrder = 2

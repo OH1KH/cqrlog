@@ -15,11 +15,13 @@ type
 
   TfrmLoTWExport = class(TForm)
     btnClose: TButton;
-    btnFileBrowse: TButton;
+    btnClose1: TButton;
     btnExportSign: TButton;
-    btnFileExport : TButton;
-    btnUpload: TButton;
+    btnFileBrowse: TButton;
+    btnFileExport: TButton;
     btnHelp: TButton;
+    btnHelp1: TButton;
+    btnUpload: TButton;
     chkFileMarkAfterExport: TCheckBox;
     edtTqsl: TEdit;
     edtFileName: TEdit;
@@ -29,13 +31,15 @@ type
     grbWebExport: TGroupBox;
     grbTqsl: TGroupBox;
     GroupBox6: TGroupBox;
-    Label1: TLabel;
+    lblInfo: TLabel;
+    lblExpToFile: TLabel;
     Label2: TLabel;
     Label3: TLabel;
-    lblInfo: TLabel;
+    lblLotwUpNull: TLabel;
     mStat: TMemo;
+    pnlButtons1: TPanel;
     pgLoTWExport: TPageControl;
-    pnlClose: TPanel;
+    pnlButtons: TPanel;
     pnlUpload: TPanel;
     rbFileExportAll: TRadioButton;
     rbWebExportAll: TRadioButton;
@@ -254,7 +258,7 @@ begin
     grbWebExport.Enabled := True;
     grbTqsl.Enabled      := True;
     pnlUpload.Enabled    := True;
-    pnlClose.Enabled     := True;
+    btnClose.Enabled     := True;
     tmrLoTW.Enabled      := False;
     mStat.SelStart:=length(mStat.Text);
     mStat.SelLength:=0;
@@ -273,7 +277,9 @@ begin
   end;
   FileName  := edtFileName.Text;
   MarkAfter := chkFileMarkAfterExport.Checked;
-  ExportToAdif
+  btnClose1.Enabled:=false;
+  ExportToAdif;
+  btnClose1.Enabled:=true;
 end;
 
 procedure TfrmLoTWExport.FormShow(Sender: TObject);
@@ -379,7 +385,7 @@ begin
   grbWebExport.Enabled := False;
   grbTqsl.Enabled      := False;
   pnlUpload.Enabled    := False;
-  pnlClose.Enabled     := False;
+  btnClose.Enabled     := False;
   tmrLoTW.Enabled      := True
 end;
 

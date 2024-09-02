@@ -20,13 +20,13 @@ type
     chkShowNew : TCheckBox;
     edtDateFrom : TEdit;
     edtQTH: TEdit;
-    GroupBox1 : TGroupBox;
+    gbProgress : TGroupBox;
     gbSettings : TGroupBox;
     Label3 : TLabel;
     Label4: TLabel;
     mStat : TMemo;
     Panel1 : TPanel;
-    Panel2 : TPanel;
+    pnlButtons : TPanel;
     procedure btnDownloadClick(Sender : TObject);
     procedure btnPreferencesClick(Sender : TObject);
     procedure chkChangeDateChange(Sender: TObject);

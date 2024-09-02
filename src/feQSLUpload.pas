@@ -19,9 +19,9 @@ type
     edtQTH : TEdit;
     grbWebExport : TGroupBox;
     GroupBox1 : TGroupBox;
-    GroupBox6 : TGroupBox;
+    gbProgress : TGroupBox;
     Label1 : TLabel;
-    lblInfo : TLabel;
+    lblInfo: TLabel;
     mStat : TMemo;
     pnlUpload : TPanel;
     rbWebExportAll : TRadioButton;

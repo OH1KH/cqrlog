@@ -1,42 +1,36 @@
 object frmeQSLDownload: TfrmeQSLDownload
-  Left = 539
-  Height = 606
-  Top = 120
-  Width = 572
+  Left = 703
+  Height = 520
+  Top = 188
+  Width = 520
+  HorzScrollBar.Page = 469
+  VertScrollBar.Page = 314
+  AutoScroll = True
   Caption = 'Download data from eQSL.cc'
-  ClientHeight = 606
-  ClientWidth = 572
+  ClientHeight = 520
+  ClientWidth = 520
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 500
   OnClose = FormClose
   OnShow = FormShow
   LCLVersion = '2.2.6.0'
-  object GroupBox1: TGroupBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Panel1
+  object gbProgress: TGroupBox
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 1
-    Height = 397
-    Top = 162
-    Width = 570
+    Left = 0
+    Height = 289
+    Top = 181
+    Width = 520
     Align = alClient
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 1
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 1
     Caption = 'Progress'
-    ClientHeight = 379
-    ClientWidth = 568
+    ClientHeight = 271
+    ClientWidth = 518
     TabOrder = 0
     object mStat: TMemo
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = GroupBox1
-      AnchorSideRight.Control = GroupBox1
-      AnchorSideBottom.Control = GroupBox1
       Left = 1
-      Height = 377
+      Height = 269
       Top = 1
-      Width = 566
+      Width = 516
       Align = alClient
       BorderSpacing.Left = 1
       BorderSpacing.Top = 1
@@ -48,41 +42,34 @@ object frmeQSLDownload: TfrmeQSLDownload
     end
   end
   object Panel1: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    Left = 1
-    Height = 160
-    Top = 1
-    Width = 570
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 181
+    Top = 0
+    Width = 520
     Align = alTop
-    BorderSpacing.Left = 1
-    BorderSpacing.Top = 1
-    BorderSpacing.Right = 1
     BevelOuter = bvNone
-    ClientHeight = 160
-    ClientWidth = 570
+    ClientHeight = 181
+    ClientWidth = 520
     TabOrder = 1
     object gbSettings: TGroupBox
       AnchorSideLeft.Control = Panel1
       AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = Panel1
-      AnchorSideBottom.Side = asrCenter
       Left = 1
-      Height = 158
-      Top = 1
-      Width = 568
-      Anchors = [akTop, akLeft, akRight, akBottom]
+      Height = 176
+      Top = 2
+      Width = 518
+      Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 1
       BorderSpacing.Top = 1
       BorderSpacing.Right = 1
       BorderSpacing.Bottom = 1
       Caption = 'Settings'
-      ClientHeight = 140
-      ClientWidth = 566
+      ClientHeight = 158
+      ClientWidth = 516
       TabOrder = 0
       object Label3: TLabel
         AnchorSideLeft.Control = gbSettings
@@ -158,61 +145,55 @@ object frmeQSLDownload: TfrmeQSLDownload
       end
     end
   end
-  object Panel2: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
+  object pnlButtons: TPanel
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 1
-    Height = 46
-    Top = 559
-    Width = 570
+    Left = 0
+    Height = 50
+    Top = 470
+    Width = 520
     Align = alBottom
-    BorderSpacing.Left = 1
-    BorderSpacing.Right = 1
-    BorderSpacing.Bottom = 1
     BevelOuter = bvNone
-    ClientHeight = 46
-    ClientWidth = 570
+    ClientHeight = 50
+    ClientWidth = 520
     TabOrder = 2
     object btnClose: TButton
-      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Control = pnlButtons
       AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Control = pnlButtons
       AnchorSideRight.Side = asrBottom
-      Left = 486
+      Left = 418
       Height = 25
-      Top = 11
-      Width = 72
+      Top = 13
+      Width = 96
       Anchors = [akTop, akRight]
-      BorderSpacing.Right = 12
+      BorderSpacing.Right = 6
       Cancel = True
       Caption = 'Close'
       ModalResult = 2
       TabOrder = 0
     end
     object btnPreferences: TButton
-      AnchorSideLeft.Control = Panel2
-      AnchorSideTop.Control = Panel2
+      AnchorSideLeft.Control = pnlButtons
+      AnchorSideTop.Control = pnlButtons
       AnchorSideTop.Side = asrCenter
-      Left = 12
+      Left = 6
       Height = 25
-      Top = 11
+      Top = 13
       Width = 96
-      BorderSpacing.Left = 12
+      BorderSpacing.Left = 6
       Caption = 'Preferences'
       OnClick = btnPreferencesClick
       TabOrder = 1
     end
     object btnDownload: TButton
-      AnchorSideLeft.Control = Panel2
+      AnchorSideLeft.Control = pnlButtons
       AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Control = pnlButtons
       AnchorSideTop.Side = asrCenter
-      Left = 135
+      Left = 110
       Height = 25
-      Top = 11
+      Top = 13
       Width = 300
       BorderSpacing.Top = 6
       Caption = 'Download data from eQSL website'
