@@ -539,7 +539,7 @@ begin
     begin
       DupeFromDate:=FormatDateTime( 'yyyy-mm-dd',cdDupeDate.Date );
       cqrini.WriteString('frmContest', 'DupeFrom', DupeFromDate);
-      btDupChkStart.Caption:='from '+DupeFromDate;
+      btDupChkStart.Caption:=DupeFromDate;
     end
 
 end;
@@ -1143,7 +1143,7 @@ begin
   rbDupeCheck.Checked       := cqrini.ReadBool('frmContest', 'DupeCheck', True);
   rbNoMode4Dupe.Checked     := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
   rbIgnoreDupes.Checked     := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
-  DupeFromDate              := cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01');
+  DupeFromDate              := cqrini.ReadString('frmContest', 'DupeFrom', FormatDateTime( 'yyyy-mm-dd',now() ));
   chkMarkDupe.Checked       := cqrini.ReadBool('frmContest', 'MarkDupe', True);
 
   chkSpace.Checked          := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
@@ -1192,7 +1192,7 @@ begin
   sbContest.Panels[4].Width := 20;
   lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
   cmbContestName.Text := cqrini.ReadString('frmContest', 'ContestName','');
-  btDupChkStart.Caption := 'from '+DupeFromDate;
+  btDupChkStart.Caption := DupeFromDate;
   btDupChkStart.Visible:=not(rbIgnoreDupes.Checked);
   MWC40:=0;
   MWC80:=0;

@@ -1,11 +1,13 @@
 object frmDXCCStat: TfrmDXCCStat
   Left = 293
-  Height = 612
+  Height = 572
   Top = 37
-  Width = 954
+  Width = 921
   Caption = 'DXCC Statistic'
-  ClientHeight = 612
-  ClientWidth = 954
+  ClientHeight = 572
+  ClientWidth = 921
+  Constraints.MinHeight = 465
+  Constraints.MinWidth = 770
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -124,11 +126,11 @@ object frmDXCCStat: TfrmDXCCStat
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 80
-    Top = 532
-    Width = 954
+    Top = 492
+    Width = 921
     Anchors = [akLeft, akRight, akBottom]
     ClientHeight = 80
-    ClientWidth = 954
+    ClientWidth = 921
     TabOrder = 0
     object btClose: TButton
       AnchorSideTop.Control = btnHTMLExport
@@ -136,7 +138,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideRight.Control = pnlStatSum
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 872
+      Left = 839
       Height = 25
       Top = 25
       Width = 75
@@ -154,7 +156,7 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btClose
       AnchorSideBottom.Side = asrBottom
-      Left = 751
+      Left = 718
       Height = 25
       Top = 25
       Width = 115
@@ -331,11 +333,11 @@ object frmDXCCStat: TfrmDXCCStat
     Left = 0
     Height = 60
     Top = 0
-    Width = 954
+    Width = 921
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
     ClientHeight = 60
-    ClientWidth = 954
+    ClientWidth = 921
     TabOrder = 1
     object btnRefresh: TButton
       AnchorSideLeft.Side = asrBottom
@@ -343,12 +345,12 @@ object frmDXCCStat: TfrmDXCCStat
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = PnlDXCCStat
       AnchorSideRight.Side = asrBottom
-      Left = 783
-      Height = 29
-      Top = 12
+      Left = 768
+      Height = 25
+      Top = 14
       Width = 147
       Anchors = [akTop, akRight]
-      BorderSpacing.Right = 24
+      BorderSpacing.Right = 6
       Caption = 'Refresh statistic'
       OnClick = btnRefreshClick
       TabOrder = 1
@@ -431,9 +433,9 @@ object frmDXCCStat: TfrmDXCCStat
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = grdStatSum
     Left = 0
-    Height = 212
+    Height = 172
     Top = 60
-    Width = 954
+    Width = 921
     Anchors = [akTop, akLeft, akRight, akBottom]
     ColCount = 27
     DefaultColWidth = 55
@@ -453,8 +455,8 @@ object frmDXCCStat: TfrmDXCCStat
     AnchorSideBottom.Control = pnlStatSum
     Left = 0
     Height = 260
-    Top = 272
-    Width = 954
+    Top = 232
+    Width = 921
     Anchors = [akLeft, akRight, akBottom]
     ColCount = 27
     DefaultColWidth = 50

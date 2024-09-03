@@ -1,13 +1,18 @@
 object frmContest: TfrmContest
   Left = 461
-  Height = 636
+  Height = 620
   Top = 139
-  Width = 827
+  Width = 770
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
+  HorzScrollBar.Page = 760
+  VertScrollBar.Page = 474
+  AutoScroll = True
   Caption = 'Contest'
-  ClientHeight = 636
-  ClientWidth = 827
+  ClientHeight = 620
+  ClientWidth = 770
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 585
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
@@ -113,16 +118,17 @@ object frmContest: TfrmContest
     TabOrder = 3
   end
   object btSave: TButton
+    AnchorSideLeft.Control = lblRate60
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = lblRate60
-    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 729
+    AnchorSideBottom.Control = btClearQso
+    Left = 680
     Height = 30
-    Top = 43
+    Top = 41
     Width = 80
-    Anchors = [akTop, akRight]
-    BorderSpacing.Right = 18
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 6
+    BorderSpacing.Bottom = 3
     Caption = 'Save QSO'
     OnClick = btSaveClick
     TabOrder = 5
@@ -296,30 +302,31 @@ object frmContest: TfrmContest
   end
   object btClearQso: TButton
     AnchorSideLeft.Control = btSave
-    AnchorSideTop.Control = btSave
     AnchorSideTop.Side = asrBottom
-    Left = 729
+    AnchorSideBottom.Control = CQpanel
+    AnchorSideBottom.Side = asrBottom
+    Left = 680
     Height = 30
-    Top = 75
+    Top = 74
     Width = 80
+    Anchors = [akLeft, akBottom]
     BorderSpacing.Top = 2
     Caption = 'Clear QSO'
     OnClick = btClearQsoClick
     TabOrder = 7
   end
   object btnHelp: TSpeedButton
-    AnchorSideTop.Control = cmbContestName
     AnchorSideTop.Side = asrCenter
-    AnchorSideRight.Control = Owner
+    AnchorSideRight.Control = btSave
     AnchorSideRight.Side = asrBottom
-    Left = 799
+    AnchorSideBottom.Control = btSave
+    Left = 735
     Height = 25
     Hint = 'Help'
-    Top = 11
+    Top = 13
     Width = 25
-    Anchors = [akTop, akRight]
-    BorderSpacing.Top = 3
-    BorderSpacing.Right = 3
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Bottom = 3
     Glyph.Data = {
       F6030000424DF6030000000000003600000028000000100000000F0000000100
       200000000000C003000064000000640000000000000000000000FFFFFF00FFFF
@@ -648,13 +655,13 @@ object frmContest: TfrmContest
     TabStop = False
   end
   object sbContest: TStatusBar
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideBottom.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 19
-    Top = 617
-    Width = 827
+    Height = 20
+    Top = 600
+    Width = 770
+    Constraints.MinHeight = 20
     Panels = <    
       item
         Text = '0'
@@ -699,10 +706,10 @@ object frmContest: TfrmContest
     Height = 23
     Hint = 'Dupe = station already worked in this band.'#10'When selected, with date, duplicate cheking starts from set date.'#10'Date is needed if you have several contests in same log'#10'.'#10'With own log for every contest date is not needed to be set'#10'.'#10'Turns call column text to bold red. If QSO is how ever logged '#10'adds "/D" to RSTsend if "Mark dupe" is cheked.'#10' '
     Top = 192
-    Width = 102
+    Width = 141
     BorderSpacing.Left = 17
     BorderSpacing.Top = 8
-    Caption = 'Dupe check'
+    Caption = 'Dupe check from:'
     Checked = True
     ParentShowHint = False
     ShowHint = True
@@ -713,12 +720,12 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btDupChkStart
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = rbDupeCheck
-    Left = 144
+    Left = 252
     Height = 23
     Hint = 'This selection allows same station to be worked in same band'#10' if QSO mode is different.'#10#10'Otherwise like "Dupe check" selction.'
     Top = 192
     Width = 122
-    BorderSpacing.Left = 6
+    BorderSpacing.Left = 3
     Caption = 'NoMode4Dupe'
     ParentShowHint = False
     ShowHint = True
@@ -728,12 +735,12 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = rbNoMode4Dupe
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = rbDupeCheck
-    Left = 272
+    Left = 377
     Height = 23
     Hint = 'No duplicate cheking'
     Top = 192
     Width = 110
-    BorderSpacing.Left = 6
+    BorderSpacing.Left = 3
     Caption = 'Ignore dupes'
     OnChange = rbIgnoreDupesChange
     ParentShowHint = False
@@ -744,7 +751,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = rbDupeCheck
     AnchorSideTop.Side = asrCenter
-    Left = 729
+    Left = 680
     Height = 30
     Top = 188
     Width = 80
@@ -758,13 +765,14 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = rbDupeCheck
     AnchorSideTop.Side = asrCenter
-    Left = 122
+    Left = 159
     Height = 33
     Hint = 'When using common log for all contests set date of '#10'dupe check begin (I.E. contest start date)'
     Top = 187
-    Width = 16
+    Width = 90
     AutoSize = True
-    BorderSpacing.Left = 3
+    BorderSpacing.Left = 1
+    Caption = '1900-01-01'
     Constraints.MaxHeight = 35
     Constraints.MaxWidth = 180
     OnClick = btDupChkStartClick
@@ -797,33 +805,30 @@ object frmContest: TfrmContest
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = sbContest
-    Left = 6
-    Height = 396
+    Left = 0
+    Height = 379
     Top = 221
-    Width = 815
+    Width = 767
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 6
     BorderSpacing.Top = 6
-    BorderSpacing.Right = 6
+    BorderSpacing.Right = 3
     Caption = 'Status'
-    ClientHeight = 378
-    ClientWidth = 813
+    ClientHeight = 361
+    ClientWidth = 765
     TabOrder = 25
     object mStatus: TMemo
       AnchorSideLeft.Control = gbStatus
-      AnchorSideTop.Control = gbStatus
       AnchorSideRight.Control = gbStatus
       AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = gbStatus
       AnchorSideBottom.Side = asrBottom
-      Left = 3
-      Height = 168
+      Left = 0
+      Height = 150
       Hint = 'Shows status of contest.'#10'If contest has any name Common Status counting is used. That'#10'includes QSO counts for all, dx and own continent with lists of'#10'DX and own continent prefixes. There is also band based counting'#10'in grid that user can adjust. '#10'Also received messages are counted and listed allowing msg'#10'multiplier count.'#10'Use can control these with left click of mouse pointing "Settings"'#10'text of "Status" display area'#10'.'#10'Currently if there are contest names that include "mwc"or "ok1wc"'#10'and "nac" those statuses are counted by MWC or NAC rules'#10'.'#10'Update is done by timer on every 3 seconds.'
-      Top = 0
-      Width = 807
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 3
-      BorderSpacing.Right = 3
-      BorderSpacing.Bottom = 3
+      Top = 211
+      Width = 765
+      Anchors = [akLeft, akRight, akBottom]
+      Constraints.MinHeight = 50
       ParentShowHint = False
       ReadOnly = True
       ScrollBars = ssAutoBoth
@@ -833,16 +838,14 @@ object frmContest: TfrmContest
     end
     object sgStatus: TStringGrid
       AnchorSideLeft.Control = gbStatus
-      AnchorSideTop.Control = mStatus
-      AnchorSideTop.Side = asrBottom
+      AnchorSideTop.Control = gbStatus
       AnchorSideRight.Control = gbStatus
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = gbStatus
-      AnchorSideBottom.Side = asrBottom
+      AnchorSideBottom.Control = mStatus
       Left = 0
-      Height = 207
-      Top = 171
-      Width = 813
+      Height = 211
+      Top = 0
+      Width = 765
       Anchors = [akTop, akLeft, akRight, akBottom]
       ColCount = 13
       Columns = <      
@@ -883,6 +886,7 @@ object frmContest: TfrmContest
         item
           Title.Caption = '023'
         end>
+      Constraints.MinHeight = 65
       RowCount = 8
       TabOrder = 1
       OnMouseUp = sgStatusMouseUp
@@ -893,12 +897,12 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = rbIgnoreDupes
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = rbDupeCheck
-    Left = 400
+    Left = 490
     Height = 23
     Hint = 'If duplicate QSO is logged  adds "/D" to RSTsend when cheked.'
     Top = 192
     Width = 95
-    BorderSpacing.Left = 18
+    BorderSpacing.Left = 3
     Caption = 'Mark dupe'
     ParentShowHint = False
     ShowHint = True
@@ -910,12 +914,12 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = chkMarkDupe
     AnchorSideTop.Side = asrCenter
-    Left = 513
+    Left = 588
     Height = 23
     Hint = 'Turn hint help texts showing ON/OFF '
     Top = 192
     Width = 90
-    BorderSpacing.Left = 18
+    BorderSpacing.Left = 3
     Caption = 'Show hint'
     Checked = True
     OnChange = chkHintChange
