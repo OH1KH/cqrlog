@@ -1,6 +1,9 @@
 About this "Alpha" version by OH1KH
----------------
-This is a clone of Cqrlog source with some additons of my own.
+===================================
+
+Cqrlog Alpha is a clone variant having nearly 500 smaller or bigger differences to official version.
+----------------------------------------------------------------------------------------------------
+
 From folder "compiled" you find ready compiled binary files against official Cqrlog and for this "local_testing" source.
 There is also "newupdate.zip" that includes "newupdate.sh", a script that does Cqrlog backup and update for you with selected binary file.
 Same folder has also README.md that holds further informations.
@@ -22,7 +25,7 @@ operation and maintenance. More at https://www.cqrlog.com/
 ![Image of CQRLOG](https://cqrlog.com/images/users/ok2cqr.png)
 
 How to contribute?
--------------------
+------------------
 
 You have to have Lazarus 2.0.6, fpc 3.0.4 compiler, MySQL server and clinet installed.
 CQRLOG is developed on Ubuntu 20.04, Lazarus and FreePascal are available in my pesronal repo  https://launchpad.net/~ok2cqr/+archive/lazarus
