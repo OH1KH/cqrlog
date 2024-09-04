@@ -1,3 +1,6 @@
+Cqrlog Alpha is a clone variant having nearly 500 smaller or bigger differences to official version.
+----------------------------------------------------------------------------------------------------
+
 This folder holds ready compiled binary files of source branch "loc_testing" that is the version of Cqrlog that I am using myself daily.
 I call it Alpha version.
 At the moment (2024-05-01) it is mostly compatible with official version. Depending what happens to official version development it may not be so in future.
