@@ -286,6 +286,10 @@
     <strong>Set UTC to Rig</strong> When checked Cqrlog will send "set_clock" command with current UTC time to rig on next full minute change after initialization.
     <br><strong>Note:</strong> All rigs do not support set_clock command.
     <br><br>
+    <strong>Send rig voice</strong> When checked Cqrlog will send "send_voice_mem" rigctld command to activate rig's internal voice memory message.
+     When unchecked Cqrlog executes voice keyer script. See: <a href="h28.html">Voice messages</a>
+    <br><strong>Note:</strong> All rigs do not support send_voice_mem command.
+    <br><br>
     <strong>Compound poll</strong> When checked Cqrlog will send rig poll command as one line "+f +m +v". That is Cqrlog default.
     <br>When unchecked every command will be sent with LineEnding, I.E. in it's own line. This may help poor rigctld emulators like WFview.
     <br><br>
