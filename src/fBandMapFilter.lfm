@@ -51,7 +51,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Control = edtLastHours
       AnchorSideTop.Control = rbNoWkdDate
       AnchorSideTop.Side = asrCenter
-      Left = 245
+      Left = 239
       Height = 34
       Top = 70
       Width = 96
@@ -63,7 +63,7 @@ object frmBandMapFilter: TfrmBandMapFilter
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = rbNoWkdDate
       AnchorSideTop.Side = asrCenter
-      Left = 347
+      Left = 341
       Height = 34
       Top = 70
       Width = 56
@@ -71,12 +71,12 @@ object frmBandMapFilter: TfrmBandMapFilter
       TabOrder = 3
       Text = '12:12'
     end
-    object Label2: TLabel
+    object lblDateTime: TLabel
       AnchorSideLeft.Control = edtTime
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtTime
       AnchorSideTop.Side = asrCenter
-      Left = 409
+      Left = 403
       Height = 17
       Top = 79
       Width = 77
@@ -85,22 +85,23 @@ object frmBandMapFilter: TfrmBandMapFilter
       ParentColor = False
     end
     object edtLastHours: TEdit
-      AnchorSideLeft.Control = chkShowActiveBandFil
+      AnchorSideLeft.Control = rbNoWkdHour
+      AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = rbNoWkdHour
       AnchorSideTop.Side = asrCenter
-      Left = 245
+      Left = 239
       Height = 34
       Top = 35
       Width = 41
       TabOrder = 4
       Text = '48'
     end
-    object Label1: TLabel
+    object lblHours: TLabel
       AnchorSideLeft.Control = edtLastHours
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtLastHours
       AnchorSideTop.Side = asrCenter
-      Left = 292
+      Left = 286
       Height = 17
       Top = 44
       Width = 226
@@ -123,28 +124,54 @@ object frmBandMapFilter: TfrmBandMapFilter
       TabStop = True
     end
     object chkShowActiveBandFil: TCheckBox
-      AnchorSideLeft.Control = rbNoWkdHour
-      AnchorSideLeft.Side = asrBottom
+      AnchorSideLeft.Control = edtLastHours
       AnchorSideTop.Control = rbShowAll
-      Left = 245
+      AnchorSideTop.Side = asrCenter
+      Left = 242
       Height = 23
       Top = 6
-      Width = 173
-      BorderSpacing.Left = 6
-      Caption = 'Show only active band'
+      Width = 58
+      BorderSpacing.Left = 3
+      Caption = 'band'
       TabOrder = 6
     end
     object chkRevOrder: TCheckBox
-      AnchorSideLeft.Control = chkShowActiveBandFil
+      AnchorSideLeft.Control = edtTime
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = rbShowAll
-      Left = 427
+      Left = 397
       Height = 23
       Top = 6
       Width = 117
-      BorderSpacing.Left = 9
       Caption = 'Reverse order'
       TabOrder = 7
+    end
+    object chkShowActiveModeFil: TCheckBox
+      AnchorSideLeft.Control = chkShowActiveBandFil
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbShowAll
+      AnchorSideTop.Side = asrCenter
+      Left = 303
+      Height = 23
+      Top = 6
+      Width = 63
+      BorderSpacing.Left = 3
+      Caption = 'mode'
+      TabOrder = 8
+    end
+    object lblActive: TLabel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbShowAll
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = chkShowActiveBandFil
+      Left = 124
+      Height = 17
+      Top = 9
+      Width = 115
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 3
+      Caption = 'Show only active:'
+      ParentColor = False
     end
   end
   object GroupBox2: TGroupBox

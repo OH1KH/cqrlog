@@ -67,6 +67,8 @@ type
     acClear: TAction;
     acFont: TAction;
     acHelp: TAction;
+    acBand: TAction;
+    acMode: TAction;
     btnEatFocus: TButton;
     dlgFont: TFontDialog;
     imglBandMap: TImageList;
@@ -75,16 +77,20 @@ type
     toolBandMap: TToolBar;
     tbtnFilter: TToolButton;
     tbtnTools: TToolButton;
+    tbBand: TToolButton;
     ToolButton2: TToolButton;
     tbtnFont: TToolButton;
     ToolButton4: TToolButton;
     tbtnClear: TToolButton;
+    tbMode: TToolButton;
     ToolButton6: TToolButton;
     tbtnHelp: TToolButton;
     procedure acClearExecute(Sender: TObject);
     procedure acFilterExecute(Sender: TObject);
     procedure acFontExecute(Sender: TObject);
     procedure acHelpExecute(Sender: TObject);
+    procedure acBandExecute(Sender: TObject);
+    procedure acModeExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -97,6 +103,7 @@ type
     BandMapItemsCount : Word;
     BandMapCrit : TRTLCriticalSection;
     RunXplanetExport : Integer;
+    BmPause          :Boolean;
 
     FFirstInterval  : Word;
     FSecondInterval : Word;
@@ -123,7 +130,7 @@ type
     procedure EmitBandMapClick(Sender:TObject;Call,Mode : String; Freq : Currency);
     procedure ClearAll;
     procedure xplanetExport;
-
+    procedure ReleasePaused;
 
     function FormatItem(freq : Double; Call, SplitInfo : String; fromNewQSO : Boolean) : String;
     function SetSizeLeft(Value : String;Len : Integer) : String;
@@ -236,13 +243,12 @@ begin
             SplitInfo
 end;
 
-
 procedure TfrmBandMap.SyncBandMap;
 var
   i : Integer;
   s : String;
 begin
-  if Active then exit; //do not refresh the window when it is activated (user is scrolling)
+  if BmPause then exit; //do not refresh the window when it is activated (user is scrolling)
   FBandFilter := UpperCase(FBandFilter);
   FModeFilter := UpperCase(FModeFilter);
   BandMap.DisableAutoRepaint(True);
@@ -650,7 +656,7 @@ begin
   finally
     FreeAndNil(f)
   end ;
-  btnEatFocus.SetFocus
+  ReleasePaused;
   end;
 
 procedure TfrmBandMap.acHelpExecute(Sender: TObject);
@@ -663,14 +669,35 @@ begin
    // /usr/bin/opera %s does work, xdg-open %s does not (even calls opera). So we should use preferences/program/browser
    // to init Lazarus help viewer.
    ShowHelp;
-   btnEatFocus.SetFocus
+   ReleasePaused;
+end;
+
+procedure TfrmBandMap.acBandExecute(Sender: TObject);
+begin
+   cqrini.WriteBool('BandMap', 'OnlyActiveBand', not(cqrini.ReadBool('BandMap', 'OnlyActiveBand', False)));
+   LoadSettings;
+   ReleasePaused;
+end;
+
+procedure TfrmBandMap.acModeExecute(Sender: TObject);
+begin
+   cqrini.WriteBool('BandMap', 'OnlyActiveMode', not(cqrini.ReadBool('BandMap', 'OnlyActiveMode', False)));
+   LoadSettings;
+   ReleasePaused;
 end;
 
 procedure TfrmBandMap.FormActivate(Sender: TObject);
 begin
+  BmPause:=true;
   frmBandMap.Caption:='BM PAUSED!';
 end;
 
+procedure TfrmBandMap.ReleasePaused;
+Begin
+  BmPause:=false;
+  frmBandMap.Caption:= 'Band map';
+  frmNewQso.ReturnToNewQSO;
+end;
 procedure TfrmBandMap.acClearExecute(Sender: TObject);
 var
    i: word;
@@ -690,7 +717,7 @@ begin
         LeaveCriticalSection(BandMapCrit)
     end;
    end;
-  btnEatFocus.SetFocus
+  ReleasePaused;
 end;
 procedure TfrmBandMap.LoadFonts;
 var
@@ -722,7 +749,7 @@ begin
     cqrini.WriteInteger('BandMap','FontSize',dlgFont.Font.Size);
     LoadFonts;
   end;
-  btnEatFocus.SetFocus
+  ReleasePaused;
 end;
 
 procedure TfrmBandMap.FormDestroy(Sender: TObject);
@@ -740,9 +767,11 @@ begin
   end
 end;
 
+
 procedure TfrmBandMap.FormShow(Sender: TObject);
 begin
-  dmUtils.LoadWindowPos(frmBandMap)
+  dmUtils.LoadWindowPos(frmBandMap);
+  ReleasePaused;
 end;
 
 procedure TfrmBandMap.SaveBandMapItemsToFile(FileName : String);
@@ -902,6 +931,15 @@ begin
   frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
   frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
+  if  cqrini.ReadBool('BandMap', 'OnlyActiveBand', False) then
+        tbBand.ImageIndex:=5
+   else
+        tbBand.ImageIndex:=6;
+  if  cqrini.ReadBool('BandMap', 'OnlyActiveMode', False) then
+        tbMode.ImageIndex:=7
+   else
+       tbMode.ImageIndex:=8;
+
   frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) = 1); //dxclust =0, wsjt=2
 
   if cqrini.ReadBool('BandMapFilter','ShowAll',True) then

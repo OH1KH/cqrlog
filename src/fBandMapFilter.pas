@@ -15,6 +15,7 @@ type
   TfrmBandMapFilter = class(TForm)
     btnOK: TButton;
     btnCancel: TButton;
+    chkShowActiveModeFil: TCheckBox;
     chkRevOrder: TCheckBox;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
@@ -24,8 +25,9 @@ type
     edtTime: TEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
-    Label1: TLabel;
-    Label2: TLabel;
+    lblHours: TLabel;
+    lblDateTime: TLabel;
+    lblActive: TLabel;
     lbFreqW: TLabel;
     lbCallW: TLabel;
     rbShowAll: TRadioButton;
@@ -68,6 +70,7 @@ begin
   seCallWidth.Value := cqrini.ReadInteger('BandMapFilter','CallWidth',12);
 
   chkShowActiveBandFil.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
+  chkShowActiveMOdeFil.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
   chkRevOrder.Checked:=cqrini.ReadBool('BandMap', 'ReverseOrder', False);
 end;
 
@@ -116,6 +119,7 @@ begin
   cqrini.WriteBool('BandMapFilter','OnlyLoTW',chkOnlyLoTW.Checked);
 
   cqrini.WriteBool('BandMap', 'OnlyActiveBand', chkShowActiveBandFil.Checked);
+  cqrini.WriteBool('BandMap', 'OnlyActiveMode', chkShowActiveModeFil.Checked);
   cqrini.WriteBool('BandMap', 'ReverseOrder', chkRevOrder.Checked);
 
   cqrini.WriteInteger('BandMapFilter','FreqWidth',seFreqWidth.Value);
