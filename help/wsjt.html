@@ -26,7 +26,7 @@
     </tr>
     </tbody>
 </table>
-<br>
+</br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 
@@ -59,7 +59,7 @@ These will show you that UDP link is alive between these programs.</font></p>
 </img>
 </p>
 <p >Wsjt-x CQ-monitor form opens when you select ”Remote mode for wsjtx” from ”File” of NewQSO window.
-<br> Top checkbox selection bar is visible at start by default.<br>
+</br> Top checkbox selection bar is visible at start by default.</br>
 You can hide it clicking with mouse on band or mode visible in both ends of the selection bar.
  It can be restored by moving mouse over window's name bar at top. It works same way when wsjtx-MAP mode is selected (see below).</p>
 <p >You can close this window and reopen it later via NewQSO/Window/Wsjt-x monitor that is visible only when
@@ -72,29 +72,29 @@ Only remote logging and call qrz/hamqth seek are used then.
 <img src="img/wsjt23.png" name="22" width="353" height="282">
 </img></p>
 Top line will show band and mode that is in use.
-<br>Checking <b>"noHst”</b> (no history) will clean monitor on every decoded RX-period.
+</br>Checking <strong>"noHst”</strong> (no history) will clean monitor on every decoded RX-period.
 </br>Timestamp and mode letter at the start of line are also replaced by DeltaFrequency (waterfall position of station) and Snr dB value 
  then, as no history is collected and so time stamp has no meaning.
-</br>If there are no CQ lines during period then old monitor lines will turn to silver gray indicating that right period of possible answer is passed. This happens ONLY if <b>"noHst”</b> is checked. If not, colors stay as they are.
+</br>If there are no CQ lines during period then old monitor lines will turn to silver gray indicating that right period of possible answer is passed. This happens ONLY if <strong>"noHst”</strong> is checked. If not, colors stay as they are.
 </br>CQ-lines turning to silver gray does not disable double click answering property. It is just informative color change. 
 </br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
 <p ><img src="img/wsjt37.png" name="22" width="353" height="282"></p>
 </br></br>Checking <strong>"USt”</strong> (USA states) will show US states of monitored US calls. Color of text is based to same formula against your logged qsos as described below with callsigns and locators.
-<br>Since Alpha version 2.6.0(120) State of callsign is checked against database table 'cqrlog_common.states' that makes makes checking faster than old StringList seek.
-<br>Creation of databse table uses now same 'usdbraw' file from W1NR than DXSpider dxcluster also uses. File is ready processed from FCC data and loads faster from internet.
-<br>At Cqrlog side new table 'states' is created to 'cqrlog_common' database upgrading it's DBversion to 7. 
-<br>When 'ctyfiles/usdbraw' file does not exist or is older than 90days then file is fetched and table 'states' is recreated (takes some time, having abt 1.5M callsigns!).
-<br>If you want to recreate database table at any time  just remove ~/.config/cqrlog/ctyfiles/usdbraw file and recheck "USt" checkbox.
-<br>After upgrading to 2.6.0(120) with this fix  you can remove all files starting with "fcc_" from  ~/.config/cqrlog/ctyfiles folder. They are not needed any more.
-<br><br>In case you do not get ftp://ftp.w1nr.net/usdbraw.gz file (gzipped verion of usdbraw) you can also use  http://wireless.fcc.gov/uls/data/complete/l_amat.zip file.
-<br>Format of usdbraw file is callsign|qth|state. I.E:
-<br>AA0A|SAINT LOUIS|MO
-<br><br> FCC's l_amat.zip has lot of other data too and file size is 17x bigger, but may be better up to date. Cqrlog can use L_amat.zip and convert this to W1NR format.
-<br><br><strong>Note:</strong> For processing  you need programs wget and gunzip for W1NR data and wget, unzip and wak for FCC data.<br>
+</br>Since Alpha version 2.6.0(120) State of callsign is checked against database table 'cqrlog_common.states' that makes makes checking faster than old StringList seek.
+</br>Creation of databse table uses now same 'usdbraw' file from W1NR than DXSpider dxcluster also uses. File is ready processed from FCC data and loads faster from internet.
+</br>At Cqrlog side new table 'states' is created to 'cqrlog_common' database upgrading it's DBversion to 7. 
+</br>When 'ctyfiles/usdbraw' file does not exist or is older than 90days then file is fetched and table 'states' is recreated (takes some time, having abt 1.5M callsigns!).
+</br>If you want to recreate database table at any time  just remove ~/.config/cqrlog/ctyfiles/usdbraw file and recheck "USt" checkbox.
+</br>After upgrading to 2.6.0(120) with this fix  you can remove all files starting with "fcc_" from  ~/.config/cqrlog/ctyfiles folder. They are not needed any more.
+</br></br>In case you do not get ftp://ftp.w1nr.net/usdbraw.gz file (gzipped verion of usdbraw) you can also use  http://wireless.fcc.gov/uls/data/complete/l_amat.zip file.
+</br>Format of usdbraw file is callsign|qth|state. I.E:
+</br>AA0A|SAINT LOUIS|MO
+</br></br> FCC's l_amat.zip has lot of other data too and file size is 17x bigger, but may be better up to date. Cqrlog can use L_amat.zip and convert this to W1NR format.
+</br></br><strong>Note:</strong> For processing  you need programs wget and gunzip for W1NR data and wget, unzip and wak for FCC data.</br>
 While database table is updating checkbox "USt" is grayed out to prevent restart of database table upgrade. Closing 'Progress' window does
 not stop upgradiong, it continues without indication.
-<br>Closing wsjtx-remote or closing Cqrlog will halt database table upgrading. On next wsjtx-remote opening it will ask should the database table be updated because it has less than 1.5M callsigns.
-<br>Answering 'no' will keep table as is. Answering 'yes' will start upgrade from beginning <strong>not</strong> from point it was interrupted.
+</br>Closing wsjtx-remote or closing Cqrlog will halt database table upgrading. On next wsjtx-remote opening it will ask should the database table be updated because it has less than 1.5M callsigns.
+</br>Answering 'no' will keep table as is. Answering 'yes' will start upgrade from beginning <strong>not</strong> from point it was interrupted.
 </br></br>Checking <strong>"sTX”</strong> (Stop TX) will fix missing Wsjt-x property: If you answer to someone's CQ at same frequency Wsjt-x will stop your TX if CQ-caller answers to someone else than you. How ever Wsjt-x developing team has
  decided that if you anśwer to CQ caller on other frequency (split) your TX remains on even if the answer was directed to someone else.
  To reduce band QRM caused by you, you may check <strong>sTx</strong> to stop your TX if answer was not for you.
@@ -107,7 +107,7 @@ In some cases your TX may be shut down after you have first tried to answer some
 </img>
 <img src="img/wsjt30.png" name="30" width="353" height="83">
 </img></p><p>
-If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent richmemo text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
+If you do not want any information texts, just alerts, you can check <strong>nTxt</strong> to prevent richmemo text updates and minimize window size horizontal or drop it completely down with (<strong>_</strong>) while alerts and follow are still working.
 </br>
 If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 
 How ever there are some limitations compared to CQ-monitor:
@@ -115,7 +115,7 @@ How ever there are some limitations compared to CQ-monitor:
 <li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
 <li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
 </br>
-With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
+With older versions of wsjt-x this causes unkonwn command error and then <strong>nTxt</strong> should not be checked until you get newer version of Wsjt-x.
 </br></p><p>
 <img src="img/wsjt34.png" name="34" width="353" height="282">
 </img>
@@ -129,25 +129,25 @@ If you are able to use <strong>color back</strong> feature you may want to chang
 </br> This may change in future devel versions or in official release of 1.9.0, but at the moment you should be aware of that.</p>
 <p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
  Wsjtx will produce again last periods decode (wsjt map will show it double) and after that you can have effect for double click.
-If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
+If you do not want any information texts, just alerts, you can check <strong>nTxt</strong> to prevent text updates and minimize window size horizontal or drop it completely down with (<strong>_</strong>) while alerts and follow are still working.
 
 </p><p><img src="img/wsjt21ab.png" name="21" width="363" height="282">
-<p>Selecting <b>DX</b> checkbox opens a popup that lets specify what continents are shown.  This works both in Cq monitor and MAP mode.
-<br>Cqrlog filters away all calls that are not from filter continents. When filter is properly set the <b>Dx</b> of checkbox is shown with <b>Green</b> color.
-<br>If none continents are selected when <b>Dx</b> is checked color is <b>Red</b> telling that you cant see any calls as all continents are unchecked.
-<br>You can click Dx checkbox (when checked) with right mouse button if you want change continent settings without change to Dx checkbox state.
+<p>Selecting <strong>DX</strong> checkbox opens a popup that lets specify what continents are shown.  This works both in Cq monitor and MAP mode.
+</br>Cqrlog filters away all calls that are not from filter continents. When filter is properly set the <strong>Dx</strong> of checkbox is shown with <strong>Green</strong> color.
+</br>If none continents are selected when <strong>Dx</strong> is checked color is <strong>Red</strong> telling that you cant see any calls as all continents are unchecked.
+</br>You can click Dx checkbox (when checked) with right mouse button if you want change continent settings without change to Dx checkbox state.
 
 </p><p><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img><img src="img/wsjt21b.png" name="21" width="363" height="282">
 </img></p>
-Checking <b>“flw”</b> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
+Checking <strong>“flw”</strong> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
 </br>Type in a callsing. The callsign is checked to be written in upcase letters and spaces are trimmed away. Pressing RETURN at the end of typing turns <strong>Follow</strong> button ON (green).
-You can also toggle  <b>Follow</b> button ON and OFF by mouse clicks (turns green/red) 
-</br>When <b>Follow</b> turns ON then during next decoding periods follow line (at right side of follow call edit)
-shows decoded lines where that <b>followed callsign is the originating (2nd) callsign</b> and the line is <b>not CQ</b> or not <b>to YOUR Call</b>(destination). That box uses same font and size as CQ-monitor.
+You can also toggle  <strong>Follow</strong> button ON and OFF by mouse clicks (turns green/red) 
+</br>When <strong>Follow</strong> turns ON then during next decoding periods follow line (at right side of follow call edit)
+shows decoded lines where that <strong>followed callsign is the originating (2nd) callsign</strong> and the line is <strong>not CQ</strong> or not <strong>to YOUR Call</strong>(destination). That box uses same font and size as CQ-monitor.
 </br>You can also paint any call from WSJT-X main window or CQ-monitor, drag it over Follow callsign field, and drop it there. Follow callsign field can have previous call (it is erased) or empty.
- Dropping also activates <b>Follow button</b> ON (turns green).
-</br></br>Line contains:   <b>delta_frequency</b> | <b>snr</b> | <b>the_message</b>.  
+ Dropping also activates <strong>Follow button</strong> ON (turns green).
+</br></br>Line contains:   <strong>delta_frequency</strong> | <strong>snr</strong> | <strong>the_message</strong>.  
  </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
  </br>Line color turns silver gray from default color (black) when corresponding response period is over.
  </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.
@@ -166,10 +166,10 @@ shows decoded lines where that <b>followed callsign is the originating (2nd) cal
 	<li/> mode symbol. Same that wsjt-x uses.</br>
 	<li/> callsign with color and low/Upcase coding.</br>
 	<li/> locator grid with color and low/Upcase coding </br>
-	<li/> caller’s country name (cut to 15chrs) Overlayed with “<font color="#ff0066"><b>CQ:xx</b></font>”
-	 and <font color="#ff0066"><b>different color</b></font> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br/>
-	<font color="#ff0066"><b>This is set as warning for you </b></font> to check that you are in directed area before answering to his/her CQ.
-	<br/>I.E. <font color="#ff0066"><b>In case of CQ DX you should be in DIFFERENT CONTINENT as the CQ caller</b></font>
+	<li/> caller’s country name (cut to 15chrs) Overlayed with “<font color="#ff0066"><strong>CQ:xx</strong></font>”
+	 and <font color="#ff0066"><strong>different color</strong></font> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br/>
+	<font color="#ff0066"><strong>This is set as warning for you </strong></font> to check that you are in directed area before answering to his/her CQ.
+	<br/>I.E. <font color="#ff0066"><strong>In case of CQ DX you should be in DIFFERENT CONTINENT as the CQ caller</strong></font>
 	to be a valid DX for him. Program does not warn you if it thinks you are real DX for caller. Otherwise
 	it does.
 	<br/><a href="https://en.wikipedia.org/wiki/CQ_(call)">https://en.wikipedia.org/wiki/CQ_(call)</a> says:
@@ -254,17 +254,22 @@ cd ~/.config/cqrlog/ctyfiles
 <img src="img/wsjt38.png" name="38" width="144" height="383"></img>
 <img src="img/wsjt39.png" name="39" width="144" height="383"></img>
 </p>
-<p>CQ-monitor can be turned to "Band map"- type Wsjt-x map by checking "<strong>Map</strong>". It hides all other controls.
+<p>CQ-monitor can be turned to "Band map"-style Wsjt-x map by checking "<strong>Map</strong>". It hides some of top line controls.
 How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Exception is that <strong>Text alert</strong> does not find continents and comments like "New country","QSL needed" etc.
-</br>Map-mode shows all traffic on band. Colors of callsigns and locators are same than in CQ-monitor. If call is <strong>not in parentheses</strong> it is a <strong>CQ</strong>-call.
- <strong>Calls in parentheses have qso</strong> if there is no locator shown. If locator is shown they are answering to someones CQ. If <b>closing bracket</b> is replaced with asterisk <b>*</b> it means that callsign is closing his current qso I.E. sending RR73 or 73.
+</br></br>Map-mode is very powerfull tool showing all traffic on band against your logged qsos. Callsigns and locators have same color coding as CQ-monitor.
+<ul>
+   <li>Call <strong><i>not</i> in parentheses </strong>is a <strong>CQ</strong>-call. 
+    </br>( Background color of these lines can be set for easier pick up. )</li>
+   <li>Call <strong>in parentheses has a qso going on</strong> if there is no locator shown</li>
+   <li>Call <strong>in parentheses with locator</strong> is answering to someone else's CQ</li>
+   <li>If <strong>closing bracket</strong> is replaced with asterisk <strong>*</strong> call is closing qso
+   </br> ( I.E. sending RR73 or 73 and can be called for qso. )</li>
+</ul>
 </br>If station is calling <strong>directed CQ</strong> that is <strong>not directed to you</strong> (same as in CQ-monitor, but in short form)  <strong>the direction </strong> is shown at the and of line.
 </br> 
 </br>As also all other lines than CQs are compared against your log entries this mode will eat more of cpu cycles than CQ-monitor.
 </br>Map-mode does not save history, it clears itself always at start of new decoding period if there is something new to show. Otherwise lines are turned gray as in CQ-monitor.
-</br></br>You can initiate qso same way as in CQ-monitor by double click on line  <strong>without </strong> parentheses.
- Double click on line  <strong>with </strong> parentheses loads call to Std messages of Wsjt-x and sets frequency, but  <strong>does not initiate TX</strong>.
-</br>This is a new property of Wsjt-x 1.9.0-rc3 and up. With previous versions this does not make any action.
+</br></br>You can initiate qso same way as in CQ-monitor by double click on line.
 </p>
 <p>
 <strong>Filter</strong> selection activates filter that passes only lines having callsign, or part of it, entered in Filter box
@@ -278,7 +283,7 @@ How ever there are some limitations compared to CQ-monitor:
 <li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
 <li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
 </br>
-With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
+With older versions of wsjt-x this causes unkonwn command error and then <strong>nTxt</strong> should not be checked until you get newer version of Wsjt-x.
 </br></p><p>
 <img src="img/wsjt34.png" name="34" width="353" height="282">
 </img>
@@ -307,31 +312,34 @@ CQ-monitor has a new design. Window is adjustable and font + size can be changed
 Font style can not be changed as now “Qso never” (default Green) is printed also with bold while all other texts are in normal style.</p>
 <img src="img/wsjt15.png" name="15" width="344" height="203">
 </img>
+<img src="img/wsjt15b.png" name="15" width="344" height="203">
+</img>
 <img src="img/wsjt17.png" name="17" width="344" height="203" border="0">
 <img/></br>
 Colors, that user can now change, will tell if station is worked
-before on <font color="#ff0066"><b>this band and mode</b></font><font color="#ff0066">,</font>
-<font color="#cc66ff">this band </font><font color="#cc66ff"><b>but
-not this mode,</b></font> <font color="#cc9900">some </font><font color="#cc9900"><b>other
-band/mode</b></font> and <font color="#00cc00"><b>never</b></font><font color="#00cc00">
+before on <font color="#ff0066"><strong>this band and mode</strong></font><font color="#ff0066">,</font>
+<font color="#cc66ff">this band </font><font color="#cc66ff"><strong>but
+not this mode,</strong></font> <font color="#cc9900">some </font><font color="#cc9900"><strong>other
+band/mode</strong></font> and <font color="#00cc00"><strong>never</strong></font><font color="#00cc00">
 on any band/mode</font>.</p>
 <p>Same color coding is applied also for locator grid.<br/>
-Full locator (means 4 first characters of locator) worked before on <b>this band
-and mode</b>, this band <b>but not this mode, </b>some <b>other band/mode </b>and <b>never</b> on any band/mode.
+Full locator (means 4 first characters of locator) worked before on <strong>this band
+and mode</strong>, this band <strong>but not this mode, </strong>some <strong>other band/mode </strong>and <strong>never</strong> on any band/mode.
 <br/>
 If no hits found for full locator then main locator (2 first
-letters) are checked same way next . Worked before on <b>this band
-and mode</b>, this band <b>but not this mode, </b>some <b>other
-band/mode </b>and <b>never</b> on any band/mode.
+letters) are checked same way next . Worked before on <strong>this band
+and mode</strong>, this band <strong>but not this mode, </strong>some <strong>other
+band/mode </strong>and <strong>never</strong> on any band/mode.
 </p><p>
 Calls and locators that are <font color="#ff0066">worked before on
-</font><font color="#ff0066"><b>this band and mode</b></font><font color="#ff3333">
-</font>are also printed in <b>lowercase</b> letters while all others
-are printed with <b>UPPERCASE</b>.</p>
+</font><font color="#ff0066"><strong>this band and mode</strong></font><font color="#ff3333">
+</font>are also printed in <strong>lowercase</strong> letters while all others
+are printed with <strong>UPPERCASE</strong>
+</br>In addition when <strong>Wsjt Map</strong> is used the <strong>background color of CQ caller line</strong> can be defined for easier pick up.</p>
 <p >
 <img src="img/wsjt19.png" name="19" width="262" height="213" border="0">
 <img/>
-</br><b>NOTE:</b> Using monospace fonts will keep monitor columns in
+</br><strong>NOTE:</strong> Using monospace fonts will keep monitor columns in
 order.</p>
 
 <h3><a name="w3"></a></a>Alerts</h5>
@@ -339,34 +347,34 @@ order.</p>
 <p>At bottom there are 3 alerts to select. The priority of alerts is same as numbering here. Smaller number overrides previous having
 highest priority. Alert is executed only once per every decoding section.</p>
 <ol>
-	<li/>”<b>My Alert</b>” will alert if someone answers your
+	<li/>”<strong>My Alert</strong>” will alert if someone answers your
 	cq-call. It is useful if you are reading your mails, Facebook or
 	what ever on another desktop while calling CQ with Wsjt-x :)</br>
-	<li/>“<b>All</b>”will extend “MyAlert” so that all lines that start with your
+	<li/>“<strong>All</strong>”will extend “MyAlert” so that all lines that start with your
 	callsign give alerts. There are stations that answer to CQ directly
 	with report, so this wakes you up also then. When using FT8 this
 	might be little annoying but is easy to check off.</br>
-	<li/>”<b>Text [ ]Alert</b>” will alert if typed text, case
+	<li/>”<strong>Text [ ]Alert</strong>” will alert if typed text, case
 	sensitive, fits into part of complete monitor line (text-in-text).
-	<br/> <b>Example:</b> alert from new country by setting “w c” string to text alert. It fits
+	<br/> <strong>Example:</strong> alert from new country by setting “w c” string to text alert. It fits
 	in to the middle of “New country” string. Text can have spaces,
 	but not at start or at end.<br/>
-	Press button <b>“Text”</b> to change to call alerts.<br/>
-	”<b>Call [ ]Alert</b>” will alert if typed text, (converts to upcase when alert activated), fits callsign of
+	Press button <strong>“Text”</strong> to change to call alerts.<br/>
+	”<strong>Call [ ]Alert</strong>” will alert if typed text, (converts to upcase when alert activated), fits callsign of
 	monitor line. As option, one asterisk can be used at start or end to
 	indicate starts-with or ends-with search. Several search strings can
 	be inserted for call alert with comma separation.<br/>
-	Press button <b>“Call”</b> to change to text alerts.</p>
+	Press button <strong>“Call”</strong> to change to text alerts.</p>
 	<p>Text you have typed is read only after you leave edit box. Then
 	spaces from start and end are removed and in case of “call alert”
 	text is changed uppercase.<br/>
-	To activate alert press ”<b>Alert</b>”
+	To activate alert press ”<strong>Alert</strong>”
 	to turn it’s text green. (it also takes you away from edit box)</p>
 	<p><img src="img/wsjt27.png" name="27"" width="441" height="47">
 	</img><br/>
 	<img src="img/wsjt28.png" name="28"  width="442" height="42">
 	</img></p>
-	<li/>”<b>Loc Alert</b>” will alert when there is new main grid that you have not worked.
+	<li/>”<strong>Loc Alert</strong>” will alert when there is new main grid that you have not worked.
 <li/></ol></p>
 <p >To make alerts do something you have to
 add a script file ~/.config/cqrlog/voice_keyer/voice_alert.sh<br/>
@@ -377,8 +385,8 @@ By using these parameters with your
 script you can play sound that you want, or do anything else you like
 to happen when alert is issued.<br/>
 <br/>
-<b>NOTE: Try to keep
-script running time as short as possible.</b></p>
+<strong>NOTE: Try to keep
+script running time as short as possible.</strong></p>
 <p >voice_alert.sh:<br/>
 <pre>
 --------------cut here---------------------------------------------------------
@@ -405,13 +413,13 @@ audio card(if needed) and play alert message</p>
 <p>You can start Wsjt-x qso by double click a CQ-monitor’s line. Wsjt-x will move to callers QRG and initiate TX.</p>
 <p><img src="img/wsjt4.png" name="4" width="466" height="353">
 </img><br/>
-This requires Wsjt-x's <b>Configuration/Settings/Reporting</b> to have <font color="#ff0066">at
-least</font> “<b>Accept</b> <b>UDP requests</b>” selected.
+This requires Wsjt-x's <strong>Configuration/Settings/Reporting</strong> to have <font color="#ff0066">at
+least</font> “<strong>Accept</strong> <strong>UDP requests</strong>” selected.
 <br/>Setting also “ Accepted UDP request restores window” will return focus from CQ-monitor back to wsjt-x main window.<br/>
 <br/>
-A line when someone has answered to you (your call is first at Wsjt-x data line) has ”<b>=</b>” sign just at start of callsign and
-locator is marked <b>*QSO</b> if line has reports or 73.
-<br/> </b>Clicking that line again does not continue qso.<br/>
+A line when someone has answered to you (your call is first at Wsjt-x data line) has ”<strong>=</strong>” sign just at start of callsign and
+locator is marked <strong>*QSO</strong> if line has reports or 73.
+<br/> </strong>Clicking that line again does not continue qso.<br/>
 Wsjt-x remote does not allow this kind of command preventing automated qsos. So at this case you have
 to go to Wsjt-x screen and initiate report sending by yourself. Or set “auto seg” at wsjt-x/FT8.</p>
 <p>Either qso is started from CQ-monitor, or Wsjt-x screen itself, the opponent callsign is added right away to New QSO's callsign
@@ -419,20 +427,20 @@ field. This way you can see right away if you have had qso with this station on 
 status, QRZ/HamQTH information etc.</p>
 
 
-<h3><a name="w5"></a></a>Logging qso to cqrlog</h5>
+<h3><a name="w5"></a>Logging qso to cqrlog</h5>
 <p>
 When you <font color="#ff0066"> either press “Log QSO”</font> at wsjt-x main window,<font color="#ff0066"> or
 </font>get it open automatic when sending 73 by <font color="#ff0066">checking Wsjt-x's </font>
-<font color="#ff0066"><b>Configuration/Settings/Reporting/Prompt me to log qso</b></font> ,you will have wsjt-x's logging form open.
+<font color="#ff0066"><strong>Configuration/Settings/Reporting/Prompt me to log qso</strong></font> ,you will have wsjt-x's logging form open.
 <br/>Check it’s information, add power and remarks if needed. After finishing with it <font color="#ff0066">press it’s OK-button</font><u>Then information is transferred to cqrlog.</u> <br/>
 <br/>
-</u><b>NOTE: </b><font color="#ff0066"><b>DO NOT press</b></font> cqrlog/NewQSO/Save QSO [enter] - button to save qso!</p>
+</u><strong>NOTE: </strong><font color="#ff0066"><strong>DO NOT press</strong></font> cqrlog/NewQSO/Save QSO [enter] - button to save qso!</p>
 <p>
 If you have enabled auto search from QRZ.com/HamQth.com in cqrlog's preferences all information is fetched during your first transmit (report sending period).<br/>
 You may alter that information in NewQSO form and it is saved along with wsjt-x logging information.<br/>
 <br/>
 In case that fetched data has same, but longer locator than wsjt-x qso data has the longer is logged to cqrlog.<br/>
-<b>I.E </b>wsjt-x data gives KP01, but QRZ.com KP01TN, the longer (more complete) is logged.<br/>
+<strong>I.E </strong>wsjt-x data gives KP01, but QRZ.com KP01TN, the longer (more complete) is logged.<br/>
 If locators differ wsjt-x data is used as it might be a portable or other special qth.</p>
 
 <a name="w6"><h3>Starting fldigi and wsjt-x via cqrlog</h3></a>
@@ -445,7 +453,7 @@ dies. You can finish your ongoing qso, start cqrlog again, set remote mode on an
 </html>
 
 <p align=center><img src=img/line.png></p>
-<br>
+</br>
 <table width="100%" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
@@ -453,6 +461,7 @@ dies. You can finish your ongoing qso, start cqrlog again, set remote mode on an
     </tr>
     </tbody>
 </table>
-<br>
+</br>
+
 </body>
 </html>

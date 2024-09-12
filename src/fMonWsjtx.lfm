@@ -646,6 +646,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     TabOrder = 9
   end
   object popColors: TPopupMenu
+    OnPopup = popColorsPopup
     Left = 104
     Top = 88
     object cmHead: TMenuItem
@@ -669,6 +670,10 @@ object frmMonWsjtx: TfrmMonWsjtx
       object cmCqDx: TMenuItem
         Caption = 'Directed CQ warning'
         OnClick = cmCqDxClick
+      end
+      object cmMapCq: TMenuItem
+        Caption = 'Map mode: Cq caller background'
+        OnClick = cmMapCqClick
       end
     end
     object cmFont: TMenuItem

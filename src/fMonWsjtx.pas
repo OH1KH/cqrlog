@@ -17,6 +17,7 @@ type
     chkSort: TCheckBox;
     chkFlt: TCheckBox;
     edtFltMap: TEdit;
+    cmMapCq: TMenuItem;
     mnuSort1: TMenuItem;
     mnuSort2: TMenuItem;
     mnuSort3: TMenuItem;
@@ -95,6 +96,7 @@ type
     procedure cmCqDxClick(Sender: TObject);
     procedure cmFontClick(Sender: TObject);
     procedure cmHereClick(Sender: TObject);
+    procedure cmMapCqClick(Sender: TObject);
     procedure cmNeverClick(Sender: TObject);
     procedure EditAlertEnter(Sender: TObject);
     procedure EditAlertExit(Sender: TObject);
@@ -118,6 +120,7 @@ type
     procedure mnuSort1Click(Sender: TObject);
     procedure pnlSelectsClick(Sender: TObject);
     procedure pnlTrigPopMouseEnter(Sender: TObject);
+    procedure popColorsPopup(Sender: TObject);
     procedure popDxClose(Sender: TObject);
     procedure sgMonitorDblClick(Sender: TObject);
     procedure sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
@@ -228,6 +231,8 @@ var
   MonitorLine: string;                  // complete line as printed to monitor
   AlertLine:   string;                  //copy of monitor line but has spaces between items
   extCqCall: Tcolor;    // extended cq (cq dx, cq na etc.) color
+  UsedBkgCqCol : Tcolor;
+  BkgCqCol : Tcolor;    // Map monitor background
   wkdhere: Tcolor;
   wkdband: Tcolor;
   wkdany: Tcolor;
@@ -323,6 +328,13 @@ begin
         Begin
              sgMonitor.Cells[c,r]:= s;  //trim ??
              sgMonitorAttributes[c,r].FG_Color:=col;
+             if (chkMap.Checked) and (c in  [3,4,5]) then
+               begin
+                sgMonitorAttributes[c,r].BG_Color:=UsedBkgCqCol; //global var
+                if (c=5) then UsedBkgCqCol:=clWhite;
+               end
+              else
+               sgMonitorAttributes[c,r].BG_Color:=clWhite;
              sgMonitorAttributes[c,r].isBold:=false;
              if ((col = wkdnever) and ((c > 2) and (c < 6))) then
                sgMonitorAttributes[c,r].isBold:=true
@@ -480,12 +492,18 @@ Begin
    Setbitmap(cmAny.Bitmap, wkdAny);
    Setbitmap(cmNever.Bitmap, wkdnever);
    Setbitmap(cmCqDX.Bitmap, extCqCall);
+   Setbitmap(cmMapCq.Bitmap, BkgCqCol);
+end;
+
+procedure TfrmMonWsjtx.popColorsPopup(Sender: TObject);
+begin
+   cmMapCq.Visible:=chkMap.Checked;
 end;
 
 procedure TfrmMonWsjtx.cmNeverClick(Sender: TObject);
 begin
   popColorDlg.Color := wkdNever;
-  popColorDlg.Title := 'Qso never before - color';
+  popColorDlg.Title := 'Qso never before color';
   if popColorDlg.Execute then
   begin
     wkdNever := (popColorDlg.Color);
@@ -496,7 +514,7 @@ end;
 procedure TfrmMonWsjtx.cmBandClick(Sender: TObject);
 begin
   popColorDlg.Color := wkdBand;
-  popColorDlg.Title := 'Qso on this band, but not this mode - color';
+  popColorDlg.Title := 'Qso on this band, but not this mode color';
   if popColorDlg.Execute then
   begin
     wkdBand := (popColorDlg.Color);
@@ -509,7 +527,7 @@ end;
 procedure TfrmMonWsjtx.cmAnyClick(Sender: TObject);
 begin
   popColorDlg.Color := wkdAny;
-  popColorDlg.Title := 'Qso on some other band/mode - color';
+  popColorDlg.Title := 'Qso on some other band/mode color';
   if popColorDlg.Execute then
   begin
     wkdAny := (popColorDlg.Color);
@@ -521,7 +539,7 @@ end;
 procedure TfrmMonWsjtx.cmHereClick(Sender: TObject);
 begin
   popColorDlg.Color := wkdHere;
-  popColorDlg.Title := 'Qso on this band and mode - color';
+  popColorDlg.Title := 'Qso on this band and mode color';
   if popColorDlg.Execute then
   begin
     wkdHere := (popColorDlg.Color);
@@ -533,7 +551,7 @@ end;
 procedure TfrmMonWsjtx.cmCqDxClick(Sender: TObject);
 begin
   popColorDlg.Color := extCqCall;
-  popColorDlg.Title := 'Extended CQ (DX, NA, SA ...) - color';
+  popColorDlg.Title := 'Extended CQ (DX, NA, SA ...) color';
   if popColorDlg.Execute then
    Begin
     extCqCall := (popColorDlg.Color);
@@ -541,6 +559,19 @@ begin
     SetAllbitmaps;
    end;
 end;
+
+procedure TfrmMonWsjtx.cmMapCqClick(Sender: TObject);
+begin
+  popColorDlg.Color := BkgCqCol;
+  popColorDlg.Title := 'Map mode: CQ caller background color';
+  if popColorDlg.Execute then
+   Begin
+    BkgCqCol := (popColorDlg.Color);
+    cqrini.WriteString('MonWsjtx', 'BkgCqCol', ColorToString(BkgCqCol));
+    SetAllbitmaps;
+   end;
+end;
+
 procedure TfrmMonWsjtx.EditAlertEnter(Sender: TObject);
 begin
   tbAlert.Checked := False;
@@ -1048,7 +1079,6 @@ begin
   sgMonitor.BorderSpacing.Top:=pnlSelects.Height;
 end;
 
-
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 //DL7OAP: complete procedure for the coloring, this function is called every time
@@ -1342,6 +1372,7 @@ begin
   wkdband := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdband', '$00FF00FF'));
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
+  BkgCqCol := StringToColor(cqrini.ReadString('MonWsjtx', 'BkgCqCol', '$FFFFFFFF'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
   SetAllbitmaps;
   edtFollow.Font.Name := sgMonitor.Font.Name;
@@ -2106,6 +2137,7 @@ begin
    msgMode := mode;
    CurMode:=getCurMode(mode);
    Message:=LineFilter(Message);
+   UsedBkgCqCol:= BkgCqCol;
 
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
   CqPeriodTimerStart;
@@ -2187,10 +2219,17 @@ begin
   if (CurMode <> '') AND (msgCall <> 'NOCALL') then //mode and call is known; we can continue
   begin
     //print only DX drops here
-    if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
+    if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then
+       Begin
+         UsedBkgCqCol :=clWhite;
+         exit;
+       end;
     //print filter callsign drops here
-    if chkFlt.Checked and chkMap.Checked and (pos(edtFltMap.Text,msgCall)=0) then exit;
-
+    if chkFlt.Checked and chkMap.Checked and (pos(edtFltMap.Text,msgCall)=0) then
+       Begin
+         UsedBkgCqCol :=clWhite;
+         exit;
+       end;
 
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);
