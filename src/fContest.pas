@@ -191,8 +191,7 @@ type
       AllOwnC,
       AllCountries,
       QsoRate10,
-      QsoRate60,
-      QsoSince        : integer;
+      QsoRate60    : integer;
 
     procedure SetActualReportForModeFromRadio;
     procedure InitInput;
@@ -499,7 +498,6 @@ begin
   if dmData.DebugLevel >= 1 then
     Writeln('input finale');
   ChkSerialNrUpd(chkNRInc.Checked);
-  QsoSince:=0;
   tmrScore.Enabled:=true;
   initInput;
 end;
@@ -1038,7 +1036,6 @@ begin
   WasContestNameChange:='';
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
-  QsoSince:=0;
   sgStatus.Cells[0,0]:='Settings';
   sgStatus.Cells[0,1]:='QSOs';
   sgStatus.Cells[0,2]:='DXs';
@@ -2294,18 +2291,18 @@ Begin
     Begin
     //last qso since
     //--------------------------------------------------------------
-      {dmData.CQ.Close;
+      dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
       dmData.CQ.SQL.Text :=
       'select sec_to_time(timestampdiff(second,concat(qsodate," ",time_off),utc_timestamp())) as last from cqrlog_main order by id_cqrlog_main desc limit 1';
-      if dmData.DebugLevel >=1 then
+      //if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      lblQsoSince.Caption:=dmData.CQ.FieldByName('last').AsString;
-      }
-      inc(QsoSince);
+      lblQsoSince.Caption:='QS:'+dmData.CQ.FieldByName('last').AsString;
+
+      //inc(QsoSince);
       //print format here MM:SS
-      lblQsoSince.Caption:='QS: '+Format('%.2d', [QsoSince div 60])+':'+Format('%.2d', [QsoSince mod 60]);
+      //lblQsoSince.Caption:='QS: '+Format('%.2d', [QsoSince div 60])+':'+Format('%.2d', [QsoSince mod 60]);
 
     //qso rate 10min
     //--------------------------------------------------------------
