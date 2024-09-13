@@ -35,11 +35,12 @@ type
     fRbnSpot : TRbnSpot;
     FOnShowSpot : TOnShowSpotEvent;
     function AllowedSpot(spotter, dxstn, freq, mode, LoTW, eQSL : String; var dxinfo : String) : Boolean;
-
     procedure ShowSpot;
   protected
     procedure Execute; override;
   public
+    WantToLoad                : Boolean;
+    MayLoad                   : Boolean;
     DxccWithLoTW              : Boolean;
     fil_SrcCont               : String;
     fil_SrcCalls              : TStringList;
@@ -187,8 +188,10 @@ var
   f        : Double;
   i        : integer;
   SpotterOk: Boolean;
+  DebugThis: Boolean;
 begin
   Result := False;
+  DebugThis:=dmData.DebugLevel>=2;
 
   if (fil_SrcCalls.Count>0) then
    Begin
@@ -203,7 +206,7 @@ begin
       end;
      if Not SpotterOK then
         Begin
-          if dmData.DebugLevel>=2 then
+          if DebugThis then
                                   Writeln('RBNMonitor: ','Wrong source callsign - ',Spotter);
           Exit
         end;
@@ -212,7 +215,7 @@ begin
   dmDXCluster.id_country(spotter,now,pfx,Country,waz,itu,SrcCont);
   if (Pos(SrcCont+',',fil_SrcCont+',') = 0) and (fil_SrcCont<>'') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong source continent - ',SrcCont);
+    if DebugThis then Writeln('RBNMonitor: ','Wrong source continent - ',SrcCont);
     exit
   end;
 
@@ -229,13 +232,13 @@ begin
   Band := dmDXCluster.GetBandFromFreq(freq,True);
   if (Band='') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong band - ',Band);
+    if DebugThis then Writeln('RBNMonitor: ','Wrong band - ',Band);
     exit
   end;
 
   if dmData.RbnCallExistsInLog(dxstn,Band,mode,LastDate,LastTime) then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station already exist in the log - ',dxstn);
+    if DebugThis then Writeln('RBNMonitor: ','Station already exist in the log - ',dxstn);
     exit
   end;
 
@@ -243,7 +246,7 @@ begin
   begin
     if Pos(dxstn+',',fil_AllowOnlyCallValue+',') = 0 then
     begin
-      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
+      if DebugThis then Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
       exit
     end
   end;
@@ -252,34 +255,37 @@ begin
    begin
    if (trim(fil_AllowOnlyCallRegValue)='') or (trim(dxstn)='') then
     begin    // do not allow empty regexp
-      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station or allowed callsigns - empty ');
+      if DebugThis then Writeln('RBNMonitor: ','Station or allowed callsigns - empty ');
       exit
     end;
     reg.Expression  := fil_AllowOnlyCallRegValue;
     reg.InputString := dxstn;
     if not reg.Exec(1) then
     begin
-      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
+      if DebugThis then Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
       exit
     end
   end;
 
   tmp:=fil_AllowBands;
-  If (pos('RIG',UpperCase(fil_AllowBands))>0) then
-                tmp:= tmp+','+dmDXCluster.GetBandFromFreq(FloatToStr(frmTRXControl.GetFreqkHz),True);
-  if (Pos(band+',',tmp+',')=0) and (tmp<>'') then
+  if DebugThis then Writeln(band,'->',tmp);
+  If (pos('RIG',UpperCase(tmp))>0) then
+           tmp:=StringReplace(tmp,'RIG', dmDXCluster.GetBandFromFreq(FloatToStr(frmTRXControl.GetFreqkHz),True),[rfReplaceAll,rfIgnoreCase]);
+  if DebugThis then Writeln(band,'->',tmp);
+  if (Pos(','+band+',',','+tmp+',')=0) and (tmp<>'') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This band is NOT allowed - ',band);
+    if DebugThis then Writeln('RBNMonitor: ','This band is NOT allowed - ',band);
     exit
   end;
 
   tmp:= fil_AllowModes;
-  If (pos('RIG',UpperCase(fil_AllowBands))>0) then
-                tmp:= tmp+','+frmTRXControl.GetActualMode;
-
-  if (Pos(mode+',',tmp+',')=0) and (tmp<>'') then
+  if DebugThis then Writeln(mode,'->',tmp);
+  If (pos('RIG',UpperCase(tmp))>0) then
+           tmp:=StringReplace(tmp,'RIG',frmTRXControl.GetActualMode,[rfReplaceAll,rfIgnoreCase]);
+  if DebugThis then Writeln(mode,'->',tmp);
+  if (Pos(','+mode+',',','+tmp+',')=0) and (tmp<>'') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This mode is NOT allowed - ',mode);
+    if DebugThis then Writeln('RBNMonitor: ','This mode is NOT allowed - ',mode);
     exit
   end;
 
@@ -287,31 +293,31 @@ begin
 
   if (Pos(DestCont+',',fil_AllowCont+',') = 0) and (fil_AllowCont<>'') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong continent - ',DestCont);
+    if DebugThis then Writeln('RBNMonitor: ','Wrong continent - ',DestCont);
     exit
   end;
 
   if ((fil_NotCnty<>'') and (Pos(pfx+',',fil_NotCnty+',')>0)) then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
+    if DebugThis then Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
     exit
   end;
 
   if ((fil_AllowCnty<>'') and (Pos(pfx+',',fil_AllowCnty+',')=0)) then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
+    if DebugThis then Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
     exit
   end;
 
   if fil_LoTWOnly and (LoTW<>'L') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This station is not LoTW user - ',dxstn);
+    if DebugThis then Writeln('RBNMonitor: ','This station is not LoTW user - ',dxstn);
     exit
   end;
 
   if fil_eQSLOnly and (eQSL<>'E') then
   begin
-    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This station is not eQSL user - ',dxstn);
+    if DebugThis then Writeln('RBNMonitor: ','This station is not eQSL user - ',dxstn);
     exit
   end;
 
@@ -325,7 +331,7 @@ begin
       dxinfo := '';
       if fil_NewDXCOnly then
                         Begin
-                          if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Not new one, band or mode - ',dxstn);
+                          if DebugThis then Writeln('RBNMonitor: ','Not new one, band or mode - ',dxstn);
                           exit;
                         end;
      end;
@@ -335,7 +341,7 @@ begin
 end;
 
 procedure TRBNThread.Execute;
-
+//-------------------------------------------------------------------
   procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
   var
     i : Integer;
@@ -366,6 +372,7 @@ procedure TRBNThread.Execute;
     mode  := b[5];
     stren := b[6]
   end;
+//-------------------------------------------------------------------
 
 var
   spot    : String;
@@ -390,6 +397,21 @@ begin
   try try
     while not Terminated do
     begin
+
+      EnterCriticalsection(frmRbnMonitor.csRbnMonitor);
+      try
+        if WantToLoad then
+        begin
+          MayLoad:=true;
+          repeat
+            sleep(1);
+          until not WantToLoad;
+          MayLoad:=false;
+        end
+      finally
+        LeaveCriticalsection(frmRbnMonitor.csRbnMonitor);
+      end;
+
       EnterCriticalsection(frmRbnMonitor.csRbnMonitor);
       try
         if frmRbnMonitor.slRbnSpots.Count>0 then
@@ -400,8 +422,10 @@ begin
         else
           spot := ''
       finally
-        LeaveCriticalsection(frmRbnMonitor.csRbnMonitor)
+        LeaveCriticalsection(frmRbnMonitor.csRbnMonitor);
       end;
+
+
       if (spot='') then
       begin
         sleep(fil_SpotDelay);
@@ -544,6 +568,8 @@ begin
   RbnMonThread := TRBNThread.Create(True);
   RbnMonThread.FreeOnTerminate :=  False;// True; I think this causes abrt in terminate (TfrmRbnMonitor.acDisconnectExecute) because procedure has freeAndNil (does free twice)
   RbnMonThread.OnShowSpot := @SynRbnMonitor; //shows up when RBN traffic is high like IARU HF contest and connect is tried to close or filter adjusted
+  RbnMonThread.WantToLoad:=false;
+  RbnMonThread.MayLoad:=false;
   RbnMonThread.Start;
 
   LoadConfigToThread;
@@ -775,10 +801,22 @@ begin
 end;
 //-------------------------------------------------
 procedure TfrmRbnMonitor.LoadConfigToThread;
-
+Var
+   timeout:integer=10000;
 begin
   if Assigned(RbnMonThread) then
   begin
+    RbnMonThread.WantToLoad:=true;
+    repeat
+      sleep(1);
+      dec(timeout);
+      if timeout < 1 then
+                         begin
+                           RbnMonThread.WantToLoad:=false;
+                           exit;
+                         end;
+    until RbnMonThread.MayLoad;
+
     RbnMonThread.fil_SrcCont := cqrini.ReadString('RBNFilter','SrcCont',C_RBN_CONT);
 
     SrcCalls.Clear;    //we need to do this via another TString list. Direct mods to fil_SrcCalls cause SIGSEGV
@@ -821,6 +859,7 @@ begin
     RbnMonThread.fil_gcfgeBckColor       := cqrini.ReadInteger('LoTW','eBckColor',clSkyBlue);
     RbnMonThread.fil_gcfgUseDXCColors    := cqrini.ReadBool('BandMap','UseDXCColors',False);
 
+    RbnMonThread.WantToLoad:=false;
   end;
 
 end;

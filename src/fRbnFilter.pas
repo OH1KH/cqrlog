@@ -206,6 +206,8 @@ begin
   cqrini.WriteBool('RBNFilter','NewDXCOnly',chkNewDXConly.Checked);
   cqrini.WriteString('RBNFilter','SpotDelay',edtSpotDelay.Text);
   cqrini.WriteBool('RBNMonitor','ToBandMap',chkToBandMap.Checked );
+
+  cqrini.SaveToDisk;
   ModalResult := mrOK
 end;
 
