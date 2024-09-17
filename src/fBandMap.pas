@@ -634,7 +634,7 @@ end;
 
 procedure TfrmBandMap.FormDeactivate(Sender: TObject);
 begin
-  frmBandMap.Caption:= 'Band map';
+  ReleasePaused;
 end;
 
 procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
