@@ -328,13 +328,12 @@ begin
         Begin
              sgMonitor.Cells[c,r]:= s;  //trim ??
              sgMonitorAttributes[c,r].FG_Color:=col;
+             sgMonitorAttributes[c,r].BG_Color:=clWhite;
              if (chkMap.Checked) and (c in  [3,4,5]) then
                begin
                 sgMonitorAttributes[c,r].BG_Color:=UsedBkgCqCol; //global var
-                if (c=5) then UsedBkgCqCol:=clWhite;
-               end
-              else
-               sgMonitorAttributes[c,r].BG_Color:=clWhite;
+                if (c=5) then UsedBkgCqCol:=clWhite;  //reset for next
+               end;
              sgMonitorAttributes[c,r].isBold:=false;
              if ((col = wkdnever) and ((c > 2) and (c < 6))) then
                sgMonitorAttributes[c,r].isBold:=true
