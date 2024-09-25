@@ -376,6 +376,7 @@ type
     procedure dbgrdMainDrawColumnCell(Sender : TObject; const Rect : TRect;
       DataCol : Integer; Column : TColumn; State : TGridDrawState);
     procedure dbgrdMainEnter(Sender: TObject);
+    procedure dbgrdMainExit(Sender: TObject);
     procedure dbgrdMainKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -1776,12 +1777,12 @@ end;
 procedure TfrmMain.dbgrdMainColumnMoved(Sender: TObject; FromIndex,
   ToIndex: Integer);
 begin
-  dmUtils.SaveForm(frmMain)
+  dmUtils.SaveDBGridInForm(frmMain)
 end;
 
 procedure TfrmMain.dbgrdMainColumnSized(Sender: TObject);
 begin
-  dmUtils.SaveForm(frmMain)
+  dmUtils.SaveDBGridInForm(frmMain)
 end;
 
 procedure TfrmMain.dbgrdMainDrawColumnCell(Sender : TObject;
@@ -1800,6 +1801,12 @@ end;
 procedure TfrmMain.dbgrdMainEnter(Sender: TObject);
 begin
   CheckAttachment
+end;
+
+procedure TfrmMain.dbgrdMainExit(Sender: TObject);
+//saving at OnColumnMoved procedure  saves column order (before move) so saving right order must be done here.
+begin
+  dmUtils.SaveDBGridInForm(frmMain)
 end;
 
 procedure TfrmMain.dbgrdMainKeyUp(Sender: TObject; var Key: Word;
@@ -1967,7 +1974,7 @@ end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  dmUtils.SaveForm(frmMain);
+  dmUtils.SaveDBGridInForm(frmMain);
   dmUtils.SaveWindowPos(frmMain);
 
   cqrini.WriteBool('Main', 'Toolbar', toolMain.Visible);
@@ -2511,7 +2518,7 @@ begin
 
   dbgrdMain.DataSource := dmData.dsrMain;
   dbgrdMain.ResetColWidths;
-  dmUtils.LoadForm(frmMain);
+  dmUtils.LoadDBGridInForm(frmMain);
   ChangeVis('QSODATE', cqrini.ReadBool('Columns', 'Date', True));
   ChangeVis('TIME_ON', cqrini.ReadBool('Columns', 'time_on', True));
   ChangeVis('TIME_OFF', cqrini.ReadBool('Columns', 'time_off', False));

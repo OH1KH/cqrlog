@@ -47,6 +47,8 @@ Alpha BINARIES:
 **These binary files do not work alone. All binaries must be either copied over complete, working, official installation**
 ** or used with required dependency packages and with folder /usr/share/cqrlog having all files from official install**
 
+It may be that some (Rpi confirmed) versions crash if your desktop uses Wayland. Switching over to X should help.
+Otherwise you have to compile the source by yourself and see if that produces runable binary result for Wayland.
 
 ------------------WARNINGS-----------------
 ===========================================

@@ -132,7 +132,7 @@ end;
 procedure TfrmConfigStorage.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  dmUtils.SaveForm(self)
+  dmUtils.SaveDBGridInForm(self)
 end;
 
 procedure TfrmConfigStorage.btnSaveClick(Sender: TObject);

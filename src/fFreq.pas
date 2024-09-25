@@ -57,7 +57,7 @@ end;
 
 procedure TfrmFreq.dbgrdFreqColumnSized(Sender : TObject);
 begin
-  dmUtils.SaveForm(frmFreq)
+  dmUtils.SaveDBGridInForm(frmFreq)
 end;
 
 procedure TfrmFreq.dbgrdFreqDblClick(Sender : TObject);
@@ -132,7 +132,7 @@ begin
     end
   end;
 
-  dmUtils.LoadForm(frmFreq);
+  dmUtils.LoadDBGridInForm(frmFreq);
   dbgrdFreq.Columns[1].Title.Caption := 'Band';
   dbgrdFreq.Columns[2].Title.Caption := 'Begin';
   dbgrdFreq.Columns[3].Title.Caption := 'End';

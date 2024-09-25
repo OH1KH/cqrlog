@@ -298,7 +298,7 @@ end;
 
 procedure TfrmWAZITUStat.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  dmUtils.SaveForm(self);
+  dmUtils.SaveDBGridInForm(self);
   cqrini.WriteString('WAZITUStat','profiles'+IntToStr(ord(StatType)),edtProfiles.Text);
   cqrini.WriteInteger('WAZITUStat','mode'+IntToStr(ord(StatType)),cmbMode.ItemIndex);
   cqrini.WriteInteger('WAZITUStat','width'+IntToStr(ord(StatType)),grdStat.ColWidths[0])

@@ -69,7 +69,7 @@ begin
     dmData.trProfiles.Rollback;
   dmData.trProfiles.StartTransaction;
   dmData.qProfiles.Open;
-  dmUtils.LoadForm(self);
+  dmUtils.LoadDBGridInForm(self);
 
   LocateProfile(profile);
 
@@ -91,7 +91,7 @@ end;
 
 procedure TfrmQTHProfiles.dbgrdProfilesColumnSized(Sender: TObject);
 begin
-  dmUtils.SaveForm(self)
+  dmUtils.SaveDBGridInForm(self)
 end;
 
 procedure TfrmQTHProfiles.dbgrdProfilesDblClick(Sender: TObject);
@@ -111,7 +111,7 @@ end;
 
 procedure TfrmQTHProfiles.dbgrdProfilesCellClick(Column: TColumn);
 begin
-  dmUtils.SaveForm(self)
+  dmUtils.SaveDBGridInForm(self)
 end;
 
 procedure TfrmQTHProfiles.btnHideShowProfileClick(Sender: TObject);

@@ -5004,6 +5004,7 @@ object frmNewQSO: TfrmNewQSO
     TitleFont.Height = 8
     OnColumnSized = dbgrdQSOBeforeColumnSized
     OnDrawColumnCell = dbgrdQSOBeforeDrawColumnCell
+    OnExit = dbgrdQSOBeforeExit
   end
   object tmrStart: TTimer
     Enabled = False

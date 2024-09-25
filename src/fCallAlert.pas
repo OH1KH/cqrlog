@@ -50,7 +50,7 @@ uses dUtils, dData, fNewCallAlert;
 
 procedure TfrmCallAlert.FormShow(Sender: TObject);
 begin
-  dmUtils.LoadForm(self);
+  dmUtils.LoadDBGridInForm(self);
   dsrCallAlert.DataSet := dmData.Q2;
   RefreshCallsignList();
 
@@ -167,7 +167,7 @@ end;
 procedure TfrmCallAlert.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
-  dmUtils.SaveForm(self);
+  dmUtils.SaveDBGridInForm(self);
   dmData.Q2.Close;
 
   cqrini.WriteBool('DxCluster', 'AlertRegExp', chkAllowRegExp.Checked);

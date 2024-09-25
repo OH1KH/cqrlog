@@ -428,6 +428,7 @@ type
     procedure cmbQSL_SExit(Sender: TObject);
     procedure cmbSatelliteChange(Sender : TObject);
     procedure dbgrdQSOBeforeColumnSized(Sender: TObject);
+    procedure dbgrdQSOBeforeExit(Sender: TObject);
     procedure edtAwardEnter(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
     procedure edtCountyChange(Sender: TObject);
@@ -664,8 +665,6 @@ type
     procedure CheckAwardClub;
     procedure CheckCountyClub;
     procedure CheckStateClub;
-    procedure SaveGrid;
-    procedure LoadGrid;
     procedure ShowWindows;
     procedure CheckAttachment;
     procedure CheckQSLImage;
@@ -1633,7 +1632,7 @@ end;
 
 procedure TfrmNewQSO.CloseAllWindows;
 begin
-  //SaveGrid;
+  dmUtils.SaveDBGridInForm(frmNewQSO) ;
   tmrRadio.Enabled := False;
   tmrEnd.Enabled   := False;
   tmrStart.Enabled := False;
@@ -4951,8 +4950,15 @@ end;
 
 procedure TfrmNewQSO.dbgrdQSOBeforeColumnSized(Sender: TObject);
 begin
-  SaveGrid
+ dmUtils.SaveDBGridInForm(frmNewQSO)
 end;
+
+procedure TfrmNewQSO.dbgrdQSOBeforeExit(Sender: TObject);
+//saving at OnColumnMoved procedure  saves column order (before move) so saving right order must be done here.
+begin
+  dmUtils.SaveDBGridInForm(frmNewQSO)
+end;
+
 procedure TfrmNewQSO.edtAwardEnter(Sender: TObject);
 begin
   edtAward.SelectAll
@@ -5716,7 +5722,7 @@ begin
     begin
       if EscFirstPressDone then
       begin
-        //SaveGrid;
+        dmUtils.SaveDBGridInForm(frmNewQSO) ;
         if edtCall.Text = '' then
         begin
           if edtCall.Enabled then
@@ -5988,7 +5994,7 @@ begin
   case key of
     #13 : begin                     //enter
             if not AnyRemoteOn then btnSave.Click;
-            //SaveGrid;
+            dmUtils.SaveDBGridInForm(frmNewQSO) ;
             key := #0;
           end;
     #12 : begin                    // CTRL+L
@@ -6292,7 +6298,7 @@ var
 begin
   dbgrdQSOBefore.DataSource := dmData.dsrQSOBefore;
   dbgrdQSOBefore.ResetColWidths;
-  LoadGrid;
+  dmUtils.LoadDBGridInForm(frmNewQSO);
   aColumns := dmUtils.LoadVisibleColumnsConfiguration();
 
   fQsoGr   := cqrini.ReadString('Fonts','QGrids','Sans 10');
@@ -7099,46 +7105,6 @@ begin
     frmQSODetails.ClubData5 := edtState.Text;
 end;
 
-procedure TfrmNewQSO.SaveGrid;
-{var
-  ini: TMemIniFile;
-  Grid : TDBGrid;
-  Section, Ident: string;
-  i,j,y : Integer;
-  l : TStringList;
-  }
-begin
-  dmUtils.SaveForm(frmNewQSO)
-  {
-  l   := TStringList.Create;
-  ini := TMemIniFile.Create(dmData.DataDir + 'grids.cfg');
-  try
-    Grid:= dbgrdQSOBefore;
-    Section:= frmNewQSO.Name+'_'+Grid.Name;
-    l.Clear;
-    ini.ReadSection(Section,l);
-    l.Text := Trim(l.Text);
-    if l.Text<>'' then
-    begin //delete old settings
-      for y:=0 to l.Count-1 do
-        ini.DeleteKey(Section,l[y])
-    end;
-    for j:= 0 to Grid.Columns.Count - 1 do
-    begin
-      Ident:= TColumn(Grid.Columns[j]).FieldName;
-      ini.WriteString(Section, Ident, IntToStr(Grid.Columns[j].Width))
-    end
-  finally
-    ini.UpdateFile;
-    ini.Free
-  end}
-end;
-
-procedure TfrmNewQSO.LoadGrid;
-begin
-  dmUtils.LoadForm(frmNewQSO)
-end;
-
 procedure TfrmNewQSO.SetSplit(s : String);
 var
    d:integer;
@@ -7610,7 +7576,7 @@ var
 
 begin
   cqrini.WriteInteger('Pref', 'ActPageIdx', 20);  //set fldigi/wsjt tab active.
-
+  dmUtils.SaveDBGridInForm(frmNewQSO) ;
   case RemoteType of
     rmtFldigi : begin
                   RememberAutoMode := chkAutoMode.Checked;

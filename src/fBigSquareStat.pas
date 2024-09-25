@@ -59,7 +59,7 @@ uses dUtils,dData, uMyIni, uVersion;
 procedure TfrmBigSquareStat.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  dmUtils.SaveForm(frmBigSquareStat);
+  dmUtils.SaveDBGridInForm(frmBigSquareStat);
   cqrini.WriteInteger('SquareStat','Band',cmbBands.ItemIndex);
   cqrini.WriteBool('SquareStat','QSL',chkQSL.Checked);
   cqrini.WriteBool('SquareStat','LoTW',chkLoTW.Checked);
@@ -321,7 +321,7 @@ end;
 procedure TfrmBigSquareStat.FormShow(Sender: TObject);
 begin
   TmpFile := GetTempFileNameUTF8(dmData.HomeDir,'square');
-  dmUtils.LoadForm(frmBigSquareStat);
+  dmUtils.LoadDBGridInForm(frmBigSquareStat);
   dmUtils.FillBandCombo(cmbBands);
   cmbBands.Items.Insert(0,'ALL');
   if cqrini.ReadInteger('SquareStat','Band',0) > cmbBands.Items.Count-1 then

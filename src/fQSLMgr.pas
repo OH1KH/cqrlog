@@ -54,7 +54,7 @@ begin
   dmUtils.LoadFontSettings(frmQSLMgr);
   dbgrdQSLMgr.DataSource := dmData.dsrQSLMgr;
   dmUtils.LoadWindowPos(frmQSLMgr);
-  dmUtils.LoadForm(frmQSLMgr);
+  dmUtils.LoadDBGridInForm(frmQSLMgr);
   edtCallsign.SetFocus
 end;
 
@@ -91,7 +91,7 @@ procedure TfrmQSLMgr.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
 
   dmUtils.SaveWindowPos(frmQSLMgr);
-  dmUtils.SaveForm(frmQSLMgr)
+  dmUtils.SaveDBGridInForm(frmQSLMgr)
 end;
 
 end.

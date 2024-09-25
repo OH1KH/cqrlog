@@ -59,7 +59,7 @@ end;
 
 procedure TfrmCommentToCall.dbgrdCommentColumnSized(Sender : TObject);
 begin
-  dmUtils.SaveForm(frmCommentToCall)
+  dmUtils.SaveDBGridInForm(frmCommentToCall)
 end;
 
 procedure TfrmCommentToCall.dbgrdCommentDblClick(Sender : TObject);
@@ -135,7 +135,7 @@ end;
 procedure TfrmCommentToCall.FormShow(Sender : TObject);
 begin
   dmUtils.LoadWindowPos(frmCommentToCall);
-  dmUtils.LoadForm(frmCommentToCall);
+  dmUtils.LoadDBGridInForm(frmCommentToCall);
   RefreshData()
 end;
 
@@ -168,7 +168,7 @@ begin
     end
   end;
 
-  dmUtils.LoadForm(frmCommentToCall);
+  dmUtils.LoadDBGridInForm(frmCommentToCall);
   dbgrdComment.Columns[1].Title.Caption := 'Callsign';
   dbgrdComment.Columns[2].Title.Caption := 'Note'
 end;

@@ -189,8 +189,8 @@ type
     procedure FileCopy(const FileFrom, FileTo: string);
     procedure CopyData(Source, Destination: string);
     procedure DeleteData(Directory: string);
-    procedure SaveForm(aForm: TForm);
-    procedure LoadForm(aForm: TForm);
+    procedure SaveDBGridInForm(aForm: TForm);
+    procedure LoadDBGridInForm(aForm: TForm);
     procedure SaveLog(Text: string);
     procedure GetCoordinate(pfx: string; var latitude, longitude: currency);
     procedure GetRealCoordinate(lat, long: string; var latitude, longitude: currency);
@@ -492,7 +492,7 @@ begin
    else Result := BandFromArray(tmp);
 end;
 
-procedure TdmUtils.SaveForm(aForm: TForm);
+procedure TdmUtils.SaveDBGridInForm(aForm: TForm);
 var
   Grid: TDBGrid;
   Section, Ident: string;
@@ -512,18 +512,19 @@ begin
         Grid := aForm.Components[i] as TDBGrid;
         Section := aForm.Name + '_' + Grid.Name;
         l.Clear;
-        cqrini.ReadSection(Section, l,cqrini.LocalOnly('WindowSize'));
+        cqrini.ReadSection(Section, l,cqrini.LocalOnly('ColumnSize'));
         l.Text := Trim(l.Text);
         if l.Text <> '' then
         begin //delete old settings
           for y := 0 to l.Count - 1 do
-            cqrini.DeleteKey(Section, l[y],cqrini.LocalOnly('WindowSize'))
+            cqrini.DeleteKey(Section, l[y],cqrini.LocalOnly('ColumnSize'))
         end;
         for j := 0 to Grid.Columns.Count - 1 do
         begin
           Ident := TColumn(Grid.Columns[j]).FieldName;
-          cqrini.WriteString(Section, Ident, IntToStr(Grid.Columns[j].Width),cqrini.LocalOnly('WindowSize'))
-          // Writeln('Saving:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[j].Width)
+          cqrini.WriteString(Section, Ident, IntToStr(Grid.Columns[j].Width),cqrini.LocalOnly('ColumnSize'));
+          if dmData.DebugLevel >= 1 then
+           Writeln('Saving:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[j].Width,' LocalOnly: ',cqrini.LocalOnly('ColumnSize'))
         end
       end
     end
@@ -533,7 +534,7 @@ begin
   end
 end;
 
-procedure TdmUtils.LoadForm(aForm: TForm);
+procedure TdmUtils.LoadDBGridInForm(aForm: TForm);
 var
   Grid: TDBGrid;
   Section, Ident: string;
@@ -543,7 +544,7 @@ var
   D: TDataSource;
 begin
   if dmData.DebugLevel >= 1 then
-    Writeln('LoadForm: ', aForm.Name);
+    Writeln('LoadDBGridInForm: ', aForm.Name);
   l := TStringList.Create;
   try
     for i := 0 to aForm.ComponentCount - 1 do
@@ -553,7 +554,7 @@ begin
         Grid := (aForm.Components[i] as TDBGrid);
         Section := aForm.Name + '_' + Grid.Name;
         l.Clear;
-        cqrini.ReadSection(Section, l, cqrini.LocalOnly('WindowSize'));
+        cqrini.ReadSection(Section, l, cqrini.LocalOnly('ColumnSize'));
         l.Text := Trim(l.Text);
         if l.Text = '' then
           exit;
@@ -567,8 +568,9 @@ begin
             Ident := l[y];
             Grid.Columns.Add.DisplayName := Ident;
             TColumn(Grid.Columns[y]).FieldName := Ident;
-            Grid.Columns[y].Width := cqrini.ReadInteger(section, Ident, 100, cqrini.LocalOnly('WindowSize'))
-            // Writeln('Loading:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[y].Width)
+            Grid.Columns[y].Width := cqrini.ReadInteger(section, Ident, 100, cqrini.LocalOnly('ColumnSize'));
+            if dmData.DebugLevel >= 1 then
+             Writeln('Loading:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[y].Width,' LocalOnly: ',cqrini.LocalOnly('ColumnSize'))
           end
         finally
           Grid.DataSource := D;
@@ -577,7 +579,7 @@ begin
       end
     end
   finally
-    //cqrini.SaveToDisk; WHY we save when load? Is this unchecked direct copy from SaveForm source abowe?
+  //cqrini.SaveToDisk; WHY we save when load? Is this unchecked direct copy from SaveForm source above?
                       // There is no cqrini writing done, so why need to save?
     l.Free
   end

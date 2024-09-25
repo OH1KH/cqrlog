@@ -232,7 +232,7 @@ end;
 procedure TfrmImportTest.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  dmUtils.SaveForm(self);
+  dmUtils.SaveDBGridInForm(self);
   //dmData.qImport.Close;
 end;
 

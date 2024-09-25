@@ -435,6 +435,7 @@ object frmMain: TfrmMain
     OnColumnSized = dbgrdMainColumnSized
     OnDrawColumnCell = dbgrdMainDrawColumnCell
     OnEnter = dbgrdMainEnter
+    OnExit = dbgrdMainExit
     OnKeyUp = dbgrdMainKeyUp
   end
   object toolMain: TToolBar

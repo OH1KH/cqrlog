@@ -169,7 +169,7 @@ end;
 
 procedure TfrmDOKStat.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  dmUtils.SaveForm(self);
+  dmUtils.SaveDBGridInForm(self);
   cqrini.WriteBool('DOKStat','hideEmpty',cbHideEmpty.Checked);
   cqrini.WriteInteger('DOKStat','whichDOKs',cbChoosingDokType.ItemIndex);
   cqrini.WriteString('DOKStat','profiles'+IntToStr(ord(StatType)),edtProfiles.Text);

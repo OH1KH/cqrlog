@@ -63,7 +63,7 @@ uses dData,dUtils, dDXCC;
 procedure TfrmSelectDXCC.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(frmSelectDXCC);
-  dmUtils.LoadForm(frmSelectDXCC);
+  dmUtils.LoadDBGridInForm(frmSelectDXCC);
 
   dbgrdDeleted.Columns[0].Visible := False;
   dbgrdValid.Columns[0].Visible   := False;
@@ -97,7 +97,7 @@ end;
 procedure TfrmSelectDXCC.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  dmUtils.SaveForm(frmSelectDXCC)
+  dmUtils.SaveDBGridInForm(frmSelectDXCC)
 end;
 
 procedure TfrmSelectDXCC.FormCreate(Sender: TObject);
