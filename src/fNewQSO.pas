@@ -688,6 +688,7 @@ type
     procedure CheckForDOKTablesUpdate;
     procedure CheckForQslManagersUpdate;
     procedure CheckForMembershipUpdate;
+    procedure CheckForAlphaVersion;
 
     procedure SelTextFix(Edit : TEdit; var Key : Char);
 
@@ -7835,7 +7836,8 @@ begin
   CheckForDXCCTablesUpdate;
   CheckForDOKTablesUpdate;
   CheckForQslManagersUpdate;
-  CheckForMembershipUpdate
+  CheckForMembershipUpdate;
+  CheckForAlphaVersion
 end;
 
 procedure TfrmNewQSO.CheckForDXCCTablesUpdate;
@@ -7878,6 +7880,25 @@ procedure TfrmNewQSO.CheckForMembershipUpdate;
 begin
   if cqrini.ReadBool('Clubs', 'CheckForUpdate', False) then
     dmMembership.CheckForMembershipUpdate
+end;
+procedure TfrmNewQSO.CheckForAlphaVersion;
+var
+  p,VerNr,
+  VerAvailNr : integer;
+  data:string;
+Begin
+  p:=pos('(',cVersionBase)+1;
+  if not (TryStrToInt(ExtractSubstr(cVersionBase,p,[')']),VerNr)) then exit;
+  VerAvailNr:=0;
+   if dmUtils.GetDataFromHttp('https://raw.githubusercontent.com/OH1KH/cqrlog/refs/heads/loc_testing/compiled/version.txt', data) then
+  begin
+    if (pos('NOT FOUND',upcase(data))<>0) then exit;
+    p:=pos('(',data)+1;
+    if not (TryStrToInt(ExtractSubstr(data,p,[')']),VerAvailNr)) then exit;
+    if VerNr < VerAvailNr then
+      ShowMessage('You are running CqrlogAlpha version '+IntToStr(VerNr)+'.'+sLineBreak+sLineBreak+'There is CqrlogAlpha version '+IntToStr(VerAvailNr)+' available at:'+sLineBreak+
+                  'https://github.com/OH1KH/cqrlog/tree/loc_testing/compiled');
+  end;
 end;
 
 //at least in Ubuntu 18.04 when user wanted to rewrite the second auto-selected

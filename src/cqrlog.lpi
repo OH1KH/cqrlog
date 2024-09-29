@@ -953,7 +953,7 @@
       <Verbosity>
         <ShowNotes Value="False"/>
         <ShowHints Value="False"/>
-        <ShoLineNum Value="True"/>
+        <ShowLineNum Value="True"/>
         <ShowDebugInfo Value="True"/>
       </Verbosity>
       <CustomOptions Value="-dNO_CONTEST"/>
