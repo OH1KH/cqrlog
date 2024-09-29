@@ -1599,7 +1599,7 @@ begin
             PrintCall(msgcall);  //make not-CQ indicator start
             if msgLocator <> '' then
             begin
-              PrintLoc(msgLocator, '', '');
+              PrintLoc(msgLocator, timeToAlert, msgTime);
               if frmWorkedGrids.GridOK(msgLocator) then  AddXplanetList(msgCall,msgLocator);
             end;
             //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
