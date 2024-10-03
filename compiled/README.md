@@ -10,6 +10,7 @@ Source is more as "daily snapshot" and may have more bugs.
 Compiled binary versions are released after it seems that biggest bugs are found and fixed.
 
 ## NOTES:
+ #### NOTE: After upgrading my computer from Fedora39 to Fedora40 I am not able to produce a running QT5 version. It compiles ok, but running gives Access violation immediately. Until this is resolved, please try with QT6 version or compile CqrlogAlpha form source.
 
  #### NOTE: Upgrading instructions for using script, manual install or compile from shource can be foud below. Just scroll down ...
 
