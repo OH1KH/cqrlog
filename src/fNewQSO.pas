@@ -7887,6 +7887,7 @@ var
   VerAvailNr : integer;
   data:string;
 Begin
+  if not cqrini.ReadBool('Program', 'CheckAlpha', True) then exit;
   p:=pos('(',cVersionBase)+1;
   if not (TryStrToInt(ExtractSubstr(cVersionBase,p,[')']),VerNr)) then exit;
   VerAvailNr:=0;

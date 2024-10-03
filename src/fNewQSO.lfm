@@ -1,6 +1,6 @@
 object frmNewQSO: TfrmNewQSO
   Left = 0
-  Height = 709
+  Height = 684
   Top = 0
   Width = 1032
   HelpType = htKeyword
@@ -2138,7 +2138,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.4.0.0'
   object pnlAll: TPanel
     AnchorSideTop.Control = dbgrdQSOBefore
     AnchorSideTop.Side = asrBottom
@@ -2517,12 +2517,12 @@ object frmNewQSO: TfrmNewQSO
           Width = 64
           BorderSpacing.Top = 2
           CharCase = ecUppercase
+          ReadOnly = True
+          TabOrder = 17
           OnChange = edtCountyChange
           OnEnter = edtDXCCRefEnter
           OnExit = edtDXCCRefExit
           OnKeyDown = edtDXCCRefKeyDown
-          ReadOnly = True
-          TabOrder = 17
         end
         object mComment: TMemo
           AnchorSideLeft.Control = lblCommentToCallsign
@@ -2540,12 +2540,12 @@ object frmNewQSO: TfrmNewQSO
             ''
           )
           MaxLength = 256
-          OnKeyDown = mCommentKeyDown
-          OnKeyUp = mCommentKeyUp
           ParentShowHint = False
           ScrollBars = ssAutoBoth
           ShowHint = True
           TabOrder = 25
+          OnKeyDown = mCommentKeyDown
+          OnKeyUp = mCommentKeyUp
         end
         object edtQTH: TEdit
           AnchorSideLeft.Control = edtName
@@ -2560,13 +2560,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 60
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 6
           OnChange = edtQTHChange
           OnEnter = edtQTHEnter
           OnExit = edtQTHExit
           OnKeyDown = edtQTHKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
         end
         object edtName: TEdit
           AnchorSideLeft.Control = lblName
@@ -2579,12 +2579,12 @@ object frmNewQSO: TfrmNewQSO
           Width = 92
           BorderSpacing.Top = 2
           MaxLength = 40
-          OnChange = edtNameChange
-          OnEnter = edtNameEnter
-          OnKeyDown = edtNameKeyDown
           ParentShowHint = False
           ShowHint = True
           TabOrder = 5
+          OnChange = edtNameChange
+          OnEnter = edtNameEnter
+          OnKeyDown = edtNameKeyDown
         end
         object edtMyRST: TEdit
           AnchorSideLeft.Control = edtHisRST
@@ -2599,13 +2599,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
           MaxLength = 20
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
           OnEnter = edtMyRSTEnter
           OnExit = edtMyRSTExit
           OnKeyDown = edtMyRSTKeyDown
           OnKeyPress = edtMyRSTKeyPress
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 4
         end
         object edtHisRST: TEdit
           AnchorSideLeft.Control = cmbMode
@@ -2620,13 +2620,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 20
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
           OnEnter = edtHisRSTEnter
           OnExit = edtHisRSTExit
           OnKeyDown = edtHisRSTKeyDown
           OnKeyPress = edtHisRSTKeyPress
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
         end
         object edtCall: TEdit
           AnchorSideLeft.Control = lblCall
@@ -2640,14 +2640,14 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           CharCase = ecUppercase
           MaxLength = 20
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
           OnChange = edtCallChange
           OnEnter = edtCallEnter
           OnExit = edtCallExit
           OnKeyDown = edtCallKeyDown
           OnKeyUp = edtCallKeyUp
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
         end
         object cmbMode: TComboBox
           AnchorSideLeft.Control = cmbFreq
@@ -2693,13 +2693,13 @@ object frmNewQSO: TfrmNewQSO
             'PACKET'
           )
           MaxLength = 12
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 2
           OnChange = cmbModeChange
           OnEnter = cmbModeEnter
           OnExit = cmbModeExit
           OnKeyDown = cmbModeKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
         end
         object edtGrid: TEdit
           AnchorSideLeft.Control = edtQTH
@@ -2714,14 +2714,14 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 10
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
           OnChange = edtGridChange
           OnEnter = edtGridEnter
           OnExit = edtGridExit
           OnKeyDown = edtGridKeyDown
           OnKeyPress = edtGridKeyPress
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 7
         end
         object edtPWR: TEdit
           AnchorSideLeft.Control = edtGrid
@@ -2737,12 +2737,12 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           CharCase = ecUppercase
           MaxLength = 10
-          OnChange = edtCountyChange
-          OnEnter = edtPWREnter
-          OnKeyDown = edtPWRKeyDown
           ParentShowHint = False
           ShowHint = True
           TabOrder = 8
+          OnChange = edtCountyChange
+          OnEnter = edtPWREnter
+          OnKeyDown = edtPWRKeyDown
         end
         object cmbQSL_S: TComboBox
           AnchorSideLeft.Control = edtPWR
@@ -2773,10 +2773,10 @@ object frmNewQSO: TfrmNewQSO
             'SPE'
           )
           MaxLength = 4
+          TabOrder = 9
           OnEnter = cmbQSL_SEnter
           OnExit = cmbQSL_SExit
           OnKeyDown = cmbQSL_SKeyDown
-          TabOrder = 9
         end
         object cmbQSL_R: TComboBox
           AnchorSideLeft.Control = cmbQSL_S
@@ -2800,10 +2800,10 @@ object frmNewQSO: TfrmNewQSO
             ''
           )
           MaxLength = 3
+          TabOrder = 10
           OnEnter = cmbQSL_REnter
           OnExit = cmbQSL_RExit
           OnKeyDown = cmbQSL_RKeyDown
-          TabOrder = 10
         end
         object edtITU: TEdit
           AnchorSideLeft.Control = lblItuEdit
@@ -2816,13 +2816,13 @@ object frmNewQSO: TfrmNewQSO
           Width = 42
           BorderSpacing.Top = 2
           CharCase = ecUppercase
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 11
           OnChange = edtCountyChange
           OnEnter = edtITUEnter
           OnExit = edtITUExit
           OnKeyDown = edtITUKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 11
         end
         object edtAward: TEdit
           AnchorSideLeft.Control = edtCounty
@@ -2837,13 +2837,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 50
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 16
           OnChange = edtCountyChange
           OnEnter = edtAwardEnter
           OnExit = edtAwardExit
           OnKeyDown = edtAwardKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 16
         end
         object edtWAZ: TEdit
           AnchorSideLeft.Control = edtITU
@@ -2859,13 +2859,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           CharCase = ecUppercase
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 12
           OnChange = edtCountyChange
           OnEnter = edtWAZEnter
           OnExit = edtWAZExit
           OnKeyDown = edtCQKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 12
         end
         object edtCounty: TEdit
           AnchorSideLeft.Control = cmbIOTA
@@ -2880,13 +2880,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 53
           BorderSpacing.Top = 2
           MaxLength = 30
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 15
           OnChange = edtCountyChange
           OnEnter = edtCountyEnter
           OnExit = edtCountyExit
           OnKeyDown = edtCountyKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 15
         end
         object cmbFreq: TComboBox
           AnchorSideLeft.Control = edtCall
@@ -2902,11 +2902,11 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           ItemHeight = 0
+          TabOrder = 1
           OnChange = cmbFreqChange
           OnEnter = cmbFreqEnter
           OnExit = cmbFreqExit
           OnKeyDown = cmbFreqKeyDown
-          TabOrder = 1
         end
         object edtQSL_VIA: TEdit
           AnchorSideLeft.Control = edtRemQSO
@@ -2922,12 +2922,12 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           CharCase = ecUppercase
           MaxLength = 30
-          OnChange = edtCountyChange
-          OnEnter = edtQSL_VIAEnter
-          OnKeyDown = edtQSL_VIAKeyDown
           ParentShowHint = False
           ShowHint = True
           TabOrder = 20
+          OnChange = edtCountyChange
+          OnEnter = edtQSL_VIAEnter
+          OnKeyDown = edtQSL_VIAKeyDown
         end
         object btnDXCCRef: TButton
           AnchorSideLeft.Control = edtDXCCRef
@@ -2942,8 +2942,8 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           BorderSpacing.InnerBorder = 4
           Caption = '...'
-          OnClick = btnDXCCRefClick
           TabOrder = 18
+          OnClick = btnDXCCRefClick
         end
         object btnQSLMgr: TButton
           AnchorSideLeft.Control = edtQSL_VIA
@@ -2958,8 +2958,8 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 2
           BorderSpacing.InnerBorder = 4
           Caption = '...'
-          OnClick = btnQSLMgrClick
           TabOrder = 21
+          OnClick = btnQSLMgrClick
         end
         object edtDate: TEdit
           AnchorSideLeft.Control = lblDate
@@ -2972,12 +2972,12 @@ object frmNewQSO: TfrmNewQSO
           Width = 100
           BorderSpacing.Top = 2
           MaxLength = 10
+          TabOrder = 22
           OnChange = edtDateChange
           OnEnter = edtDateEnter
           OnExit = edtDateExit
           OnKeyDown = edtDateKeyDown
           OnKeyPress = edtDateKeyPress
-          TabOrder = 22
         end
         object edtStartTime: TEdit
           AnchorSideLeft.Control = edtDate
@@ -2992,12 +2992,12 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
           MaxLength = 5
+          TabOrder = 23
           OnChange = edtStartTimeChange
           OnEnter = edtStartTimeEnter
           OnExit = edtStartTimeExit
           OnKeyDown = edtStartTimeKeyDown
           OnKeyPress = edtStartTimeKeyPress
-          TabOrder = 23
         end
         object edtEndTime: TEdit
           AnchorSideLeft.Control = edtStartTime
@@ -3012,12 +3012,12 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
           MaxLength = 5
+          TabOrder = 24
           OnChange = edtEndTimeChange
           OnEnter = edtEndTimeEnter
           OnExit = edtEndTimeExit
           OnKeyDown = edtEndTimeKeyDown
           OnKeyPress = edtStartTimeKeyPress
-          TabOrder = 24
         end
         object cmbIOTA: TComboBox
           AnchorSideLeft.Control = edtWAZ
@@ -3034,13 +3034,13 @@ object frmNewQSO: TfrmNewQSO
           CharCase = ecUppercase
           ItemHeight = 0
           MaxLength = 6
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 13
           OnChange = cmbIOTAChange
           OnEnter = cmbIOTAEnter
           OnExit = cmbIOTAExit
           OnKeyDown = cmbIOTAKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 13
         end
         object edtRemQSO: TEdit
           AnchorSideLeft.Control = btnDXCCRef
@@ -3055,11 +3055,11 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           MaxLength = 200
-          OnEnter = edtRemQSOEnter
-          OnKeyDown = edtRemQSOKeyDown
           ParentShowHint = False
           ShowHint = True
           TabOrder = 19
+          OnEnter = edtRemQSOEnter
+          OnKeyDown = edtRemQSOKeyDown
         end
         object edtState: TEdit
           AnchorSideLeft.Control = cmbIOTA
@@ -3073,13 +3073,13 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           CharCase = ecUppercase
           MaxLength = 4
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 14
           OnChange = edtCountyChange
           OnEnter = edtStateEnter
           OnExit = edtStateExit
           OnKeyDown = edtStateKeyDown
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 14
         end
         object chkAutoMode: TCheckBox
           AnchorSideLeft.Side = asrBottom
@@ -3095,9 +3095,9 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 4
           Caption = 'Auto'
           Checked = True
-          OnChange = chkAutoModeChange
           State = cbChecked
           TabOrder = 26
+          OnChange = chkAutoModeChange
         end
         object sbtnRefreshTime: TSpeedButton
           AnchorSideLeft.Control = edtEndTime
@@ -3159,8 +3159,8 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                373
                 374
+                373
               )
             end
           end
@@ -3189,8 +3189,8 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                372
                 373
+                372
               )
             end
           end
@@ -3210,10 +3210,10 @@ object frmNewQSO: TfrmNewQSO
               BorderSpacing.Top = 3
               ItemHeight = 0
               MaxLength = 30
-              OnChange = cmbPropagationChange
               ParentFont = False
               Style = csDropDownList
               TabOrder = 0
+              OnChange = cmbPropagationChange
             end
             object lblPropagation: TLabel
               AnchorSideLeft.Control = lblStatellite
@@ -3252,10 +3252,10 @@ object frmNewQSO: TfrmNewQSO
               BorderSpacing.Top = 3
               ItemHeight = 0
               MaxLength = 30
-              OnChange = cmbSatelliteChange
               ParentFont = False
               Style = csDropDownList
               TabOrder = 1
+              OnChange = cmbSatelliteChange
             end
             object lblRXFreq: TLabel
               AnchorSideLeft.Control = edtRXFreq
@@ -3278,10 +3278,10 @@ object frmNewQSO: TfrmNewQSO
               Top = 26
               Width = 128
               BorderSpacing.Left = 12
-              OnChange = edtRXFreqChange
-              OnExit = edtRXFreqExit
               ParentFont = False
               TabOrder = 2
+              OnChange = edtRXFreqChange
+              OnExit = edtRXFreqExit
             end
             object btnClearSatellite: TButton
               AnchorSideLeft.Control = edtRXFreq
@@ -3294,8 +3294,8 @@ object frmNewQSO: TfrmNewQSO
               AutoSize = True
               BorderSpacing.Right = 10
               Caption = 'Clear all'
-              OnClick = btnClearSatelliteClick
               TabOrder = 3
+              OnClick = btnClearSatelliteClick
             end
             object lblRXMhz: TLabel
               AnchorSideLeft.Control = edtRXFreq
@@ -3321,10 +3321,10 @@ object frmNewQSO: TfrmNewQSO
               Width = 226
               Caption = 'Use RX frequency for DX spots'
               Color = clNone
-              OnChange = cbSpotRXChange
               ParentColor = False
               ParentFont = False
               TabOrder = 4
+              OnChange = cbSpotRXChange
             end
           end
           object tabLOConfig: TTabSheet
@@ -3339,8 +3339,8 @@ object frmNewQSO: TfrmNewQSO
               Top = 16
               Width = 97
               Caption = 'Use TX LO:'
-              OnChange = cbTxLoChange
               TabOrder = 0
+              OnChange = cbTxLoChange
             end
             object cbRxLo: TCheckBox
               AnchorSideTop.Control = cbTxLo
@@ -3350,8 +3350,8 @@ object frmNewQSO: TfrmNewQSO
               Width = 98
               BorderSpacing.Top = 32
               Caption = 'Use RX LO:'
-              OnChange = cbRxLoChange
               TabOrder = 1
+              OnChange = cbRxLoChange
             end
             object edtTXLO: TEdit
               AnchorSideLeft.Control = cbTxLo
@@ -3363,8 +3363,8 @@ object frmNewQSO: TfrmNewQSO
               Top = 10
               Width = 80
               BorderSpacing.Left = 5
-              OnExit = edtTXLOExit
               TabOrder = 2
+              OnExit = edtTXLOExit
             end
             object edtRXLO: TEdit
               AnchorSideLeft.Control = cbRxLo
@@ -3376,8 +3376,8 @@ object frmNewQSO: TfrmNewQSO
               Top = 42
               Width = 80
               BorderSpacing.Left = 5
-              OnExit = edtRXLOExit
               TabOrder = 3
+              OnExit = edtRXLOExit
             end
             object Label37: TLabel
               AnchorSideLeft.Control = edtTXLO
@@ -3416,8 +3416,8 @@ object frmNewQSO: TfrmNewQSO
               Width = 134
               BorderSpacing.Left = 24
               Caption = 'Use split TX freq'
-              OnChange = cbSplitTXChange
               TabOrder = 4
+              OnChange = cbSplitTXChange
             end
           end
         end
@@ -3511,11 +3511,11 @@ object frmNewQSO: TfrmNewQSO
             BorderSpacing.Top = 3
             BorderSpacing.Right = 3
             MaxLength = 40
-            OnChange = edtCountyChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
             TextHint = 'max 40 characters'
+            OnChange = edtCountyChange
           end
           object edtContestSerialSent: TEdit
             AnchorSideLeft.Control = lblContestName
@@ -3562,11 +3562,11 @@ object frmNewQSO: TfrmNewQSO
             BorderSpacing.Top = 6
             BorderSpacing.Right = 3
             MaxLength = 50
-            OnChange = edtCountyChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 3
             TextHint = 'max 50 characters'
+            OnChange = edtCountyChange
           end
           object edtContestExchangeMessageReceived: TEdit
             AnchorSideLeft.Control = lblContestExchangeMessageReceived
@@ -3582,11 +3582,11 @@ object frmNewQSO: TfrmNewQSO
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Right = 3
             MaxLength = 50
-            OnChange = edtCountyChange
             ParentShowHint = False
             ShowHint = True
             TabOrder = 4
             TextHint = 'max 50 characters'
+            OnChange = edtCountyChange
           end
         end
         object lblDOK: TLabel
@@ -3617,14 +3617,14 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           CharCase = ecUppercase
           MaxLength = 12
-          OnChange = edtCountyChange
-          OnEnter = edtStateEnter
-          OnExit = edtStateExit
-          OnKeyDown = edtStateKeyDown
           ParentShowHint = False
           ShowHint = True
           TabOrder = 29
           Visible = False
+          OnChange = edtCountyChange
+          OnEnter = edtStateEnter
+          OnExit = edtStateExit
+          OnKeyDown = edtStateKeyDown
         end
         object pnlOffline: TPanel
           AnchorSideLeft.Control = edtDate
@@ -3652,8 +3652,8 @@ object frmNewQSO: TfrmNewQSO
             BorderSpacing.CellAlignHorizontal = ccaRightBottom
             BorderSpacing.CellAlignVertical = ccaRightBottom
             Caption = 'Offline'
-            OnChange = cbOfflineChange
             TabOrder = 0
+            OnChange = cbOfflineChange
           end
         end
         object pnlSbtn0: TPanel
@@ -4829,8 +4829,8 @@ object frmNewQSO: TfrmNewQSO
         BorderSpacing.Bottom = 6
         BorderSpacing.InnerBorder = 1
         Caption = 'Save QSO [enter]'
-        OnClick = btnSaveClick
         TabOrder = 1
+        OnClick = btnSaveClick
       end
       object btnCancel: TButton
         AnchorSideRight.Control = gbDXCCdata
@@ -4847,8 +4847,8 @@ object frmNewQSO: TfrmNewQSO
         BorderSpacing.InnerBorder = 1
         Caption = 'Quit [CTRL+Q]'
         ModalResult = 2
-        OnClick = btnCancelClick
         TabOrder = 2
+        OnClick = btnCancelClick
       end
     end
     object pnlProfiles: TPanel
@@ -4957,10 +4957,10 @@ object frmNewQSO: TfrmNewQSO
         Width = 281
         BorderSpacing.Left = 5
         ItemHeight = 0
-        OnChange = cmbProfilesChange
         ParentFont = False
         TabOrder = 0
         Text = 'cmbProfiles'
+        OnChange = cmbProfilesChange
       end
     end
     object sbNewQSO: TStatusBar
