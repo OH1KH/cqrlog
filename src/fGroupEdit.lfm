@@ -148,7 +148,7 @@ object frmGroupEdit: TfrmGroupEdit
   }
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.4.0.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -235,9 +235,9 @@ object frmGroupEdit: TfrmGroupEdit
         'Operator'
         'DOK'
       )
-      OnChange = cmbFieldChange
       Style = csDropDownList
       TabOrder = 0
+      OnChange = cmbFieldChange
     end
     object cmbValue: TComboBox
       AnchorSideLeft.Control = cmbField
@@ -249,8 +249,8 @@ object frmGroupEdit: TfrmGroupEdit
       Width = 312
       BorderSpacing.Top = 3
       ItemHeight = 0
-      OnChange = cmbValueChange
       TabOrder = 1
+      OnChange = cmbValueChange
     end
     object pnlGrpEdt: TPanel
       AnchorSideLeft.Control = GroupBox1
@@ -308,8 +308,8 @@ object frmGroupEdit: TfrmGroupEdit
       Width = 75
       BorderSpacing.Left = 60
       Caption = 'Apply'
-      OnClick = btnApplyClick
       TabOrder = 0
+      OnClick = btnApplyClick
     end
     object btnCancel: TButton
       AnchorSideTop.Control = Panel1
@@ -326,6 +326,23 @@ object frmGroupEdit: TfrmGroupEdit
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
+    end
+    object cbKeepSelect: TCheckBox
+      AnchorSideLeft.Control = Panel1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 158
+      Height = 23
+      Hint = 'Checking keeps qso selection but does not refresh QSOlist when edit is done.'
+      Top = 8
+      Width = 121
+      Caption = 'Keep selection'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Visible = False
+      OnChange = cbKeepSelectChange
     end
   end
 end

@@ -26,6 +26,7 @@ type
   TfrmGroupEdit = class(TForm)
     btnApply: TButton;
     btnCancel: TButton;
+    cbKeepSelect: TCheckBox;
     cmbField: TComboBox;
     cmbValue: TComboBox;
     GroupBox1: TGroupBox;
@@ -35,6 +36,7 @@ type
     Panel1: TPanel;
     pnlGrpEdt: TPanel;
     procedure btnApplyClick(Sender: TObject);
+    procedure cbKeepSelectChange(Sender: TObject);
     procedure cmbFieldChange(Sender: TObject);
     procedure cmbValueChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -136,8 +138,14 @@ procedure TfrmGroupEdit.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
   pnlGrpEdt.Color:=clDefault;
+  cbKeepSelect.Visible:=false;
+  cbKeepSelect.Enabled:=true;
+  cbKeepSelect.Checked:=false;
   if Selected then
-     WhereTo := 'to selected qsos'
+     begin
+      WhereTo := 'to selected qsos';
+      cbKeepSelect.Visible:=true;
+     end
     else
      if dmData.IsFilter then
        WhereTo := 'to filtered qsos'
@@ -380,7 +388,8 @@ begin
                Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
                cmbValue.SetFocus;
                exit
-              end
+              end;
+             cmbValue.Text:= dmUtils.StdFormatLocator(cmbValue.Text);
             end
            else begin
              if (Application.MessageBox('Do you really want to clear My locator field?',
@@ -400,7 +409,8 @@ begin
               Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
               cmbValue.SetFocus;
               exit
-            end
+            end;
+            cmbValue.Text:= dmUtils.StdFormatLocator(cmbValue.Text);
           end
           else begin
             if (Application.MessageBox('Do you really want to clear Locator field?',
@@ -617,14 +627,30 @@ begin
     end
   finally
     dmData.qCQRLOG.EnableControls;
-    frmMain.acRefresh.Execute
+    if not cbKeepSelect.Checked then
+                                frmMain.acRefresh.Execute
   end;
   lblInfo.Caption := 'Group edit done '+WhereTo;
-  btnCancel.Caption:= 'Close';
-  btnApply.Enabled:=False;
+  if not cbKeepSelect.Checked then
+     Begin
+      btnCancel.Caption:= 'Close';
+      btnApply.Enabled:=False;
+     end;
   pnlGrpEdt.Color:= clLime;
   pnlGrpEdt.Repaint;
   lblInfo.Repaint;
+end;
+
+procedure TfrmGroupEdit.cbKeepSelectChange(Sender: TObject);
+begin
+    if (not cbKeepSelect.Checked )
+     and ( pos('Group edit done',lblInfo.Caption)>0 )  then
+     Begin
+      btnCancel.Caption:= 'Close';
+      btnApply.Enabled:=False;
+      cbKeepSelect.Enabled:=false;
+      frmMain.acRefresh.Execute
+     end;
 end;
 
 end.
