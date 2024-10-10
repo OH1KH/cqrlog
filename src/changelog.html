@@ -11,9 +11,10 @@
     <strong>CQRLOG α (Alpha)</strong><br>
     What is new:
     <ul style="list-style: square;text-align:left; color: green;" >
+    <li>(132)</li><ul>
     <li>Group Edit:Selected qsos:Add: Checkbox to keep selection after edit allowing other edits with same selection<br>
 	 How ever QSOlist view is then not updated after edit(s).</li>
-    <li>(131)</li><ul>	
+    </ul><li>(131)</li><ul>	
     <li>CqrlogAlpha:Add: Checkbox for allow checking new Alpha version (Preferences/Program)</li>
     <li>CqrlogAlpha:Add: Check version against compiled version available at GitHub</li>
     <li>Wsjtx monitor:Map mode:Fix Locator alert also for non CQ messages where new locator exist</li>
@@ -29,7 +30,7 @@
     <li>NewQSO:DXCCinfoText:WsjtRemote:Fix:Fixed DXCC info text (above DXCC) when Wsjt remote on.<br>
 	Preferences:LoTW/eQSL support:Fix: Use LoTW and eQSL confirmed in NewQSO:DXCC info text.<br>
 	(used only LoTW, no eQSL)</li>
-</ul>    <li>(130)</li><ul>
+    </ul><li>(130)</li><ul>
     <li>Qso list:File:Add: Export selected qso(s) as ADIF</li>
     <li>Filter:Fix: Window sizeable </li>
     <li>DXCC Satistics: Fix: Bottom panel layout again. Better for QT6version</li>
@@ -38,7 +39,7 @@
     <br>This needs still checking what happens when dark mode is used</li>
     <li>CW setup:Fix: Init when keyer is selected as 'none'</li>	
     <li>CW keyer setups: New setups for keyers</li>
-</ul>    <li>(129)</li><ul>
+    </ul><li>(129)</li><ul>
     <li>Contest: Delay score counting at form show and shut down score counting timer at form close (tnx Stefan, DG0OAT)</li>
     <li>DXCC statistic:Fix: With user selected mode WKD and CFM count by band were same</li>
     <li>BandMap filter layout fix</li>
@@ -46,16 +47,16 @@
     <li>NewQSO:Qso from DXCluster spot:Tried to get statistic grid to have right coloring</li>
     <li>WSJT remote: Removed dynamic polling speed.Modern comuters can do hiSpeed all the time</li>
     <li>NewQSO:Qso count: Fix small bug</li>
-</ul>    <li>(128)</li><ul>
+    </ul><li>(128)</li><ul>
     <li>NewQSO:Edit from WB4 grid:Fix: Saving edited qso changed data to wrong qso. (Tnx: Stefan, DG0OAT)</li>
     <li>Fix:NewQSO/File/Tune stop when using cwdaemon</li>
-</ul>    <li>(127)</li><ul>
+    </ul><li>(127)</li><ul>
     <li>Add:Startup with parameter -q or --quiet to disable splash</li>
     <li>Add:Qso list:File:Backup log: Calls same backup as on program close. 
     <br>Fix:Backup: Passes by ADIF standard of submodes(import_only) to keep cqrmode as written.</li>
     <li>Fixed mode selector contents and ADIF export routine.</li>
     <li>Build: Enable building with QT6 (lazarus 3.x needed). This is still in test phase. (Tnx: George N3GB)</li>
-</ul>    <li>(126)</li><ul>
+    </ul><li>(126)</li><ul>
     <li>Fix: Hopefully fixed random 'Transaction already active' error</li>
     <li>DXCCStat/dDXCC:Fix a bug and create own query and transaction</li>
     <li>NewQSO:DXCC & Call statistic:Fix: create own query and transaction</li>
@@ -71,7 +72,7 @@
     <li>Some of compiler warnings fixed. Some member lists updated</li>
     <li>ADIF:import:Fix: Parsing error with tags having UTF8 characters</li>
     <li>Preferences:Membership:Load:Fix: Error message more informative. Helps finding error line from long membership text file</li>
-</ul>    <li>(125)</li><ul>
+    </ul><li>(125)</li><ul>
     <li>Contest:F1-key:Add: When in run mode-cw and call column is empty sends F1-run-memory (reserverd for CQ).
     <br>When call column is not empty sends Call column (uncomplete callsign)</li>
     <li>Contest:ESC:Phone modes:Fix: Fixed 1st ESC to send StopVoice rigctld command</li>
@@ -86,7 +87,7 @@
     <li>NewQSO/Satellte/Fix: checkbox "Rx LO" follows "Use split TX freq" checkbox. Split TX frequency is not shown if rig split is not active</li>
     <li>CW Type:Memory buttons:Fix: scaling of buttons</li>
     <li>Small redesign of "CW Type" window</li>
-</ul>    <li>(124)</li><ul>
+    </ul><li>(124)</li><ul>
     <li>Online logs:Add: SAT_NAME and SAT_MODE adif tags added to qso upload data </li>	
     <li>Qso list/Search:Fix: Tried to fix Search function, hopefully did not make any new bugs</li>
     <li>QSL:Label printing:Fix: QSL via valid detecting. Add: open exported label-file button</li>	
@@ -99,7 +100,7 @@
     <li>Changelog/About:Fix: Layout fix. Contest:fix:Contest name free typing fix</li>
     <li>Preferences:TRX/ROTcontrol: When path to rigctl/rotctl is fixed immediately load list of models to rig/rot selector</li>
     <li>NewQSO:Fix Improved columns 'type in' NonASCII filter</li>
-</ul>    <li>(123)</li><ul>
+    </ul><li>(123)</li><ul>
     <li>Gridmap:Fix: Removed critical sections added when hunting "sum" error splash. Caused more errors.</li>
     <li>NewQSO&Contest:Fix several bugs in columns 'type in' filters. (Tnx info: Peter,NN9K)
     <li>Adif import/eQSL&LoTWDownload: eQSL seems to send adif tag data that may contain charactes not in (space)..(~) range against adif standard.
@@ -108,7 +109,7 @@
     <li>Preferences/NewQSO:Add checkbox to select nickname or fullname from callbook. Capitalize first letter of Name and Qth (only when typing in)</li>
     <li>NewQSO:CallisgnStatus:Fix: changed seek only for callsign. Previous was callsign and adif (=country dxcc number)
 	<br>should now work even if old loggings have different adif than todays adif is for callisgn</li>
-</ul>    <li>(122)</li><ul>
+    </ul><li>(122)</li><ul>
     <li>eQSL+LoTW download:Fix: error files are now written and error StringList cleared
         <br> every time (append) when error qso is found. This should help SringList overflow
 	<br> on extreme big downloads having lots of errors to write. </li>
@@ -147,7 +148,7 @@
     <li>NewQSO/Contest:Fix: If Ctrl+A pressed when no rig and NewQSO/Freq column empty caused 'invalid float' error</li>
     <li>Locator write:Fix: Fixed locator writing to prevent false locator inputs</li>
     <li>Preferences:Profiles:Add/Edit:Fix: Window anchoring and sizing to view buttons on QT5version</li>
-</ul>    <li>(121)</li><ul>
+    </ul><li>(121)</li><ul>
     <li>WSJT remote:USt:Fix: If checkbox USt is checked fixes state with Hawaii calls that are reported to be in mainland by FCC data
     <br> Note: This does not change logged qso's ITU/WAZ/DXCC/STATE it is just Wsjt monitor information</li>
     <li>Contest:'Set filter':Add: When filter is checked right mouse click opens quick export menu</li>
@@ -163,7 +164,7 @@
     <li>Contest:Fix:Remembers "MSG s" over Cqrlog restart. Remembers if Contest wondow was open over restart.</li>
     <li>WSJT remote:Contest:EU Vhf:EXCH rcvd:Fix: Locator from received message is now opied also to NewQSO/Grid. Affects NAC Contest score counting</li>
     <li>Qso list:Fix:Dark themes by Bill,WK2X</li>
-</ul>    <li>(120)</li><ul>
+    </ul><li>(120)</li><ul>
     <li>WsjtxMonitor:States (USt): Fix: Can use either FCC's l_amt.zip or W1NR usdbraw as source</li>
     <li>Start:MASTER.SCP:Fix: Dynamic array sizing by Bill,WK2X</li>
     <li>RigControl:Fix: Clear RIT command had a typo. Fixed and now working. Tnx Thomas, EA5AKM, for finding this out.</li>	
@@ -183,7 +184,7 @@
     <li>Contest: Common Status display improvements. Band grid. Current band gets yellow background. </li>
     <li>Contest: Common Status display improvements. Band (& current rigmode if selected) based grid with selected counters. (Early test phase!). 
 	<br>Some save/load extension fixes.</li>
-</ul>    <li>(119)</li><ul>
+    </ul><li>(119)</li><ul>
     <li>QSO list: Fix display of #QSOs and #DXCC cfmd when using dark theme</li>
     <li>eQSL download: Fixed the stuck up caused by eQSL starting to add one more empty line at the end of downloaded file</li>
     <li>Contest: Inform remote mode 'on' when saving manual entered qso. Multimode contests like<br>
@@ -191,7 +192,7 @@
 	Then entering qso manually looks like saved, but will never appear into log.	
     <li>Makefile: Clean fix (by Bill, WK2X)</li> 
     <li>Contest filter: If Contest window is open contest name is copied to filter</li>
-</ul>    <li>(118)</li><ul>
+    </ul><li>(118)</li><ul>
     <li>CW Messages: Fix to open/close when Contest window open and S&P not checked</li>
     <li>CW Messages: Added another set F1-F10 for Contest RUN mode</li>
     <li>RigControl: Update Hamlib error codes list </li>
@@ -214,7 +215,7 @@
     <li>Group edit warning color change for readability</li>
     <li>CW:Hamlib keyer: Should now detect Hamlib>=Jul-2023 that differs with CW commands</li>
     <li>Cabrillo export: Sets now suffix '.cbr' for filename as default</li>
-</ul>    <li>(117)</li><ul>
+    </ul><li>(117)</li><ul>
     <li>Preferences:TRXControl: Added checkbox 'compound poll' (default checked) When unchecked rig polling commands are sent each one on it's own line. This may help poor emulators like WFview.</li>
     <li>HamlibCW: Fixed StopSending procedure. Has now '+\stop_morse currVFO' that should work also other rigs than ts480 and Icoms and is implemented in rigctld at least from Jan2023</li> 
     <li>Callbook: CQRZCQ XML fixd and tested. Should be mostly ok now.</li>
@@ -249,7 +250,7 @@
     <br>With CW and Phone qsos this does not matter as times are usually same.
     <br>With FT8 qso takes longer and WSTX's (and N1MM's) exports are using time_off.
     <br>Now Cqrlog's export is equal to others.</li>
-</ul>    <li>(116)</li><ul>
+    </ul><li>(116)</li><ul>
     <li>Preferences: wsjt/fldigi: fixed hidden checkbox</li>
     <li>DXCluster: Added user defined command keys F1-F10 See help for details.</li>
     <li>WSJT remote: fixed contest logging. Remote name should have WSJT instead of being exactly WSJT-X.<br>
@@ -260,7 +261,7 @@
     <li>LoTW Import: Checkbox to change Rcvd date to current date after successfull download (tu: 4X6GP)</li>	
     <li>When creating a new log it is now possible to copy configuration automated from existing log<br>
 	(FYI: Configuration is log based)</li>
-</ul>    <li>(115)</li><ul>
+    </ul><li>(115)</li><ul>
     <li>Moved also solar data (propagation window) text address to user editable in preferences.</li>
     <li>Fixed solar data (propagation window) addresses from 'http' to 'https'</li>
     <li>Contest: Stores last used CQ frequency and mode when in Run. Click (or Ctrl+L) over reading resets rig to that freq+mode</li>
@@ -268,7 +269,7 @@
     <li>DXCluster: fixed response missing for "sh/he e6" (all prefixes E1..E9)</li>
     <li>Small view fix in RBN monitor header</li>
     <li>Small view fix in adif errorfile import</li>
-</ul>    <li>(114)</li><ul>
+    </ul><li>(114)</li><ul>
     <li>Added 8M and 5M bands</li>
     <li>Fixed radio memory loading/saving (tested with 12000 memories)</li>
     <li>Added search to radio memory list</li>
@@ -276,10 +277,10 @@
     <li>Fixed file open dialogs to check file exists. QT5 opendialog allowsuser to type filename and it needs checking</li>
     <li>Fixed DXCluster spot:Any of QSL, LoTW, eQSL received prints with confirmed color</li>
     <li>Fixed DXCluster font style saving/loading</li>
-</ul>    <li>(113)</li><ul>
+    </ul><li>(113)</li><ul>
     <li>Fixed wsjtx std messages clean when remote was set active</li>
     <li> Added option (from preferences) to show LoTW/eQSL users in wsjtx CQ-monitor</li>
-</ul>    <li>(112)</li><ul>
+    </ul><li>(112)</li><ul>
     <li>Fixed spot splitter a bit and cleaned DXCluster code too</li>
     <li>Clicking DXSpot line now sets wsjt std messages if wsjt-remote is active</li>
     <li>Rewritten DXCluster spot splitter because of faulty call grep</li>
@@ -296,27 +297,27 @@
     <li>Added missing 'OR' to Qso list/Qsl selection </li>
     <li>Fixed update QSO list view when Preferences/Visible columns change</li>
     <li>Fixed bug in Qsolist/View/Show Details checbox visibility</li>
-</ul>    <li>(111)</li><ul>	
+    </ul><li>(111)</li><ul>	
     <li>Fixed bug in preferences/Online log edited and saved urls could not be loaded</li>
-</ul>    <li>(110)</li><ul>
+    </ul><li>(110)</li><ul>
     <li>Added numeric divide-key to work in contest/call column</li>
     <li>Added End-key to work in contest/call column</li>
     <li>Added Home-key to work in contest/call column</li>
     <li>Changed CQmonitor/Mapmode worked locator color printing<br>
 	Should now respond better to true situation of current band</li> 
     <li>Removed one debug print from rigcontrol</li>	
-</ul>    <li>(109)</li><ul>
+    </ul><li>(109)</li><ul>
     <li>Fixed numkeypad in contest/callsign/gtk2, QT5 was already working</li>
     <li>RBNmonitor: Added source callsign filter</li>
     <li>Removed small change to "remove all upload triggers". No good<br>
 	Instead added warnings for use with more than on online log</li>
-</ul>    <li>(108)</li><ul>
+    </ul><li>(108)</li><ul>
     <li>Very small change to "remove all upload triggers". Helps? </li>
     <li>Fixed startup rig power on with rig models below 10, mainly for mod #2</li>
     <li>Fixed Cabrillo export to have adjustable RST fields</li>
     <li>Fixed TAB key funtion in Contest window</li>
     <li>Added Contest/msg multipliers count and list by contest bands</li>
-</ul>    <li>(107)</li><ul>
+    </ul><li>(107)</li><ul>
     <li>Added cache write while preferences closing. Speeds up %50</li>
     <li>Added retry counter for rigctld connecting.</li>
     <li>Updated sat_names.tab (from Florian,DF2ET)</li>
@@ -328,7 +329,7 @@
     <li>Fixed some rig and rot parameter readings</li>
     <li>Fixed ver(104) bug where rig did not initialize if TRXControl window
         <br> stayed closed during Cqrlog start</li>
-</ul>    <li>(105)</li><ul>
+    </ul><li>(105)</li><ul>
     <li>Added macros:
 	<br>%xnr - contest exchange serial number received
 	<br>%xnrs- contest exchenge serial number received sends 9->N and 0->T
