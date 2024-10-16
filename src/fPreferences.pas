@@ -452,6 +452,8 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtBackupFileName1: TEdit;
+    edtBackupFileName2: TEdit;
     edtK3NHex: TEdit;
     edtCWDHex: TEdit;
     edtCbQRZPass: TEdit;
@@ -1570,6 +1572,10 @@ begin
   cqrini.WriteString('Backup', 'Path1', edtBackupPath1.Text);
   cqrini.WriteInteger('Backup', 'BackupType', rgBackupType.ItemIndex);
   cqrini.WriteInteger('Backup', 'BackupType1', rgBackupType1.ItemIndex);
+  if rgBackupType.ItemIndex = 2 then
+    cqrini.WriteString('Backup', 'FileName1', edtBackupFileName1.Text);
+  if rgBackupType1.ItemIndex = 2 then
+    cqrini.WriteString('Backup', 'FileName2', edtBackupFileName2.Text);
   cqrini.WriteBool('Backup','AskFirst',chkAskBackup.Checked);
 
   cqrini.WriteString('ExtView', 'txt', edtTxtFiles.Text);
@@ -3390,7 +3396,12 @@ begin
   edtBackupPath.Text := cqrini.ReadString('Backup', 'Path', dmData.DataDir);
   edtBackupPath1.Text := cqrini.ReadString('Backup', 'Path1','');
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
+  if rgBackupType.ItemIndex = 2 then
+     edtBackupFileName1.Text := cqrini.ReadString('Backup', 'FileName1', 'fileName1.adi');
   rgBackupType1.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType1', 0);
+  if rgBackupType1.ItemIndex = 2 then
+     edtBackupFileName2.Text := cqrini.ReadString('Backup', 'FileName2', 'fileName2.adi');
+
   chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 
   edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', '');

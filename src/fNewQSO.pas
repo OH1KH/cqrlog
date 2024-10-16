@@ -7464,6 +7464,7 @@ end;
 procedure TfrmNewQSO.CreateAutoBackup;
 var
   call, path1, path2 : String;
+  backupType1, backupType2 : integer;
 begin
   path1 := cqrini.ReadString('Backup','Path',dmData.DataDir);
   path2 := cqrini.ReadString('Backup','Path1','');
@@ -7479,17 +7480,25 @@ begin
     AutoBackup       := True;
     SecondBackupPath := Path2;
 
-    FileName         := Path1 + call;
-    if cqrini.ReadInteger('Backup', 'BackupType', 0) > 0 then
-      FileName := FileName + '_backup.adi'
-    else
-      FileName := FileName + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
+    backupType1      := cqrini.ReadInteger('Backup', 'BackupType', 0);
+    backupType2      := cqrini.ReadInteger('Backup', 'BackupType1', 0);
 
-    FileName2         := Path2 + call;
-    if cqrini.ReadInteger('Backup', 'BackupType1', 0) > 0 then
-      FileName2 := FileName2 + '_backup.adi'
+    FileName         := Path1;
+
+    if backupType1 = 1 then
+      FileName := FileName + call + '_backup.adi'
+    else if backupType1 = 2 then   // custom file name over-writes default
+      FileName := FileName + cqrini.ReadString('Backup', 'FileName1', 'fileName1.adi')
     else
-      FileName2 := FileName2 + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
+      FileName := FileName + call + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
+
+    FileName2         := Path2;
+    if backupType2 = 1 then
+      FileName2 := FileName2 + call + '_backup.adi'
+    else if backupType2 = 2 then // custom file name over-writes default
+      FileName2 := FileName2 + cqrini.ReadString('Backup', 'FileName2', 'fileName2.adi')
+    else
+      FileName2 := FileName2 + call + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
 
     ExportType := 2;
 
