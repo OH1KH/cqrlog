@@ -185,7 +185,7 @@ implementation
 {$R *.lfm}
 
 { TfrmFilter }
-uses dData, dUtils,fSelectDXCC, dMembership, uMyini,dSatellite;
+uses dData, dUtils,fSelectDXCC, dMembership, uMyini,dSatellite,fMain;
 
 procedure TfrmFilter.btnOKClick(Sender: TObject);
 var
@@ -758,6 +758,8 @@ begin
       cmbProfile.ItemIndex     := 0;
       cmbMembers.ItemIndex     := 0;
       cmbBandSelector.ItemIndex:= 0;
+
+      frmMain.acCancelFilterExecute(nil);
 end;
 
 procedure TfrmFilter.btnLoadClick(Sender: TObject);
