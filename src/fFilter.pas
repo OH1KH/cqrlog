@@ -456,7 +456,10 @@ begin
                         dmData.trCQRLOG.StartTransaction;
                         dmData.qCQRLOG.Open;
                         dmData.qCQRLOG.Last
-                      end;
+                      end
+                      else
+                       //It was empty, clear (S+F12) the view
+                       frmMain.acCancelFilterExecute(nil);
   ModalResult := mrOK;
 end;
 
@@ -759,7 +762,6 @@ begin
       cmbMembers.ItemIndex     := 0;
       cmbBandSelector.ItemIndex:= 0;
 
-      frmMain.acCancelFilterExecute(nil);
 end;
 
 procedure TfrmFilter.btnLoadClick(Sender: TObject);
