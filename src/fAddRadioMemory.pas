@@ -25,6 +25,7 @@ type
     lblInfo: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure edtFreqKeyPress(Sender: TObject; var Key: char);
+    procedure edtWidthChange(Sender: TObject);
     procedure FormCreate(Sender : TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -81,6 +82,19 @@ end;
 procedure TfrmAddRadioMemory.edtFreqKeyPress(Sender: TObject; var Key: char);
 begin
   if not (key in ['0'..'9','.']) then key:=#0;
+end;
+
+procedure TfrmAddRadioMemory.edtWidthChange(Sender: TObject);
+var i:longint;
+begin                          //allows negative (-1)
+  if (edtWidth.Text<>'') and (edtWidth.Text<>'-')  then
+     Begin
+       if not TryStrToInt(edtWidth.Text,i) then
+                                         edtWidth.Text:='';
+       if i < -1 then
+                     edtWidth.Text:='';
+     end;
+
 end;
 
 procedure TfrmAddRadioMemory.FormCreate(Sender : TObject);

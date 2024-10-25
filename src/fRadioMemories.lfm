@@ -9,7 +9,7 @@ object frmRadioMemories: TfrmRadioMemories
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '3.4.0.0'
   object sgrdMem: TStringGrid
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -124,8 +124,8 @@ object frmRadioMemories: TfrmRadioMemories
       Width = 75
       BorderSpacing.Top = 30
       Caption = 'More...'
-      OnClick = btnMoreClick
       TabOrder = 6
+      OnClick = btnMoreClick
     end
     object btnOK: TButton
       AnchorSideLeft.Control = Panel1
@@ -150,8 +150,8 @@ object frmRadioMemories: TfrmRadioMemories
       Width = 75
       BorderSpacing.Top = 6
       Caption = 'Delete All'
-      OnClick = btnDelAllClick
       TabOrder = 5
+      OnClick = btnDelAllClick
     end
     object lblLines: TLabel
       AnchorSideLeft.Control = lblSlash
