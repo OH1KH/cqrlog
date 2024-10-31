@@ -641,19 +641,13 @@ begin
   if AskForDB then
   begin
       if (frmDbSqlSel = nil) then  Application.CreateForm(TfrmDbSqlSel, frmDbSqlSel);
-      frmDbSqlSel.Show;
 
-      repeat   //wait for user to make selection on other window
-       Begin
-        sleep(100);
-        Application.ProcessMessages;
-       end;
-        until frmDbSqlSel.rdy;
+      frmDbSqlSel.ShowModal;
 
       if frmDbSqlSel.loc then
        begin
         dmData.StartMysqldProcess;
-        Sleep(3000)
+        Sleep(3500)
        end
       else
        begin
