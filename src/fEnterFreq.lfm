@@ -1,11 +1,11 @@
 object frmEnterFreq: TfrmEnterFreq
-  Left = 382
+  Left = 945
   Height = 109
-  Top = 374
+  Top = 234
   Width = 261
   HorzScrollBar.Page = 260
   VertScrollBar.Page = 108
-  ActiveControl = edtFreq
+  ActiveControl = btnOK
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Enter freq'
@@ -116,14 +116,15 @@ object frmEnterFreq: TfrmEnterFreq
     7FFF0000FFFF0001FFFF0003FFFF0007FFFF001FFFFF003FFFFF00FFFFFF83FF
     FFFF
   }
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
-  Position = poMainFormCenter
-  LCLVersion = '0.9.29'
+  Position = poDesktopCenter
+  LCLVersion = '3.6.0.0'
   object Label1: TLabel
     Left = 5
     Height = 17
     Top = 8
-    Width = 79
+    Width = 87
     Caption = 'Freq (in kHz):'
     ParentColor = False
   end
@@ -153,25 +154,28 @@ object frmEnterFreq: TfrmEnterFreq
     Width = 75
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
-    OnClick = btnOKClick
     TabOrder = 2
+    OnClick = btnOKClick
   end
   object edtFreq: TEdit
     Left = 5
-    Height = 26
+    Height = 34
     Top = 32
     Width = 123
-    OnKeyPress = edtFreqKeyPress
+    NumbersOnly = True
     TabOrder = 0
+    OnExit = edtFreqExit
+    OnKeyPress = edtFreqKeyPress
   end
   object cmbMode: TComboBox
     Left = 136
-    Height = 28
+    Height = 34
     Top = 32
     Width = 115
     ItemHeight = 0
-    OnChange = cmbModeChange
     TabOrder = 1
     Text = 'cmbMode'
+    OnChange = cmbModeChange
+    OnKeyDown = FormKeyDown
   end
-end
+end

@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls;
+  Buttons, StdCtrls,LCLType;
 
 type
 
@@ -30,12 +30,15 @@ type
     edtFreq: TEdit;
     Label1: TLabel;
     Label2: TLabel;
+    procedure edtFreqExit(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure cmbModeChange(Sender: TObject);
     procedure edtFreqKeyPress(Sender: TObject; var Key: char);
   private
-    ModeChanged : Boolean;
+    mode : String;
+    freq : String;
     { private declarations }
   public
     { public declarations }
@@ -51,11 +54,8 @@ implementation
 uses dUtils, fTRXControl, dData;
 
 procedure TfrmEnterFreq.FormShow(Sender: TObject);
-var
-  mode : String;
-  freq : String;
+
 begin
-  ModeChanged := False;
   dmUtils.InsertModes(cmbMode);
   frmTRXControl.GetModeFreqNewQSO(mode,freq);
   cmbMode.Text := mode;
@@ -63,17 +63,33 @@ begin
   edtFreq.SetFocus
 end;
 
+procedure TfrmEnterFreq.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if (edtFreq.Text<>'') and (key = VK_RETURN) then
+    btnOK.Click;
+  if key = VK_ESCAPE then
+    btnCancel.Click;
+end;
+
+procedure TfrmEnterFreq.edtFreqExit(Sender: TObject);
+var
+   tmp:extended;
+begin
+  if TryStrToFloat(edtFreq.Text,tmp) then
+  begin
+   mode := dmUtils.GetModeFromFreq(FloatToStr(tmp/1000));
+   cmbMode.Caption:=mode;
+  end;
+end;
+
 procedure TfrmEnterFreq.btnOKClick(Sender: TObject);
 var
   tmp  : Extended;
-  freq : String;
-  mode : String;
 begin
   if TryStrToFloat(edtFreq.Text,tmp) then
   begin
     mode := cmbMode.Text;
-    if not ModeChanged then
-      mode := dmUtils.GetModeFromFreq(FloatToStr(tmp/1000));
     freq := FloatToStr(tmp);
     frmTRXControl.SetModeFreq(mode,freq);
   end;
@@ -82,7 +98,7 @@ end;
 
 procedure TfrmEnterFreq.cmbModeChange(Sender: TObject);
 begin
-  ModeChanged := True;
+  cmbMode.Text:=UpperCase(cmbMode.text);
 end;
 
 procedure TfrmEnterFreq.edtFreqKeyPress(Sender: TObject; var Key: char);

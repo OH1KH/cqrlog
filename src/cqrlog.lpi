@@ -272,6 +272,7 @@
         <Filename Value="fEnterFreq.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmEnterFreq"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit24>
       <Unit25>

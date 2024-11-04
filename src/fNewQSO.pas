@@ -5717,7 +5717,9 @@ var
   n     : String;
   ShowMain : Boolean = False;
 begin
-  if key = VK_ESCAPE then
+
+  //key ESC definitions
+  if key = VK_ESCAPE then                                           //VK_ESCAPE
   begin
     if not (fViewQSO or fEditQSO) then
     begin
@@ -5781,7 +5783,8 @@ begin
   else
     EscFirstPressDone := False;
 
-  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+  //Function keys 1-10
+  if (key in [VK_F1..VK_F10]) and (Shift = []) then                      //VK_F1..VK_F10
   Begin
    if LastFkey = 0 then
     begin
@@ -5806,7 +5809,7 @@ begin
     key := 0
   end;
 
-  if (Key = VK_F11) then
+  if (Key = VK_F11) then                                            //VK_11
   begin
     if NOT c_running then
     begin
@@ -5818,8 +5821,8 @@ begin
     end
   end;
 
+  // keys for CW speed up / down
   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
-
   if( (key in [33,34]) and (not dbgrdQSOBefore.Focused) and (Assigned(CWint)) )then
   begin
     case key of
@@ -5836,169 +5839,206 @@ begin
     key:=0;
   end;
 
-  // CTRL-Key > Keyboard Shortcuts for NewQSO GUI with CTRL
-
-  if ((Shift = [ssCtrl]) and (key = VK_F2)) then
+  // CTRL-Key > Keyboard Shortcuts for NewQSO with CTRL
+ if (Shift = [ssCtrl]) then
   begin
-    if fViewQSO then
+      if (key = VK_F2) then                                         //VK_F2
       begin
-        if (not (fViewQSO or fEditQSO or cbOffline.Checked)) then
-        tmrRadio.Enabled := True;
-        btnSave.Enabled  := True;
-        for i:=0 to ComponentCount-1 do
-        begin
-          if (frmNewQSO.Components[i] is TEdit) then
-             (frmNewQSO.Components[i] As TEdit).ReadOnly := False;
-        end;
-        edtDate.ReadOnly  := False;
-        mComment.ReadOnly := False;
-        edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
+        if fViewQSO then
+          begin
+            if (not (fViewQSO or fEditQSO or cbOffline.Checked)) then
+            tmrRadio.Enabled := True;
+            btnSave.Enabled  := True;
+            for i:=0 to ComponentCount-1 do
+            begin
+              if (frmNewQSO.Components[i] is TEdit) then
+                 (frmNewQSO.Components[i] As TEdit).ReadOnly := False;
+            end;
+            edtDate.ReadOnly  := False;
+            mComment.ReadOnly := False;
+            edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
+          end;
+        Caption := dmUtils.GetNewQSOCaption('New QSO');
+        fViewQSO := False;
+        fEditQSO := False;
+        NewQSO;
+        ClearAll;
+        key := 0
       end;
-    Caption := dmUtils.GetNewQSOCaption('New QSO');
-    fViewQSO := False;
-    fEditQSO := False;
-    NewQSO;
-    ClearAll;
-    key := 0
-  end;
+      if (Key = VK_F8) then                                         //VK_F8
+      begin
+        if not (fEditQSO or fViewQSO) then
+          edtCall.Text:= '';
+        ReturnToNewQSO;
+        key := 0
+      end;
+      if (key = VK_A) then                                          //VK_A
+      begin
+        acAddToBandMap.Execute;
+        key := 0
+      end;
+      if (key = VK_D) then                                          //VK_D
+      begin
+        acDXCCCfm.Execute;
+        key := 0;
+      end;
+      if (key = VK_I) then                                          //VK_I
+      begin
+        acDetails.Execute;
+        key := 0
+      end;
+      if (key = VK_H) then                                          //VK_H
+      begin
+        ShowHelp;
+        key := 0
+      end;
+      if (key = VK_M) then                                          //VK_M
+      begin
+        acRemoteMode.Execute;
+        key := 0
+      end;
+      if (key = VK_N) then                                          //VK_N
+      begin
+        acLongNote.Execute;
+        key := 0
+      end;
+      if(key = VK_P) then                                           //VK_P
+      begin
+        acPreferences.Execute;
+        key := 0;
+      end;
+      if (key = VK_Q) then //why all this didnt work directly in    //VK_Q
+      begin                                            //action
+        acClose.Execute;
+        key := 0;
+        exit
+      end;
+      if (key = VK_R) then                                          //VK_R
+      begin
+        if edtCall.Text <> '' then
+        begin
+          tmp := idcall;
+          with TfrmRefCall.Create(self) do
+          try
+            edtIdCall.Text := idcall;
+            ShowModal;
+            if ModalResult = mrOK then
+              idcall := edtIdCall.Text;
+          finally
+            Free;
+            if tmp <> idcall then
+              CheckCallsignClub;
+          end;
+        end;
+        key := 0
+      end;
+      if (key = VK_W) then                                          //VK_W
+        Begin
+         acSendSpot.Execute;
+         key := 0;
+        end;
+      if key in [VK_1..VK_9] then                                   //VK_1..VK_9
+         Begin
+          SetSplit(chr(key));
+         end;
+      if (key = VK_0) then                                          //VK_0
+        begin
+         frmTRXControl.DisableSplit;
+         key:=0;
+        end;
+ end;
 
-  if (Shift = [ssCtrl]) and (Key = VK_F8) then
-  begin     //F8
-    if not (fEditQSO or fViewQSO) then
-      edtCall.Text:= '';
-    ReturnToNewQSO;
-    key := 0
-  end;
 
-  if ((Shift = [ssCtrl]) and (key = VK_A)) then
-  begin
-    acAddToBandMap.Execute;
-    key := 0
-  end;
-  if (Shift = [ssCtrl]) and (key = VK_D) then
-  begin
-    acDXCCCfm.Execute;
-    key := 0;
-  end;
-  if (Shift = [ssCtrl]) and (key = VK_I) then
-  begin
-    acDetails.Execute;
-    key := 0
-  end;
-  if ((Shift = [ssCtrl]) and (key = VK_H)) then
-  begin
-    ShowHelp;
-    key := 0
-  end;
-  if ((Shift = [ssCtrl]) and (key = VK_M)) then
-  begin
-    acRemoteMode.Execute;
-    key := 0
-  end;
-  if ((Shift = [ssCtrl]) and (key = VK_N)) then
-  begin
-    acLongNote.Execute;
-    key := 0
-  end;
-  if (Shift = [ssCtrl]) and (key = VK_O) then
-  begin
-    mnuQSOList.Click;
-    key := 0;
-  end;
-  if (Shift = [ssCtrl]) and (key = VK_P) then
-  begin
-    acPreferences.Execute;
-    key := 0;
-  end;
-  if (Shift = [ssCtrl]) and (key = VK_Q) then //why all this didnt work directly in action?
-  begin
-    acClose.Execute;
-    key := 0;
-    exit
-  end;
-  if ((Shift = [ssCtrl]) and (key = VK_R)) then
-  begin
-    if edtCall.Text <> '' then
+ //three cases of VK_O
+   if (key = VK_O) then                                             //VK_O
+   Begin
+   if (Shift = [ssCtrl,ssShift]) then
     begin
-      tmp := idcall;
-      with TfrmRefCall.Create(self) do
+     cbOffline.Checked:= not cbOffline.Checked;
+     if  cbOffline.Checked then
+         edtDate.SetFocus
+       else
+         edtCall.SetFocus;
+     key := 0;
+    end;
+   if (Shift = [ssCtrl]) then
+    begin
+      mnuQSOList.Click;
+      key := 0;
+    end;
+   if (Shift = [ssAlt]) then
+    begin
+      with TfrmChangeOperator.Create(self) do
       try
-        edtIdCall.Text := idcall;
+        edtOperator.Text := Op;
         ShowModal;
-        if ModalResult = mrOK then
-          idcall := edtIdCall.Text;
+        if ModalResult = mrOk then
+        begin
+         if UpperCase(edtOperator.Text)<>'' then
+            Op := UpperCase(edtOperator.Text)
+           else
+            Op:= '';
+          if dmData.DebugLevel>=1 then writeln('Operator changed: '+Op);
+          cqrini.WriteString('TMPQSO','OP',Op);
+          ShowOperator;
+        end;
       finally
         Free;
-        if tmp <> idcall then
-          CheckCallsignClub;
       end;
-      key := 0
     end;
-  end;
-  if ((Shift = [ssCTRL]) and (key = VK_W)) then
-    acSendSpot.Execute;
+  end; //end VK_O
 
-  if (Shift = [ssCTRL]) then
-    if key in [VK_1..VK_9] then SetSplit(chr(key));
-  if ((Shift = [ssCTRL]) and (key = VK_0)) then
-    frmTRXControl.DisableSplit;
 
-  // ALT-Key > Keyboard Shortcuts for NewQSO GUI with ALT
-
-  if ((Shift = [ssAlt]) and (key = VK_B)) then
-    frmTRXControl.btnMemUp.Click;
-  if ((Shift = [ssAlt]) and (key = VK_F)) then
-  begin
-    dmUtils.EnterFreq;
-    key := 0
-  end;
-  if ((Shift = [ssAlt]) and (key = VK_V)) then  //Alt+V
-    frmTRXControl.btnMemDwn.Click;
-  if ((Shift = [ssAlt]) and (key = VK_W)) then  //Alt+W
-    cmbQSL_S.text:='SB';
-  if ((Shift = [ssAlt]) and (key = VK_N)) then  //Alt+N
-    cmbQSL_S.text:='N';
-  if ((Shift = [ssAlt]) and (key = VK_O)) then //Alt+O
-  begin
-    with TfrmChangeOperator.Create(self) do
-    try
-      edtOperator.Text := Op;
-      ShowModal;
-      if ModalResult = mrOk then
-      begin
-       if UpperCase(edtOperator.Text)<>'' then
-          Op := UpperCase(edtOperator.Text)
-         else
-          Op:= '';
-        if dmData.DebugLevel>=1 then writeln('Operator changed: '+Op);
-        cqrini.WriteString('TMPQSO','OP',Op);
-        ShowOperator;
-      end;
-    finally
-      Free;
-    end;
-  end;
-  if ((Shift = [ssAlt]) and (key = VK_H)) then
-  begin
-    ShowHelp;
-    key := 0
-  end;
-  if ((Shift = [ssAlt]) and (key = VK_F2)) then
-  begin
-    acNewQSOExecute(nil);
-    key := 0
+  // ALT-Key > Keyboard Shortcuts for NewQSO with ALT
+ if (Shift = [ssAlt]) then
+  Begin
+      if (key = VK_B) then                                         //VK_B
+        begin
+         frmTRXControl.btnMemUp.Click;
+         key:=0;
+        end;
+      if (key = VK_F) then                                         //VK_F
+        begin
+          dmUtils.EnterFreq;
+          key:=0;
+        end;
+      if (key = VK_V) then                                         //Alt+V
+        Begin
+         frmTRXControl.btnMemDwn.Click;
+         key:=0;
+        end;
+      if (key = VK_W) then                                         //Alt+W
+        Begin
+         cmbQSL_S.text:='SB';
+         key:=0;
+        end;
+      if (key = VK_N) then                                         //Alt+N
+        Begin
+         cmbQSL_S.text:='N';
+         key:=0;
+        end;
+      if (key = VK_H) then                                         //VK_H
+        begin
+         ShowHelp;
+         key:=0;
+        end;
+      if (key = VK_F2) then                                        //VK_F2
+        begin
+         acNewQSOExecute(nil);
+         key:= 0;
+        end;
   end;
 end;
 
 procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
 begin
   case key of
-    #13 : begin                     //enter
+    #13 : begin                                                   //enter
             if not AnyRemoteOn then btnSave.Click;
             dmUtils.SaveDBGridInForm(frmNewQSO) ;
             key := #0;
           end;
-    #12 : begin                    // CTRL+L
+    #12 : begin                                                   //CTRL+L
             with TfrmChangeLocator.Create(self) do
             try
               edtLocator.Text := CurrentMyLoc;
@@ -6016,11 +6056,11 @@ begin
             end;
             key := #0
           end;
-    #96 : begin  // CTRL+w
+    #96 : begin                                                   //CTRL+W
             acSendSpot.Execute;
             Key := #0
           end;
-    #43 : begin  //+ key
+    #43 : begin                                                   //+ key
             if cqrini.ReadBool('BandMap','PlusToBandMap',False) then
             begin
               acAddToBandMap.Execute;
