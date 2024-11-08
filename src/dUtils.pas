@@ -1011,8 +1011,11 @@ begin
   imin := 0;
   ihour := 0;
   Result := True;
-  if length(time) <> 5 then
-    Result := False
+  if (length(time) <> 5) then
+       Result := False
+     else
+      if (time[3]<>':') then
+       Result := False
   else
   begin
     if not ((TryStrToInt(time[1] + time[2], ihour)) and
@@ -1300,21 +1303,21 @@ function TdmUtils.IsDateOK(date: string): boolean;
 var
   tmp: string;
 
-//OH1KH:  this 230-0010-20 passes as 2023-01-20 !!!   We have to do something for this !!
-
 begin
-  if date = '' then
-  begin
-    Result := False;
-    exit;
-  end;
   Result := True;
+  if date = '' then
+                begin
+                 Result := False;
+                  exit;
+                end;
 
 //check separator places first
-  if (date[5]<>'-') or (date[8]<>'-') then
+  if (date[5]<>'-') and (date[8]<>'-') then
+                                        Begin
                                          Result:=false;
-
-  tmp := FormatSettings.ShortDateFormat;
+                                         exit;
+                                        end;
+  tmp := FormatSettings.ShortDateFormat;    //store existing format
   try
     FormatSettings.ShortDateFormat := 'YYYY-MM-DD';
     try
@@ -1323,7 +1326,7 @@ begin
       Result := False
     end
   finally
-    FormatSettings.ShortDateFormat := tmp
+    FormatSettings.ShortDateFormat := tmp   //restore existing format
   end;
 end;
 

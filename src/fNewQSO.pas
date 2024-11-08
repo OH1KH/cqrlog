@@ -109,6 +109,9 @@ type
     edtContestName: TEdit;
     edtRXFreq : TEdit;
     gbContest: TGroupBox;
+    lblStimeFormat: TLabel;
+    lblEtimeFormat: TLabel;
+    lblDateformat: TLabel;
     Label38: TLabel;
     Label37: TLabel;
     lblContestExchangeMessageReceived: TLabel;
@@ -432,10 +435,8 @@ type
     procedure edtAwardEnter(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
     procedure edtCountyChange(Sender: TObject);
-    procedure edtDateChange(Sender: TObject);
     procedure edtDateEnter(Sender: TObject);
     procedure edtDXCCRefEnter(Sender: TObject);
-    procedure edtEndTimeChange(Sender: TObject);
     procedure edtEndTimeEnter(Sender: TObject);
     procedure edtGridChange(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
@@ -457,7 +458,6 @@ type
     procedure edtRXFreqChange(Sender: TObject);
     procedure edtRXFreqExit(Sender: TObject);
     procedure edtRXLOExit(Sender: TObject);
-    procedure edtStartTimeChange(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
     procedure edtStateChange(Sender: TObject);
     procedure edtStateEnter(Sender: TObject);
@@ -569,6 +569,7 @@ type
     procedure edtQTHExit(Sender: TObject);
     procedure edtQTHKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure edtRemQSOKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ModifyTimeFormat( var time:string);
     procedure edtStartTimeExit(Sender: TObject);
     procedure edtStartTimeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -3657,13 +3658,12 @@ var
 begin
   if fViewQSO then
     exit;
-  if Length(edtDate.Text)=8 then
+  if ((Length(edtDate.Text)<>10) or (not dmUtils.IsDateOK(edtDate.Text))) then
   begin
-    tmp := edtDate.Text;
-    edtDate.Text := copy(tmp,1,4) + '-' + copy(tmp,5,2) + '-' + copy(tmp,7,2);
-  end;
-  if not dmUtils.IsDateOK(edtDate.Text) then
+    edtDate.SetFocus;
+    edtDate.SelectAll;
     exit;
+  end;
   if not ChangeDXCC then
   begin
     ShowDXCCInfo;
@@ -3693,13 +3693,6 @@ begin
     edtStartTime.SetFocus;
     key := 0
   end;
-  if ( ((length(edtDate.Text)=5) or (length(edtDate.Text)=8))
-    and ((key = VK_BACK) or (key = VK_DELETE))
-    and (not AnyRemoteOn and cbOffline.Checked) ) then     //auto del "-"
-     begin
-        edtDate.Text:=copy(edtDate.Text,1,length(edtDate.Text)-2);
-        key := 0
-     end;
 end;
 
 
@@ -3749,17 +3742,27 @@ end;
 
 procedure TfrmNewQSO.edtDateKeyPress(Sender: TObject; var Key: char);
 begin
-  if not ((key in ['0'..'9']) or (key = '-') or (key=#40) or (key=#38) or (key = #32) or (key=#8)) then
+  if not (key in ['0'..'9','-',#24,#3,#22,#8,#127]) then   //CtrlX,CtrlC,CtrlV,BackSpace,DEL
     key := #0
 end;
 
 procedure TfrmNewQSO.edtEndTimeExit(Sender: TObject);
+var
+   f:integer;
+   s:String;
 begin
-  if Length(edtEndTime.Text)=4 then
-    edtEndTime.Text := copy(edtEndTime.Text,1,2) + ':' +
-                       copy(edtEndTime.Text,3,2);
+ s:= edtEndTime.Text;
+ ModifyTimeFormat(s);
+ edtEndTime.Text:=s;
+ if not dmUtils.IsTimeOK(edtEndTime.Text) then
+   begin
+    edtEndTime.SetFocus;
+    edtEndTime.SelectAll;
+    exit;
+  end;
+ if (cbOffline.Checked) and (not AnyremoteOn) then
+                                               edtCall.SetFocus;
 end;
-
 procedure TfrmNewQSO.edtEndTimeKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -3783,13 +3786,6 @@ begin
      ReturnToNewQSO;
      key := 0
    end;
-   if ((length(edtEndTime.Text)=3)
-    and ((key = VK_BACK) or (key = VK_DELETE))
-    and (not AnyRemoteOn and cbOffline.Checked) ) then //aute del ":"
-     begin
-        edtEndTime.Text:=copy(edtEndTime.Text,1,length(edtEndTime.Text)-2);
-        key := 0
-     end;
 end;
 
 
@@ -4027,12 +4023,31 @@ begin
     key := 0;
   end;
 end;
-
-procedure TfrmNewQSO.edtStartTimeExit(Sender: TObject);
+procedure TfrmNewQSO.ModifyTimeFormat( var time:string);
+var f:integer;
 begin
-  if Length(edtStartTime.Text)=4 then
-    edtStartTime.Text := copy(edtStartTime.Text,1,2) + ':' +
-                         copy(edtStartTime.Text,3,2);
+ if length(time)=4 then  //auto insert ':' if there are 4 numbers
+  begin
+    for f:=1 to 4 do
+     Begin
+      if not ord(time[f]) in [ 48..57 ] then
+                                           exit;
+     end;
+    time:=copy(time,1,2)+':'+copy(time,3,2);
+  end;
+end;
+procedure TfrmNewQSO.edtStartTimeExit(Sender: TObject);
+var s:String;
+Begin
+ s:= edtStartTime.Text;
+ ModifyTimeFormat(s);
+ edtStartTime.Text:=s;
+ if not dmUtils.IsTimeOK(edtStartTime.Text) then
+   begin
+    edtStartTime.SetFocus;
+    edtStartTime.SelectAll;
+    exit;
+  end;
   if cbOffline.Checked then
     edtEndTime.Text := edtStartTime.Text;
 end;
@@ -4055,13 +4070,6 @@ begin
     edtEndTime.SetFocus;
     key := 0
   end;
-  if ((length(edtStartTime.Text)=3)
-    and ((key = VK_BACK) or (key = VK_DELETE))
-    and (not AnyRemoteOn and cbOffline.Checked) ) then //aute del ":"
-     begin
-        edtStartTime.Text:=copy(edtStartTime.Text,1,length(edtStartTime.Text)-2);
-        key := 0
-     end;
 end;
 
 procedure TfrmNewQSO.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -4530,17 +4538,6 @@ begin
    end;
 end;
 
-procedure TfrmNewQSO.edtDateChange(Sender: TObject);
-begin
-  if  cbOffline.Checked and not AnyRemoteOn then
-  begin
-    if  (length(edtDate.Text)=4) or (length(edtDate.Text)=7) then //auto "-"
-     edtDate.Text:=edtDate.Text+'-';
-    edtDate.SelStart:=length(edtDate.Text);
-    edtDate.SelLength:=0;
-  end;
-end;
-
 procedure TfrmNewQSO.edtDateEnter(Sender: TObject);
 begin
   edtDate.SelectAll
@@ -4548,17 +4545,6 @@ end;
 procedure TfrmNewQSO.edtDXCCRefEnter(Sender: TObject);
 begin
   edtDXCCRef.SelectAll
-end;
-
-procedure TfrmNewQSO.edtEndTimeChange(Sender: TObject);
-begin
-    if  cbOffline.Checked and not AnyRemoteOn then
-  begin
-    if  (length(edtEndTime.Text)=2) then //auto ":"
-     edtEndTime.Text:=edtEndTime.Text+':';
-    edtEndTime.SelStart:=length(edtEndTime.Text);
-    edtEndTime.SelLength:=0;
-  end;
 end;
 
 procedure TfrmNewQSO.edtEndTimeEnter(Sender: TObject);
@@ -5057,17 +5043,6 @@ begin
       edtRXLO.Text := '0.0';
   end;
   cqrini.WriteString('NewQSO', 'RXLO', edtRXLO.Text);
-end;
-
-procedure TfrmNewQSO.edtStartTimeChange(Sender: TObject);
-begin
-   if  cbOffline.Checked and not AnyRemoteOn then
-  begin
-    if  (length(edtStartTime.Text)=2) then //auto ":"
-     edtStartTime.Text:=edtStartTime.Text+':';
-    edtStartTime.SelStart:=length(edtStartTime.Text);
-    edtStartTime.SelLength:=0;
-  end;
 end;
 
 procedure TfrmNewQSO.edtStartTimeEnter(Sender: TObject);
@@ -6072,7 +6047,7 @@ end;
 
 procedure TfrmNewQSO.edtStartTimeKeyPress(Sender: TObject; var Key: char);
 begin
-  if not ((key in ['0'..'9']) or (key = ':') or (key=#40) or (key=#38) or (key = #32) or (key=#8)) then
+  if not (key in ['0'..'9','-',':',#24,#3,#22,#8,#127]) then   //CtrlX,CtrlC,CtrlV,BackSpace,DEL
     key := #0
 end;
 
