@@ -5341,12 +5341,15 @@ begin
   if cbOffline.Checked then
   begin
     pnlOffline.Color := clRed;
-    lblQSOTakes.Visible := False
   end
   else begin
     SetDateTime();
-    pnlOffline.Color := ColorToRGB(clBtnFace)
-  end
+    pnlOffline.Color := ColorToRGB(clBtnFace);
+  end;
+  lblQSOTakes.Visible := not cbOffline.Checked;
+  lblDateFormat.Visible:=cbOffline.Checked;
+  lblStimeFormat.Visible:=cbOffline.Checked;
+  lblEtimeFormat.Visible:=cbOffline.Checked;
 end;
 
 procedure TfrmNewQSO.cmbFreqChange(Sender: TObject);
@@ -5964,7 +5967,24 @@ begin
   end; //end VK_O
 
 
+
+  // ALT-keys by label focus control (not visible in source, only in lfm)
+  // jump to Comment to callsign                                   //VK_A
+  // jump to Comment to QSO                                        //VK_C
+  // jump to Date                                                  //VK_D
+  // jump to End Date                                              //VK_E
+  // jump to Grid                                                  //VK_G
+  // jump to IOTA                                                  //VK_I
+  // jump to Name                                                  //VK_M
+  // jump to QTH                                                   //VK_Q
+  // jump to RSTsent                                               //VK_R
+  // jump to Start date                                            //VK_S
+  // jump to RST rcvd                                              //VK_T
+  // jump to County                                                //VK_U
+
+
   // ALT-Key > Keyboard Shortcuts for NewQSO with ALT
+  // note above source about 3 cases of VK_O                       //VK_O
  if (Shift = [ssAlt]) then
   Begin
       if (key = VK_B) then                                         //VK_B

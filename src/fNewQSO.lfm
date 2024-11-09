@@ -1,16 +1,16 @@
 object frmNewQSO: TfrmNewQSO
   Left = 0
-  Height = 659
+  Height = 634
   Top = 0
-  Width = 1032
+  Width = 1019
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   HorzScrollBar.Page = 974
-  VertScrollBar.Page = 638
+  VertScrollBar.Page = 634
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 659
-  ClientWidth = 1032
+  ClientHeight = 634
+  ClientWidth = 1019
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2146,11 +2146,11 @@ object frmNewQSO: TfrmNewQSO
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 588
-    Top = 71
-    Width = 1032
+    Top = 50
+    Width = 1019
     Align = alBottom
     ClientHeight = 588
-    ClientWidth = 1032
+    ClientWidth = 1019
     TabOrder = 0
     object pnlQsoInfo: TPanel
       AnchorSideTop.Side = asrBottom
@@ -2159,12 +2159,12 @@ object frmNewQSO: TfrmNewQSO
       Left = 1
       Height = 531
       Top = 35
-      Width = 759
+      Width = 746
       Align = alClient
       BorderSpacing.Bottom = 2
       BevelOuter = bvNone
       ClientHeight = 531
-      ClientWidth = 759
+      ClientWidth = 746
       TabOrder = 0
       object pnlQSOinput: TPanel
         AnchorSideRight.Side = asrBottom
@@ -2172,12 +2172,12 @@ object frmNewQSO: TfrmNewQSO
         Left = 0
         Height = 531
         Top = 0
-        Width = 759
+        Width = 746
         Align = alClient
         BorderSpacing.InnerBorder = 2
         BevelOuter = bvNone
         ClientHeight = 531
-        ClientWidth = 759
+        ClientWidth = 746
         ParentShowHint = False
         TabOrder = 0
         object lblCommentToCallsign: TLabel
@@ -2200,7 +2200,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 59
           Width = 28
-          Caption = 'QTH'
+          Caption = '&QTH'
+          FocusControl = edtQTH
           ParentFont = False
         end
         object lblName: TLabel
@@ -2212,7 +2213,8 @@ object frmNewQSO: TfrmNewQSO
           Top = 59
           Width = 39
           BorderSpacing.Top = 3
-          Caption = 'Name'
+          Caption = 'Na&me'
+          FocusControl = edtName
           ParentFont = False
         end
         object lblRSTRcvd: TLabel
@@ -2223,7 +2225,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 3
           Width = 57
-          Caption = 'RST rcvd'
+          Caption = 'RS&T rcvd'
+          FocusControl = edtMyRST
           ParentFont = False
         end
         object lblRstSent: TLabel
@@ -2234,7 +2237,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 3
           Width = 57
-          Caption = 'RST sent'
+          Caption = '&RST sent'
+          FocusControl = edtHisRST
           ParentFont = False
         end
         object lblCall: TLabel
@@ -2302,7 +2306,8 @@ object frmNewQSO: TfrmNewQSO
           Top = 227
           Width = 31
           BorderSpacing.Top = 3
-          Caption = 'Date'
+          Caption = '&Date'
+          FocusControl = edtDate
           ParentFont = False
         end
         object lblGrid: TLabel
@@ -2313,7 +2318,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 59
           Width = 33
-          Caption = 'GRID'
+          Caption = '&GRID'
+          FocusControl = edtGrid
           ParentFont = False
         end
         object lblPwr: TLabel
@@ -2403,7 +2409,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 115
           Width = 31
-          Caption = 'IOTA'
+          Caption = '&IOTA'
+          FocusControl = cmbIOTA
           ParentFont = False
         end
         object lblCounty: TLabel
@@ -2414,7 +2421,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 115
           Width = 46
-          Caption = 'County'
+          Caption = 'Co&unty'
+          FocusControl = edtCounty
           ParentFont = False
         end
         object lblCommentToQSO: TLabel
@@ -2425,7 +2433,8 @@ object frmNewQSO: TfrmNewQSO
           Height = 17
           Top = 171
           Width = 113
-          Caption = 'Comment to QSO'
+          Caption = '&Comment to QSO'
+          FocusControl = edtRemQSO
           ParentFont = False
         end
         object lblQSLVia: TLabel
@@ -3094,7 +3103,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 0
           Height = 163
           Top = 368
-          Width = 759
+          Width = 746
           ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
@@ -3107,14 +3116,14 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideBottom.Side = asrBottom
             Caption = 'DXCC statistic'
             ClientHeight = 132
-            ClientWidth = 749
+            ClientWidth = 736
             object sgrdStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
               AnchorSideBottom.Side = asrBottom
               Left = 0
               Height = 132
               Top = 0
-              Width = 749
+              Width = 736
               Align = alClient
               AutoFillColumns = True
               ColCount = 2
@@ -3129,22 +3138,22 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                374
-                373
+                367
+                367
               )
             end
           end
           object tabCallStat: TTabSheet
             Caption = 'Call statistic'
             ClientHeight = 132
-            ClientWidth = 749
+            ClientWidth = 736
             object sgrdCallStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
               AnchorSideBottom.Side = asrBottom
               Left = 0
               Height = 132
               Top = 0
-              Width = 749
+              Width = 736
               Align = alClient
               AutoFillColumns = True
               ColCount = 2
@@ -3159,8 +3168,8 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                373
-                372
+                366
+                366
               )
             end
           end
@@ -3168,7 +3177,7 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideBottom.Side = asrBottom
             Caption = 'Satellite'
             ClientHeight = 132
-            ClientWidth = 749
+            ClientWidth = 736
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
               AnchorSideTop.Control = lblPropagation
@@ -3298,7 +3307,7 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideBottom.Side = asrBottom
             Caption = 'LO Config'
             ClientHeight = 132
-            ClientWidth = 749
+            ClientWidth = 736
             object cbTxLo: TCheckBox
               Left = 8
               Height = 23
@@ -3394,12 +3403,12 @@ object frmNewQSO: TfrmNewQSO
           Left = 555
           Height = 204
           Top = 0
-          Width = 204
+          Width = 191
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 20
           Caption = 'Contest'
           ClientHeight = 186
-          ClientWidth = 202
+          ClientWidth = 189
           TabOrder = 28
           Visible = False
           object lblContestName: TLabel
@@ -3465,7 +3474,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 34
             Hint = 'name of contest, max 40 characters allowed'
             Top = 23
-            Width = 196
+            Width = 183
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 3
             BorderSpacing.Right = 3
@@ -3516,7 +3525,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 34
             Hint = 'contest exchange message sent, max 50 characters'
             Top = 83
-            Width = 118
+            Width = 105
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 6
             BorderSpacing.Right = 3
@@ -3537,7 +3546,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 34
             Hint = 'contest exchange message received, max 50 characters'
             Top = 146
-            Width = 118
+            Width = 105
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Right = 3
             MaxLength = 50
@@ -4178,6 +4187,7 @@ object frmNewQSO: TfrmNewQSO
           Top = 280
           Width = 84
           Caption = 'YYYY-MM-DD'
+          Visible = False
         end
         object lblStimeFormat: TLabel
           AnchorSideLeft.Control = edtStartTime
@@ -4188,6 +4198,7 @@ object frmNewQSO: TfrmNewQSO
           Top = 280
           Width = 48
           Caption = 'HH:MM'
+          Visible = False
         end
         object lblEtimeFormat: TLabel
           AnchorSideLeft.Control = edtEndTime
@@ -4198,6 +4209,7 @@ object frmNewQSO: TfrmNewQSO
           Top = 280
           Width = 48
           Caption = 'HH:MM'
+          Visible = False
         end
       end
     end
@@ -4205,7 +4217,7 @@ object frmNewQSO: TfrmNewQSO
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 760
+      Left = 747
       Height = 533
       Top = 35
       Width = 271
@@ -4821,12 +4833,12 @@ object frmNewQSO: TfrmNewQSO
       Left = 1
       Height = 34
       Top = 1
-      Width = 1030
+      Width = 1017
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 34
-      ClientWidth = 1030
+      ClientWidth = 1017
       TabOrder = 2
       object lblQSONr: TLabel
         AnchorSideLeft.Control = lblQSONrDesc
@@ -4929,7 +4941,7 @@ object frmNewQSO: TfrmNewQSO
       Left = 1
       Height = 19
       Top = 568
-      Width = 1030
+      Width = 1017
       Panels = <      
         item
           Width = 50
@@ -4952,9 +4964,9 @@ object frmNewQSO: TfrmNewQSO
   object dbgrdQSOBefore: TDBGrid
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 71
+    Height = 50
     Top = 0
-    Width = 1032
+    Width = 1019
     Align = alClient
     Color = clWindow
     Columns = <>
