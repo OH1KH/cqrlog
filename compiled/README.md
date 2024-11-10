@@ -1,9 +1,11 @@
-Cqrlog Alpha is a clone variant having nearly 500 smaller or bigger differences to official version.
+# CqrlogAlpha is a clone based on the work of OK2CQR & OK1RR.
+## It has over 500 smaller or bigger differences to official Cqrlog.
+### I am maintaining this software mainly for my own use, but feel free to use/modify it for your own needs by the rules of Open software licence and HamSprit rules.
 ----------------------------------------------------------------------------------------------------
 
 This folder holds ready compiled binary files of source branch "loc_testing" that is the version of Cqrlog that I am using myself daily.
 I call it Alpha version.
-At the moment (2024-05-01) it is mostly compatible with official version. Depending what happens to official version development it may not be so in future.
+At the moment (2024-05-01) it is mostly compatible with official Cqrlog. Depending what happens to official Cqrlog development it may not be so in future.
 
 Note that source (one step backwards from this "compiled" folder)  may have bigger version number and have changes and fixes made after ready compiled versions are released.
 Source is more as "daily snapshot" and may have more bugs.
