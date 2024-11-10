@@ -145,7 +145,8 @@ begin
            '&Password='+dmUtils.EncodeURLData(pass)+
            '&QTHNickname='+dmUtils.EncodeURLData(edtQTH.Text)+
            '&RcvdSince='+StringReplace(edtDateFrom.Text,'-','',[rfReplaceAll, rfIgnoreCase]);
-    if dmData.DebugLevel>=1 then Writeln(url);
+    if dmData.DebugLevel>=1 then
+                                Writeln(url);
     http.MimeType := 'text/xml';
     http.Protocol := '1.1';
     http.Sock.OnStatus := @SockCallBack;
@@ -164,84 +165,87 @@ begin
       begin
         mStat.Lines.Add('Error: No such Username/Password found');
         exit
-      end
-      else begin
-        if Pos(CDWNLD,l.Text) > 0 then
-        begin
-          //First find the line where link is
-          for i:=0 to pred(l.Count) do
-           begin
-            if Pos(CDWNLD,l[i])>0 then //then parse filename
-             Begin
-                  tmp := copy(l[i],pos('HREF="',l[i])+6,length(l[i])); //start point
-                  tmp := copy(l[i],1,pos('.adi"',l[i])+3); //endpoint
-                  tmp := ExtractFileNameOnly(tmp)+ExtractFileExt(tmp);
-             end;
+      end;
+      if (pos('You have no log entries',l.Text) > 0) then
+      begin
+        mStat.Lines.Add('You have no log entries received on or after '+edtDateFrom.Text);
+        exit
+      end;
+      if Pos(CDWNLD,l.Text) > 0 then
+      begin
+        //First find the line where link is
+        for i:=0 to pred(l.Count) do
+         begin
+          if Pos(CDWNLD,l[i])>0 then //then parse filename
+           Begin
+                tmp := copy(l[i],pos('HREF="',l[i])+6,length(l[i])); //start point
+                tmp := copy(l[i],1,pos('.adi"',l[i])+3); //endpoint
+                tmp := ExtractFileNameOnly(tmp)+ExtractFileExt(tmp);
            end;
-          url := cqrini.ReadString('LoTW', 'eQSLDnlAddr','https://www.eqsl.cc/downloadedfiles/')+tmp;
-          if dmData.DebugLevel>0 then  Writeln('url: ',url);
-          mStat.Lines.Add('File will be downloaded from:');
-          mStat.Lines.Add(url);
-          FileSize := 0;
-          mStat.Lines.Add('Size:');
-          if http.HTTPMethod('GET',url) then
+         end;
+        url := cqrini.ReadString('LoTW', 'eQSLDnlAddr','https://www.eqsl.cc/downloadedfiles/')+tmp;
+        if dmData.DebugLevel>0 then  Writeln('url: ',url);
+        mStat.Lines.Add('File will be downloaded from:');
+        mStat.Lines.Add(url);
+        FileSize := 0;
+        mStat.Lines.Add('Size:');
+        if http.HTTPMethod('GET',url) then
+        begin
+          http.Document.Seek(0,soBeginning);
+          m.CopyFrom(http.Document,http.Document.Size);
+          mStat.Lines.Add('File downloaded successfully as local file:');
+          mStat.Lines.Add(AdifFile);
+          Done := True;
+          Repaint;
+          Application.ProcessMessages;
+          mStat.Lines.Add('Preparing import ....');
+          Repaint;
+          Application.ProcessMessages;
+          if not FileExists(AdifFile) then
           begin
-            http.Document.Seek(0,soBeginning);
-            m.CopyFrom(http.Document,http.Document.Size);
-            mStat.Lines.Add('File downloaded successfully as local file:');
+            mStat.Lines.Add('File: ');
             mStat.Lines.Add(AdifFile);
-            Done := True;
-            Repaint;
-            Application.ProcessMessages;
-            mStat.Lines.Add('Preparing import ....');
-            Repaint;
-            Application.ProcessMessages;
-            if not FileExists(AdifFile) then
-            begin
-              mStat.Lines.Add('File: ');
-              mStat.Lines.Add(AdifFile);
-              mStat.Lines.Add('DOES NOT exist!');
-              exit
-            end;
-            with TfrmImportProgress.Create(self) do
-            try
-              FileName    := AdifFile;
-              ImportType  := imptImporteQSLAdif;
-              eQSLShowNew := chkShowNew.Checked;
-              ShowModal;
-              QSOList.Text := eQSLQSOList.Text;
-              Count        := eQSLQSOList.Count
-            finally
-              Free
-            end;
-            mStat.Lines.Add('Import complete ...');
-            if chkChangeDate.Checked then
-               Begin
-                 edtDateFrom.Caption:= FormatDateTime('YYYY-MM-DD', IncDay(Today, -1));
-                 cqrini.WriteString('eQSLImp','DateFrom',FormatDateTime('YYYY-MM-DD', IncDay(Today, -1)));
-               end;
-            Repaint;
-            Application.ProcessMessages;
-            if chkShowNew.Checked then
-            begin
-              mStat.Lines.Add('');
-              mStat.Lines.Add('New QSOs confirmed by eQSL:');
-              mStat.Lines.AddStrings(QSOList);
-              mStat.Lines.Add('-----------------------------');
-              mStat.Lines.Add('Total: ' + IntToStr(Count) + ' new QSOs')
-            end
-          end
-          else begin
-            mStat.Lines.Add('File was NOT downloaded!');
-            mStat.Lines.Add('Error: '+IntToStr(http.Sock.LastError) + ' ' +
-                            http.Sock.LastErrorDesc)
+            mStat.Lines.Add('DOES NOT exist!');
+            exit
+          end;
+          with TfrmImportProgress.Create(self) do
+          try
+            FileName    := AdifFile;
+            ImportType  := imptImporteQSLAdif;
+            eQSLShowNew := chkShowNew.Checked;
+            ShowModal;
+            QSOList.Text := eQSLQSOList.Text;
+            Count        := eQSLQSOList.Count
+          finally
+            Free
+          end;
+          mStat.Lines.Add('Import complete ...');
+          if chkChangeDate.Checked then
+             Begin
+               edtDateFrom.Caption:= FormatDateTime('YYYY-MM-DD', IncDay(Today, -1));
+               cqrini.WriteString('eQSLImp','DateFrom',FormatDateTime('YYYY-MM-DD', IncDay(Today, -1)));
+             end;
+          Repaint;
+          Application.ProcessMessages;
+          if chkShowNew.Checked then
+          begin
+            mStat.Lines.Add('');
+            mStat.Lines.Add('New QSOs confirmed by eQSL:');
+            mStat.Lines.AddStrings(QSOList);
+            mStat.Lines.Add('-----------------------------');
+            mStat.Lines.Add('Total: ' + IntToStr(Count) + ' new QSOs')
           end
         end
         else begin
-          mStat.Lines.Add('eQSL page was probably changed, cannot find the link to ADIF file');
-          mStat.Lines.Add('Server returned this:');
-          mStat.Lines.Add(l.Text)
+          mStat.Lines.Add('File was NOT downloaded!');
+          mStat.Lines.Add('Error: '+IntToStr(http.Sock.LastError) + ' ' +
+                          http.Sock.LastErrorDesc)
         end
+      end
+      else begin
+        mStat.Lines.Add('eQSL page was probably changed, cannot find the link to ADIF file');
+        mStat.Lines.Add('Server returned this:');
+        mStat.Lines.Add(l.Text)
       end
     end
     else begin
