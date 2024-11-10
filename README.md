@@ -1,7 +1,6 @@
-About this "Alpha" version by OH1KH
-===================================
-
-Cqrlog Alpha is a clone variant having nearly 500 smaller or bigger differences to official version.
+# CqrlogAlpha is a clone based on the work of OK2CQR & OK1RR.
+## It has over 500 smaller or bigger differences to official Cqrlog.
+### I am maintaining this software mainly for my own use, but feel free to use/modify it for your own needs by the rules of Open software licence and HamSprit rules.
 ----------------------------------------------------------------------------------------------------
 
 From folder "compiled" you find ready compiled binary files against official Cqrlog and for this "local_testing" source.
@@ -16,29 +15,30 @@ What is CQRLOG?
 ---------------
 
 CQRLOG is an advanced ham radio logger based on MySQL database. Provides radio control 
-based on hamlib libraries (currently support of 140+ radio types and models), DX cluster 
-connection, online callbook, a grayliner, internal QSL manager database support and a most 
+based on hamlib libraries (currently support all radio types and models Hamlib can support),
+DX cluster connection, online callbook, a grayliner, internal QSL manager database support,
+remore support for fldigi|wsjt-x|ADIF (n1mm) and a most 
 accurate country resolution algorithm based on country tables developed by OK1RR. CQRLOG is 
-intended for daily general logging of HF, CW & SSB contacts and strongly focused on easy 
-operation and maintenance. More at https://www.cqrlog.com/
+intended for daily general logging of HF, CW , PHONE & DIGI contacts and strongly focused on easy 
+operation and maintenance. 
 
 ![Image of CQRLOG](https://cqrlog.com/images/users/ok2cqr.png)
 
 How to contribute?
 ------------------
 
-You have to have Lazarus 2.0.6, fpc 3.0.4 compiler, MySQL server and clinet installed.
-CQRLOG is developed on Ubuntu 20.04, Lazarus and FreePascal are available in my pesronal repo  https://launchpad.net/~ok2cqr/+archive/lazarus
+You have to have Lazarus + fpc compiler, MySQL server and clinet installed.
+CQRLOG is developed on Ubuntu 20.04, Lazarus and FreePascal are available from https://www.lazarus-ide.org
 
-Compile with make and install with make DESTDIR=/home/yourusername/where_you_want_to_have_it install. If you are 
-going to change the source code, fork the repo, do the changes, commit them and use Pull request.
+Compile with make|make cqrlog_qt5|make cqrlog_qt6 and install with make DESTDIR=/home/yourusername/where_you_want_to_have_it install.
+If you are going to change the source code, fork the repo, do the changes, commit them and use Pull request.
 
 Dependencies
 -------------
 
-Build-Depends: lazarus, lcl, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk2, fp-units-db, fp-units-math, fp-units-net
+Build-Depends: lazarus, lcl, [qt5pas, qt6pas] fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk2, fp-units-db, fp-units-math, fp-units-net
 
-Depends: libssl-dev, mysql-server | mariadb-server, mysql-client | mariadb-client, libhamlib2 (>= 1.2.10), libhamlib-utils (>= 1.2.10)
+Depends: libssl-dev, mariadb-server,  mariadb-client, libhamlib2 (>= 1.2.10), libhamlib-utils (>= 1.2.10)
 
 Running build with Docker
 -------------------------
