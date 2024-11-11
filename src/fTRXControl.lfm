@@ -1,12 +1,14 @@
 object frmTRXControl: TfrmTRXControl
   Left = 950
-  Height = 302
+  Height = 277
   Top = 29
   Width = 265
   Anchors = []
   Caption = 'TRX control'
   ClientHeight = 277
   ClientWidth = 265
+  Constraints.MinHeight = 50
+  Constraints.MinWidth = 50
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
     0000400000000100200000000000001000006400000064000000000000000000
@@ -152,7 +154,7 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object gbMode: TGroupBox
     AnchorSideLeft.Control = gbVfo
     AnchorSideTop.Control = gbVfo
@@ -179,8 +181,8 @@ object frmTRXControl: TfrmTRXControl
       Width = 51
       BorderSpacing.Left = 13
       Caption = 'CW'
-      OnClick = btnCWClick
       TabOrder = 0
+      OnClick = btnCWClick
     end
     object btnSSB: TButton
       AnchorSideLeft.Control = btnCW
@@ -191,8 +193,8 @@ object frmTRXControl: TfrmTRXControl
       Top = 25
       Width = 51
       Caption = 'SSB'
-      OnClick = btnSSBClick
       TabOrder = 1
+      OnClick = btnSSBClick
     end
     object btnDATA: TButton
       AnchorSideLeft.Control = btnCW
@@ -203,8 +205,8 @@ object frmTRXControl: TfrmTRXControl
       Top = 50
       Width = 51
       Caption = 'DATA'
-      OnClick = btnDATAClick
       TabOrder = 2
+      OnClick = btnDATAClick
     end
     object btnAM: TButton
       AnchorSideLeft.Control = btnCW
@@ -215,8 +217,8 @@ object frmTRXControl: TfrmTRXControl
       Top = 75
       Width = 51
       Caption = 'AM'
-      OnClick = btnAMClick
       TabOrder = 3
+      OnClick = btnAMClick
     end
     object btnFM: TButton
       AnchorSideLeft.Control = btnCW
@@ -227,8 +229,8 @@ object frmTRXControl: TfrmTRXControl
       Top = 100
       Width = 51
       Caption = 'FM'
-      OnClick = btnFMClick
       TabOrder = 4
+      OnClick = btnFMClick
     end
     object btnMemUp: TButton
       AnchorSideLeft.Control = btnCW
@@ -241,8 +243,8 @@ object frmTRXControl: TfrmTRXControl
       Width = 51
       BorderSpacing.Right = 6
       Caption = 'M up'
-      OnClick = btnMemUpClick
       TabOrder = 5
+      OnClick = btnMemUpClick
     end
     object btnMemDwn: TButton
       AnchorSideLeft.Control = btnCW
@@ -254,8 +256,8 @@ object frmTRXControl: TfrmTRXControl
       Top = 150
       Width = 51
       Caption = 'M dwn'
-      OnClick = btnMemDwnClick
       TabOrder = 6
+      OnClick = btnMemDwnClick
     end
     object btnMemWri: TButton
       AnchorSideLeft.Control = btnCW
@@ -269,9 +271,9 @@ object frmTRXControl: TfrmTRXControl
       BorderSpacing.Top = 7
       Caption = 'M Wri'
       Font.Color = clRed
-      OnClick = btnMemWriClick
       ParentFont = False
       TabOrder = 7
+      OnClick = btnMemWriClick
     end
   end
   object pnlMain: TPanel
@@ -354,16 +356,16 @@ object frmTRXControl: TfrmTRXControl
         Color = clYellow
         DoubleBuffered = True
         ParentBidiMode = False
-        OnKeyPress = edtFreqInputKeyPress
-        OnKeyUp = edtFreqInputKeyUp
-        OnMouseLeave = edtFreqInputMouseLeave
-        OnMouseUp = edtFreqInputMouseUp
-        OnMouseWheel = edtFreqInputMouseWheel
         ParentDoubleBuffered = False
         ParentShowHint = False
         TabOrder = 0
         TextHint = 'Mhz'
         Visible = False
+        OnKeyPress = edtFreqInputKeyPress
+        OnKeyUp = edtFreqInputKeyUp
+        OnMouseLeave = edtFreqInputMouseLeave
+        OnMouseUp = edtFreqInputMouseUp
+        OnMouseWheel = edtFreqInputMouseWheel
       end
     end
     object gbBand: TGroupBox
@@ -393,8 +395,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 6
         BorderSpacing.InnerBorder = 4
         Caption = '160m'
-        OnClick = btn160mClick
         TabOrder = 0
+        OnClick = btn160mClick
       end
       object btn80m: TButton
         AnchorSideLeft.Control = gbBand
@@ -408,8 +410,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 1
         BorderSpacing.InnerBorder = 4
         Caption = '80m'
-        OnClick = btn80mClick
         TabOrder = 1
+        OnClick = btn80mClick
       end
       object btn40m: TButton
         AnchorSideLeft.Control = gbBand
@@ -423,8 +425,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 1
         BorderSpacing.InnerBorder = 4
         Caption = '40m'
-        OnClick = btn40mClick
         TabOrder = 2
+        OnClick = btn40mClick
       end
       object btn30m: TButton
         AnchorSideLeft.Control = gbBand
@@ -438,8 +440,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 1
         BorderSpacing.InnerBorder = 4
         Caption = '30m'
-        OnClick = btn30mClick
         TabOrder = 3
+        OnClick = btn30mClick
       end
       object btn12m: TButton
         AnchorSideLeft.Control = gbBand
@@ -453,8 +455,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 1
         BorderSpacing.InnerBorder = 4
         Caption = '12m'
-        OnClick = btn12mClick
         TabOrder = 4
+        OnClick = btn12mClick
       end
       object btn15m: TButton
         AnchorSideLeft.Control = gbBand
@@ -468,8 +470,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 1
         BorderSpacing.InnerBorder = 4
         Caption = '15m'
-        OnClick = btn15mClick
         TabOrder = 5
+        OnClick = btn15mClick
       end
       object btn17m: TButton
         AnchorSideLeft.Control = gbBand
@@ -483,8 +485,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 1
         BorderSpacing.InnerBorder = 4
         Caption = '17m'
-        OnClick = btn17mClick
         TabOrder = 6
+        OnClick = btn17mClick
       end
       object btn20m: TButton
         AnchorSideLeft.Control = gbBand
@@ -497,8 +499,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Top = 6
         BorderSpacing.InnerBorder = 4
         Caption = '20m'
-        OnClick = btn20mClick
         TabOrder = 7
+        OnClick = btn20mClick
       end
       object btn10m: TButton
         AnchorSideTop.Control = gbBand
@@ -513,8 +515,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Right = 6
         BorderSpacing.InnerBorder = 4
         Caption = '10m'
-        OnClick = btn10mClick
         TabOrder = 8
+        OnClick = btn10mClick
       end
       object btn6m: TButton
         AnchorSideTop.Control = btn10m
@@ -530,8 +532,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Right = 6
         BorderSpacing.InnerBorder = 4
         Caption = '6m'
-        OnClick = btn6mClick
         TabOrder = 9
+        OnClick = btn6mClick
       end
       object btn70cm: TButton
         AnchorSideTop.Control = btn2m
@@ -547,8 +549,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Right = 6
         BorderSpacing.InnerBorder = 4
         Caption = '70cm'
-        OnClick = btn70cmClick
         TabOrder = 10
+        OnClick = btn70cmClick
       end
       object btn2m: TButton
         AnchorSideTop.Control = btn6m
@@ -564,8 +566,8 @@ object frmTRXControl: TfrmTRXControl
         BorderSpacing.Right = 6
         BorderSpacing.InnerBorder = 4
         Caption = '2m'
-        OnClick = btn2mClick
         TabOrder = 11
+        OnClick = btn2mClick
       end
       object pnlPower: TPanel
         AnchorSideLeft.Control = gbBand
@@ -594,8 +596,8 @@ object frmTRXControl: TfrmTRXControl
           Width = 56
           BorderSpacing.Left = 6
           Caption = 'P-ON'
-          OnClick = btPonClick
           TabOrder = 0
+          OnClick = btPonClick
         end
         object btPoff: TButton
           AnchorSideLeft.Control = pnlPower
@@ -607,8 +609,8 @@ object frmTRXControl: TfrmTRXControl
           Top = 3
           Width = 56
           Caption = 'P-OFF'
-          OnClick = btPoffClick
           TabOrder = 1
+          OnClick = btPoffClick
         end
         object btPstby: TButton
           AnchorSideLeft.Side = asrBottom
@@ -623,8 +625,8 @@ object frmTRXControl: TfrmTRXControl
           Anchors = [akTop, akRight]
           BorderSpacing.Right = 6
           Caption = 'P-STB'
-          OnClick = btPstbyClick
           TabOrder = 2
+          OnClick = btPstbyClick
         end
       end
       object pnlUsr: TPanel
@@ -653,8 +655,8 @@ object frmTRXControl: TfrmTRXControl
           Width = 56
           BorderSpacing.Left = 6
           Caption = 'USR1'
-          OnClick = btnUsrClick
           TabOrder = 0
+          OnClick = btnUsrClick
         end
         object btnUsr2: TButton
           AnchorSideLeft.Control = pnlUsr
@@ -666,8 +668,8 @@ object frmTRXControl: TfrmTRXControl
           Top = 3
           Width = 56
           Caption = 'USR2'
-          OnClick = btnUsrClick
           TabOrder = 1
+          OnClick = btnUsrClick
         end
         object btnUsr3: TButton
           AnchorSideLeft.Side = asrBottom
@@ -682,8 +684,8 @@ object frmTRXControl: TfrmTRXControl
           Anchors = [akTop, akRight]
           BorderSpacing.Right = 6
           Caption = 'USR3'
-          OnClick = btnUsrClick
           TabOrder = 2
+          OnClick = btnUsrClick
         end
       end
     end
@@ -728,12 +730,12 @@ object frmTRXControl: TfrmTRXControl
           '5'
           '6'
         )
-        OnChange = cmbRigChange
-        OnCloseUp = cmbRigCloseUp
-        OnGetItems = cmbRigGetItems
         Style = csDropDownList
         TabOrder = 0
         Text = '1'
+        OnChange = cmbRigChange
+        OnCloseUp = cmbRigCloseUp
+        OnGetItems = cmbRigGetItems
       end
       object lblInitRig: TLabel
         AnchorSideLeft.Control = pnlRig
@@ -814,8 +816,8 @@ object frmTRXControl: TfrmTRXControl
       Width = 25
       BorderSpacing.Left = 13
       Caption = 'A'
-      OnClick = btnVFOAClick
       TabOrder = 0
+      OnClick = btnVFOAClick
     end
     object btnVFOB: TButton
       AnchorSideLeft.Control = btnVFOA
@@ -826,8 +828,8 @@ object frmTRXControl: TfrmTRXControl
       Top = 0
       Width = 25
       Caption = 'B'
-      OnClick = btnVFOBClick
       TabOrder = 1
+      OnClick = btnVFOBClick
     end
   end
   object tmrRadio: TTimer

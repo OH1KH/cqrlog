@@ -1,16 +1,18 @@
 object frmNewQSO: TfrmNewQSO
   Left = 0
-  Height = 609
+  Height = 750
   Top = 0
   Width = 1006
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   HorzScrollBar.Page = 974
-  VertScrollBar.Page = 609
+  VertScrollBar.Page = 638
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 609
+  ClientHeight = 750
   ClientWidth = 1006
+  Constraints.MinHeight = 250
+  Constraints.MinWidth = 380
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2146,7 +2148,7 @@ object frmNewQSO: TfrmNewQSO
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 588
-    Top = 50
+    Top = 162
     Width = 1006
     Align = alBottom
     ClientHeight = 588
@@ -3171,8 +3173,8 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                361
                 360
+                359
               )
             end
           end
@@ -4967,7 +4969,7 @@ object frmNewQSO: TfrmNewQSO
   object dbgrdQSOBefore: TDBGrid
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 50
+    Height = 162
     Top = 0
     Width = 1006
     Align = alClient

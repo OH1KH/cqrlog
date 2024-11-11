@@ -7,6 +7,8 @@ object frmQSODetails: TfrmQSODetails
   Caption = 'Details'
   ClientHeight = 210
   ClientWidth = 266
+  Constraints.MinHeight = 50
+  Constraints.MinWidth = 50
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -118,7 +120,7 @@ object frmQSODetails: TfrmQSODetails
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '3.6.0.0'
   object pnlDetails: TPanel
     Left = 0
     Height = 210
@@ -126,6 +128,7 @@ object frmQSODetails: TfrmQSODetails
     Width = 266
     Align = alClient
     Color = clWhite
+    ParentBackground = False
     ParentColor = False
     TabOrder = 0
   end

@@ -6,13 +6,15 @@ object frmPropDK0WCY: TfrmPropDK0WCY
   Caption = 'Propagation DK0WCY'
   ClientHeight = 308
   ClientWidth = 223
+  Constraints.MinHeight = 50
+  Constraints.MinWidth = 50
   KeyPreview = True
   OnClose = FormClose
   OnCreate = FormCreate
   OnDblClick = FormDblClick
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object lblBoulAidx: TLabel
     AnchorSideLeft.Control = lblInfoDate
     AnchorSideTop.Control = lblInfo
