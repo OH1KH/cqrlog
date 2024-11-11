@@ -1901,7 +1901,7 @@ begin
     fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10)
   end;
 
-  //otherwise NewQSO buttons do not fit to space
+  //Exceptions: Otherwise NewQSO button texts do not fit to their space
    if ( fbSize > 10 )then
      Begin
           frmNewQSO.btnSave.Caption:='Save QSO';
@@ -1956,13 +1956,16 @@ begin
     //labels, buttons, radio,checkbox ....
     if (aForm.Components[i] is TLabel) then
     begin
-      if not (((aForm.Components[i] as TLabel).Name = 'lblFreq') or
-        ((aForm.Components[i] as TLabel).Name = 'lblAzimuth')) then
-        //frequecy/Azimuth label font is set
-      begin
-        (aForm.Components[i] as TLabel).Font.Name := fButtons;
-        (aForm.Components[i] as TLabel).Font.Style := []
-      end
+      if not (  //TRX/ROTControl:frequecy/Azimuth display labels font are not changed
+         ((aForm.Components[i] as TLabel).Name = 'lblFreq')
+           or
+         ((aForm.Components[i] as TLabel).Name = 'lblAzimuth'))
+        then
+          begin
+            (aForm.Components[i] as TLabel).Font.Name := fButtons;
+            (aForm.Components[i] as TLabel).Font.Size := fbSize;
+            (aForm.Components[i] as TLabel).Font.Style := []
+          end
     end;
 
     if (aForm.Components[i] is TGroupBox) then
@@ -1993,6 +1996,21 @@ begin
     begin
       (aForm.Components[i] as TBitBtn).Font.Name := fButtons;
       (aForm.Components[i] as TBitBtn).Font.Size := fbSize
+    end;
+
+    { why this gives error: "identifier not found  TPageControl" ?
+
+    if (aForm.Components[i] is TPageControl) then
+    begin
+      (aForm.Components[i] as TPageControl).Font.Name := fButtons;
+      (aForm.Components[i] as TPageControl).Font.Size := fbSize
+    end;
+    }
+
+    if (aForm.Components[i] is TListBox) then
+    begin
+      (aForm.Components[i] as TListBox).Font.Name := fEdits;
+      (aForm.Components[i] as TListBox).Font.Size := feSize
     end;
 
     /////////////////////////////////////////////////////////
