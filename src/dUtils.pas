@@ -20,7 +20,7 @@ uses
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
   sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr,
-  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils;
+  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils,ComCtrls;
 
   //"XMLRead, DOM," replced. These have system encoding. "laz2_" ones have full UTF-8 Unicode support
   //they should be replaceable by Laz-XML-wiki.
@@ -1998,14 +1998,11 @@ begin
       (aForm.Components[i] as TBitBtn).Font.Size := fbSize
     end;
 
-    { why this gives error: "identifier not found  TPageControl" ?
-
     if (aForm.Components[i] is TPageControl) then
     begin
       (aForm.Components[i] as TPageControl).Font.Name := fButtons;
       (aForm.Components[i] as TPageControl).Font.Size := fbSize
     end;
-    }
 
     if (aForm.Components[i] is TListBox) then
     begin
