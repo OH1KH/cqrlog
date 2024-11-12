@@ -6,8 +6,8 @@ object frmPropDK0WCY: TfrmPropDK0WCY
   Caption = 'Propagation DK0WCY'
   ClientHeight = 308
   ClientWidth = 223
-  Constraints.MinHeight = 50
-  Constraints.MinWidth = 50
+  Constraints.MinHeight = 275
+  Constraints.MinWidth = 200
   KeyPreview = True
   OnClose = FormClose
   OnCreate = FormCreate

@@ -8,6 +8,8 @@ object frmBandMap: TfrmBandMap
   Caption = 'Band map'
   ClientHeight = 556
   ClientWidth = 259
+  Constraints.MinHeight = 170
+  Constraints.MinWidth = 230
   KeyPreview = True
   OnActivate = FormActivate
   OnClose = FormClose
@@ -16,7 +18,7 @@ object frmBandMap: TfrmBandMap
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     Left = 0
     Height = 24

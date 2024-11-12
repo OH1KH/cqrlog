@@ -6,6 +6,8 @@ object frmGrayline: TfrmGrayline
   Caption = 'Grayline'
   ClientHeight = 248
   ClientWidth = 419
+  Constraints.MinHeight = 100
+  Constraints.MinWidth = 130
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -121,7 +123,7 @@ object frmGrayline: TfrmGrayline
   OnPaint = FormPaint
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object sbtnGrayLine: TSpeedButton
     Left = 400
     Height = 16

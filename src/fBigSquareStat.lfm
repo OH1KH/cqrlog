@@ -6,9 +6,11 @@ object frmBigSquareStat: TfrmBigSquareStat
   Caption = 'Big square statistic'
   ClientHeight = 590
   ClientWidth = 655
+  Constraints.MinHeight = 225
+  Constraints.MinWidth = 585
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -33,9 +35,9 @@ object frmBigSquareStat: TfrmBigSquareStat
       BorderSpacing.Left = 6
       BorderSpacing.Top = 9
       ItemHeight = 0
-      OnChange = cmbBandsChange
       Style = csDropDownList
       TabOrder = 0
+      OnChange = cmbBandsChange
     end
     object Label1: TLabel
       AnchorSideLeft.Control = Panel1
@@ -75,8 +77,8 @@ object frmBigSquareStat: TfrmBigSquareStat
         Width = 51
         BorderSpacing.Left = 5
         Caption = 'QSL'
-        OnChange = cmbBandsChange
         TabOrder = 0
+        OnChange = cmbBandsChange
       end
       object chkLoTW: TCheckBox
         AnchorSideLeft.Control = GroupBox1
@@ -88,8 +90,8 @@ object frmBigSquareStat: TfrmBigSquareStat
         Top = 1
         Width = 62
         Caption = 'LoTW'
-        OnChange = cmbBandsChange
         TabOrder = 1
+        OnChange = cmbBandsChange
       end
       object chkeQSL: TCheckBox
         AnchorSideTop.Control = GroupBox1
@@ -103,8 +105,8 @@ object frmBigSquareStat: TfrmBigSquareStat
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 6
         Caption = 'eQSL'
-        OnChange = cmbBandsChange
         TabOrder = 2
+        OnChange = cmbBandsChange
       end
     end
     object btnRefresh: TButton
@@ -120,8 +122,8 @@ object frmBigSquareStat: TfrmBigSquareStat
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 12
       Caption = 'Refresh statistic'
-      OnClick = btnRefreshClick
       TabOrder = 2
+      OnClick = btnRefreshClick
     end
     object pbTot: TProgressBar
       AnchorSideLeft.Control = cmbBands
@@ -197,8 +199,8 @@ object frmBigSquareStat: TfrmBigSquareStat
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 12
       Caption = 'Save to ...'
-      OnClick = btnSaveToClick
       TabOrder = 1
+      OnClick = btnSaveToClick
     end
   end
   object IpHtmlPanel1: TIpHtmlPanel

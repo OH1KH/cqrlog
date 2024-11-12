@@ -1,6 +1,6 @@
 object frmNewQSO: TfrmNewQSO
   Left = 0
-  Height = 750
+  Height = 725
   Top = 0
   Width = 1006
   HelpType = htKeyword
@@ -9,10 +9,10 @@ object frmNewQSO: TfrmNewQSO
   VertScrollBar.Page = 638
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 750
+  ClientHeight = 725
   ClientWidth = 1006
-  Constraints.MinHeight = 250
-  Constraints.MinWidth = 380
+  Constraints.MinHeight = 360
+  Constraints.MinWidth = 560
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2148,7 +2148,7 @@ object frmNewQSO: TfrmNewQSO
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 588
-    Top = 162
+    Top = 137
     Width = 1006
     Align = alBottom
     ClientHeight = 588
@@ -4969,7 +4969,7 @@ object frmNewQSO: TfrmNewQSO
   object dbgrdQSOBefore: TDBGrid
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 162
+    Height = 137
     Top = 0
     Width = 1006
     Align = alClient

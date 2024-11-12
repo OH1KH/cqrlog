@@ -1,14 +1,14 @@
 object frmCommentToCall: TfrmCommentToCall
-  Left = 673
+  Left = 576
   Height = 583
-  Top = 324
+  Top = 292
   Width = 860
   Caption = 'Comment to callsign'
   ClientHeight = 583
   ClientWidth = 860
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     Left = 744
     Height = 583
@@ -71,6 +71,8 @@ object frmCommentToCall: TfrmCommentToCall
     Align = alClient
     Color = clWindow
     Columns = <>
+    Constraints.MinHeight = 280
+    Constraints.MinWidth = 435
     DataSource = dsrComment
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAnyButtonCanSelect]
     TabOrder = 1
@@ -79,12 +81,12 @@ object frmCommentToCall: TfrmCommentToCall
   end
   object dsrComment: TDataSource
     DataSet = dmData.qComment
-    left = 105
-    top = 57
+    Left = 105
+    Top = 57
   end
   object acComment: TActionList
-    left = 472
-    top = 216
+    Left = 472
+    Top = 216
     object acSearch: TAction
       Caption = 'Search'
       OnExecute = acSearchExecute

@@ -11,14 +11,14 @@ object frmContest: TfrmContest
   Caption = 'Contest'
   ClientHeight = 620
   ClientWidth = 770
-  Constraints.MinHeight = 200
-  Constraints.MinWidth = 585
+  Constraints.MinHeight = 225
+  Constraints.MinWidth = 620
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object edtCall: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideTop.Control = lblCall
@@ -30,11 +30,11 @@ object frmContest: TfrmContest
     AutoSelect = False
     CharCase = ecUppercase
     MaxLength = 20
+    TabOrder = 1
     OnChange = edtCallChange
     OnExit = edtCallExit
     OnKeyDown = edtCallKeyDown
     OnKeyPress = edtCallKeyPress
-    TabOrder = 1
   end
   object edtRSTs: TEdit
     AnchorSideLeft.Control = edtCall
@@ -45,9 +45,9 @@ object frmContest: TfrmContest
     Top = 127
     Width = 50
     MaxLength = 20
+    TabOrder = 8
     OnEnter = edtRSTsEnter
     OnKeyDown = edtCallKeyDown
-    TabOrder = 8
   end
   object edtSTX: TEdit
     AnchorSideLeft.Control = edtRSTs
@@ -59,12 +59,12 @@ object frmContest: TfrmContest
     Top = 127
     Width = 50
     MaxLength = 6
-    OnExit = edtSTXExit
-    OnKeyDown = edtCallKeyDown
-    OnKeyPress = edtSTXKeyPress
     ParentShowHint = False
     ShowHint = True
     TabOrder = 15
+    OnExit = edtSTXExit
+    OnKeyDown = edtCallKeyDown
+    OnKeyPress = edtSTXKeyPress
   end
   object edtSTXStr: TEdit
     AnchorSideLeft.Control = edtSTX
@@ -76,13 +76,13 @@ object frmContest: TfrmContest
     Top = 127
     Width = 100
     MaxLength = 50
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 14
     OnChange = edtSTXStrChange
     OnEnter = edtSTXStrEnter
     OnExit = edtSTXStrExit
     OnKeyDown = edtSTXStrKeyDown
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 14
   end
   object edtRSTr: TEdit
     AnchorSideLeft.Control = edtSTXStr
@@ -94,9 +94,9 @@ object frmContest: TfrmContest
     Width = 50
     BorderSpacing.Left = 16
     MaxLength = 20
+    TabOrder = 2
     OnEnter = edtRSTrEnter
     OnKeyDown = edtCallKeyDown
-    TabOrder = 2
   end
   object edtSRX: TEdit
     AnchorSideLeft.Control = edtRSTr
@@ -108,14 +108,14 @@ object frmContest: TfrmContest
     Top = 127
     Width = 50
     MaxLength = 6
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 3
     OnChange = edtSRXChange
     OnEnter = edtRSTrEnter
     OnExit = edtSRXExit
     OnKeyDown = edtCallKeyDown
     OnKeyPress = edtSTXKeyPress
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
   end
   object btSave: TButton
     AnchorSideLeft.Control = lblRate60
@@ -130,8 +130,8 @@ object frmContest: TfrmContest
     BorderSpacing.Left = 6
     BorderSpacing.Bottom = 3
     Caption = 'Save QSO'
-    OnClick = btSaveClick
     TabOrder = 5
+    OnClick = btSaveClick
   end
   object edtSRXStr: TEdit
     AnchorSideLeft.Control = edtSRX
@@ -143,13 +143,13 @@ object frmContest: TfrmContest
     Top = 127
     Width = 100
     MaxLength = 50
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
     OnChange = edtSRXStrChange
     OnEnter = edtRSTrEnter
     OnKeyDown = edtSRXStrKeyDown
     OnKeyPress = edtSRXStrKeyPress
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 4
   end
   object lblCall: TLabel
     AnchorSideLeft.Control = lblContestName
@@ -222,12 +222,12 @@ object frmContest: TfrmContest
     Top = 161
     Width = 45
     Caption = 'Inc'
-    OnChange = chkNRIncChange
-    OnClick = chkNRIncClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 9
     TabStop = False
+    OnChange = chkNRIncChange
+    OnClick = chkNRIncClick
   end
   object lblNRs: TLabel
     AnchorSideLeft.Control = edtSTX
@@ -264,11 +264,11 @@ object frmContest: TfrmContest
     Top = 161
     Width = 113
     Caption = 'SPACE is TAB'
-    OnChange = chkSpaceChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 18
     TabStop = False
+    OnChange = chkSpaceChange
   end
   object chkNoNr: TCheckBox
     AnchorSideLeft.Control = edtSRX
@@ -279,11 +279,11 @@ object frmContest: TfrmContest
     Top = 161
     Width = 44
     Caption = 'No'
-    OnChange = chkNoNrChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 12
     TabStop = False
+    OnChange = chkNoNrChange
   end
   object chkTrueRST: TCheckBox
     AnchorSideLeft.Control = edtRSTs
@@ -294,11 +294,11 @@ object frmContest: TfrmContest
     Top = 161
     Width = 46
     Caption = 'Tru'
-    OnChange = chkTrueRSTChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 13
     TabStop = False
+    OnChange = chkTrueRSTChange
   end
   object btClearQso: TButton
     AnchorSideLeft.Control = btSave
@@ -312,8 +312,8 @@ object frmContest: TfrmContest
     Anchors = [akLeft, akBottom]
     BorderSpacing.Top = 2
     Caption = 'Clear QSO'
-    OnClick = btClearQsoClick
     TabOrder = 7
+    OnClick = btClearQsoClick
   end
   object btnHelp: TSpeedButton
     AnchorSideTop.Side = asrCenter
@@ -614,13 +614,13 @@ object frmContest: TfrmContest
       'YUDXC'
     )
     MaxLength = 40
-    OnChange = cmbContestNameChange
-    OnEnter = cmbContestNameEnter
-    OnExit = cmbContestNameExit
     ParentShowHint = False
     ShowHint = True
     TabOrder = 11
     TabStop = False
+    OnChange = cmbContestNameChange
+    OnEnter = cmbContestNameEnter
+    OnExit = cmbContestNameExit
   end
   object chkQsp: TCheckBox
     AnchorSideLeft.Control = edtSTXStr
@@ -631,11 +631,11 @@ object frmContest: TfrmContest
     Top = 161
     Width = 51
     Caption = 'Qsp'
-    OnChange = chkQspChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 16
     TabStop = False
+    OnChange = chkQspChange
   end
   object chkTabAll: TCheckBox
     AnchorSideLeft.Control = Owner
@@ -648,11 +648,11 @@ object frmContest: TfrmContest
     Width = 106
     BorderSpacing.Left = 6
     Caption = 'TAB in order'
-    OnChange = chkTabAllChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 17
     TabStop = False
+    OnChange = chkTabAllChange
   end
   object sbContest: TStatusBar
     AnchorSideRight.Side = asrBottom
@@ -742,10 +742,10 @@ object frmContest: TfrmContest
     Width = 110
     BorderSpacing.Left = 3
     Caption = 'Ignore dupes'
-    OnChange = rbIgnoreDupesChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 21
+    OnChange = rbIgnoreDupesChange
   end
   object btClearAll: TButton
     AnchorSideLeft.Control = btSave
@@ -756,9 +756,9 @@ object frmContest: TfrmContest
     Top = 188
     Width = 80
     Caption = 'Clear All'
-    OnClick = btClearAllClick
     TabOrder = 6
     TabStop = False
+    OnClick = btClearAllClick
   end
   object btDupChkStart: TButton
     AnchorSideLeft.Control = rbDupeCheck
@@ -775,11 +775,11 @@ object frmContest: TfrmContest
     Caption = '1900-01-01'
     Constraints.MaxHeight = 35
     Constraints.MaxWidth = 180
-    OnClick = btDupChkStartClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 23
     TabStop = False
+    OnClick = btDupChkStartClick
   end
   object chkSP: TCheckBox
     AnchorSideLeft.Control = edtSTXStr
@@ -792,11 +792,11 @@ object frmContest: TfrmContest
     Top = 161
     Width = 52
     Caption = 'S&&P'
-    OnClick = chkSPClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 24
     TabStop = False
+    OnClick = chkSPClick
   end
   object gbStatus: TGroupBox
     AnchorSideLeft.Control = Owner
@@ -922,12 +922,12 @@ object frmContest: TfrmContest
     BorderSpacing.Left = 3
     Caption = 'Show hint'
     Checked = True
-    OnChange = chkHintChange
     ParentShowHint = False
     ShowHint = True
     State = cbChecked
     TabOrder = 27
     TabStop = False
+    OnChange = chkHintChange
   end
   object CQpanel: TPanel
     AnchorSideLeft.Control = cmbContestName
@@ -1021,12 +1021,12 @@ object frmContest: TfrmContest
       BorderSpacing.Left = 12
       Caption = 'CQ start'
       Font.Color = clGreen
-      OnClick = btnCQstartClick
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
       TabStop = False
+      OnClick = btnCQstartClick
     end
     object lblCqFreq: TLabel
       AnchorSideTop.Control = btnCQstart
@@ -1132,9 +1132,9 @@ object frmContest: TfrmContest
     BorderSpacing.Left = 6
     BorderSpacing.Top = 3
     Caption = 'Filter && Exp'
+    TabOrder = 28
     OnClick = chkSetFilterClick
     OnMouseUp = chkSetFilterMouseUp
-    TabOrder = 28
   end
   object tmrESC2: TTimer
     Enabled = False

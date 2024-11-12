@@ -7,6 +7,8 @@ object frmLongNote: TfrmLongNote
   Caption = 'Show/edit long note'
   ClientHeight = 389
   ClientWidth = 609
+  Constraints.MinHeight = 175
+  Constraints.MinWidth = 430
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -115,7 +117,7 @@ object frmLongNote: TfrmLongNote
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     Left = 0
     Height = 45
@@ -159,4 +161,4 @@ object frmLongNote: TfrmLongNote
     ScrollBars = ssAutoBoth
     TabOrder = 1
   end
-end
+end

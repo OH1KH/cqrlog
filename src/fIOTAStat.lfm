@@ -7,6 +7,8 @@ object frmIOTAStat: TfrmIOTAStat
   Caption = 'IOTA statistics'
   ClientHeight = 494
   ClientWidth = 594
+  Constraints.MinHeight = 280
+  Constraints.MinWidth = 580
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -115,7 +117,7 @@ object frmIOTAStat: TfrmIOTAStat
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -146,17 +148,17 @@ object frmIOTAStat: TfrmIOTAStat
       Anchors = [akTop, akRight]
       BorderSpacing.InnerBorder = 4
       Caption = 'Save'
-      OnClick = btnSaveClick
       TabOrder = 1
+      OnClick = btnSaveClick
     end
     object chkOnlyCFM: TCheckBox
       Left = 7
-      Height = 22
+      Height = 23
       Top = 16
-      Width = 108
+      Width = 124
       Caption = 'confirmed only'
-      OnChange = chkOnlyCFMChange
       TabOrder = 2
+      OnChange = chkOnlyCFMChange
     end
     object cmbCfmType: TComboBox
       Left = 136
@@ -174,10 +176,10 @@ object frmIOTAStat: TfrmIOTAStat
         'eQSL only'
         'paper QSL, LoTW and eQSL'
       )
-      OnChange = cmbCfmTypeChange
       Style = csDropDownList
       TabOrder = 3
       Text = 'paper QSL, LoTW and eQSL'
+      OnChange = cmbCfmTypeChange
     end
   end
   object mIOTA: TMemo
@@ -191,7 +193,7 @@ object frmIOTAStat: TfrmIOTAStat
   end
   object dlgSave: TSaveDialog
     FilterIndex = 0
-    left = 64
-    top = 36
+    Left = 64
+    Top = 36
   end
-end
+end

@@ -1,12 +1,14 @@
 object frmDOKStat: TfrmDOKStat
-  Left = 768
+  Left = 686
   Height = 587
   Top = 256
-  Width = 668
+  Width = 750
   ActiveControl = grdStat
   Caption = 'frmDOKStat'
   ClientHeight = 587
-  ClientWidth = 668
+  ClientWidth = 750
+  Constraints.MinHeight = 320
+  Constraints.MinWidth = 750
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -116,18 +118,18 @@ object frmDOKStat: TfrmDOKStat
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     Left = 0
     Height = 43
     Top = 544
-    Width = 668
+    Width = 750
     Align = alBottom
     ClientHeight = 43
-    ClientWidth = 668
+    ClientWidth = 750
     TabOrder = 0
     object btnClose: TButton
-      Left = 576
+      Left = 658
       Height = 25
       Top = 12
       Width = 75
@@ -139,32 +141,32 @@ object frmDOKStat: TfrmDOKStat
       TabOrder = 0
     end
     object btnHTMLExport: TButton
-      Left = 416
+      Left = 498
       Height = 25
       Top = 12
       Width = 139
       Anchors = [akTop, akRight]
       BorderSpacing.InnerBorder = 4
       Caption = 'Export to HTML'
-      OnClick = btnHTMLExportClick
       TabOrder = 1
+      OnClick = btnHTMLExportClick
     end
     object btnShowSationList: TButton
-      Left = 240
+      Left = 322
       Height = 25
       Top = 12
       Width = 171
       Anchors = [akTop, akRight]
       Caption = 'Show station list'
-      OnClick = btnShowStationListClick
       TabOrder = 2
+      OnClick = btnShowStationListClick
     end
   end
   object grdSumStat: TStringGrid
     Left = 0
     Height = 104
     Top = 440
-    Width = 668
+    Width = 750
     Align = alBottom
     ColCount = 30
     DefaultColWidth = 40
@@ -173,14 +175,13 @@ object frmDOKStat: TfrmDOKStat
     ParentFont = False
     RowCount = 3
     TabOrder = 1
-    TitleFont.Name = 'courier [biznet]'
     TitleStyle = tsNative
   end
   object grdStat: TStringGrid
     Left = 0
     Height = 360
     Top = 80
-    Width = 668
+    Width = 750
     Align = alClient
     ColCount = 30
     DefaultColWidth = 40
@@ -191,31 +192,29 @@ object frmDOKStat: TfrmDOKStat
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
     ParentFont = False
     TabOrder = 2
-    TitleFont.Name = 'dejavu sans mono [dejavu]'
-    TitleFont.Pitch = fpFixed
     TitleStyle = tsNative
   end
   object Panel2: TPanel
     Left = 0
     Height = 80
     Top = 0
-    Width = 668
+    Width = 750
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 80
-    ClientWidth = 668
+    ClientWidth = 750
     TabOrder = 3
     object Label2: TLabel
       Left = 200
       Height = 17
       Top = 10
-      Width = 50
+      Width = 46
       Caption = 'Profile:'
       ParentColor = False
     end
     object edtProfiles: TEdit
       Left = 264
-      Height = 25
+      Height = 34
       Top = 8
       Width = 136
       TabOrder = 0
@@ -226,23 +225,23 @@ object frmDOKStat: TfrmDOKStat
       Top = 7
       Width = 120
       Caption = 'Select profile'
-      OnClick = btnSelectProfileClick
       TabOrder = 1
+      OnClick = btnSelectProfileClick
     end
     object Label1: TLabel
       Left = 8
       Height = 17
       Top = 11
-      Width = 43
+      Width = 40
       Caption = 'Mode:'
       ParentColor = False
     end
     object cmbMode: TComboBox
       Left = 56
-      Height = 25
+      Height = 33
       Top = 5
       Width = 136
-      ItemHeight = 25
+      ItemHeight = 0
       Style = csDropDownList
       TabOrder = 2
     end
@@ -252,15 +251,15 @@ object frmDOKStat: TfrmDOKStat
       Top = 44
       Width = 176
       Caption = 'Refresh statistics'
-      OnClick = btnRefreshClick
       TabOrder = 3
+      OnClick = btnRefreshClick
     end
     object cmbCfmType: TComboBox
       Left = 140
-      Height = 25
+      Height = 29
       Top = 44
       Width = 260
-      ItemHeight = 17
+      ItemHeight = 0
       ItemIndex = 6
       Items.Strings = (
         'paper QSL only'
@@ -279,7 +278,7 @@ object frmDOKStat: TfrmDOKStat
       Left = 8
       Height = 17
       Top = 50
-      Width = 110
+      Width = 105
       Caption = 'Confirmed type:'
       ParentColor = False
     end
@@ -287,16 +286,16 @@ object frmDOKStat: TfrmDOKStat
       Left = 552
       Height = 23
       Top = 8
-      Width = 105
+      Width = 199
       Caption = 'Show logged (S)DOKs only'
-      OnChange = cbHideEmptyChange
       TabOrder = 5
+      OnChange = cbHideEmptyChange
     end
     object cbChoosingDokType: TComboBox
       AnchorSideLeft.Control = btnRefresh
       AnchorSideLeft.Side = asrBottom
       Left = 609
-      Height = 32
+      Height = 29
       Top = 44
       Width = 143
       BorderSpacing.Left = 9
@@ -307,15 +306,15 @@ object frmDOKStat: TfrmDOKStat
         'only DOK'
         'only SDOK'
       )
-      OnChange = cbChoosingDokTypeChange
       Style = csDropDownList
       TabOrder = 6
       Text = 'DOK & SDOK'
+      OnChange = cbChoosingDokTypeChange
     end
   end
   object dlgSave: TSaveDialog
     FilterIndex = 0
-    left = 520
-    top = 272
+    Left = 520
+    Top = 272
   end
 end

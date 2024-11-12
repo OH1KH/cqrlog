@@ -8,12 +8,14 @@ object frmWorkedGrids: TfrmWorkedGrids
   Caption = 'Worked locator grids'
   ClientHeight = 432
   ClientWidth = 721
+  Constraints.MinHeight = 290
+  Constraints.MinWidth = 430
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poDefault
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '3.6.0.0'
   object BandSelector: TComboBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = BandLabel
@@ -43,10 +45,10 @@ object frmWorkedGrids: TfrmWorkedGrids
       '4M'
       '2M'
     )
-    OnChange = BandSelectorChange
-    OnKeyUp = FormKeyUp
     Style = csDropDownList
     TabOrder = 0
+    OnChange = BandSelectorChange
+    OnKeyUp = FormKeyUp
   end
   object BandLabel: TLabel
     AnchorSideLeft.Control = Owner
@@ -72,9 +74,9 @@ object frmWorkedGrids: TfrmWorkedGrids
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 3
     Caption = 'Save image'
+    TabOrder = 1
     OnClick = SaveMapClick
     OnEnter = SaveMapClick
-    TabOrder = 1
   end
   object Nrstatus: TLabel
     AnchorSideLeft.Control = Owner
@@ -139,9 +141,9 @@ object frmWorkedGrids: TfrmWorkedGrids
     Width = 86
     BorderSpacing.Top = 2
     ItemHeight = 0
-    OnChange = WsModeChange
     Style = csDropDownList
     TabOrder = 3
+    OnChange = WsModeChange
   end
   object modeLabel: TLabel
     AnchorSideLeft.Control = BandSelector
@@ -181,8 +183,8 @@ object frmWorkedGrids: TfrmWorkedGrids
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 3
     Caption = 'Wkd grid'
-    OnClick = ShoWkdOnlyClick
     TabOrder = 2
+    OnClick = ShoWkdOnlyClick
   end
   object ZooMap: TImage
     AnchorSideLeft.Control = LocMap
@@ -245,13 +247,13 @@ object frmWorkedGrids: TfrmWorkedGrids
     DefaultExt = '.bmp'
     Filter = '.bmp, .png, .jpg'
     Options = [ofOverwritePrompt, ofPathMustExist, ofEnableSizing, ofViewDetail]
-    left = 544
-    top = 368
+    Left = 544
+    Top = 368
   end
   object AutoUpdate: TTimer
     Enabled = False
     OnTimer = AutoUpdateTimer
-    left = 638
-    top = 368
+    Left = 638
+    Top = 368
   end
 end

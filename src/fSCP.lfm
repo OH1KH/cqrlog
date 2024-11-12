@@ -1,19 +1,21 @@
 object frmSCP: TfrmSCP
   Left = 520
-  Height = 168
+  Height = 200
   Top = 409
   Width = 462
   Caption = 'Super check partial'
-  ClientHeight = 168
+  ClientHeight = 200
   ClientWidth = 462
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 100
   KeyPreview = True
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '3.6.0.0'
   object mSCP: TMemo
     Left = 0
-    Height = 168
+    Height = 200
     Top = 0
     Width = 462
     Align = alClient

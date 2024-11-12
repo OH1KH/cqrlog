@@ -6,9 +6,11 @@ object frmCountyStat: TfrmCountyStat
   Caption = 'County statistic'
   ClientHeight = 590
   ClientWidth = 653
+  Constraints.MinHeight = 225
+  Constraints.MinWidth = 585
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -34,9 +36,9 @@ object frmCountyStat: TfrmCountyStat
       BorderSpacing.Left = 6
       BorderSpacing.Top = 9
       ItemHeight = 0
-      OnChange = cmbBandsChange
       Style = csDropDownList
       TabOrder = 0
+      OnChange = cmbBandsChange
     end
     object Label1: TLabel
       AnchorSideLeft.Control = Panel1
@@ -74,8 +76,8 @@ object frmCountyStat: TfrmCountyStat
         Width = 51
         BorderSpacing.Left = 6
         Caption = 'QSL'
-        OnChange = cmbBandsChange
         TabOrder = 0
+        OnChange = cmbBandsChange
       end
       object chkLoTW: TCheckBox
         AnchorSideLeft.Control = GroupBox1
@@ -87,8 +89,8 @@ object frmCountyStat: TfrmCountyStat
         Top = 1
         Width = 62
         Caption = 'LoTW'
-        OnChange = cmbBandsChange
         TabOrder = 1
+        OnChange = cmbBandsChange
       end
       object chkeQSL: TCheckBox
         AnchorSideTop.Control = GroupBox1
@@ -102,8 +104,8 @@ object frmCountyStat: TfrmCountyStat
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 6
         Caption = 'eQSL'
-        OnChange = cmbBandsChange
         TabOrder = 2
+        OnChange = cmbBandsChange
       end
     end
     object pbTot: TProgressBar
@@ -135,8 +137,8 @@ object frmCountyStat: TfrmCountyStat
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 12
       Caption = 'Refresh statistic'
-      OnClick = btnRefreshClick
       TabOrder = 3
+      OnClick = btnRefreshClick
     end
     object lblFIlterActive: TLabel
       AnchorSideLeft.Control = GroupBox1
@@ -196,8 +198,8 @@ object frmCountyStat: TfrmCountyStat
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 12
       Caption = 'Save to ...'
-      OnClick = btnSaveToClick
       TabOrder = 1
+      OnClick = btnSaveToClick
     end
   end
   object IpHtmlPanel1: TIpHtmlPanel

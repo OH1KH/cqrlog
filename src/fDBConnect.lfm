@@ -2,10 +2,12 @@ object frmDBConnect: TfrmDBConnect
   Left = 499
   Height = 587
   Top = 186
-  Width = 357
+  Width = 360
   Caption = 'Database connection'
   ClientHeight = 587
-  ClientWidth = 357
+  ClientWidth = 360
+  Constraints.MinHeight = 530
+  Constraints.MinWidth = 360
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2126,19 +2128,19 @@ object frmDBConnect: TfrmDBConnect
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object grbLogin: TGroupBox
     Left = 0
     Height = 218
     Top = 0
-    Width = 357
+    Width = 360
     Align = alTop
     AutoSize = True
     BorderSpacing.InnerBorder = 10
     Caption = ' MySQL server '
     ChildSizing.LeftRightSpacing = 10
     ClientHeight = 200
-    ClientWidth = 355
+    ClientWidth = 358
     TabOrder = 0
     Visible = False
     object edtServer: TEdit
@@ -2149,9 +2151,9 @@ object frmDBConnect: TfrmDBConnect
       Top = 19
       Width = 168
       BorderSpacing.Top = 2
-      OnExit = edtServerExit
       TabOrder = 0
       Text = 'localhost'
+      OnExit = edtServerExit
     end
     object lblServerName: TLabel
       Left = 10
@@ -2180,9 +2182,9 @@ object frmDBConnect: TfrmDBConnect
       Width = 80
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
-      OnExit = edtPortExit
       TabOrder = 1
       Text = '3306'
+      OnExit = edtPortExit
     end
     object lblUserName: TLabel
       AnchorSideTop.Control = edtServer
@@ -2203,8 +2205,8 @@ object frmDBConnect: TfrmDBConnect
       Top = 78
       Width = 168
       BorderSpacing.Top = 2
-      OnExit = edtUserExit
       TabOrder = 2
+      OnExit = edtUserExit
     end
     object lblPassword: TLabel
       AnchorSideTop.Control = edtPort
@@ -2229,9 +2231,9 @@ object frmDBConnect: TfrmDBConnect
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
       EchoMode = emPassword
-      OnExit = edtPassExit
       PasswordChar = '*'
       TabOrder = 3
+      OnExit = edtPassExit
     end
     object chkSavePass: TCheckBox
       AnchorSideTop.Control = edtUser
@@ -2242,8 +2244,8 @@ object frmDBConnect: TfrmDBConnect
       Width = 123
       BorderSpacing.Top = 6
       Caption = 'Remember me'
-      OnChange = chkSavePassChange
       TabOrder = 4
+      OnChange = chkSavePassChange
     end
     object btnConnect: TButton
       AnchorSideTop.Control = chkSavePass
@@ -2256,8 +2258,8 @@ object frmDBConnect: TfrmDBConnect
       BorderSpacing.Top = 6
       Caption = 'Connect'
       Constraints.MinWidth = 90
-      OnClick = btnConnectClick
       TabOrder = 5
+      OnClick = btnConnectClick
     end
     object btnDisconnect: TButton
       AnchorSideTop.Control = chkAutoConn
@@ -2270,8 +2272,8 @@ object frmDBConnect: TfrmDBConnect
       BorderSpacing.Top = 6
       Caption = 'Disconnect'
       Constraints.MinWidth = 90
-      OnClick = btnDisconnectClick
       TabOrder = 6
+      OnClick = btnDisconnectClick
     end
     object chkAutoConn: TCheckBox
       AnchorSideTop.Control = edtPass
@@ -2289,15 +2291,15 @@ object frmDBConnect: TfrmDBConnect
     Left = 0
     Height = 326
     Top = 261
-    Width = 357
+    Width = 360
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel1'
     ClientHeight = 326
-    ClientWidth = 357
+    ClientWidth = 360
     TabOrder = 1
     object Panel2: TPanel
-      Left = 225
+      Left = 228
       Height = 293
       Top = 0
       Width = 132
@@ -2320,8 +2322,8 @@ object frmDBConnect: TfrmDBConnect
         Caption = 'New log'
         Constraints.MinWidth = 100
         Enabled = False
-        OnClick = btnNewLogClick
         TabOrder = 1
+        OnClick = btnNewLogClick
       end
       object btnEditLog: TButton
         AnchorSideTop.Control = btnNewLog
@@ -2335,8 +2337,8 @@ object frmDBConnect: TfrmDBConnect
         Caption = 'Edit log'
         Constraints.MinWidth = 100
         Enabled = False
-        OnClick = btnEditLogClick
         TabOrder = 2
+        OnClick = btnEditLogClick
       end
       object btnDeleteLog: TButton
         AnchorSideTop.Control = btnEditLog
@@ -2350,8 +2352,8 @@ object frmDBConnect: TfrmDBConnect
         Caption = 'Delete log'
         Constraints.MinWidth = 100
         Enabled = False
-        OnClick = btnDeleteLogClick
         TabOrder = 3
+        OnClick = btnDeleteLogClick
       end
       object btnOpenLog: TButton
         Left = 12
@@ -2364,8 +2366,8 @@ object frmDBConnect: TfrmDBConnect
         Caption = 'Open log'
         Constraints.MinWidth = 100
         Enabled = False
-        OnClick = btnOpenLogClick
         TabOrder = 0
+        OnClick = btnOpenLogClick
       end
       object btnCancel: TButton
         AnchorSideTop.Control = btnOpenLog
@@ -2379,8 +2381,8 @@ object frmDBConnect: TfrmDBConnect
         Cancel = True
         Caption = 'Cancel'
         Constraints.MinWidth = 100
-        OnClick = btnCancelClick
         TabOrder = 4
+        OnClick = btnCancelClick
       end
       object btnUtils: TButton
         AnchorSideTop.Control = btnDeleteLog
@@ -2393,15 +2395,15 @@ object frmDBConnect: TfrmDBConnect
         BorderSpacing.Top = 30
         Caption = 'Utils'
         Constraints.MinWidth = 100
-        OnClick = btnUtilsClick
         TabOrder = 5
+        OnClick = btnUtilsClick
       end
     end
     object dbgrdLogs: TDBGrid
       Left = 0
       Height = 293
       Top = 0
-      Width = 225
+      Width = 228
       Align = alClient
       Color = clWindow
       Columns = <>
@@ -2414,7 +2416,7 @@ object frmDBConnect: TfrmDBConnect
       Left = 5
       Height = 23
       Top = 298
-      Width = 352
+      Width = 355
       Align = alBottom
       AutoSize = True
       BorderSpacing.Left = 5
@@ -2422,7 +2424,7 @@ object frmDBConnect: TfrmDBConnect
       BorderSpacing.Bottom = 5
       BevelOuter = bvNone
       ClientHeight = 23
-      ClientWidth = 352
+      ClientWidth = 355
       TabOrder = 2
       object chkAutoOpen: TCheckBox
         Left = 0
@@ -2438,13 +2440,13 @@ object frmDBConnect: TfrmDBConnect
     Left = 10
     Height = 23
     Top = 228
-    Width = 337
+    Width = 340
     Align = alTop
     AutoSize = True
     BorderSpacing.Around = 10
     BevelOuter = bvNone
     ClientHeight = 23
-    ClientWidth = 337
+    ClientWidth = 340
     TabOrder = 2
     object chkSaveToLocal: TCheckBox
       Left = 0
@@ -2452,8 +2454,8 @@ object frmDBConnect: TfrmDBConnect
       Top = 0
       Width = 227
       Caption = 'Save log data to local machine'
-      OnClick = chkSaveToLocalClick
       TabOrder = 0
+      OnClick = chkSaveToLocalClick
     end
   end
   object tmrAutoConnect: TTimer

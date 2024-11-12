@@ -5,11 +5,15 @@ object frmKeyTexts: TfrmKeyTexts
   Width = 616
   HelpType = htKeyword
   HelpKeyword = 'help/h26.html'
+  HorzScrollBar.Page = 613
+  VertScrollBar.Page = 643
+  AutoScroll = True
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'CW Messages'
   ClientHeight = 651
   ClientWidth = 616
+  Constraints.MinHeight = 260
+  Constraints.MinWidth = 330
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -118,10 +122,8 @@ object frmKeyTexts: TfrmKeyTexts
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object pnlControl: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideBottom.Control = Owner
     Left = 0
     Height = 34
     Top = 617
@@ -142,8 +144,8 @@ object frmKeyTexts: TfrmKeyTexts
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 36
       Caption = 'OK'
-      OnClick = btnOKClick
       TabOrder = 0
+      OnClick = btnOKClick
     end
     object btnHelp: TButton
       AnchorSideLeft.Control = pnlControl
@@ -155,8 +157,8 @@ object frmKeyTexts: TfrmKeyTexts
       Top = 5
       Width = 75
       Caption = 'Help'
-      OnClick = btnHelpClick
       TabOrder = 1
+      OnClick = btnHelpClick
     end
     object btnCancel: TButton
       AnchorSideLeft.Control = btnHelp
@@ -197,15 +199,11 @@ object frmKeyTexts: TfrmKeyTexts
       Height = 509
       Top = 1
       Width = 614
-      ActivePage = tabSeP
+      ActivePage = tabRUN
       Anchors = [akTop, akLeft, akRight, akBottom]
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       object tabSeP: TTabSheet
-        AnchorSideLeft.Control = pgMemories
-        AnchorSideTop.Control = pgMemories
-        AnchorSideRight.Control = pgMemories
-        AnchorSideBottom.Control = pgMemories
         Hint = 'Default memories when Contest window is closed.'#10'S&P memories when COntest window is open.'
         Caption = 'S&&P (default)'
         ClientHeight = 478
@@ -276,7 +274,7 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox9
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 382
           Width = 290
@@ -337,7 +335,7 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox8
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 288
           Width = 290
@@ -398,7 +396,7 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox7
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 194
           Width = 290
@@ -459,7 +457,7 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox6
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 100
           Width = 290
@@ -515,15 +513,15 @@ object frmKeyTexts: TfrmKeyTexts
           end
         end
         object GroupBox6: TGroupBox
+          AnchorSideLeft.Control = GroupBox1
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = tabSeP
-          AnchorSideRight.Control = tabSeP
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 6
           Width = 290
-          Anchors = [akTop, akRight]
+          BorderSpacing.Left = 9
           BorderSpacing.Top = 6
           BorderSpacing.Right = 6
           Caption = ' F6 '
@@ -821,10 +819,6 @@ object frmKeyTexts: TfrmKeyTexts
         end
       end
       object tabRUN: TTabSheet
-        AnchorSideLeft.Control = pgMemories
-        AnchorSideTop.Control = pgMemories
-        AnchorSideRight.Control = pgMemories
-        AnchorSideBottom.Control = pgMemories
         Hint = 'CW memories when COntest window is open and S6P is unchecked (Run mode)'
         Caption = 'Run'
         ClientHeight = 478
@@ -841,7 +835,7 @@ object frmKeyTexts: TfrmKeyTexts
           BorderSpacing.Left = 6
           BorderSpacing.Top = 6
           Caption = ' F1 '
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 0
           object Label17: TLabel
@@ -900,7 +894,7 @@ object frmKeyTexts: TfrmKeyTexts
           Width = 290
           BorderSpacing.Top = 6
           Caption = ' F2'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 1
           object Label37: TLabel
@@ -959,7 +953,7 @@ object frmKeyTexts: TfrmKeyTexts
           Width = 290
           BorderSpacing.Top = 6
           Caption = ' F3'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 2
           object Label39: TLabel
@@ -1018,7 +1012,7 @@ object frmKeyTexts: TfrmKeyTexts
           Width = 290
           BorderSpacing.Top = 6
           Caption = ' F4'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 3
           object Label19: TLabel
@@ -1077,7 +1071,7 @@ object frmKeyTexts: TfrmKeyTexts
           Width = 290
           BorderSpacing.Top = 6
           Caption = ' F5'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 4
           object Label21: TLabel
@@ -1126,19 +1120,18 @@ object frmKeyTexts: TfrmKeyTexts
           end
         end
         object GroupBox16: TGroupBox
+          AnchorSideLeft.Control = GroupBox11
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = tabRUN
-          AnchorSideRight.Control = tabRUN
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 6
           Width = 290
-          Anchors = [akTop, akRight]
+          BorderSpacing.Left = 9
           BorderSpacing.Top = 6
-          BorderSpacing.Right = 6
           Caption = ' F6 '
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 5
           object Label23: TLabel
@@ -1191,14 +1184,14 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox16
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 100
           Width = 290
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 6
           Caption = ' F7'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 6
           object Label25: TLabel
@@ -1251,14 +1244,14 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox16
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 194
           Width = 290
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 6
           Caption = ' F8'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 7
           object Label27: TLabel
@@ -1311,14 +1304,14 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox16
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 288
           Width = 290
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 6
           Caption = ' F9'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 8
           object Label29: TLabel
@@ -1371,14 +1364,14 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupBox16
           AnchorSideRight.Side = asrBottom
-          Left = 308
+          Left = 305
           Height = 88
           Top = 382
           Width = 290
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 6
           Caption = ' F10'
-          ClientHeight = 86
+          ClientHeight = 70
           ClientWidth = 288
           TabOrder = 9
           object Label31: TLabel
@@ -1444,33 +1437,33 @@ object frmKeyTexts: TfrmKeyTexts
       ClientWidth = 614
       TabOrder = 1
       object gbSaveLoad: TGroupBox
+        AnchorSideLeft.Control = rgEnter
+        AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = pnlActions
-        AnchorSideRight.Control = pnlActions
         AnchorSideRight.Side = asrBottom
-        Left = 317
+        Left = 309
         Height = 88
         Top = 4
-        Width = 290
-        Anchors = [akTop, akRight]
+        Width = 298
+        BorderSpacing.Left = 9
         BorderSpacing.Top = 3
-        BorderSpacing.Right = 6
         Caption = 'CW Messages'
         ClientHeight = 70
-        ClientWidth = 288
+        ClientWidth = 296
         TabOrder = 1
         object SaveMsg: TButton
           AnchorSideLeft.Control = gbSaveLoad
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = gbSaveLoad
           AnchorSideRight.Side = asrBottom
-          Left = 100
+          Left = 104
           Height = 26
           Top = 6
           Width = 88
           BorderSpacing.Top = 6
           Caption = 'Save'
-          OnClick = SaveMsgClick
           TabOrder = 0
+          OnClick = SaveMsgClick
         end
         object LoadMsg: TButton
           AnchorSideLeft.Control = gbSaveLoad
@@ -1479,14 +1472,14 @@ object frmKeyTexts: TfrmKeyTexts
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Side = asrBottom
-          Left = 100
+          Left = 104
           Height = 26
           Top = 35
           Width = 88
           BorderSpacing.Top = 3
           Caption = 'Load'
-          OnClick = LoadMsgClick
           TabOrder = 1
+          OnClick = LoadMsgClick
         end
       end
       object rgEnter: TRadioGroup

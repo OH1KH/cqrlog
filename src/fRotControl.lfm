@@ -1,15 +1,15 @@
 object frmRotControl: TfrmRotControl
   Left = 282
-  Height = 225
+  Height = 200
   Top = 155
   Width = 184
   Anchors = []
   BorderIcons = [biSystemMenu]
   Caption = 'Rotor control'
-  ClientHeight = 225
+  ClientHeight = 200
   ClientWidth = 184
-  Constraints.MinHeight = 50
-  Constraints.MinWidth = 50
+  Constraints.MinHeight = 180
+  Constraints.MinWidth = 180
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -164,7 +164,7 @@ object frmRotControl: TfrmRotControl
     AnchorSideBottom.Side = asrBottom
     Left = 6
     Height = 112
-    Top = 107
+    Top = 82
     Width = 172
     Anchors = [akLeft, akRight, akBottom]
     AutoSize = True
