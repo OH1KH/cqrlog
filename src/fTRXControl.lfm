@@ -1,11 +1,11 @@
 object frmTRXControl: TfrmTRXControl
   Left = 950
-  Height = 270
+  Height = 341
   Top = 29
   Width = 270
   Anchors = []
   Caption = 'TRX control'
-  ClientHeight = 270
+  ClientHeight = 341
   ClientWidth = 270
   Constraints.MinHeight = 270
   Constraints.MinWidth = 270
@@ -281,7 +281,7 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = gbMode
     Left = 1
-    Height = 270
+    Height = 341
     Top = 0
     Width = 189
     Align = alLeft
@@ -289,7 +289,7 @@ object frmTRXControl: TfrmTRXControl
     BorderSpacing.Left = 1
     BorderSpacing.Right = 1
     BevelOuter = bvNone
-    ClientHeight = 270
+    ClientHeight = 341
     ClientWidth = 189
     TabOrder = 1
     object gbFreq: TGroupBox
@@ -373,15 +373,16 @@ object frmTRXControl: TfrmTRXControl
       AnchorSideTop.Control = gbInfo
       AnchorSideRight.Control = pnlMain
       Left = 1
-      Height = 121
+      Height = 191
       Top = 117
       Width = 187
       Align = alClient
+      Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 1
       BorderSpacing.Top = 3
       BorderSpacing.Right = 1
       Caption = ' Band '
-      ClientHeight = 103
+      ClientHeight = 173
       ClientWidth = 185
       TabOrder = 1
       object btn160m: TButton
@@ -578,9 +579,10 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Side = asrBottom
         Left = 0
         Height = 30
-        Top = 73
+        Top = 140
         Width = 185
         Anchors = [akLeft, akRight, akBottom]
+        BorderSpacing.Bottom = 3
         BevelOuter = bvNone
         ClientHeight = 30
         ClientWidth = 185
@@ -637,7 +639,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Control = pnlPower
         Left = 0
         Height = 30
-        Top = 43
+        Top = 110
         Width = 185
         Anchors = [akLeft, akRight, akBottom]
         BevelOuter = bvNone
@@ -697,10 +699,10 @@ object frmTRXControl: TfrmTRXControl
       AnchorSideBottom.Side = asrBottom
       Left = 0
       Height = 27
-      Top = 240
+      Top = 311
       Width = 189
       Align = alBottom
-      BorderSpacing.Top = 2
+      BorderSpacing.Top = 3
       BorderSpacing.Bottom = 3
       BevelOuter = bvNone
       ClientHeight = 27
