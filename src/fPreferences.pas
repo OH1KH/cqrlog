@@ -728,7 +728,7 @@ type
     lblSerialRSpd: TLabel;
     lblSerialRStop: TLabel;
     LblTimes: TLabel;
-    Label17: TLabel;
+    lblExtViewErrorMsg: TLabel;
     lblUsr1R: TLabel;
     lblUsr2R: TLabel;
     lblUsr3R: TLabel;
@@ -1024,6 +1024,7 @@ type
     procedure chkBeamArcLengthExit(Sender: TObject);
     procedure chkBlenByQsoExit(Sender: TObject);
     procedure chkClUpEnabledChange(Sender: TObject);
+    procedure chkHamClockChange(Sender: TObject);
     procedure chkHaUpEnabledChange(Sender: TObject);
     procedure chkHrUpEnabledChange(Sender: TObject);
     procedure chkUdUpEnabledChange(Sender: TObject);
@@ -1778,7 +1779,7 @@ begin
   dmUtils.InsertQSL_S(cmbQSL_S);
   dmUtils.InsertFreq(cmbFreq);
   ActPageIdx := 0; //tabProgram
-  Label17.Caption:='';
+  lblExtViewErrorMsg.Caption:='';
 end;
 
 
@@ -2337,6 +2338,17 @@ begin
   cmbClColor.Enabled    := chkClUpEnabled.Checked
 end;
 
+procedure TfrmPreferences.chkHamClockChange(Sender: TObject);
+begin
+   if chkHamClock.Checked then
+    if (edtHamClockUrl.Text='') then
+    begin
+       edtHamClockUrl.Text:='http://';
+       edtHamClockUrl.SetFocus;
+       edtHamClockUrl.SelStart:=length(edtHamClockUrl.Text);
+    end;
+end;
+
 procedure TfrmPreferences.chkHaUpEnabledChange(Sender: TObject);
 begin
   edtHaUserName.Enabled := chkHaUpEnabled.Checked;
@@ -2694,11 +2706,41 @@ begin
 end;
 
 procedure TfrmPreferences.edtHamClockUrlExit(Sender: TObject);
+var
+  f: string;
+  p:integer;
+  ok:boolean;
 begin
-  edtHamClockUrl.Text:=lowerCase(edtHamClockUrl.Text);
-  if (copy(edtHamClockUrl.Text,1,7)<>'http://') then //very simple address check.
-     edtHamClockUrl.SetFocus;
-end;
+  if  (edtHamClockUrl.Text<>'') then
+    begin
+      ok:=true;
+      edtHamClockUrl.Text:=lowerCase(edtHamClockUrl.Text);
+      if (copy(edtHamClockUrl.Text,1,7)='http://') then     //chk URL head
+      begin
+        f:=copy(edtHamClockUrl.Text,8,length(edtHamClockUrl.Text));
+        p:=pos(':',f);                                      //find ":"
+        if (p<>0) then
+          begin
+            f:= copy(f,p+1,length(f));
+            ok:=tryStrToint(f,p);                           //port is number
+          end
+         else
+         ok:=false;
+      end
+       else
+         ok:=false;
+
+      if not ok then
+        Begin
+          lblExtViewErrorMsg.Caption:='NOTE: Right format is: http://address:port';
+          edtHamClockUrl.SetFocus;
+        end
+         else
+           lblExtViewErrorMsg.Caption:='';
+    end
+   else
+     chkHamClock.Checked:=false;
+  end;
 
 procedure TfrmPreferences.edtHtmlFilesClick(Sender: TObject);
 begin
@@ -2711,9 +2753,9 @@ begin
    if ExtractFilePath(edtHtmlFiles.Text)='' then
    Begin
      edtHtmlFiles.Text:='';
-     Label17.Caption:='NOTE: You have to give full path for program file names!'
+     lblExtViewErrorMsg.Caption:='NOTE: You have to give full path for program file names!'
    end else
-     Label17.Caption:='';
+     lblExtViewErrorMsg.Caption:='';
 end;
 
 procedure TfrmPreferences.edtImgFilesExit(Sender: TObject);
@@ -2816,7 +2858,7 @@ end;
 function TfrmPreferences.SeekExecFile(MyFile,MyExeFor:string): String;
 Begin
      Result :='';
-     Label17.Caption:='NOTE: You have to give full path for program file names!';
+     lblExtViewErrorMsg.Caption:='NOTE: You have to give full path for program file names!';
      odFindBrowser.InitialDir:='/usr/bin';
      odFindBrowser.FileName:=MyFile;
      odFindBrowser.Title:=MyExeFor;

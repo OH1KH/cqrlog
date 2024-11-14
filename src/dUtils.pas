@@ -5799,30 +5799,47 @@ end;
 
 procedure TdmUtils.HamClockSetNewDX(lat,lon,loc:string);
 //set_newdx?            grid=AB12&lat=X&lng=Y
+var  s:string;
 Begin
       if not cqrini.ReadBool('HamClock','enable', false) then
                                                          exit;
       if (loc<>'') then //locator has priority
-       HamClockSendCommand('set_newdx?grid='+copy(loc,1,4))
+       s:='set_newdx?grid='+copy(loc,1,4)
        else
          if ((loc='')and(lat<>'')and(lon<>'')) then
-           HamClockSendCommand('set_newdx?lat='+lat+'&lng='+lon);
-
-
+           s:='set_newdx?lat='+lat+'&lng='+lon;
+      if dmData.DebugLevel >= 1 then
+         Writeln('HamClock cmd:',s);
+      s:=HamClockSendCommand(s);
+     if dmData.DebugLevel >= 1 then
+         Writeln('HamClock response:',s);
 end;
 procedure TdmUtils.HamClockSetNewDE(loc,lat,lon,mycall:string);
 //set_newde?            grid=AB12&lat=X&lng=Y&call=AA0XYZ
+var  s:string;
 Begin
       if not cqrini.ReadBool('HamClock','enable', false) then
                                                          exit;
       if (loc<>'') then //locator has priority
-       HamClockSendCommand('set_newde?grid='+copy(loc,1,4))
+       s:='set_newde?grid='+copy(loc,1,4)
        else
          if ((loc='')and(lat<>'')and(lon<>'')) then
-            HamClockSendCommand('set_newde?lat='+lat+'&lng='+lon);
+           s:='set_newde?lat='+lat+'&lng='+lon;
+      if dmData.DebugLevel >= 1 then
+         Writeln('HamClock cmd:',s);
+      s:=HamClockSendCommand(s);
+      if dmData.DebugLevel >= 1 then
+         Writeln('HamClock response:',s);
 
      if mycall<>'' then
-       HamClockSendCommand('set_newde?call='+mycall);
+      Begin
+        s:= 'set_newde?call='+mycall;
+        if dmData.DebugLevel >= 1 then
+          Writeln('HamClock cmd:',s);
+        s:=HamClockSendCommand(s);
+        if dmData.DebugLevel >= 1 then
+         Writeln('HamClock response:',s);
+      end;
 
 end;
 
