@@ -1458,6 +1458,9 @@ begin
   ChangeDXCC := False;
   adif := 0;
   FreqBefChange := frmTRXControl.GetFreqMHz;
+  dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
+  dmUtils.HamClockSetNewDX('','',CurrentMyloc);
+
 end;
 
 procedure TfrmNewQSO.LoadSettings;
@@ -4571,6 +4574,8 @@ begin
   if dmUtils.isLocOK(edtGrid.Text) then
     begin
      CalculateDistanceEtc;
+     dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
+     dmUtils.HamClockSetNewDX('','',edtGrid.Text);
      sbtnLocatorMap.Visible := True;
      lblGrid.Font.Style:=[];
      lblGrid.Font.Color:=clDefault;
@@ -5674,6 +5679,8 @@ begin
   if (not (fEditQSO or fViewQSO)) then
     FreqBefChange := frmTRXControl.GetFreqMHz;
 
+  dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
+  dmUtils.HamClockSetNewDX(lblLat.Caption,lblLong.Caption,edtGrid.Text);
   CheckCallsignClub;
   CheckAwardClub;
   CheckCountyClub;

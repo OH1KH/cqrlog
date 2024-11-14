@@ -134,6 +134,7 @@ type
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
     function GetQRZCQInfo(call: string;
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
+    function HamClockSendCommand(cmd: string):string;
 
   public
     s136: string;
@@ -239,6 +240,8 @@ type
     procedure KeyInLoc(loc:string; var key:char);
     procedure AdifAsciiTrim(var col:TEdit);
     procedure ViewTextFile(f:string);
+    procedure HamClockSetNewDX(lat,lon,loc:string);
+    procedure HamClockSetNewDE(loc,lat,lon,mycall:string);
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
@@ -5760,5 +5763,69 @@ begin
   end;
 
 end;
+
+function TdmUtils.HamClockSendCommand(cmd: string):string;
+var
+  http: THTTPSend;
+  m: TStringList;
+  req: string;
+Begin
+  Result:='';
+  http := THTTPSend.Create;
+  m := TStringList.Create;
+  try
+    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
+    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
+    http.UserName := cqrini.ReadString('Program', 'User', '');
+    http.Password := cqrini.ReadString('Program', 'Passwd', '');
+    if (cmd = '') then
+    begin
+      Result := 'cmd empty!';
+      exit;
+    end;
+    req := cqrini.ReadString('HamClock','url','http://localhost:8080')+'/'+cmd;
+    if not HTTP.HTTPMethod('GET', req) then
+      Result := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
+     else
+      Begin
+       m.LoadFromStream(http.Document);
+       Result:=m.Text;
+      end;
+  finally
+    m.Free;
+    HTTP.Free
+  end;
+end;
+
+procedure TdmUtils.HamClockSetNewDX(lat,lon,loc:string);
+//set_newdx?            grid=AB12&lat=X&lng=Y
+Begin
+      if not cqrini.ReadBool('HamClock','enable', false) then
+                                                         exit;
+      if (loc<>'') then //locator has priority
+       HamClockSendCommand('set_newdx?grid='+copy(loc,1,4))
+       else
+         if ((loc='')and(lat<>'')and(lon<>'')) then
+           HamClockSendCommand('set_newdx?lat='+lat+'&lng='+lon);
+
+
+end;
+procedure TdmUtils.HamClockSetNewDE(loc,lat,lon,mycall:string);
+//set_newde?            grid=AB12&lat=X&lng=Y&call=AA0XYZ
+Begin
+      if not cqrini.ReadBool('HamClock','enable', false) then
+                                                         exit;
+      if (loc<>'') then //locator has priority
+       HamClockSendCommand('set_newde?grid='+copy(loc,1,4))
+       else
+         if ((loc='')and(lat<>'')and(lon<>'')) then
+            HamClockSendCommand('set_newde?lat='+lat+'&lng='+lon);
+
+     if mycall<>'' then
+       HamClockSendCommand('set_newde?call='+mycall);
+
+end;
+
+
 end.
 

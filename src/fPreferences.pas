@@ -107,6 +107,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkHamClock: TCheckBox;
     chkNewAlpha: TCheckBox;
     chkCompressBackup1: TCheckBox;
     chkNFname: TCheckBox;
@@ -452,6 +453,7 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtHamClockUrl: TEdit;
     edtBackupFileName1: TEdit;
     edtBackupFileName2: TEdit;
     edtK3NHex: TEdit;
@@ -676,6 +678,7 @@ type
     Label108: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    lblHamclock: TLabel;
     lblK3NGHex: TLabel;
     lblSpdStep: TLabel;
     lblSpdStepWpm: TLabel;
@@ -1055,6 +1058,7 @@ type
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
     procedure edtGCStepExit(Sender: TObject);
+    procedure edtHamClockUrlExit(Sender: TObject);
     procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtHtmlFilesExit(Sender: TObject);
     procedure edtImgFilesExit(Sender: TObject);
@@ -1659,6 +1663,9 @@ begin
   cqrini.WriteBool('prop','Values',chkShowCondxValues.Checked);
   cqrini.WriteBool('prop','CalcHF',chkCondxCalcHF.Checked);
   cqrini.WriteBool('prop','CalcVHF',chkCondxCalcVHF.Checked);
+
+  cqrini.WriteString('HamClock','url',edtHamClockUrl.Text);
+  cqrini.WriteBool('HamClock','enable', chkHamClock.Checked);
 
   if CWKeyerChanged then frmNewQSO.InitializeCW;
 
@@ -2686,6 +2693,13 @@ begin
     edtGCStep.Caption:='0.1'; //on convert error use default value;
 end;
 
+procedure TfrmPreferences.edtHamClockUrlExit(Sender: TObject);
+begin
+  edtHamClockUrl.Text:=lowerCase(edtHamClockUrl.Text);
+  if (copy(edtHamClockUrl.Text,1,7)<>'http://') then //very simple address check.
+     edtHamClockUrl.SetFocus;
+end;
+
 procedure TfrmPreferences.edtHtmlFilesClick(Sender: TObject);
 begin
   if odFindBrowser.Execute then
@@ -3483,6 +3497,9 @@ begin
   chkShowCondxValues.Checked := cqrini.ReadBool('prop','Values',True);
   chkCondxCalcHF.Checked     := cqrini.ReadBool('prop','CalcHF',True);
   chkCondxCalcVHF.Checked    := cqrini.ReadBool('prop','CalcVHF',True);
+
+  edtHamClockUrl.Text        := cqrini.ReadString('HamClock','url','http://localhost:8080');
+  chkHamClock.Checked        := cqrini.ReadBool('HamClock','enable', false);
 
   wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked or chkUdUpEnabled.Checked;
 
