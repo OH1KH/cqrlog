@@ -1459,7 +1459,7 @@ begin
   adif := 0;
   FreqBefChange := frmTRXControl.GetFreqMHz;
   dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
- // dmUtils.HamClockSetNewDX('','',CurrentMyloc);
+  dmUtils.HamClockSetNewDX('','',CurrentMyloc);   //a way to clear SP/LP line (but draws vertical line instead)
 
 end;
 
@@ -4576,7 +4576,7 @@ begin
      CalculateDistanceEtc;
      if (edtCall.Text='') then
        Begin
-        // dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
+        //no need here // dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
          dmUtils.HamClockSetNewDX('','',edtGrid.Text);
        end;
      sbtnLocatorMap.Visible := True;
@@ -5682,7 +5682,7 @@ begin
   if (not (fEditQSO or fViewQSO)) then
     FreqBefChange := frmTRXControl.GetFreqMHz;
 
-  //dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
+  //no need here //dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
   dmUtils.HamClockSetNewDX(lblLat.Caption,lblLong.Caption,edtGrid.Text);
   CheckCallsignClub;
   CheckAwardClub;
