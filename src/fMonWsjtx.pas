@@ -289,10 +289,14 @@ begin
     AProcess.Parameters.Clear;
     AProcess.Parameters.Add(AFile);
     AProcess.Parameters.Add(AlertLine);
-    if LocalDbg then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-    AProcess.Execute
+    if LocalDbg then
+       Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    AProcess.Options:=[poWaitOnExit];
+    AProcess.Execute;
+    While AProcess.Running do
+          Application.ProcessMessages;
   finally
-    FreeAndNil(Aprocess);
+    Aprocess.Free;
   end;
 end;
 

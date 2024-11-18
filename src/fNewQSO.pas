@@ -7362,7 +7362,10 @@ begin
     end;
     paramList.Free;
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-    AProcess.Execute
+    AProcess.Options:=[poWaitOnExit];
+    AProcess.Execute;
+    while AProcess.Running do
+          Application.ProcessMessages;
   finally
     AProcess.Free
   end
@@ -7385,12 +7388,14 @@ begin
   
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := 'bash';
+    AProcess.Executable := dmData.HomeDir + cVoiceKeyer;
     AProcess.Parameters.Clear;
-    AProcess.Parameters.Add(dmData.HomeDir + cVoiceKeyer);
     AProcess.Parameters.Add(key_pressed);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-    AProcess.Execute
+    AProcess.Options:=[poWaitOnExit];
+    AProcess.Execute;
+    While AProcess.Running do
+          Application.ProcessMessages;
   finally
     AProcess.Free
   end

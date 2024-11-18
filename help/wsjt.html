@@ -42,12 +42,12 @@
     </ul>
 <p>From New QSO / File select 'Remote mode for wsjt'</p>
 <img src="img/wsjt2.png" name="2" width="144" height="238" border="0"/>
-<p> Remote mode for WSJT-X-communication is made via UDP dtatgrams that and is supported from WSJT-X 1.5.0 program upwards.<br/>
+<p> Remote mode for WSJT-X-communication is made via UDP dtatgrams that and is supported from WSJT-X 1.5.0 program upwards.<br>
 Cqrlog supports WSJT-X UDP remote mode since version 1.9.1 
 </p>
 <img src="img/wsjt18.png" name="18" width="144" height="137" border="0"/>
 <p > When remote mode is selected it shows last received WSJT-X packet type
-number after text “Wsjt-x remote” text. Also color of text changes while receiving packets.<br/>
+number after text “Wsjt-x remote” text. Also color of text changes while receiving packets.<br>
 These will show you that UDP link is alive between these programs.</font></p>
 <p>New QSO / Window list</p>
 <img src="img/wsjt1.png" name="1" width="144" height="282" border="0"/>
@@ -63,7 +63,7 @@ These will show you that UDP link is alive between these programs.</font></p>
 You can hide it clicking with mouse on band or mode visible in both ends of the selection bar.
  It can be restored by moving mouse over window's name bar at top. It works same way when wsjtx-MAP mode is selected (see below).</p>
 <p >You can close this window and reopen it later via NewQSO/Window/Wsjt-x monitor that is visible only when
-remote mode is selected. While it is closed it will not update it’s contents.<br/>
+remote mode is selected. While it is closed it will not update it’s contents.<br>
 Only remote logging and call qrz/hamqth seek are used then.
 </br>If UPD port opening for remote fails "NewQSO/Comment to qso" will have text “Could not bind socket for wsjtx!"
 </p>
@@ -167,12 +167,12 @@ shows decoded lines where that <strong>followed callsign is the originating (2nd
 	<li/> callsign with color and low/Upcase coding.</br>
 	<li/> locator grid with color and low/Upcase coding </br>
 	<li/> caller’s country name (cut to 15chrs) Overlayed with “<font color="#ff0066"><strong>CQ:xx</strong></font>”
-	 and <font color="#ff0066"><strong>different color</strong></font> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br/>
+	 and <font color="#ff0066"><strong>different color</strong></font> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br>
 	<font color="#ff0066"><strong>This is set as warning for you </strong></font> to check that you are in directed area before answering to his/her CQ.
-	<br/>I.E. <font color="#ff0066"><strong>In case of CQ DX you should be in DIFFERENT CONTINENT as the CQ caller</strong></font>
+	<br>I.E. <font color="#ff0066"><strong>In case of CQ DX you should be in DIFFERENT CONTINENT as the CQ caller</strong></font>
 	to be a valid DX for him. Program does not warn you if it thinks you are real DX for caller. Otherwise
 	it does.
-	<br/><a href="https://en.wikipedia.org/wiki/CQ_(call)">https://en.wikipedia.org/wiki/CQ_(call)</a> says:
+	<br><a href="https://en.wikipedia.org/wiki/CQ_(call)">https://en.wikipedia.org/wiki/CQ_(call)</a> says:
 	 In amateur radio usage, a CQ call can be qualified by appending more letters, as in CQ DX (meaning &quot;
 	<i> calling all stations located in a<u> different continent </u> to the caller</i>&quot;). See also:  <a href="http://www.mapability.com/ei8ic/maps/continent.php">http://www.mapability.com/ei8ic/maps/continent.php</a> for continents.
 	<li/> information of DXCC status compared to your logged qsos.</br>
@@ -308,7 +308,7 @@ If you are able to use <strong>color back</strong> feature you may want to chang
 </p>
 <h3><a name="w2"></a>Colors &amp; fonts</h3>
 <p>
-CQ-monitor has a new design. Window is adjustable and font + size can be changed.<br/>
+CQ-monitor has a new design. Window is adjustable and font + size can be changed.<br>
 Font style can not be changed as now “Qso never” (default Green) is printed also with bold while all other texts are in normal style.</p>
 <img src="img/wsjt15.png" name="15" width="344" height="203">
 </img>
@@ -322,10 +322,10 @@ before on <font color="#ff0066"><strong>this band and mode</strong></font><font 
 not this mode,</strong></font> <font color="#cc9900">some </font><font color="#cc9900"><strong>other
 band/mode</strong></font> and <font color="#00cc00"><strong>never</strong></font><font color="#00cc00">
 on any band/mode</font>.</p>
-<p>Same color coding is applied also for locator grid.<br/>
+<p>Same color coding is applied also for locator grid.<br>
 Full locator (means 4 first characters of locator) worked before on <strong>this band
 and mode</strong>, this band <strong>but not this mode, </strong>some <strong>other band/mode </strong>and <strong>never</strong> on any band/mode.
-<br/>
+<br>
 If no hits found for full locator then main locator (2 first
 letters) are checked same way next . Worked before on <strong>this band
 and mode</strong>, this band <strong>but not this mode, </strong>some <strong>other
@@ -356,70 +356,75 @@ highest priority. Alert is executed only once per every decoding section.</p>
 	might be little annoying but is easy to check off.</br>
 	<li/>”<strong>Text [ ]Alert</strong>” will alert if typed text, case
 	sensitive, fits into part of complete monitor line (text-in-text).
-	<br/> <strong>Example:</strong> alert from new country by setting “w c” string to text alert. It fits
+	<br> <strong>Example:</strong> alert from new country by setting “w c” string to text alert. It fits
 	in to the middle of “New country” string. Text can have spaces,
-	but not at start or at end.<br/>
-	Press button <strong>“Text”</strong> to change to call alerts.<br/>
+	but not at start or at end.<br>
+	Press button <strong>“Text”</strong> to change to call alerts.<br>
 	”<strong>Call [ ]Alert</strong>” will alert if typed text, (converts to upcase when alert activated), fits callsign of
 	monitor line. As option, one asterisk can be used at start or end to
 	indicate starts-with or ends-with search. Several search strings can
-	be inserted for call alert with comma separation.<br/>
+	be inserted for call alert with comma separation.<br>
 	Press button <strong>“Call”</strong> to change to text alerts.</p>
 	<p>Text you have typed is read only after you leave edit box. Then
 	spaces from start and end are removed and in case of “call alert”
-	text is changed uppercase.<br/>
+	text is changed uppercase.<br>
 	To activate alert press ”<strong>Alert</strong>”
 	to turn it’s text green. (it also takes you away from edit box)</p>
 	<p><img src="img/wsjt27.png" name="27"" width="441" height="47">
-	</img><br/>
+	</img><br>
 	<img src="img/wsjt28.png" name="28"  width="442" height="42">
 	</img></p>
 	<li/>”<strong>Loc Alert</strong>” will alert when there is new main grid that you have not worked.
 <li/></ol></p>
 <p >To make alerts do something you have to
-add a script file ~/.config/cqrlog/voice_keyer/voice_alert.sh<br/>
+add a script file ~/.config/cqrlog/voice_keyer/voice_alert.sh<br>
 This
 script gets parameter $1 of “my”,”loc”,”text” or “call”
-depending of alert given.<br/>
+depending of alert given.<br>
+Other paramaters are the monitor line words that caused the alert.<br>
 By using these parameters with your
 script you can play sound that you want, or do anything else you like
-to happen when alert is issued.<br/>
-<br/>
-<strong>NOTE: Try to keep
-script running time as short as possible.</strong></p>
-<p >voice_alert.sh:<br/>
+to happen when alert is issued.<br>
+<br>
+<strong>NOTE: Try to keep script running time as short as possible. (Short audio files)</strong></p>
+<strong>NOTE: Put a lonely " &" at the end of your player calling line. 
+It puts the playing on background and Cqrlog can continue right away.</strong><br>
+
+<p >voice_alert.sh:<br>
 <pre>
 --------------cut here---------------------------------------------------------
-#!/bin/bash<br/>
+
+#!/bin/bash
+# Audio file name (prefix) played on alert
+# can be:
+# 'my'   Meaning: answer to my cq,
+# 'loc'  Meaning: new main grid,
+# 'text' Meaning: text found from monitor line,
+# 'call' Meaning: text fits to the callsign.
 #
-//audio file name (prefix) played on alert<br/>
-# //can be:'my' =
-ansver to my cq,<br/>
-# // 'loc' = new main grid,<br/>
-# // 'text'=
-text found from monitor line <br/>
-# // 'call'= text fits to the
-callsign<br/>
-# // create files you want to be played<br/>
-# scirpt
-is seeking names with '.wav' suffix! Change if needed <br/>
-#select
-audio card(if needed) and play alert message</p>
-<p>aplay ~/.config/cqrlog/voice_keyer/$1.wav</p>
+# I.E 'my.wav', 'loc.wav', 'text.wav', 'call.wav'
+#
+# Create files you want to be played with recording program like 'Audacity'.
+# into ~/.config/cqrlog/voice_keyer/ folder.
+# This example script is seeking names with '.wav' suffix! Change if needed (to '.mp3' etc...) 
+# select audio card(if needed) and play alert message here with 'aplay' program
+#
+aplay ~/.config/cqrlog/voice_keyer/$1.wav &
+exit
 
 --------------cut here---------------------------------------------------------
 </pre>
 <h3><a name="w4">Starting qso from wsjtx-monitor</h3>
 <p>You can start Wsjt-x qso by double click a CQ-monitor’s line. Wsjt-x will move to callers QRG and initiate TX.</p>
 <p><img src="img/wsjt4.png" name="4" width="466" height="353">
-</img><br/>
+</img><br>
 This requires Wsjt-x's <strong>Configuration/Settings/Reporting</strong> to have <font color="#ff0066">at
 least</font> “<strong>Accept</strong> <strong>UDP requests</strong>” selected.
-<br/>Setting also “ Accepted UDP request restores window” will return focus from CQ-monitor back to wsjt-x main window.<br/>
-<br/>
+<br>Setting also “ Accepted UDP request restores window” will return focus from CQ-monitor back to wsjt-x main window.<br>
+<br>
 A line when someone has answered to you (your call is first at Wsjt-x data line) has ”<strong>=</strong>” sign just at start of callsign and
 locator is marked <strong>*QSO</strong> if line has reports or 73.
-<br/> </strong>Clicking that line again does not continue qso.<br/>
+<br> </strong>Clicking that line again does not continue qso.<br>
 Wsjt-x remote does not allow this kind of command preventing automated qsos. So at this case you have
 to go to Wsjt-x screen and initiate report sending by yourself. Or set “auto seg” at wsjt-x/FT8.</p>
 <p>Either qso is started from CQ-monitor, or Wsjt-x screen itself, the opponent callsign is added right away to New QSO's callsign
@@ -432,21 +437,21 @@ status, QRZ/HamQTH information etc.</p>
 When you <font color="#ff0066"> either press “Log QSO”</font> at wsjt-x main window,<font color="#ff0066"> or
 </font>get it open automatic when sending 73 by <font color="#ff0066">checking Wsjt-x's </font>
 <font color="#ff0066"><strong>Configuration/Settings/Reporting/Prompt me to log qso</strong></font> ,you will have wsjt-x's logging form open.
-<br/>Check it’s information, add power and remarks if needed. After finishing with it <font color="#ff0066">press it’s OK-button</font><u>Then information is transferred to cqrlog.</u> <br/>
-<br/>
+<br>Check it’s information, add power and remarks if needed. After finishing with it <font color="#ff0066">press it’s OK-button</font><u>Then information is transferred to cqrlog.</u> <br>
+<br>
 </u><strong>NOTE: </strong><font color="#ff0066"><strong>DO NOT press</strong></font> cqrlog/NewQSO/Save QSO [enter] - button to save qso!</p>
 <p>
-If you have enabled auto search from QRZ.com/HamQth.com in cqrlog's preferences all information is fetched during your first transmit (report sending period).<br/>
-You may alter that information in NewQSO form and it is saved along with wsjt-x logging information.<br/>
-<br/>
-In case that fetched data has same, but longer locator than wsjt-x qso data has the longer is logged to cqrlog.<br/>
-<strong>I.E </strong>wsjt-x data gives KP01, but QRZ.com KP01TN, the longer (more complete) is logged.<br/>
+If you have enabled auto search from QRZ.com/HamQth.com in cqrlog's preferences all information is fetched during your first transmit (report sending period).<br>
+You may alter that information in NewQSO form and it is saved along with wsjt-x logging information.<br>
+<br>
+In case that fetched data has same, but longer locator than wsjt-x qso data has the longer is logged to cqrlog.<br>
+<strong>I.E </strong>wsjt-x data gives KP01, but QRZ.com KP01TN, the longer (more complete) is logged.<br>
 If locators differ wsjt-x data is used as it might be a portable or other special qth.</p>
 
 <a name="w6"><h3>Starting fldigi and wsjt-x via cqrlog</h3></a>
 <p>You can set preferences so that cqrlog will start fldigi and/or wsjt-x programs for you when you enter remote mode. This is very handy, but doing that has also one risk.
-<br/>When fldigi or wsjt-x has been started as a child process of cqrlog they will die at the moment cqrlog crashes for some reason.
-<br/>If you start them manually as processes of their own and then activate remote mode from cqrlog they keep on running if cqrlog
+<br>When fldigi or wsjt-x has been started as a child process of cqrlog they will die at the moment cqrlog crashes for some reason.
+<br>If you start them manually as processes of their own and then activate remote mode from cqrlog they keep on running if cqrlog
 dies. You can finish your ongoing qso, start cqrlog again, set remote mode on and then log the qso in normal manner.</p>
 
 </body>
