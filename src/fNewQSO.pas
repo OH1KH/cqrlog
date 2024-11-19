@@ -7397,6 +7397,7 @@ begin
     While AProcess.Running do
           Application.ProcessMessages;
   finally
+    AProcess.Terminate(0);
     AProcess.Free
   end
 end;

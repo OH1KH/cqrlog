@@ -291,11 +291,11 @@ begin
     AProcess.Parameters.Add(AlertLine);
     if LocalDbg then
        Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-    AProcess.Options:=[poWaitOnExit];
     AProcess.Execute;
     While AProcess.Running do
           Application.ProcessMessages;
   finally
+    Aprocess.Terminate(0);
     Aprocess.Free;
   end;
 end;
