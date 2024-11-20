@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  uColorMemo,lclproc, Math, lcltype, ComCtrls, ActnList, StdCtrls;
+  uColorMemo,lclproc, Math, lcltype, ComCtrls, ActnList, StdCtrls, DateUtils;
 
 type
   TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
@@ -471,8 +471,8 @@ begin
 
       if (frmBandMap.FDateFilterType = dftShowLastHours) then
       begin
-        LastDate := FormatDateTime('YYY-MM-DD',when - (frmBandMap.FLastHours/24));
-        LastTime := FormatDateTime('HH:NN',when - (frmBandMap.FLastHours/24))
+        LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600))));
+        LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600)))),1,5);
       end
       else begin
         if (frmBandMap.FDateFilterType = dftShowLastDateTime) then
@@ -494,7 +494,7 @@ begin
         skip := False;
 
         if not (frmBandMap.FDateFilterType = dftShowAll) then
-          skip := dmData.CallExistsInLog(AddArray[y].Call,AddArray[y].Band,AddArray[y].Mode,LastDate,LastTime);
+          skip := dmData.IsCallInLog(dmData.qBandMapFil,dmData.trBandMapFil,AddArray[y].Call,AddArray[y].Band,AddArray[y].Mode,LastDate,LastTime);
 
         if frmBandMap.FOnlyLoTW and frmBandMap.FOnlyEQSL then
         begin

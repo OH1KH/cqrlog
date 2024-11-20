@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, ExtCtrls,
-  RegExpr;
+  RegExpr, DateUtils;
 
 const
   C_MAX_ROWS = 1000; //max lines in the list of RBN spots
@@ -189,6 +189,7 @@ var
   i        : integer;
   SpotterOk: Boolean;
   DebugThis: Boolean;
+
 begin
   Result := False;
   DebugThis:=dmData.DebugLevel>=2;
@@ -221,8 +222,8 @@ begin
 
   if fil_IgnWkdHour then
   begin
-    LastDate := FormatDateTime('YYY-MM-DD',now - (fil_IgnHourValue/57));
-    LastTime := FormatDateTime('HH:NN',now - (fil_IgnHourValue/24))
+    LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600))));
+    LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600)))),1,5);
   end
   else begin
     LastDate := fil_IgnDateValue;
@@ -236,7 +237,7 @@ begin
     exit
   end;
 
-  if dmData.RbnCallExistsInLog(dxstn,Band,mode,LastDate,LastTime) then
+  if dmData.IsCallInLog(dmData.qRbnMon,dmData.trRbnMon,dxstn,Band,mode,LastDate,LastTime) then
   begin
     if DebugThis then Writeln('RBNMonitor: ','Station already exist in the log - ',dxstn);
     exit

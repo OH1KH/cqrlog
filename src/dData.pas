@@ -280,9 +280,8 @@ type
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  TriggersExistsOnCqrlog_main : Boolean;
     function  GetLastAllertCallId(const callsign,band,mode : String) : Integer;
-    function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
-    function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+    function  IsCallInLog(AQue:TSQLQuery;ATra:TSQLTransaction;callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  CallNoteExists(Callsign : String) : Boolean;
     function  GetNewLogNumber : Integer;
     function  getNewMySQLConnectionObject : TMySQL57Connection;
@@ -3913,31 +3912,6 @@ begin
   end
 end;
 
-function TdmData.CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
-var
-  sql : String;
-begin
-  EnterCriticalsection(csPreviousQSO);
-  try
-    Result := False;
-    qBandMapFil.Close;
-
-    //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
-    //too late to rewrite it (Petr, OK2CQR)
-    sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
-           'and (mode = '+QuotedStr(mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
-           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')';
-    qBandMapFil.SQL.Text := sql;
-    if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
-    qBandMapFil.Open;
-    Result := qBandMapFil.RecordCount > 0
-  finally
-    qBandMapFil.Close;
-    trBandMapFil.RollBack;
-    LeaveCriticalsection(csPreviousQSO)
-  end
-end;
-
 function TdmData.RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean; var index : integer) : String;
 var
   sAdif : String = '';
@@ -4024,35 +3998,34 @@ begin
   end
 end;
 
-function TdmData.RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+function TdmData.IsCallInLog(AQue:TSQLQuery;ATra:TSQLTransaction;callsign,band,mode,LastDate,LastTime : String) : Boolean;    //IsCallInLog
 var
   sql : String;
 begin
+ EnterCriticalsection(csPreviousQSO);
   try
     Result := False;
-    qRbnMon.Close;
+    if ATra.Active then ATra.Rollback;
+    AQue.Close;
 
     //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
     //too late to rewrite it (Petr, OK2CQR)
-    qRbnMon.SQL.Text := 'select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band) '+
-           'and (mode = :mode) and (str_to_date(concat(qsodate, '+QuotedStr(' ')+',time_on), '+
-           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date(:last_date_time, '+QuotedStr('%Y-%m-%d %H:%i')+')';
-
-    qRbnMon.Prepare;
-    qRbnMon.ParamByName('callsign').AsString := callsign;
-    qRbnMon.ParamByName('band').AsString := band;
-    qRbnMon.ParamByName('mode').AsString := mode;
-    qRbnMon.ParamByName('last_date_time').AsString := LastDate + ' ' + LastTime;
-    if fDebugLevel>=1 then Writeln(qRbnMon.SQL.Text);
-    qRbnMon.Open;
-
-    Result := qRbnMon.RecordCount > 0
+    sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
+           'and (mode = '+QuotedStr(mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
+           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')';
+    AQue.SQL.Text := sql;
+    if fDebugLevel>=1 then
+                      Writeln(AQue.SQL.Text);
+    AQue.Open;
+    Result := AQue.RecordCount > 0 ;
+    if fDebugLevel>=1 then
+                      writeln ('IsInLog from:',AQue.name,' call:',callsign,' Band:',band, ' mode:',mode,' LDate:',Lastdate,' Ltime:',LastTime,' ',Result);
   finally
-    qRbnMon.Close;
-    trRbnMon.RollBack
-  end
+    AQue.Close;
+    ATra.RollBack;
+    LeaveCriticalsection(csPreviousQSO)
+  end;
 end;
-
 procedure TdmData.StoreFreqMemories(grid : TStringGrid);
 const
   C_INS = 'insert into freqmem (freq,mode,bandwidth,info) values (:freq,:mode,:bandwidth,:info)';
