@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  uColorMemo,lclproc, Math, lcltype, ComCtrls, ActnList, StdCtrls, DateUtils;
+  uColorMemo,lclproc, Math, lcltype, ComCtrls, ActnList, StdCtrls;
 
 type
   TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
@@ -471,8 +471,9 @@ begin
 
       if (frmBandMap.FDateFilterType = dftShowLastHours) then
       begin
-        LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600))));
-        LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600)))),1,5);
+        dmUtils.DateHoursAgo(frmBandMap.FLastHours,LastDate,LastTime);
+        //LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600))));
+        //LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600)))),1,5);
       end
       else begin
         if (frmBandMap.FDateFilterType = dftShowLastDateTime) then

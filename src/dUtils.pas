@@ -242,6 +242,7 @@ type
     procedure ViewTextFile(f:string);
     procedure HamClockSetNewDX(lat,lon,loc:string);
     procedure HamClockSetNewDE(loc,lat,lon,mycall:string);
+    procedure DateHoursAgo(hours:integer;var Adate,Atime:string);
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
@@ -5842,7 +5843,13 @@ Begin
       end;
 
 end;
-
+procedure  TdmUtils.DateHoursAgo(hours:integer;var Adate,Atime:string);
+//should work also with negative hours, not tested
+Begin
+  if hours=0 then exit; //no need to calculate
+  ADate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(hours * 3600))));
+  ATime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(hours * 3600)))),1,5);
+end;
 
 end.
 

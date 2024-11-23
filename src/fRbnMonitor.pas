@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, ExtCtrls,
-  RegExpr, DateUtils;
+  RegExpr;
 
 const
   C_MAX_ROWS = 1000; //max lines in the list of RBN spots
@@ -222,8 +222,9 @@ begin
 
   if fil_IgnWkdHour then
   begin
-    LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600))));
-    LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600)))),1,5);
+    dmUtils.DateHoursAgo(fil_IgnHourValue,LastDate,LastTime);
+    //LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600))));
+    //LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600)))),1,5);
   end
   else begin
     LastDate := fil_IgnDateValue;
