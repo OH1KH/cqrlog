@@ -472,8 +472,6 @@ begin
       if (frmBandMap.FDateFilterType = dftShowLastHours) then
       begin
         dmUtils.DateHoursAgo(frmBandMap.FLastHours,LastDate,LastTime);
-        //LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600))));
-        //LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(frmBandMap.FLastHours * 3600)))),1,5);
       end
       else begin
         if (frmBandMap.FDateFilterType = dftShowLastDateTime) then

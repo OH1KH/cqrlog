@@ -223,8 +223,6 @@ begin
   if fil_IgnWkdHour then
   begin
     dmUtils.DateHoursAgo(fil_IgnHourValue,LastDate,LastTime);
-    //LastDate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600))));
-    //LastTime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(fil_IgnHourValue * 3600)))),1,5);
   end
   else begin
     LastDate := fil_IgnDateValue;
