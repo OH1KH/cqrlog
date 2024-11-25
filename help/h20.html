@@ -128,17 +128,9 @@ tr:nth-child(even){background-color:#d6eeee;}
         <td width="35%">Ctrl-R</td>
         <td width="65%">Change ref. call</td>
     </tr>
-    <tr>
-        <td width="35%">Ctrl-S</td>
-        <td width="65%">Save DXCluster StartConnectionCommand</td>
-    </tr>
         <tr>
         <td width="35%">Ctrl-W or ` (back single quote) </td>
         <td width="65%">Send a spot to the DX Cluster</td>
-    </tr>
-    <tr>
-        <td width="35%">Ctrl-Z</td>
-        <td width="65%">Scroll back DXCluster commands (5 stored)</td>
     </tr>
     <tr>
         <td width="35%">ALT-F2</td>
@@ -333,6 +325,33 @@ tr:nth-child(even){background-color:#d6eeee;}
     </tbody>
 </table>
 <p align=center><img src=img/line.png></p>
+<strong>When "DXCluster" window is active:</strong><br><br>
+<table>
+    <tr>
+        <td valign="top"><img src="img/bulb.png"></td>
+        <td bgcolor=ccffff width="100%">
+            <strong><font color="blue">The DXCLuster is the screen DX spots from internet</font></strong>
+        </td>
+    </tr>
+</table>
+<br><br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="35%">Shift-F1 ..Shift-F10 </td>
+        <td width="65%">Send user defined quick commands. See F-Keys TAB of DXCluster window(Telnet only) </td>
+    </tr>
+    <tr>
+        <td width="35%">Ctrl-S</td>
+        <td width="65%">Save DXCluster StartConnectionCommand written in cmd column ( ; separated commands)(Telnet only)</td>
+    </tr>
+    <tr>
+        <td width="35%">Ctrl-Z</td>
+        <td width="65%">Scroll back last DXCluster commands sent (5 stored)(Telnet only)</td>
+    </tr>
+    </tbody>
+</table>
+<p align=center><img src=img/line.png></p>
 <strong>When "Contest" window is active:</strong><br><br>
 <table>
     <tr>
@@ -347,7 +366,7 @@ tr:nth-child(even){background-color:#d6eeee;}
     <tbody>
     <tr>
         <td width="35%">ESC<br><br></td>
-        <td width="65%">1x Stops CW memory sending<br>2x Returns cursor to Call column<br>3x Empty all fields and prepare program for a new QSO</td>
+        <td width="65%">1x Stops CW and (rig's)voice memory sending<br>2x Returns cursor to Call column<br>3x Empty all fields and prepare program for a new QSO</td>
     </tr>
     <tr>
         <td width="35%">F1..F10<br></td>
@@ -366,6 +385,14 @@ tr:nth-child(even){background-color:#d6eeee;}
         <td width="65%">CW Speed -2 WPM (QRS)</td>
     </tr>
     <tr>
+        <td width="35%">Ctrl+TAB</td>
+        <td width="65%">Set S&P mode</td>
+    </tr>
+    <tr>
+        <td width="35%">Shift+TAB</td>
+        <td width="65%">Set RUN mode</td>
+    </tr>
+    <tr>
         <td width="35%">Ctrl-1...Ctrl-9<br><br></td>
         <td width="65%">Set split using XIT if rig supports it. Value 0 - 9999Hz UP/DOWN
 	<br>Ctrl-9 will add random value 0 - 990Hz to setting. Subtract if split is DOWN</td>
@@ -377,6 +404,10 @@ tr:nth-child(even){background-color:#d6eeee;}
     <tr>
         <td width="35%">Ctrl-A<br></td>
         <td width="65%">Sets callsign to Band map (for later return with double click)</td>
+    </tr>
+    <tr>
+        <td width="35%">Ctrl-L<br></td>
+        <td width="65%">Jump back to CQ call frequency and mode (when CQ initiated with Shift+F1)</td>
     </tr>
     </tbody>
 </table>
