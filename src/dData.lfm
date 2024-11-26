@@ -3,8 +3,8 @@ object dmData: TdmData
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
   Height = 654
-  HorizontalOffset = 153
-  VerticalOffset = 39
+  HorizontalOffset = 155
+  VerticalOffset = 53
   Width = 1050
   object dsrMain: TDataSource
     DataSet = qCQRLOG
@@ -91,7 +91,17 @@ object dmData: TdmData
       '       rtty NUMERIC(10,4),'
       '       ssb NUMERIC(10,4),'
       '       rx_offset numeric(10,4) default 0,'
-      '       tx_offset numeric(10,4) default 0'
+      '       tx_offset numeric(10,4) default 0,'
+      '       b_cw NUMERIC(10,4) DEFAULT 0,'
+      '       e_cw NUMERIC(10,4) DEFAULT 0,'
+      '       b_data NUMERIC(10,4) DEFAULT 0,'
+      '       e_data NUMERIC(10,4) DEFAULT 0,'
+      '       b_ssb NUMERIC(10,4) DEFAULT 0,'
+      '       e_ssb NUMERIC(10,4) DEFAULT 0,'
+      '       b_am NUMERIC(10,4) DEFAULT 0,'
+      '       e_am NUMERIC(10,4) DEFAULT 0,'
+      '       b_fm NUMERIC(10,4) DEFAULT 0,'
+      '       e_fm NUMERIC(10,4) DEFAULT 0'
       ');'
       'CREATE INDEX band ON bands(band);'
       ''

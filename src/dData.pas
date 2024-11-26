@@ -25,7 +25,7 @@ uses
 const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 19;
-  cDB_COMN_VER = 7;
+  cDB_COMN_VER = 8;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -339,7 +339,8 @@ type
     procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
     procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
     procedure OpenFreqMemories(mode : String);
-    procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
+    procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset,
+                                      Bcw, Ecw, Bdata, Edata, Bssb, Essb, Bam, Eam, Bfm, Efm:currency);
     procedure GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
     procedure LoadQSODateColorSettings;
     procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
@@ -1637,135 +1638,84 @@ begin
 end;
 
 procedure TdmData.PrepareBandDatabase;
+  procedure  insband(s:string);
+     Begin
+        Q.SQL.Text :=s;
+        Q.ExecSQL;
+     end;
+// Column names:
+// (old)      'Band_id' 'Band', 'Begin', 'End', 'CW', 'Data', 'SSB', 'RX offset', 'TX offset',
+// (new added)'CW Begin', 'CW End', 'Data Begin', 'Data End', 'SSB Begin', 'SSB End', 'AM Begin', 'AM End', 'FM Begin', 'FM End'
+// Columns SQL:
+// id_bands band b_begin b_end cw rtty ssb rx_offset tx_offset b_cw  e_cw b_data e_data b_ssb e_ssb b_am e_am b_fm e_fm
 begin
   trQ.StartTransaction;
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                 QuotedStr('2190M')+',0.135,0.139,0.135,0.139,0.139)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                 QuotedStr('630M')+',0.472,0.480,0.472,0.472,0.480)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('160M')+',1.80,2.0,1.838,1.839,1.843)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('80M')+',3.5,3.8,3.580,3.580,3.620)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('60M')+',5.0,5.9,5.2,5.2,5.3)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('40M')+',7.0,7.200,7.035,7.035,7.043)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('30M')+',10.100,10.150,10.140,10.142,10.150)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('20M')+',14.000,14.350,14.070,14.070,14.112)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('17M')+',18.068,18.168,18.095,18.095,18.111)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('15M')+',21.000,21.450,21.070,21.070,21.120)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('12M')+',24.890,24.990,24.915,24.915,24.931)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('10M')+',28.000,30.000,28.070,28.070,28.300)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                         QuotedStr('8M')+',40.0000,45.0000,40.3000,40.3000,40.6800)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('6M')+',50.000,52.000,50.110,50.110,50.120)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('5M')+',54.0000,69.9000,59.5000,59.6000,59.6000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('4M')+',70.000,71.000,70.150,70.150,70.150)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('2M')+',144.00,146.00,144.110,144.110,144.150)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('1.25M')+',219.00,225.00,221.0,221.0,222.0)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('70CM')+',430.000,440.000,432.100,432.100,433.600)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('33CM')+',902.000,928.000,903.000,903.000,910.000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('23CM')+',1240.000,1300.000,1245.000,1250.000,1260.000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('13CM')+',2300,2450,2310,2310,2320)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('9CM')+',3400,3475,3400,3400,3420)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('6CM')+',5650,5850,5670,5670,5675)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('3CM')+',10000,10500,10500,10500,10500)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('1.25CM')+',24000,24250,24240,24250,24250)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('6MM')+',47000,47200,47100,47100,47200)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('4MM')+',75500,81500,75500,81500,81500)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('2.5MM')+',122250,123000,122250,123000,123000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('2MM')+',134000,141000,141000,141000,141000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('1MM')+',241000,248000,241000,248000,248000)';
-  Q.ExecSQL;
-
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                 QuotedStr('2190M')+',0.135,0.139,0.135,0.139,0.139)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                 QuotedStr('630M')+',0.472,0.480,0.472,0.472,0.480)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('160M')+',1.80,2.0,1.838,1.839,1.843)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('80M')+',3.5,3.8,3.580,3.580,3.620)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('60M')+',5.0,5.9,5.2,5.2,5.3)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('40M')+',7.0,7.200,7.035,7.035,7.043)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('30M')+',10.100,10.150,10.140,10.142,10.150)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('20M')+',14.000,14.350,14.070,14.070,14.112)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('17M')+',18.068,18.168,18.095,18.095,18.111)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('15M')+',21.000,21.450,21.070,21.070,21.120)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('12M')+',24.890,24.990,24.915,24.915,24.931)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('10M')+',28.000,30.000,28.070,28.070,28.300)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                         QuotedStr('8M')+',40.0000,45.0000,40.3000,40.3000,40.6800)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('6M')+',50.000,52.000,50.110,50.110,50.120)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('5M')+',54.0000,69.9000,59.5000,59.6000,59.6000)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('4M')+',70.000,71.000,70.150,70.150,70.150)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('2M')+',144.00,146.00,144.110,144.110,144.150)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('1.25M')+',219.00,225.00,221.0,221.0,222.0)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('70CM')+',430.000,440.000,432.100,432.100,433.600)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('33CM')+',902.000,928.000,903.000,903.000,910.000)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('23CM')+',1240.000,1300.000,1245.000,1250.000,1260.000)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('13CM')+',2300,2450,2310,2310,2320)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('9CM')+',3400,3475,3400,3400,3420)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('6CM')+',5650,5850,5670,5670,5675)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('3CM')+',10000,10500,10500,10500,10500)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('1.25CM')+',24000,24250,24240,24250,24250)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('6MM')+',47000,47200,47100,47100,47200)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('4MM')+',75500,81500,75500,81500,81500)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('2.5MM')+',122250,123000,122250,123000,123000)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('2MM')+',134000,141000,141000,141000,141000)');
+  insband('INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('1MM')+',241000,248000,241000,248000,248000)');
   trQ.Commit;
   Q.Close
            //band,begin,end,cw,rtty,ssb - cw to, rtty from, ssb from
+
 end;
 
 function TdmData.QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
@@ -2816,6 +2766,24 @@ begin
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         cqrini.DeleteKey('MonWsjtx', 'FCC_Addr');  //delete old key if exist
+      end;
+
+       if old_version < 8 then
+      begin
+        Q1.SQL.Text := 'ALTER TABLE cqrlog_common.bands '+
+                              'ADD COLUMN IF NOT EXISTS b_cw NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS e_cw NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS b_data NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS e_data NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS b_ssb NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS e_ssb NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS b_am NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS e_am NUMERIC(10,4) DEFAULT 0, '+
+                              'ADD COLUMN IF NOT EXISTS b_fm NUMERIC(10,4) DEFAULT 0,'+
+                              'ADD COLUMN IF NOT EXISTS e_fm NUMERIC(10,4) DEFAULT 0';
+        //if fDebugLevel>=1 then
+                              Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
       end;
 
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
@@ -4217,10 +4185,15 @@ begin
 end;
 
 
-procedure TdmData.SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
+procedure TdmData.SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset,
+                                      Bcw, Ecw, Bdata, Edata, Bssb, Essb, Bam, Eam, Bfm, Efm:currency);
 const
-  C_UPD = 'update cqrlog_common.bands set b_begin = :b_begin, b_end = :b_end, cw = :cw, rtty = :rtty, '+
-          'ssb = :ssb, rx_offset = :rx_offset, tx_offset = :tx_offset where band = :band';
+  C_UPD = 'update cqrlog_common.bands set '+
+          'b_begin = :b_begin, b_end = :b_end, cw = :cw, rtty = :rtty, '+
+          'ssb = :ssb, rx_offset = :rx_offset, tx_offset = :tx_offset, ' +
+          'b_cw = :b_cw ,e_cw = :e_cw ,b_data = :b_data, e_data = :e_data, '+
+          'b_ssb = :b_ssb , e_ssb = :e_ssb  , b_am = :b_am , e_am = :e_am, '+
+          'b_fm = :b_fm  , e_fm = :e_fm where band = :band';
 begin
   qBands.Close;
   if trBands.Active then
@@ -4230,14 +4203,25 @@ begin
   try try
     qBands.SQL.Text := C_UPD;
     qBands.Prepare;
-    qBands.Params[0].AsCurrency := BandBegin;
-    qBands.Params[1].AsCurrency := BandEnd;
-    qBands.Params[2].AsCurrency := BandCW;
-    qBands.Params[3].AsCurrency := BandRTTY;
-    qBands.Params[4].AsCurrency := BandSSB;
-    qBands.Params[5].AsCurrency := RXOffset;
-    qBands.Params[6].AsCurrency := TXOffset;
-    qBands.Params[7].AsString   := band;
+    qBands.Params[0].AsCurrency  := BandBegin;
+    qBands.Params[1].AsCurrency  := BandEnd;
+    qBands.Params[2].AsCurrency  := BandCW;
+    qBands.Params[3].AsCurrency  := BandRTTY;
+    qBands.Params[4].AsCurrency  := BandSSB;
+    qBands.Params[5].AsCurrency  := RXOffset;
+    qBands.Params[6].AsCurrency  := TXOffset;
+
+    qBands.Params[7].AsCurrency  := Bcw;
+    qBands.Params[8].AsCurrency  := Ecw;
+    qBands.Params[9].AsCurrency  := Bdata;
+    qBands.Params[10].AsCurrency := Edata;
+    qBands.Params[11].AsCurrency := Bssb;
+    qBands.Params[12].AsCurrency := Essb;
+    qBands.Params[13].AsCurrency := Bam;
+    qBands.Params[14].AsCurrency := Eam;
+    qBands.Params[15].AsCurrency := Bfm;
+    qBands.Params[16].AsCurrency := Efm;
+    qBands.Params[17].AsString   := band;
     qBands.ExecSQL
   except
     on E : Exception do

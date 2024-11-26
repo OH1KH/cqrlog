@@ -1206,7 +1206,7 @@ procedure TfrmTRXControl.SetMode(mode : String; bandwidth : Integer);
 var
   rmode : TRigMode;
 begin
-
+  if mode='' then exit;
   CheckUserMode(mode);
   if Assigned(radio) then
   begin
@@ -1216,7 +1216,7 @@ begin
   end;
 end;
 
-function TfrmTRXControl.GetFreqFromModeBand(band : Integer; smode : String) : String;
+function TfrmTRXControl.GetFreqFromModeBand(band : Integer; smode : String) : String;  //get default freq when band and mode set
 var
   freq : Currency = 0;
   mode : Integer = 0;
@@ -1376,6 +1376,12 @@ var
   RXOffset : Currency;
   TXOffset : Currency;
 begin
+  if mode='' then
+   Begin
+    if Assigned(radio) then   //use existing mode
+     mode:= GetActualMode;
+   end;
+
   if mode = 'SSB' then
   begin
     if (freq > 5000) and (freq < 6000) then
@@ -1410,8 +1416,11 @@ var
   bandwidth : Integer = 0;
   f : Double = 0;
 begin
-  if (lblFreq.Caption = empty_freq) then
+  if (lblFreq.Caption = empty_freq) then  //no rig freq received
     exit;
+  if mode='' then        //if mode is empty change freq using existing mode
+     mode:=GetActualMode;
+
   bandwidth := GetBandWidth(mode);
   f := StrToFloat(freq);
   if mode = 'SSB' then

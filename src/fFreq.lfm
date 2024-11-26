@@ -1,7 +1,7 @@
 object frmFreq: TfrmFreq
-  Left = 283
+  Left = 141
   Height = 540
-  Top = 24
+  Top = 34
   Width = 803
   HorzScrollBar.Page = 448
   VertScrollBar.Page = 331
@@ -11,7 +11,7 @@ object frmFreq: TfrmFreq
   ClientWidth = 803
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '3.6.0.0'
   object dbgrdFreq: TDBGrid
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -27,7 +27,7 @@ object frmFreq: TfrmFreq
     Columns = <>
     DataSource = dsrFreq
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
-    TabOrder = 1
+    TabOrder = 0
     TitleStyle = tsNative
     OnColumnSized = dbgrdFreqColumnSized
     OnDblClick = dbgrdFreqDblClick
@@ -47,48 +47,49 @@ object frmFreq: TfrmFreq
     BevelOuter = bvNone
     ClientHeight = 73
     ClientWidth = 803
-    TabOrder = 0
+    TabOrder = 1
     object btnChange: TButton
-      AnchorSideTop.Control = lblFreqNote1
+      AnchorSideTop.Control = btnCancel
       AnchorSideRight.Control = btnCancel
       AnchorSideBottom.Side = asrCenter
       Left = 641
       Height = 25
-      Top = 18
+      Top = 15
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
       BorderSpacing.InnerBorder = 4
       Caption = 'Modify'
+      TabOrder = 2
       OnClick = btnChangeClick
-      TabOrder = 0
     end
     object btnCancel: TButton
-      AnchorSideTop.Control = btnChange
+      AnchorSideTop.Control = pnlFreq2
       AnchorSideRight.Control = pnlFreq2
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrCenter
       Left = 722
       Height = 25
-      Top = 18
+      Top = 15
       Width = 75
       Anchors = [akTop, akRight]
+      BorderSpacing.Top = 15
       BorderSpacing.Right = 6
       BorderSpacing.InnerBorder = 4
       Caption = 'Close'
       ModalResult = 2
-      TabOrder = 1
+      TabOrder = 3
     end
     object lblFreqNote1: TLabel
       AnchorSideLeft.Control = pnlFreq2
       AnchorSideTop.Control = pnlFreq2
       Left = 12
       Height = 17
-      Top = 18
-      Width = 184
+      Top = 15
+      Width = 180
       BorderSpacing.Left = 12
-      BorderSpacing.Top = 18
-      Caption = 'CW: (f>=Begin and f<=CW)'
+      BorderSpacing.Top = 15
+      Caption = 'CW: f>=Begin AND f<=CW'
       ParentColor = False
     end
     object lblFreqNote2: TLabel
@@ -98,9 +99,9 @@ object frmFreq: TfrmFreq
       AnchorSideBottom.Side = asrCenter
       Left = 12
       Height = 17
-      Top = 35
-      Width = 167
-      Caption = 'SSB: (f>SSB and f<=End)'
+      Top = 32
+      Width = 162
+      Caption = 'SSB: f>SSB AND f<=End'
       ParentColor = False
     end
     object lblFreqNote3: TLabel
@@ -108,10 +109,10 @@ object frmFreq: TfrmFreq
       AnchorSideTop.Control = lblFreqNote1
       Left = 230
       Height = 17
-      Top = 18
-      Width = 180
+      Top = 15
+      Width = 175
       BorderSpacing.Left = 230
-      Caption = 'DATA: (f>DATA and f<=SSB)'
+      Caption = 'DATA: f>DATA and f<=SSB'
       ParentColor = False
     end
     object lblFreqNote4: TLabel
@@ -119,15 +120,49 @@ object frmFreq: TfrmFreq
       AnchorSideTop.Control = lblFreqNote2
       Left = 230
       Height = 17
-      Top = 35
-      Width = 247
-      Caption = 'USB: (f>10 or (f>5 and f<6)) else LSB'
+      Top = 32
+      Width = 242
+      Caption = 'SSB=USB: f>10 or f in [5..6] else LSB'
       ParentColor = False
+    end
+    object chkNewModes: TCheckBox
+      AnchorSideLeft.Control = pnlFreq2
+      AnchorSideTop.Control = lblFreqNote2
+      AnchorSideTop.Side = asrBottom
+      Left = 12
+      Height = 23
+      Top = 52
+      Width = 306
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 3
+      Caption = 'Use new mode/frequencies definition table'
+      Color = clDefault
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 0
+      OnChange = chkNewModesChange
+    end
+    object btnInitFreq: TButton
+      AnchorSideTop.Control = btnChange
+      AnchorSideRight.Control = btnChange
+      Left = 466
+      Height = 25
+      Hint = 'New mode Begin/End frequencies will be derived from old table settings.'#10'.'#10'THIS WILL OVERWRITE ALL NEW VALUES OF ALL BANDS !!'#10'.'#10'If you have edited some of them already consider TWO TIMES before pressing.'#10'This is mainly intended for filling zero values during first use.'
+      Top = 15
+      Width = 133
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 42
+      Caption = 'InitFreqTable'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      Visible = False
+      OnClick = btnInitFreqClick
     end
   end
   object dsrFreq: TDataSource
     DataSet = dmData.qFreqs
-    left = 130
-    top = 57
+    Left = 130
+    Top = 57
   end
 end

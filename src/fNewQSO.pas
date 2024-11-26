@@ -468,6 +468,7 @@ type
     procedure FormWindowStateChange(Sender: TObject);
     procedure lblAziChangeBounds(Sender: TObject);
     procedure lblDOKClick(Sender: TObject);
+    procedure lblModeClick(Sender: TObject);
     procedure lblQRAChangeBounds(Sender: TObject);
     procedure lblStateClick(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
@@ -838,7 +839,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, f
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat;
+     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat,fFreq;
 
 
 
@@ -5120,6 +5121,19 @@ begin
  showDOK(false);
 end;
 
+procedure TfrmNewQSO.lblModeClick(Sender: TObject);
+
+begin
+  frmFreq := TfrmFreq.Create(frmNewQSO);
+  try
+    frmFreq.ShowModal
+  finally
+    frmFreq.Free
+  end;
+  //init user defined bands vs frequencies
+  dmUtils.BandFromDbase;
+end;
+
 procedure TfrmNewQSO.lblStateClick(Sender: TObject);
 begin
   showDOK(true);
@@ -6958,8 +6972,8 @@ begin
     if chkAutoMode.Checked then
       cmbMode.Text := RigCmd2DataMode(mode);
     freq := FloatToStr(etmp);
-    if not FromRbn then
-      mode := dmUtils.GetModeFromFreq(freq);
+    //if not FromRbn then
+         mode := dmUtils.GetModeFromFreq(freq);
     etmp := etmp*1000;
     freq := FloatToStr(etmp);
     frmTRXControl.SetModeFreq(mode,freq);

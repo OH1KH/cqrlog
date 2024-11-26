@@ -243,6 +243,7 @@ type
     procedure HamClockSetNewDX(lat,lon,loc:string);
     procedure HamClockSetNewDE(loc,lat,lon,mycall:string);
     procedure DateHoursAgo(hours:integer;var Adate,Atime:string);
+    procedure FillNewBandModeLimits; //upgrade new limits to modes table
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
@@ -367,6 +368,34 @@ begin
       Result := 'D';
   end;
 end;
+procedure TdmUtils.FillNewBandModeLimits;  //write band's mode base values to new mode frequency table using old values
+  var f:integer;
+      b: string;
+
+  Begin
+    for f:=0 to cMaxBandsCount-1 do
+      begin
+       try
+        b:=cBands[f];
+        dmData.Q.SQL.Text :='UPDATE cqrlog_common.bands SET '
+                                +'b_cw=b_begin, e_cw=cw, '
+                                +'b_data=cw, e_data=ssb, '
+                                +'b_ssb=ssb, e_ssb=b_end, '
+                                +'b_am=ssb, e_am=b_end, '
+                                +'b_fm=ssb, e_fm=b_end '
+                                +'WHERE band="'+b+'"';
+         writeln(dmData.Q.SQL.Text);
+         if dmData.trQ.Active then
+                 dmData.trQ.Rollback;
+         dmData.trQ.StartTransaction;
+         dmData.Q.ExecSQL;
+
+       finally
+        dmData.trQ.Commit;
+        dmData.trQ.Rollback
+       end;
+      end;
+  end;
 Procedure TdmUtils.BandFromDbase;
 var
   BandCount: integer;
@@ -412,12 +441,17 @@ function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
 var
   Band: string;
   tmp: extended;
+
+function IsIt(fr:extended;st,en:currency):boolean;
+Begin
+   Result:= ((fr >= st) and (fr <= en))
+end;
+
 begin
   Result := '';
   band := GetBandFromFreq(freq);
   dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
-    QuotedStr(band);
+  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
   if dmData.trBands.Active then
     dmData.trBands.Rollback;
   dmData.trBands.StartTransaction;
@@ -425,30 +459,45 @@ begin
     dmData.qBands.Open;
     tmp := StrToFloat(freq);
     if dmData.qBands.RecordCount > 0 then
-    begin
-      if ((tmp >= dmData.qBands.FieldByName('B_BEGIN').AsCurrency) and
-        (tmp <= dmData.qBands.FieldByName('CW').AsCurrency)) then
-        Result := 'CW'
-      else
+    Begin
+    if cqrini.ReadBool('Bands', 'UseNewModeFreq',false) then
+      begin  //if areas are overlapping priority is from high to low: CW>DATA>SSB>FM>AM
+       if IsIt(tmp,dmData.qBands.FieldByName('B_am').AsCurrency,dmData.qBands.FieldByName('E_am').AsCurrency) then Result := 'AM';
+       if IsIt(tmp,dmData.qBands.FieldByName('B_fm').AsCurrency,dmData.qBands.FieldByName('E_fm').AsCurrency) then Result := 'FM';
+       if IsIt(tmp,dmData.qBands.FieldByName('B_ssb').AsCurrency,dmData.qBands.FieldByName('E_ssb').AsCurrency) then Result := 'SSB';
+       if IsIt(tmp,dmData.qBands.FieldByName('B_data').AsCurrency,dmData.qBands.FieldByName('E_data').AsCurrency) then Result := 'RTTY'; //means DATA
+       if IsIt(tmp,dmData.qBands.FieldByName('B_cw').AsCurrency,dmData.qBands.FieldByName('E_cw').AsCurrency) then Result := 'CW';
+      end
+     else
       begin
-        if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
-          Result := 'RTTY';
-
-        if ((tmp > dmData.qBands.FieldByName('SSB').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('B_END').AsCurrency)) then
+        if IsIt(tmp,dmData.qBands.FieldByName('B_BEGIN').AsCurrency,dmData.qBands.FieldByName('CW').AsCurrency) then Result := 'CW'
+        else
         begin
-          if (tmp > 5) and (tmp < 6) then
-            Result := 'USB'
-          else begin
-            if tmp > 10 then
+          if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and  //RTTY here in database (remainder from past) is actually called DATA when used
+            (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
+            Result := 'RTTY';
+
+          if ((tmp > dmData.qBands.FieldByName('SSB').AsCurrency) and
+            (tmp <= dmData.qBands.FieldByName('B_END').AsCurrency)) then
+            Result:='SSB';
+        end
+      end;
+
+
+    if (Result='SSB') then
+           begin
+           if ((tmp > 5) and (tmp < 6)) then
               Result := 'USB'
             else
-              Result := 'LSB'
-          end
-        end
-      end
-    end
+             begin
+              if tmp > 10 then
+                Result := 'USB'
+              else
+                Result := 'LSB'
+             end
+            end
+   end
+
   finally
     dmData.qBands.Close;
     dmData.trBands.Rollback
