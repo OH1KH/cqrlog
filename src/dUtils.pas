@@ -461,12 +461,17 @@ begin
     if dmData.qBands.RecordCount > 0 then
     Begin
     if cqrini.ReadBool('Bands', 'UseNewModeFreq',false) then
-      begin  //if areas are overlapping priority is from high to low: CW>DATA>SSB>FM>AM
+      begin  //if segments are overlapping priority is for DATA,AM and FM as they probably are narrow segments inside CW or SSB
+       if IsIt(tmp,dmData.qBands.FieldByName('B_ssb').AsCurrency,dmData.qBands.FieldByName('E_ssb').AsCurrency) then Result := 'SSB';
+       if IsIt(tmp,dmData.qBands.FieldByName('B_cw').AsCurrency,dmData.qBands.FieldByName('E_cw').AsCurrency) then Result := 'CW';
        if IsIt(tmp,dmData.qBands.FieldByName('B_am').AsCurrency,dmData.qBands.FieldByName('E_am').AsCurrency) then Result := 'AM';
        if IsIt(tmp,dmData.qBands.FieldByName('B_fm').AsCurrency,dmData.qBands.FieldByName('E_fm').AsCurrency) then Result := 'FM';
-       if IsIt(tmp,dmData.qBands.FieldByName('B_ssb').AsCurrency,dmData.qBands.FieldByName('E_ssb').AsCurrency) then Result := 'SSB';
        if IsIt(tmp,dmData.qBands.FieldByName('B_data').AsCurrency,dmData.qBands.FieldByName('E_data').AsCurrency) then Result := 'RTTY'; //means DATA
-       if IsIt(tmp,dmData.qBands.FieldByName('B_cw').AsCurrency,dmData.qBands.FieldByName('E_cw').AsCurrency) then Result := 'CW';
+       //First checked is SSB. Then CW is checked and can override SSB segment.
+       //Modes AM,FM,DATA (in that order) can override CW or SSB segments.
+       //You can define whole band divided for CW and SSB. Over them you can define small segments of AM,FM,or DATA and they can
+       //roll over CW and SSB segments. FM can roll over AM and DATA can roll over FM (or AM) if overlapping.
+       //See: Help/Quick start/Bands
       end
      else
       begin

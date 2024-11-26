@@ -149,7 +149,7 @@ object frmChangeFreq: TfrmChangeFreq
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 185
-    Hint = 'Set frequency borders for mode (Begin, End).'#10'Mode areas can be in any order inside Band Begin and Band End.'#10'If areas are overlapping priority is from high to low: CW>DATA>SSB>FM>AM  '#10'If mode is not used set both Begin and End to 0 (zero)'
+    Hint = 'Set frequency borders for Band (Begin, End). '#10'RX and TX offsets are needed to get right frequency values if you use transverter.'#10'Mode areas can be in any order inside Band Begin and Band End. '#10'If mode is not used set both Begin and End to 0 (zero).'#10'.'#10'If segments are overlapping priority is for DATA,AM and FM as they probably'#10'are narrow segments inside CW or SSB.'#10'.'#10'First checked is SSB. Then CW is checked and can override SSB segment.'#10'Modes AM,FM,DATA can override CW or SSB segments.'#10'.'#10'You can define whole band divided for CW and SSB. Over them you can define'#10'small segments of AM,FM,or DATA and they can roll over CW and SSB segments.'#10'FM can roll over AM and DATA can roll over FM(and AM) if overlapping.   '#10'See: Help/Quick start/Bands                 '
     Top = 64
     Width = 440
     ClientHeight = 185
