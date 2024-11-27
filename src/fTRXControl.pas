@@ -172,7 +172,7 @@ type
 
     function GetFreqFromModeBand(band : Integer; smode : String) : String;
     function GetModeFreqNewQSO(var mode, freq : String) : Boolean;
-    function GetBandWidth(mode : String) : Integer;
+    function GetBandWidthForMode(mode : String) : Integer;
     function GetModeBand(var mode, band : String) : Boolean;
     function InitializeRig : Boolean;
     function GetFreqHz : Double;
@@ -226,7 +226,7 @@ begin
       if not Tuning then
       begin
         ModeWas := GetActualMode;
-        BwWas := GetBandWidth(ModeWas);
+        BwWas := GetBandWidthForMode(ModeWas);
         SetMode('AM', 0);
         radio.PttOn;
         Tuning := True;
@@ -409,20 +409,20 @@ begin
     Result := 4;
 end;
 
-function TfrmTRXControl.GetBandWidth(mode : String) : Integer;
+function TfrmTRXControl.GetBandWidthForMode(mode : String) : Integer;
 var
   section : String;
 begin
   section := 'Band'+RigInUse;
-  Result := 500;
+  Result := -1;  //this will keep the exisiting bandwdith if nothing match
   if (mode = 'LSB') or (mode = 'USB') then
     mode := 'SSB';
   if mode = 'CW' then
     Result := (cqrini.ReadInteger(section, 'CW', 500));
   if mode = 'SSB' then
-    Result := (cqrini.ReadInteger(section, 'SSB', 1800));
-  if mode = 'RTTY' then
-    Result := (cqrini.ReadInteger(section, 'RTTY', 500)); //note: Data is called rtty for backward compatibility
+    Result := (cqrini.ReadInteger(section, 'SSB', 1800)); ;
+  if mode = cqrini.ReadString('Band'+frmTRXControl.RigInUse, 'Datacmd', 'RTTY') then
+    Result := (cqrini.ReadInteger(section, 'RTTY', 500)); //note: Data is called rtty in ini for backward compatibility
   if mode = 'AM' then
     Result := (cqrini.ReadInteger(section, 'AM', 3000));
   if mode = 'FM' then
@@ -619,7 +619,7 @@ end;
 procedure TfrmTRXControl.btnCWClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
-  SetMode('CW', GetBandWidth('CW'));
+  SetMode('CW', GetBandWidthForMode('CW'));
 end;
 
 procedure TfrmTRXControl.btnSSBClick(Sender : TObject);
@@ -628,15 +628,15 @@ var
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   if not TryStrToCurr(lblFreq.Caption, tmp) then
-    SetMode('LSB', GetBandWidth('SSB'))
+    SetMode('LSB', GetBandWidthForMode('SSB'))
   else begin
     if (tmp > 5) and (tmp < 6) then
-      SetMode('USB', GetBandWidth('SSB'))
+      SetMode('USB', GetBandWidthForMode('SSB'))
     else begin
       if tmp > 10 then
-        SetMode('USB', GetBandWidth('SSB'))
+        SetMode('USB', GetBandWidthForMode('SSB'))
       else
-        SetMode('LSB', GetBandWidth('SSB'));
+        SetMode('LSB', GetBandWidthForMode('SSB'));
     end;
   end;
 end;
@@ -667,19 +667,19 @@ procedure TfrmTRXControl.btnDATAClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   //TODO fix mode setting here
-  SetMode('RTTY', GetBandWidth('RTTY'));
+  SetMode('RTTY', GetBandWidthForMode('RTTY'));  //it is acatually mode 'DATA'
 end;
 
 procedure TfrmTRXControl.btnAMClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
-  SetMode('AM', GetBandWidth('AM'));
+  SetMode('AM', GetBandWidthForMode('AM'));
 end;
 
 procedure TfrmTRXControl.btnFMClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
-  SetMode('FM', GetBandWidth('FM'));
+  SetMode('FM', GetBandWidthForMode('FM'));
 end;
 
 procedure TfrmTRXControl.mnuShowPwrClick(Sender : TObject);
@@ -989,7 +989,7 @@ begin
     lblFreq.Caption       := edtFreqInput.Text;
     edtFreqInput.Visible  := False;
     mode:=dmUtils.GetModeFromFreq(s);
-    bw:= GetBandWidth(mode);
+    bw:= GetBandWidthForMode(mode);
     SetMode(mode,bw);
   end;
 end;
@@ -1420,7 +1420,7 @@ begin
   if mode='' then        //if mode is empty change freq using existing mode
      mode:=GetActualMode;
 
-  bandwidth := GetBandWidth(mode);
+  bandwidth := GetBandWidthForMode(mode);
   f := StrToFloat(freq);
   if mode = 'SSB' then
   begin
