@@ -121,26 +121,36 @@ object frmEnterFreq: TfrmEnterFreq
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
   object Label1: TLabel
-    Left = 5
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 6
     Height = 17
-    Top = 8
+    Top = 6
     Width = 87
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
     Caption = 'Freq (in kHz):'
     ParentColor = False
   end
   object Label2: TLabel
-    Left = 136
+    AnchorSideLeft.Control = cmbMode
+    AnchorSideTop.Control = Label1
+    Left = 135
     Height = 17
-    Top = 8
+    Top = 6
     Width = 40
     Caption = 'Mode:'
     ParentColor = False
   end
   object btnCancel: TButton
-    Left = 176
+    AnchorSideLeft.Control = btnOK
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = btnOK
+    Left = 174
     Height = 25
     Top = 72
     Width = 75
+    BorderSpacing.Left = 6
     BorderSpacing.InnerBorder = 4
     Cancel = True
     Caption = 'Cancel'
@@ -148,30 +158,40 @@ object frmEnterFreq: TfrmEnterFreq
     TabOrder = 3
   end
   object btnOK: TButton
-    Left = 88
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = edtFreq
+    AnchorSideTop.Side = asrBottom
+    Left = 93
     Height = 25
     Top = 72
     Width = 75
+    BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
     TabOrder = 2
     OnClick = btnOKClick
   end
   object edtFreq: TEdit
-    Left = 5
+    AnchorSideLeft.Control = Owner
+    Left = 6
     Height = 34
     Top = 32
     Width = 123
+    BorderSpacing.Left = 6
     NumbersOnly = True
     TabOrder = 0
     OnExit = edtFreqExit
     OnKeyPress = edtFreqKeyPress
   end
   object cmbMode: TComboBox
-    Left = 136
+    AnchorSideLeft.Control = edtFreq
+    AnchorSideLeft.Side = asrBottom
+    Left = 135
     Height = 34
     Top = 32
     Width = 115
+    BorderSpacing.Left = 6
     ItemHeight = 0
     TabOrder = 1
     Text = 'cmbMode'

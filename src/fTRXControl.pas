@@ -160,7 +160,6 @@ type
     procedure ClearModeButtonsColor;
     procedure UpdateModeButtons(mode : String);
 
-    procedure CheckUserMode(var mode : String);
     procedure UserButton(r, b : Char);
   public
     AutoMode : Boolean;
@@ -1207,7 +1206,7 @@ var
   rmode : TRigMode;
 begin
   if mode='' then exit;
-  CheckUserMode(mode);
+  dmUtils.GetUserMode(mode);
   if Assigned(radio) then
   begin
     rmode.mode := mode;
@@ -1393,7 +1392,7 @@ begin
         mode := 'LSB';
     end;
   end;
-  CheckUserMode(mode);
+  dmUtils.GetUserMode(mode);
 
   if Assigned(radio) then
   begin
@@ -1672,17 +1671,7 @@ begin
   btn2MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','2cw',144050)/1000));
   btn70CMBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','70cw',430000)/1000))
 end;
-procedure TfrmTRXControl.CheckUserMode(var mode : String);
-var
-  usermode,
-  usercmd  :String;
-begin
-  usercmd:=cqrini.ReadString('Band'+RigInUse, 'Datacmd', 'RTTY');
-  usermode:=cqrini.ReadString('Band'+RigInUse, 'Datamode', 'RTTY');
 
-  if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
-     mode := usercmd;
-end;
 procedure TfrmTRXControl.SendVoice(mem : String);
 
 begin

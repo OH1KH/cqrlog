@@ -244,6 +244,7 @@ type
     procedure HamClockSetNewDE(loc,lat,lon,mycall:string);
     procedure DateHoursAgo(hours:integer;var Adate,Atime:string);
     procedure FillNewBandModeLimits; //upgrade new limits to modes table
+    procedure GetUserMode(var mode : String);
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
@@ -436,7 +437,18 @@ Begin
                 end;
       end;
 end;
+procedure TdmUtils.GetUserMode(var mode : String);
+//this calls conversion of legacy RTTY See: preferences/modes
+var
+  usermode,
+  usercmd  :String;
+begin
+  usercmd:=cqrini.ReadString('Band'+frmTRXControl.RigInUse, 'Datacmd', 'RTTY');
+  usermode:=cqrini.ReadString('Band'+frmTRXControl.RigInUse, 'Datamode', 'RTTY');
 
+  if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
+     mode := usercmd;
+end;
 function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
 var
   Band: string;
@@ -507,6 +519,7 @@ begin
     dmData.qBands.Close;
     dmData.trBands.Rollback
   end;
+  GetUserMode(Result);
 end;
 
 function TdmUtils.GetBandFromFreq(MHz: string): string;

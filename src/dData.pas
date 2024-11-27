@@ -2781,7 +2781,7 @@ begin
                               'ADD COLUMN IF NOT EXISTS e_am NUMERIC(10,4) DEFAULT 0, '+
                               'ADD COLUMN IF NOT EXISTS b_fm NUMERIC(10,4) DEFAULT 0,'+
                               'ADD COLUMN IF NOT EXISTS e_fm NUMERIC(10,4) DEFAULT 0';
-        //if fDebugLevel>=1 then
+        if fDebugLevel>=1 then
                               Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
       end;
