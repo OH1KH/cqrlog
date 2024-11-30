@@ -7973,8 +7973,19 @@ Begin
     p:=pos('(',data)+1;
     if not (TryStrToInt(ExtractSubstr(data,p,[')']),VerAvailNr)) then exit;
     if VerNr < VerAvailNr then
-      ShowMessage('You are running CqrlogAlpha version '+IntToStr(VerNr)+'.'+sLineBreak+sLineBreak+'There is CqrlogAlpha version '+IntToStr(VerAvailNr)+' available at:'+sLineBreak+
-                  'https://github.com/OH1KH/cqrlog/tree/loc_testing/compiled');
+    begin
+      try
+        frmAbout:= TfrmAbout.Create(Application);
+        frmAbout.PageControl1.ActivePage := frmAbout.tabUpgrade;
+        frmAbout.lblVerze1.Caption := cVERSION + '  ' + cBUILD_DATE;
+        frmAbout.tabAbout.TabVisible:=false;
+        frmAbout.tabUpgrade.TabVisible:=True;
+        frmAbout.Label8.Caption:='There is CqrlogAlpha version '+IntToStr(VerAvailNr)+' available!';
+        frmAbout.ShowModal
+      finally
+        frmAbout.Free;
+      end
+    end;
   end;
 end;
 

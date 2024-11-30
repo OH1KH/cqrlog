@@ -1862,20 +1862,6 @@ var
 
 begin
   dmUtils.OpenInApp('file://' + dmData.HelpDir + HelpAddr[pgPreferences.TabIndex] );
-  //ShowHelp;
-{
- this feels stupid but I could not find any other way to bind help-button to active tab's help
- Because of:
-
- procedure TControl.ShowHelp;
-  Begin
-  ...
-  ...
-   if Parent <> nil then  <-------------!!!! I THINK: this leads always to show upper level help !!!!
-      Parent.ShowHelp;
-  end;
- }
-
 end;
 
 procedure TfrmPreferences.btnLoadFifthClick(Sender: TObject);
