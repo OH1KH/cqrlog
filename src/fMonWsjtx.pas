@@ -155,7 +155,7 @@ type
     procedure TryAlerts;
     procedure SaveFormPos(FormMode: string);
     procedure LoadFormPos(FormMode: string);
-    procedure CqPeriodTimerStart;
+    procedure CqPeriodTimerStart(msgnow,msglast:string);
     procedure AddXplanetList(call,loc:string);
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
@@ -192,7 +192,7 @@ type
   end;
 
 const
-  MaxLinesSgMonitor = 50;  //max lines in sgmonitor grid
+  MaxLinesSgMonitor = 50;  //max line nr in sgmonitor grid (lines count is 0..MaxLinesSgMonitor => MaxLinesSgMonitor+1
   CountryLen = 15;         //length of printed country name in monitor
   CallFieldLen = 10;       //max len of callsign
   Sdelim = ',';            //separator of several text alerts
@@ -260,7 +260,7 @@ var
   LockMap: boolean;
   LockFlw: boolean;
   PCallColor :Tcolor;  //color that was last used for callsign printing, will be used in xplanet
-  sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
+  sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
   USDB_Address :String;
@@ -383,7 +383,7 @@ var
 begin
   for i:= 0 to 7 do
   begin
-       for j:=0 to MaxLinesSgMonitor - 1 do
+       for j:=0 to MaxLinesSgMonitor do
        begin
           sgMonitorAttributes[i,j].FG_Color:=clBlack;
           sgMonitorAttributes[i,j].BG_Color:=clWhite;
@@ -1273,18 +1273,21 @@ begin
     edtFollow.Font.Color := clSilver;
 end;
 
-procedure TfrmMonWsjtx.CqPeriodTimerStart;
+procedure TfrmMonWsjtx.CqPeriodTimerStart(msgnow,msglast:string);
 var
     tmr: integer;
+    n,l: Longint;
 begin
   tmrCqPeriod.Enabled := False;
-  tmr := 40000;   // tmr about 2/3 of period time
-  case CurMode of
-       'FT8': tmr := 10000;
-       'FT4': tmr := 5000;
-  end;
+  if (msgnow='') or (msglast='') then exit;
+  n:=3600*StrToInt(msgnow[1]+msgnow[2])+60*StrToInt(msgnow[3]+msgnow[4])+StrToInt(msgnow[5]+msgnow[6]);
+  l:=3600*StrToInt(msglast[1]+msglast[2])+60*StrToInt(msglast[3]+msglast[4])+StrToInt(msglast[5]+msglast[6]);
+  tmr:= ((n-l)*1000*2) div 3;
+  if (tmr<=0) or (tmr>120000) then exit;
+
   tmrCqPeriod.Interval := tmr;
-  if LocalDbg then Writeln('Period timer set to: ',tmr);
+  if LocalDbg then
+              Writeln('Period timer set to: ',tmr);
   tmrCqPeriod.Enabled := True;
 end;
 
@@ -1322,6 +1325,7 @@ begin
   cmNever.Bitmap := TBitmap.Create;
   cmCqDX.Bitmap := TBitmap.Create;
   CanCloseUSDBProcess := True;  //there is no process yet
+  UsedBkgCqCol :=clWhite;
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
@@ -1527,7 +1531,6 @@ begin
  else
     if chkMap.Checked then
         begin
-          CqPeriodTimerStart;
           if LocalDbg then
            Writeln('Other line:', Message);
           if  (pos('RR73',Message)= length(Message)-3)
@@ -1584,6 +1587,7 @@ begin
                     if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
                                        else sgMonitor.Columns.Items[1].Visible:= false;
                     clearSgMonitor;
+                    CqPeriodTimerStart(msgTime, LastWsjtLineTime);
                   end;
             LastWsjtLineTime := msgTime;
             sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
@@ -1621,6 +1625,7 @@ begin
                                                      AddColorStr(msgRes, StatClr,7,sgMonitor.rowCount-1);
                                                end;
               end;
+            scrollSgMonitor;
             if LocalDbg then
               Begin
                Writeln('All written in Addother. Next alerts');
@@ -2105,6 +2110,7 @@ begin
                      if LocalDbg then
                                  Writeln('Msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
                     clearSgMonitor;
+                    CqPeriodTimerStart(msgTime, LastWsjtLineTime);
                   end;
 
             LastWsjtLineTime := msgTime;
@@ -2143,7 +2149,6 @@ begin
    UsedBkgCqCol:= BkgCqCol;
 
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
-  CqPeriodTimerStart;
 
   mycont := '';
   cont := '';
@@ -2243,6 +2248,7 @@ begin
                if LocalDbg then
                            Writeln('Msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
               clearSgMonitor;
+              CqPeriodTimerStart(msgTime, LastWsjtLineTime);
             end;
 
       LastWsjtLineTime := msgTime;
@@ -2875,7 +2881,7 @@ var
 begin
   for i:= 0 to 7 do
   begin
-       for j:=0 to MaxLinesSgMonitor - 1 do
+       for j:=0 to MaxLinesSgMonitor do
        begin
           sgMonitorAttributes[i,j].FG_Color:=Fc;
           sgMonitorAttributes[i,j].BG_Color:=Bc;
