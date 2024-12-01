@@ -27,10 +27,11 @@
     </MacroValues>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
-      <SharedMatrixOptions Count="3">
+      <SharedMatrixOptions Count="4">
         <Item1 ID="887029194029" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
         <Item2 ID="890734883088" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk3"/>
         <Item3 ID="102898540782" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item4 ID="587735805546" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt6"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -949,6 +950,8 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <RunWithoutDebug Value="True"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
     </Linking>
