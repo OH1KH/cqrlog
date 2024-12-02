@@ -255,7 +255,6 @@ type
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;
-    function  LetterFromMode(mode : String) : String;
     function  DateToFilterDate(date : TDateTime) : String;
     function  ADIFDateToDate(date : String) : String;
     function  IsModeOK(mode : String) : Boolean;
@@ -275,7 +274,7 @@ type
     function  RemoveSpaces(S : String) : String;
     function  StripHTML(S: string): string;
     function  ExtractQTH( qth : String) : String;
-    function  GetModeFromFreq(freq : String) : String;
+    function  GetModeFromFreq(freq : String) : String;  //freq in MHz
     function  FromJS8CALLToAdif(buf:string):string;
     function  FromN1MMToAdif(buf:string):string;
     function  StringToADIF(ATag, Text : String) : String;
@@ -357,18 +356,6 @@ implementation
 { TdmUtils }
 uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest;
 
-function TdmUtils.LetterFromMode(mode: string): string;
-begin
-  if (mode = 'CW') or (mode = 'CWQ') then
-    Result := 'C'
-  else
-  begin
-    if (mode = 'FM') or (mode = 'SSB') or (mode = 'AM') then
-      Result := 'F'
-    else
-      Result := 'D';
-  end;
-end;
 procedure TdmUtils.FillNewBandModeLimits;  //write band's mode base values to new mode frequency table using old values
   var f:integer;
       b: string;

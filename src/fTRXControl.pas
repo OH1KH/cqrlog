@@ -19,7 +19,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, inifiles, process, lcltype, Buttons, Menus, ActnList, dynlibs,
-  uRigControl, Types, StrUtils;
+  uRigControl, Types, StrUtils, ComCtrls;
 
 type
 
@@ -65,8 +65,10 @@ type
     gbInfo : TGroupBox;
     gbVfo : TGroupBox;
     GroupBox4 : TGroupBox;
-    lblInitRig: TLabel;
+    lblMode: TLabel;
     lblFreq : TLabel;
+    lblInitRig: TLabel;
+    mnuShowFreqBar: TMenuItem;
     mnuShowUsr : TMenuItem;
     mnuShowInfo : TMenuItem;
     mnuShowVfo : TMenuItem;
@@ -76,10 +78,14 @@ type
     mnuShowPwr : TMenuItem;
     mnuProgPref : TMenuItem;
     mnuMem : TMainMenu;
+    pbBand: TProgressBar;
+    pnlFreqBar: TPanel;
+    pnlRig: TPanel;
     pnlUsr : TPanel;
-    pnlRig : TPanel;
     pnlMain : TPanel;
     pnlPower : TPanel;
+    Separator1: TMenuItem;
+    Separator2: TMenuItem;
     tmrChokeWheel: TTimer;
     tmrSetRigTime: TTimer;
     tmrRadio : TTimer;
@@ -127,6 +133,7 @@ type
     procedure btnDATAClick(Sender : TObject);
     procedure btnSSBClick(Sender : TObject);
     procedure gbFreqClick(Sender : TObject);
+    procedure mnuShowFreqBarClick(Sender: TObject);
     procedure mnuShowInfoClick(Sender : TObject);
     procedure mnuShowPwrClick(Sender : TObject);
     procedure mnuProgPrefClick(Sender : TObject);
@@ -201,6 +208,7 @@ type
     procedure HLTune(start : Boolean);
     procedure SendVoice(mem : String);
     procedure StopVoice;
+    procedure UpdateFreqBar;
   end;
 
 var
@@ -276,10 +284,11 @@ begin
 
   f := f + txlo;
   lblFreq.Caption := FormatFloat(empty_freq, f);
+  UpdateFreqBar;
 
   UpdateModeButtons(m);
   ClearBandButtonsColor;
-  // this waits5 rig polls before lock freq set by memory. After that if freq chanfǵes (by vfo knob) clean info text
+  // this waits5 rig polls before lock freq set by memory. After that if freq changes (by vfo knob) clean info text
   // stupid but works quite well
   case infosetstage of
     4: begin
@@ -441,10 +450,11 @@ begin
   cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
-  gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', gbInfo.Visible);
+  gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', False);
+  pnlFreqBar.Visible:=cqrini.ReadBool('TRX','ShowFreqBar', False);
   mnuShowInfo.Checked := gbInfo.Visible;
-  gbVfo.Visible := cqrini.ReadBool('TRX', 'ShowVfo', gbVfo.Visible);
-  pnlUsr.Visible := cqrini.ReadBool('TRX', 'ShowUsr', pnlUsr.Visible);
+  gbVfo.Visible := cqrini.ReadBool('TRX', 'ShowVfo', False);
+  pnlUsr.Visible := cqrini.ReadBool('TRX', 'ShowUsr', False);
   mnuShowVfo.Checked := gbVfo.Visible;
   mnuShowUsr.Checked := pnlUsr.Visible;
   MouseWheelUsed := False;
@@ -654,6 +664,12 @@ begin
   edtFreqInput.Repaint;
   edtFreqInput.SetFocus;
 
+end;
+
+procedure TfrmTRXControl.mnuShowFreqBarClick(Sender: TObject);
+begin
+  pnlFreqBar.Visible:= not pnlFreqBar.Visible;
+  cqrini.WriteBool('TRX', 'ShowFreqBar', pnlFreqBar.Visible);
 end;
 
 procedure TfrmTRXControl.mnuShowInfoClick(Sender : TObject);
@@ -1687,4 +1703,36 @@ begin
     radio.StopVoice;
 end;
 
+procedure  TfrmTRXControl.UpdateFreqBar;
+var
+ b,m:string;
+ f,l: integer;
+Begin
+  if not GetModeBand(m,b) then
+                              exit;
+  if b<>'' then
+  begin
+    l:=length( dmUtils.BandFreq);
+    lblMode.Caption:= m;
+    for f:=0 to  l - 1 do
+      if (dmUtils.BandFreq[f].band = b ) then
+       Begin
+            pbBand.Min:=round(dmUtils.BandFreq[f].b_begin*1000);  //kHz
+            pbBand.Max:=round(dmUtils.BandFreq[f].b_end*1000);
+            Break;
+       end;
+    pbBand.Smooth:=True;
+    pbBand.Step:=1;
+    pbBand.Enabled:=True;
+
+    pbBand.Position:=round(StrToFloat(lblFreq.Caption)*1000);
+  end
+  else
+  begin
+     pbBand.Min:=0;
+     pbBand.Max:= 1;
+     pbBand.Position:=0;
+     lblMode.Caption:='NotHamBand';
+  end;
+end;
 end.
