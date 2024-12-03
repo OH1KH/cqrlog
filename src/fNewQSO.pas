@@ -656,6 +656,8 @@ type
     LoTWcfm    : String;
     UsrAssignedProfile : String;
     EditId             : longint;     //id_cqrlog_main of qso in edit mode
+    DetailsCMBColorDone : string;      //changes done for DXCCdetails column color by currently used call+mode+band
+
     procedure showDOK(stat:boolean);
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -1461,6 +1463,7 @@ begin
   FreqBefChange := frmTRXControl.GetFreqMHz;
   dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
   dmUtils.HamClockSetNewDX('','',CurrentMyloc);   //a way to clear SP/LP line (but draws vertical line instead)
+  DetailsCMBColorDone:='';
 
 end;
 
@@ -2271,6 +2274,7 @@ var
 begin
   mode := '';
   freq := '';
+  band := '';
   if Running then
    exit;
   Running := True;
@@ -2293,14 +2297,18 @@ begin
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
-          if edtCall.Text<>'' then //this sets statistic grid to have right coloring, specially when NewQSO from DXCluster spot click
-           begin
-             actTab:=pgDetails.ActivePage;
-             pgDetails.ActivePage:=tabCallStat;
-             pgDetails.ActivePage:=tabDXCCStat;
-             pgDetails.ActivePage:=actTab;
+          if frmTRXControl.GetModeBand(mode,band) then
+            Begin
+             if (edtCall.Text<>'') and (edtCall.Text+mode+band <> DetailsCMBColorDone) then
+             //this sets statistic grid to have right coloring, specially when NewQSO from DXCluster spot click
+               begin
+                 actTab:=pgDetails.ActivePage;
+                 pgDetails.ActivePage:=tabCallStat;
+                 pgDetails.ActivePage:=tabDXCCStat;
+                 pgDetails.ActivePage:=actTab;
+                 DetailsCMBColorDone := edtCall.Text+mode+band;
+               end;
            end;
-
           if ClearAfterFreqChange and sbtnHamQTH.Visible then
           begin
             dfreq := frmTRXControl.GetFreqMHz;
