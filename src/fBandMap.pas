@@ -688,13 +688,13 @@ end;
 procedure TfrmBandMap.FormActivate(Sender: TObject);
 begin
   BmPause:=true;
-  frmBandMap.Caption:='BM PAUSED!';
+  Self.Caption:='BM PAUSED!';
 end;
 
 procedure TfrmBandMap.ReleasePaused;
 Begin
   BmPause:=false;
-  frmBandMap.Caption:= 'Band map';
+  Self.Caption:= 'Band map';
   frmNewQso.ReturnToNewQSO;
 end;
 procedure TfrmBandMap.acClearExecute(Sender: TObject);

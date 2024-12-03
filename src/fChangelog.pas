@@ -66,7 +66,7 @@ var
 '<P><UL><LI style="list-style: square;text-align:left; color: green;" >'+
 'PROGRAM:</LI>'+
 '<UL><LI style="text-align:left; color: brown;">'+
-'Basic settings how CcqrlogAlpha works with this log</LI></UL>'+
+'Basic settings how CqrlogAlpha works with this log</LI></UL>'+
 '<LI style="list-style: square;text-align:left; color: green;" >'+
 'STATION:</LI>'+
 '<UL><LI style="text-align:left; color: brown;">'+
@@ -74,19 +74,19 @@ var
 '<LI style="list-style: square;text-align:left; color: green;" >'+
 'BANDS:</LI>'+
 '<UL><LI style="text-align:left; color: brown;"> '+
-'By default CQRLOG uses Region1 band settings.<BR>'+
+'By default CqrlogAlpha uses Region1 band settings.<BR>'+
 'If you are in other region please check bands/frequencies<BR>'+
 'to set correct band start and end frequencies.<BR>'+
-'This will affect to CQRLOG operations.</LI></UL>'+
+'This will affect to all CqrlogAlpha operations.</LI></UL>'+
 '<LI style="list-style: square;text-align:left; color: green;" >'+
 'TRX CONTROL:</LI>'+
 '<UL><LI style="text-align:left; color: brown;">'+
-'Settings if you want CQRLOG to communicate with<BR>'+
+'Settings if you want CqrlogAlpha to communicate with<BR>'+
 'your rig using CAT control.</LI></UL>'+
 '<LI style="list-style: square;text-align:left; color: green;" >'+
 'EXTERNAL VIEWERS:</LI>'+
 '<UL><LI style="text-align:left; color: brown;"> '+
-'Programs that CQRLOG uses for viewing various documents</LI></UL>'+
+'Programs that CqrlogAlpha uses for viewing various documents</LI></UL>'+
 '</UL></P>'+
 '<P>'+
 'For other Preferences/Tabs: Set their values by your needs.'+
