@@ -1,26 +1,33 @@
 object frmChangelog: TfrmChangelog
   Left = 427
-  Height = 480
+  Height = 467
   Top = 275
   Width = 628
-  Caption = 'Changelog'
-  ClientHeight = 480
+  HorzScrollBar.Page = 628
+  VertScrollBar.Page = 88
+  AutoScroll = True
+  ClientHeight = 467
   ClientWidth = 628
-  OnShow = FormShow
-  Position = poMainFormCenter
-  LCLVersion = '2.2.6.0'
+  Constraints.MinHeight = 100
+  Constraints.MinWidth = 250
+  DefaultMonitor = dmPrimary
+  FormStyle = fsStayOnTop
+  Position = poScreenCenter
+  LCLVersion = '3.6.0.0'
   object Panel1: TPanel
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 34
-    Top = 446
-    Width = 628
+    Top = 433
+    Width = 630
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 34
-    ClientWidth = 628
+    ClientWidth = 630
     TabOrder = 0
     object Button1: TButton
-      Left = 545
+      Left = 547
       Height = 25
       Top = 5
       Width = 75
@@ -32,11 +39,22 @@ object frmChangelog: TfrmChangelog
     end
   end
   object IpHtmlPanel1: TIpHtmlPanel
-    Left = 0
-    Height = 446
-    Top = 0
-    Width = 628
-    Align = alClient
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Panel1
+    Left = 2
+    Height = 429
+    Top = 2
+    Width = 626
+    Align = alCustom
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
+    BorderStyle = bsSingle
     DataProvider = IpFileDataProvider1
     FixedTypeface = 'Courier New'
     DefaultTypeFace = 'default'
