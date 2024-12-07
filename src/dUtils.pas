@@ -5629,7 +5629,7 @@ begin
       g.Cells[i,y] := '   ';
   with g do
   begin
-    Cells[0, 1] := 'SSB';
+    Cells[0, 1] := 'PHO';
     Cells[0, 2] := 'CW';
     Cells[0, 3] := 'DIGI'
   end;
@@ -5723,7 +5723,7 @@ begin
     eQSL := dmData.QStatNewQSO.Fields[4].AsString;
     if i > 0 then
     begin
-      if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
+      if (mode = 'SSB') or (mode='FM') or (mode='AM') or (mode='DIGITALVOICE')then
       begin
         tmps := g.Cells[i,1] ;
         if QSLR = 'Q' then

@@ -148,7 +148,7 @@ object frmContest: TfrmContest
     TabOrder = 4
     OnChange = edtSRXStrChange
     OnEnter = edtRSTrEnter
-    OnKeyDown = edtSRXStrKeyDown
+    OnKeyDown = edtSTXStrKeyDown
     OnKeyPress = edtSRXStrKeyPress
   end
   object lblCall: TLabel
@@ -266,7 +266,7 @@ object frmContest: TfrmContest
     Caption = 'SPACE is TAB'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 18
+    TabOrder = 19
     TabStop = False
     OnChange = chkSpaceChange
   end
@@ -623,17 +623,19 @@ object frmContest: TfrmContest
     OnExit = cmbContestNameExit
   end
   object chkQsp: TCheckBox
-    AnchorSideLeft.Control = edtSTXStr
     AnchorSideTop.Control = chkNRInc
-    Left = 246
+    AnchorSideRight.Control = edtSTXStr
+    AnchorSideRight.Side = asrBottom
+    Left = 295
     Height = 23
     Hint = 'When checked allows circulating STX_String.'#10'I.E. set MSG_s at start, after 1st QSO is saved your MSG_s'#10'changes to MSG_r received from last logged QSO.'
     Top = 161
     Width = 51
+    Anchors = [akTop, akRight]
     Caption = 'Qsp'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 16
+    TabOrder = 17
     TabStop = False
     OnChange = chkQspChange
   end
@@ -650,7 +652,7 @@ object frmContest: TfrmContest
     Caption = 'TAB in order'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 17
+    TabOrder = 18
     TabStop = False
     OnChange = chkTabAllChange
   end
@@ -713,7 +715,7 @@ object frmContest: TfrmContest
     Checked = True
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 22
+    TabOrder = 23
     TabStop = True
   end
   object rbNoMode4Dupe: TRadioButton
@@ -729,7 +731,7 @@ object frmContest: TfrmContest
     Caption = 'NoMode4Dupe'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 20
+    TabOrder = 21
   end
   object rbIgnoreDupes: TRadioButton
     AnchorSideLeft.Control = rbNoMode4Dupe
@@ -744,7 +746,7 @@ object frmContest: TfrmContest
     Caption = 'Ignore dupes'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 21
+    TabOrder = 22
     OnChange = rbIgnoreDupesChange
   end
   object btClearAll: TButton
@@ -777,7 +779,7 @@ object frmContest: TfrmContest
     Constraints.MaxWidth = 180
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 23
+    TabOrder = 24
     TabStop = False
     OnClick = btDupChkStartClick
   end
@@ -794,7 +796,7 @@ object frmContest: TfrmContest
     Caption = 'S&&P'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 24
+    TabOrder = 25
     TabStop = False
     OnClick = chkSPClick
   end
@@ -815,7 +817,7 @@ object frmContest: TfrmContest
     Caption = 'Status'
     ClientHeight = 361
     ClientWidth = 765
-    TabOrder = 25
+    TabOrder = 26
     object mStatus: TMemo
       AnchorSideLeft.Control = gbStatus
       AnchorSideRight.Control = gbStatus
@@ -906,7 +908,7 @@ object frmContest: TfrmContest
     Caption = 'Mark dupe'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 26
+    TabOrder = 27
     TabStop = False
   end
   object chkHint: TCheckBox
@@ -925,7 +927,7 @@ object frmContest: TfrmContest
     ParentShowHint = False
     ShowHint = True
     State = cbChecked
-    TabOrder = 27
+    TabOrder = 28
     TabStop = False
     OnChange = chkHintChange
   end
@@ -1132,9 +1134,24 @@ object frmContest: TfrmContest
     BorderSpacing.Left = 6
     BorderSpacing.Top = 3
     Caption = 'Filter && Exp'
-    TabOrder = 28
+    TabOrder = 29
     OnClick = chkSetFilterClick
     OnMouseUp = chkSetFilterMouseUp
+  end
+  object chkNRString: TCheckBox
+    AnchorSideLeft.Control = edtSTXStr
+    AnchorSideTop.Control = edtSTXStr
+    AnchorSideTop.Side = asrBottom
+    Left = 246
+    Height = 23
+    Hint = 'When checked clears NRs and NRr and INC checkbox.'#10'After that NR columns can be used as string fields.'#10'Note that on export their TAG names are sill kept and'#10'produced TAGs contain illegal values(characters) and'#10'may not be used with contest log robots.'#10'Mainly for special purpose.'
+    Top = 161
+    Width = 44
+    Caption = 'NS'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 16
+    OnChange = chkNRStringChange
   end
   object tmrESC2: TTimer
     Enabled = False

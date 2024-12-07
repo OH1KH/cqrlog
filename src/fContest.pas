@@ -20,6 +20,8 @@ type
     btDupChkStart: TButton;
     btnCQstart: TButton;
     cdDupeDate: TCalendarDialog;
+    chkNRstr: TCheckBox;
+    chkNRString: TCheckBox;
     chkSetFilter: TCheckBox;
     chkHint: TCheckBox;
     chkMarkDupe: TCheckBox;
@@ -124,6 +126,7 @@ type
     procedure chkNoNrChange(Sender: TObject);
     procedure chkNRIncChange(Sender: TObject);
     procedure chkNRIncClick(Sender : TObject);
+    procedure chkNRStringChange(Sender: TObject);
     procedure chkQspChange(Sender: TObject);
     procedure chkSetFilterClick(Sender: TObject);
     procedure chkSetFilterMouseUp(Sender: TObject; Button: TMouseButton;
@@ -137,8 +140,6 @@ type
     procedure cmbContestNameExit(Sender: TObject);
     procedure edtRSTrEnter(Sender: TObject);
     procedure edtRSTsEnter(Sender: TObject);
-    procedure edtSRXStrKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
     procedure edtSRXStrKeyPress(Sender: TObject; var Key: char);
     procedure edtSTXStrChange(Sender: TObject);
     procedure edtSTXStrKeyDown(Sender: TObject; var Key: Word;
@@ -644,16 +645,29 @@ end;
 
 procedure TfrmContest.chkNRIncChange(Sender: TObject);
 begin
+  if chkNRInc.Checked then
+          chkNRString.Checked := False;
   SetTabOrders;
 end;
 
 procedure TfrmContest.chkNRIncClick(Sender : TObject);
 begin
   if chkNRInc.Checked and (edtSTX.Text = '') then
-  begin
-    edtSTX.Text := '001';
-    edtCall.SetFocus
-  end
+    begin
+      edtSTX.Text := '001';
+      edtCall.SetFocus
+    end
+end;
+
+procedure TfrmContest.chkNRStringChange(Sender: TObject);
+begin
+  if chkNRString.Checked then
+               Begin
+                   chkNRInc.Checked:=false;
+                   edtSTX.Text:='';
+                   edtSRX.Text:='';
+               end;
+
 end;
 
 procedure TfrmContest.chkQspChange(Sender: TObject);
@@ -797,6 +811,7 @@ begin
            rbDupeCheck.Checked:=true;
            chkMarkDupe.Checked:=true;
            chkHint.Checked:=false;
+           chkNRString.Checked:=false;
            WasContestNameChange :=cmbContestName.Text
          end;
         UseStatus:=1; //OK1WC memorial contest
@@ -823,6 +838,7 @@ begin
            rbDupeCheck.Checked:=true;
            chkMarkDupe.Checked:=true;
            chkHint.Checked:=false;
+           chkNRString.Checked:=false;
            WasContestNameChange :=cmbContestName.Text
          end;
         UseStatus:=2; //Nordic V,U,SHF activity contest
@@ -850,6 +866,7 @@ begin
            rbDupeCheck.Checked:=true;
            chkMarkDupe.Checked:=true;
            chkHint.Checked:=false;
+           chkNRString.Checked:=false;
            WasContestNameChange :=cmbContestName.Text
          end;
         UseStatus:=3; //SRAL FT8 contest for OH stations
@@ -896,16 +913,6 @@ begin
           edtRSTs.Text:='';
           edtRSTr.Text:='';
      end;
-end;
-
-procedure TfrmContest.edtSRXStrKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-   if ((Key = VK_SPACE) and (chkSpace.Checked)) then
-  begin
-    Key := 0;
-    SelectNext(Sender as TWinControl, True, True);
-  end;
 end;
 
 procedure TfrmContest.edtSRXStrKeyPress(Sender: TObject; var Key: char);
@@ -1024,9 +1031,18 @@ end;
 
 procedure TfrmContest.edtSTXKeyPress(Sender: TObject; var Key: char);
 begin
-  if not (key in ['0'..'9', chr(VK_SPACE), chr(VK_DELETE), chr(VK_BACK),
+  if chkNRString.Checked then
+   begin
+    if not (key in ['0'..'9','A'..'Z','a'..'z', chr(VK_SPACE), chr(VK_DELETE), chr(VK_BACK),
     chr(VK_RIGHT), chr(VK_LEFT)]) then
-    key := #0;
+                                  key := #0;
+   end
+  else
+   begin
+    if not (key in ['0'..'9', chr(VK_SPACE), chr(VK_DELETE), chr(VK_BACK),
+    chr(VK_RIGHT), chr(VK_LEFT)]) then
+                                  key := #0;
+   end;
 end;
 
 procedure TfrmContest.FormCreate(Sender: TObject);
@@ -1068,6 +1084,7 @@ begin
   cqrini.WriteBool('frmContest', 'SpaceIsTab', chkSpace.Checked);
   cqrini.WriteBool('frmContest', 'TrueRST', chkTrueRST.Checked);
   cqrini.WriteBool('frmContest', 'NRInc', chkNRInc.Checked);
+  cqrini.WriteBool('frmContest', 'NRString', chkNRString.Checked);
   cqrini.WriteBool('frmContest', 'QSP', chkQsp.Checked);
   cqrini.WriteBool('frmContest', 'NoNR', chkNoNr.Checked);
   cqrini.WriteBool('frmContest', 'Loc', chkLoc.Checked);
@@ -1142,10 +1159,10 @@ begin
   rbIgnoreDupes.Checked     := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
   DupeFromDate              := cqrini.ReadString('frmContest', 'DupeFrom', FormatDateTime( 'yyyy-mm-dd',now() ));
   chkMarkDupe.Checked       := cqrini.ReadBool('frmContest', 'MarkDupe', True);
-
   chkSpace.Checked          := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
   chkTrueRST.Checked        := cqrini.ReadBool('frmContest', 'TrueRST', False);
   chkNRInc.Checked          := cqrini.ReadBool('frmContest', 'NRInc', False);
+  chkNRString.Checked        := cqrini.ReadBool('frmContest', 'NRString', False);
   chkQsp.Checked            := cqrini.ReadBool('frmContest', 'QSP', False);
   chkNoNr.Checked           := cqrini.ReadBool('frmContest', 'NoNR', False);
   chkLoc.Checked            := cqrini.ReadBool('frmContest', 'Loc', False);
@@ -1313,6 +1330,8 @@ begin
       CTST.WriteBool('frmContest', 'SpaceIsTab', chkSpace.Checked);
       CTST.WriteBool('frmContest', 'TrueRST', chkTrueRST.Checked);
       CTST.WriteBool('frmContest', 'NRInc', chkNRInc.Checked);
+      CTST.WriteBool('frmContest', 'NString', chkNRString.Checked);
+
       CTST.WriteBool('frmContest', 'QSP', chkQsp.Checked);
       CTST.WriteBool('frmContest', 'NoNR', chkNoNr.Checked);
       CTST.WriteBool('frmContest', 'Loc', chkLoc.Checked);
@@ -1321,7 +1340,6 @@ begin
 
       CTST.WriteString('frmContest', 'STX', edtSTX.Text);
       CTST.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
-      CTST.WriteString('frmContest', 'ContestName', cmbContestName.Text);
       CTST.WriteBool('frmContest', 'SP', chkSP.Checked);
 
       CTST.WriteBool('frmContest', 'mnuQSOcount',mnuQSOcount.Checked);
@@ -1409,7 +1427,34 @@ begin
  begin
    CTST := TIniFile.Create(OpenDialog1.FileName);
    try
-      mnuQSOcount.Checked       := CTST.ReadBool('frmContest', 'mnuQSOcount',True);
+      cmbContestName.Text       := CTST.ReadString('frmContest', 'ContestName', '');
+      chkSetFilter.Checked      := CTST.ReadBool('frmContest', 'SetFilter',False);
+      chkTabAll.Checked         := CTST.ReadBool('frmContest', 'TabAll', False);
+
+      chkHint.Checked           := CTST.ReadBool('frmContest', 'ShowHint', True);
+      spCQperiod.Value          := CTST.ReadInteger('frmContest','CQperiod',5000);
+      spCQrepeat.Value          := CTST.ReadInteger('frmContest','CQrepeat',1);
+      rbDupeCheck.Checked       := CTST.ReadBool('frmContest', 'DupeCheck', True);
+      rbNoMode4Dupe.Checked     := CTST.ReadBool('frmContest', 'NoMode4Dupe', False);
+      rbIgnoreDupes.Checked     := CTST.ReadBool('frmContest', 'IgnoreDupes', False);
+      DupeFromDate              := CTST.ReadString('frmContest', 'DupeFrom', FormatDateTime( 'yyyy-mm-dd',now() ));
+      chkMarkDupe.Checked       := CTST.ReadBool('frmContest', 'MarkDupe', True);
+      chkSpace.Checked          := CTST.ReadBool('frmContest', 'SpaceIsTab', False);
+      chkTrueRST.Checked        := CTST.ReadBool('frmContest', 'TrueRST', False);
+      chkNRInc.Checked          := CTST.ReadBool('frmContest', 'NRInc', False);
+      chkNRString.Checked       := CTST.ReadBool('frmContest', 'NRString', False);
+      chkQsp.Checked            := CTST.ReadBool('frmContest', 'QSP', False);
+      chkNoNr.Checked           := CTST.ReadBool('frmContest', 'NoNR', False);
+      chkLoc.Checked            := CTST.ReadBool('frmContest', 'Loc', False);
+      chkLoc.Caption            := CTST.ReadString('frmContest','MsgIsStr','MSG is Grid');
+      MsgIs                     := CTST.ReadInteger('frmContest','MsgIs',1); //defaults to MSG is Grid
+      chkSP.Checked             := CTST.ReadBool('frmContest', 'SP', False);
+      edtSTX.Text               := CTST.ReadString('frmContest', 'STX', '');
+      ResetStx                  := edtSTX.Text;
+      edtSTXStr.Text            := CTST.ReadString('frmContest', 'STXStr', '');
+      ResetStxStr               := edtSTXStr.Text;
+
+      mnuQSOcount.Checked       :=CTST.ReadBool('frmContest', 'mnuQSOcount',True);
       mnuDXQSOCount.Checked     :=CTST.ReadBool('frmContest', 'mnuDXQSOCount',True);
       mnuCountyrCountAll.Checked:=CTST.ReadBool('frmContest', 'mnuCountyrCountAll',True);
       mnuDXCountryCount.Checked :=CTST.ReadBool('frmContest', 'mnuDXCountryCount',True);

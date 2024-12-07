@@ -10,82 +10,77 @@ object dmDXCluster: TdmDXCluster
     FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
     Transaction = trBands
-    Options = []
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 144
-    top = 60
+    Left = 144
+    Top = 60
   end
   object trBands: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
-    left = 144
-    top = 120
+    Left = 144
+    Top = 120
   end
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
-    left = 24
-    top = 120
+    Left = 24
+    Top = 120
   end
   object Q1: TSQLQuery
     FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
-    Options = []
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 25
-    top = 60
+    Left = 25
+    Top = 60
   end
   object trQ: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
-    left = 80
-    top = 120
+    Left = 80
+    Top = 120
   end
   object Q: TSQLQuery
     FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
-    Options = []
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 82
-    top = 60
+    Left = 82
+    Top = 60
   end
   object trDXCCRef: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
-    left = 216
-    top = 120
+    Left = 216
+    Top = 120
   end
   object qDXCCRef: TSQLQuery
     FieldDefs = <>
     BeforeOpen = qDXCCRefBeforeOpen
     Transaction = trDXCCRef
-    Options = []
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 216
-    top = 60
+    Left = 216
+    Top = 60
   end
   object trCallAlert: TSQLTransaction
     Active = False
-    Options = []
-    left = 24
-    top = 236
+    Left = 24
+    Top = 236
   end
   object qCallAlert: TSQLQuery
     FieldDefs = <>
     Transaction = trCallAlert
-    Options = []
     Params = <>
-    left = 24
-    top = 188
+    Macros = <>
+    Left = 24
+    Top = 188
   end
 end

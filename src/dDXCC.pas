@@ -244,6 +244,7 @@ var               // index : 0 - Nepotrebujes QSL (neznama zeme, potvrzena)     
   band : String;
   lotw   : Boolean = False;
   sAdif : String = '';
+  Smode : String;
 begin
   lotw := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
   if (adif = 0) then
@@ -256,21 +257,41 @@ begin
   sAdif := IntToStr(adif);
 
   band := dmUtils.GetBandFromFreq(freq);
+
+
+  //preferences/modes/data/log mode cases (take account most common cases)
+  Smode := ' AND mode='+QuotedStr(mode);
+
+  if ((mode='FT8') or (mode='FT4')) then
+     Smode := ' AND mode LIKE'+QuotedStr('FT%');
+
+  if ((mode='FST4') or (mode='FST4W')) then
+     Smode := ' AND mode LIKE'+QuotedStr('FST%');
+
+  if ((mode='JT4') or (mode='JT9') or (mode='JT65')) then
+     Smode := ' AND mode LIKE'+QuotedStr('JT%');
+
+
   if trQ.Active then
     trQ.Rollback;
 
   try
     if lotw then
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                    sAdif+' AND band='+QuotedStr(band)+
+      Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                    ' AND band='+QuotedStr(band)+
                     ' AND ((qsl_r='+QuotedStr('Q')+
-                    ') OR (lotw_qslr='+QuotedStr('L')+
-                    ') OR (eqsl_qsl_rcvd='+QuotedStr('E')+ ')) AND mode='+
-                    QuotedStr(mode)+' LIMIT 1'
+                          ') OR (lotw_qslr='+ QuotedStr('L')+
+                          ') OR (eqsl_qsl_rcvd='+ QuotedStr('E')+
+                          '))'+
+                    Smode+
+                    ' LIMIT 1'
     else
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
-                     QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+      Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                    ' AND band='+QuotedStr(band)+
+                    ' AND qsl_r='+QuotedStr('Q')+
+                    Smode+
+                    ' LIMIT 1';
+
     trQ.StartTransaction;
     Q.Open;
     if Q.Fields[0].AsInteger > 0 then
@@ -280,9 +301,10 @@ begin
     end
     else begin
       Q.Close;
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND mode='+
-                     QuotedStr(mode)+' LIMIT 1';
+      Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                    ' AND band='+QuotedStr(band)+
+                    Smode+
+                    ' LIMIT 1';
       Q.Open;
       if Q.Fields[0].AsInteger > 0 then
       begin
@@ -291,8 +313,9 @@ begin
       end
       else begin
         Q.Close;
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                      ' AND band='+QuotedStr(band)+
+                      ' LIMIT 1';
         Q.Open;
         if Q.Fields[0].AsInteger > 0 then
         begin
@@ -301,8 +324,8 @@ begin
         end
         else begin
           Q.Close;
-          Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                         sAdif+' LIMIT 1';
+          Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                        ' LIMIT 1';
           Q.Open;
           if Q.Fields[0].AsInteger>0 then
           begin

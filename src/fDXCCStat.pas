@@ -1076,7 +1076,7 @@ begin
   Result := 0;
   dmData.QDXCCStat.Close;
   tmp := '((mode='+QuotedStr('SSB')+') or (mode = '+QuotedStr('AM')+
-         ') or (mode='+QuotedStr('FM')+'))';
+         ') or (mode='+QuotedStr('FM')+') or (mode='+QuotedStr('DIGITALVOICE')+'))';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
   dmData.QDXCCStat.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+

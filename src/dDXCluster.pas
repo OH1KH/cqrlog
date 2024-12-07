@@ -199,51 +199,86 @@ var
   tmp : Extended;
   cw, ssb : Extended;
   n   :String;
+
+  function IsIt(fr:extended;st,en:currency):boolean;
+  Begin
+     Result:= ((fr >= st) and (fr <= en))
+  end;
+
 begin
   EnterCriticalsection(csDX);
   try
-    Result := False;
+    Result:= False;
     if (freq = '') then
-      exit;
+       exit;
     if not TryStrToFloat(freq,tmp) then
-      exit;
+        exit;
+
     tmp := tmp/1000;
     freq := FloatToStr(tmp);
 
     qBands.Close;
     qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
                         freq+') ORDER BY b_begin';
-    if dmData.DebugLevel >= 1 then
-      Writeln(qBands.SQL.Text);
     if trBands.Active then
       trBands.RollBack;
     trBands.StartTransaction;
     qBands.Open;
-    //qBands.Last; //to get proper count
-    //Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
     if qBands.RecordCount = 0 then
-      exit;
+        exit;
     band := qBands.Fields[1].AsString;
-    cw   := qBands.Fields[4].AsFloat;
-    ssb  := qBands.Fields[6].AsFloat;
 
-    Result := True;
-    if (tmp <= cw) then
-      mode := 'CW'
-    else begin
-      if (tmp >= ssb) then
-        mode := 'SSB'
-      else
-        Begin
-          n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
-          mode :=  cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
-        end;
+     qBands.Close;
+     qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
+     if trBands.Active then
+       trBands.Rollback;
+     trBands.StartTransaction;
+       qBands.Open;
+       tmp := StrToFloat(freq);
+       if qBands.RecordCount > 0 then
+       Begin
+       Result:=true;
+       if cqrini.ReadBool('Bands', 'UseNewModeFreq',false) then
+         begin  //if segments are overlapping priority is for DATA,AM and FM as they probably are narrow segments inside CW or SSB
+          if IsIt(tmp,qBands.FieldByName('B_ssb').AsCurrency,qBands.FieldByName('E_ssb').AsCurrency) then mode := 'SSB';
+          if IsIt(tmp,qBands.FieldByName('B_cw').AsCurrency,qBands.FieldByName('E_cw').AsCurrency) then mode := 'CW';
+          if IsIt(tmp,qBands.FieldByName('B_am').AsCurrency,qBands.FieldByName('E_am').AsCurrency) then mode := 'AM';
+          if IsIt(tmp,qBands.FieldByName('B_fm').AsCurrency,qBands.FieldByName('E_fm').AsCurrency) then mode := 'FM';
+          if IsIt(tmp,qBands.FieldByName('B_data').AsCurrency,qBands.FieldByName('E_data').AsCurrency) then mode := 'RTTY'; //means DATA
+          //First checked is SSB. Then CW is checked and can override SSB segment.
+          //Modes AM,FM,DATA (in that order) can override CW or SSB segments.
+          //You can define whole band divided for CW and SSB. Over them you can define small segments of AM,FM,or DATA and they can
+          //roll over CW and SSB segments. FM can roll over AM and DATA can roll over FM (or AM) if overlapping.
+          //See: Help/Quick start/Bands
+         end
+        else
+         begin
+           if IsIt(tmp,qBands.FieldByName('B_BEGIN').AsCurrency,qBands.FieldByName('CW').AsCurrency) then mode := 'CW'
+           else
+           begin
+             if ((tmp > qBands.FieldByName('RTTY').AsCurrency) and  //RTTY here in database (remainder from past) is actually called DATA when used
+               (tmp <= qBands.FieldByName('SSB').AsCurrency)) then
+               mode := 'RTTY';
+
+             if ((tmp > qBands.FieldByName('SSB').AsCurrency) and
+               (tmp <= qBands.FieldByName('B_END').AsCurrency)) then
+               mode:='SSB';
+           end;
+         end;
+
+
+        if mode='RTTY' then //RTTY is corrected here
+           Begin
+              n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+              mode :=  cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+            end;
+       end;
+
+    finally
+        qBands.Close;
+        trBands.Rollback;
+        LeaveCriticalsection(csDX)
     end;
-
-    //Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
-  finally
-    LeaveCriticalsection(csDX)
-  end
 end;
 
 function TdmDXCluster.DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;
@@ -251,6 +286,7 @@ var
   band : String;
   lotw   : Boolean = False;
   sAdif : String = '';
+  Smode : String;
 begin
   EnterCriticalsection(csDX);
   try
@@ -269,21 +305,54 @@ begin
     index := 1;
     sAdif := IntToStr(adif);
 
-    band := dmUtils.GetBandFromFreq(freq);
+    qBands.Close;
+    qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
+                        freq+') ORDER BY b_begin';
+
+    if trBands.Active then
+      trBands.RollBack;
+    trBands.StartTransaction;
+    qBands.Open;
+    if qBands.RecordCount = 0 then
+     begin
+        LeaveCriticalsection(csDX);
+        exit;
+      end;
+    band := qBands.Fields[1].AsString;
+    qBands.Close;
+    trBands.RollBack;
+
+    //preferences/modes/data/log mode cases (take account most common cases)
+    Smode := ' AND mode='+QuotedStr(mode);
+
+    if ((mode='FT8') or (mode='FT4')) then
+       Smode := ' AND mode LIKE'+QuotedStr('FT%');
+
+    if ((mode='FST4') or (mode='FST4W')) then
+       Smode := ' AND mode LIKE'+QuotedStr('FST%');
+
+    if ((mode='JT4') or (mode='JT9') or (mode='JT65')) then
+       Smode := ' AND mode LIKE'+QuotedStr('JT%');
+
     if trQ.Active then
       trQ.Rollback;
 
     try try
       if lotw then
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                      sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                      QuotedStr('Q')+') OR (lotw_qslr='+ QuotedStr('L')+
-                      ') OR (eqsl_qsl_rcvd='+ QuotedStr('E')+')) AND mode='+
-                      QuotedStr(mode)+' LIMIT 1'
+        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                      ' AND band='+QuotedStr(band)+
+                      ' AND ((qsl_r='+QuotedStr('Q')+
+                            ') OR (lotw_qslr='+ QuotedStr('L')+
+                            ') OR (eqsl_qsl_rcvd='+ QuotedStr('E')+
+                            '))'+
+                      Smode+
+                      ' LIMIT 1'
       else
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
-                       QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                      ' AND band='+QuotedStr(band)+
+                      ' AND qsl_r='+QuotedStr('Q')+
+                      Smode+
+                      ' LIMIT 1';
 
       trQ.StartTransaction;
       Q.Open;
@@ -294,9 +363,10 @@ begin
       end
       else begin
         Q.Close;
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' AND mode='+
-                       QuotedStr(mode)+' LIMIT 1';
+        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                      ' AND band='+QuotedStr(band)+
+                      Smode+
+                      ' LIMIT 1';
         Q.Open;
         if Q.Fields[0].AsInteger > 0 then
         begin
@@ -305,8 +375,9 @@ begin
         end
         else begin
           Q.Close;
-          Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                         sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+          Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                        ' AND band='+QuotedStr(band)+
+                        ' LIMIT 1';
           Q.Open;
           if Q.Fields[0].AsInteger > 0 then
           begin
@@ -315,8 +386,8 @@ begin
           end
           else begin
             Q.Close;
-            Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                           sAdif+' LIMIT 1';
+            Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+sAdif+
+                          ' LIMIT 1';
             Q.Open;
             if Q.Fields[0].AsInteger>0 then
             begin

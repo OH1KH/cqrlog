@@ -1144,7 +1144,7 @@ var
   cfgOC  : Boolean;
 begin
   sColor  := clWindowText; //cerna
-
+  writeln(spot);
   EnterCriticalSection(csDXCPref);
   try
     cfgUseBackColor  := gcfgUseBackColor;
@@ -1215,6 +1215,7 @@ begin
       Writeln('Cannot find out mode from frequency, exiting ...');
     exit
   end;
+
   if band = '' then
   begin
     Result := False;
@@ -1226,14 +1227,15 @@ begin
   adif    := dmDXCluster.id_country(call,now,prefix,stmp,waz,itu,cont,lat,long);
   prefix  := dmDXCluster.PfxFromADIF(adif);
   Country := dmDXCluster.CountryFromADIF(adif);
-  dmDXCluster.DXCCInfo(adif,freq,mode,index);
+  dmDXCluster.DXCCInfo(adif,freq,mode,index);    //worked status
   if dmData.DebugLevel>=1 then
-  begin
+   begin
     Writeln('dx_prefix:',prefix);
     Writeln('dx_cont:  ',cont);
     Writeln('Freq:     ',freq);
+    Writeln('mode:     ',mode);
     Writeln('Call:     ',call)
-  end;
+   end;
   if dmData.DebugLevel >=2 then
   begin
     Writeln('Prefix: ',prefix);

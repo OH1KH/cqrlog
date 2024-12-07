@@ -116,7 +116,7 @@ object frmDXCCStat: TfrmDXCCStat
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.6.0.0'
   object pnlStatSum: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
@@ -164,8 +164,8 @@ object frmDXCCStat: TfrmDXCCStat
       BorderSpacing.Right = 6
       BorderSpacing.InnerBorder = 4
       Caption = 'Export to HTML'
-      OnClick = btnHTMLExportClick
       TabOrder = 1
+      OnClick = btnHTMLExportClick
     end
     object gbCW: TGroupBox
       AnchorSideLeft.Control = gbPhone
@@ -352,8 +352,8 @@ object frmDXCCStat: TfrmDXCCStat
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
       Caption = 'Refresh statistic'
-      OnClick = btnRefreshClick
       TabOrder = 1
+      OnClick = btnRefreshClick
     end
     object cmbCfmType: TComboBox
       AnchorSideLeft.Control = lblDXCCType
@@ -376,10 +376,10 @@ object frmDXCCStat: TfrmDXCCStat
         'eQSL only'
         'paper QSL, LoTW and eQSL'
       )
-      OnChange = cmbCfmTypeChange
       Style = csDropDownList
       TabOrder = 0
       Text = 'paper QSL, LoTW and eQSL'
+      OnChange = cmbCfmTypeChange
     end
     object lblDXCCType: TLabel
       AnchorSideLeft.Control = PnlDXCCStat
@@ -420,9 +420,9 @@ object frmDXCCStat: TfrmDXCCStat
       Items.Strings = (
         ''
       )
-      OnChange = cmbCfmTypeChange
       Style = csDropDownList
       TabOrder = 2
+      OnChange = cmbCfmTypeChange
     end
   end
   object grdDXCCStat: TStringGrid
