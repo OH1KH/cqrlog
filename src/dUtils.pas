@@ -5723,7 +5723,7 @@ begin
     eQSL := dmData.QStatNewQSO.Fields[4].AsString;
     if i > 0 then
     begin
-      if (mode = 'SSB') or (mode='FM') or (mode='AM') or (mode='DIGITALVOICE')then
+      if (mode = 'SSB') or (mode='FM') or (mode='AM') or (mode='DIGITALVOICE') then   //phone
       begin
         tmps := g.Cells[i,1] ;
         if QSLR = 'Q' then
@@ -5735,7 +5735,7 @@ begin
        g.Cells[i,1] := tmps
       end
       else begin
-        if (Mode='CW') or (Mode='CWQ') then
+        if (Mode='CW') or (Mode='CWQ') then           //cw
         begin
           tmps := g.Cells[i,2] ;
           if QSLR = 'Q' then
@@ -5746,7 +5746,7 @@ begin
             tmps[3] := 'E';
           g.Cells[i,2] := tmps
         end
-        else begin
+        else begin                              //digi
           tmps := g.Cells[i,3] ;
           if QSLR = 'Q' then
             tmps[1] := 'Q';
@@ -5776,11 +5776,11 @@ begin
 
     if i > 0 then
       begin
-        if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
+        if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM') or (mode='DIGITALVOICE')) then   //phone
           if(g.Cells[i,1] = space+space+space) then g.Cells[i,1] := ' X ';
-        if ((mode = 'CW') or (mode = 'CWR')) then
+        if ((mode = 'CW') or (mode = 'CWR')) then                                             //cw
           if (g.Cells[i,2] = space+space+space) then g.Cells[i,2] := ' X ';
-        if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
+        if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode<>'DIGITALVOICE') and (mode <> 'CW') and (mode <> 'CWR')) then //digi
           if (g.Cells[i,3] = space+space+space) then g.Cells[i,3] := ' X '
       end;
       dmData.QStatNewQSO.Next;
