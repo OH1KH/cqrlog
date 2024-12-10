@@ -90,7 +90,9 @@ type
     procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
-    procedure chkUStateChange(Sender: TObject);
+    procedure chkUStateClick(Sender: TObject);
+    procedure chkUStateMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure cmAnyClick(Sender: TObject);
     procedure cmBandClick(Sender: TObject);
     procedure cmCqDxClick(Sender: TObject);
@@ -876,27 +878,42 @@ begin
     end;
 end;
 
-procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
+procedure TfrmMonWsjtx.chkUStateClick(Sender: TObject);
 
 var
   SourceFile,
   msg ,
   call,
+  tmp,
   HasState        : String;
   StateSourceIn    : Textfile;
   BuildFile        : TIniFile;
-  i,c                :integer;
+  i                : integer;
+  c                : integer=0;
 begin
   cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
-  if chkUState.Checked  then
+  if (Sender.ClassNameIs('TfrmMonWsjtx')) then   //user init
+                                          c:= -1;
+  if (chkUState.Checked or (c=-1)) then
     Begin
       if LocalDbg then  Writeln('State check activated');
       SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
-      if (not FileExists(SourceFile)) or ((DaysBetween(now,FileDateTodateTime(FileAge(SourceFile)))) > 90) then
-            Begin //over 3 month old or missing
-             msg := 'Source file '+SourceFile+' is over 90 days old or missing.'
-                    +#13+#13+'(More info: Help/Digital modes: wjstx/Checking "USt”)'
-                    +#13+#13+'Should it be updated?' ;
+      if (c=0) then
+       if (FileExists(SourceFile)) then   //no user init, check age
+                                c:= DaysBetween(now,FileDateTodateTime(FileAge(SourceFile)))
+                               else
+                                c:=-2; //no file found
+      if ((c > 90) or (c<0)) then
+            Begin //over 3 month old, missing or manual
+             case c of
+              -2  : tmp:='File is missing!';
+              -1  : tmp:='You did manual update request.';
+              else
+                tmp:= 'File is over 90 days old!';
+              end;
+             msg := 'Source file '+SourceFile+LineEnding
+                    +#13+#13+tmp+#13+'Do you want to update data?'
+                    +#13+#13+'(More info: Help/Digital modes: wjstx/Checking "USt”)' ;
               if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
                 Begin
                  if FileExists(SourceFile) then DeleteFile(SourceFile);
@@ -909,33 +926,45 @@ begin
                   else //populate database
                    BuildUSDBState;
                 end
-               else chkUState.Checked := false;
-
-            end
-        else //we have proper file, check if database has contents
-         Begin
-            if dmData.trQstate.Active then dmData.trQstate.Rollback;
-            dmData.trQstate.StartTransaction;
-            dmData.Qstate.SQL.Text := 'select count(callsign) as c from cqrlog_common.states';
-            if LocalDbg then  Writeln(dmData.Qstate.SQL.Text);
-            dmData.Qstate.open;
-            c:= dmData.Qstate.FieldByName('c').AsInteger;
-            dmData.trQstate.Rollback;
-            dmData.Qstate.Close;
-            if LocalDbg then  Writeln(c,' calls in table');
-            if c<1400000 then
-             begin
-              msg := 'Looks like states database does not have proper contents.'+#13+
-                     'Found '+IntToStr(c)+' callsigns. Should be abt 1,5M'+#13+ 'Rebuild?';
-              if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
-                  BuildUSDBState
                else
-                  chkUState.Checked := false;
-             end;
-         end;
+                   if (c=-2) then
+                          begin
+                            chkUState.Checked := false;
+                            exit;
+                          end
+
+            end;
+
+      if dmData.trQstate.Active then dmData.trQstate.Rollback;
+      dmData.trQstate.StartTransaction;
+      dmData.Qstate.SQL.Text := 'select count(callsign) as c from cqrlog_common.states';
+      if LocalDbg then  Writeln(dmData.Qstate.SQL.Text);
+      dmData.Qstate.open;
+      c:= dmData.Qstate.FieldByName('c').AsInteger;
+      dmData.trQstate.Rollback;
+      dmData.Qstate.Close;
+      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , ['']);
+      AddColorStr(IntToStr(c),clBlack,3,sgMonitor.rowcount-1);
+      AddColorStr('ca',clBlack,4,sgMonitor.rowcount-1);
+      AddColorStr('ll',clBlack,5,sgMonitor.rowcount-1);
+      AddColorStr('in',clBlack,6,sgMonitor.rowcount-1);
+      AddColorStr('DB',clBlack,7,sgMonitor.rowcount-1);
+      if c<500000 then
+       begin
+        msg := 'Could it be that database does not have all US callsigns?'+#13+
+               'Found '+IntToStr(c)+' callsigns. '+#13+ 'Rebuild? (NO = use as is)';
+        if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+            BuildUSDBState;
+       end;
     end;
 end;
 
+procedure TfrmMonWsjtx.chkUStateMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+    If (Button = mbRight) and (Shift=[ssShift]) then        //asks update DB by user event
+            chkUStateClick(Self);
+end;
 procedure TfrmMonWsjtx.cbflwChange(Sender: TObject);
 begin
   if not LockFlw then
@@ -2727,22 +2756,35 @@ var
 
     //wget -qN ftp://ftp.w1nr.net/usdbraw.gz                              -> needed programs: wget and gunzip
     //You can still use also FCC's l_amat.zip (lot bigger download)       -> needed programs: wget, unzip and awk
-     ///  ftp://wirelessftp.fcc.gov/pub/uls/complete/l_amat.zip
+     ///  https://data.fcc.gov/download/pub/uls/complete/l_amat.zip
 
-     if InputQuery('Download address check','Using Address (change if needed):'+
-                   LineEnding+'ftp://ftp.w1nr.net/usdbraw.gz (9M, fast to download)'+
-                   LineEnding+'ftp://wirelessftp.fcc.gov/pub/uls/complete/l_amat.zip (160M, may be more up to date)', USDB_Address) then
-      begin
-        cqrini.WriteString('MonWsjtx', 'USDB_Addr',USDB_Address);
-        if LocalDbg then Writeln('Saved USDB_Address:',USDB_Address);
-      end
-      else
-       begin
-        USDBProcessFailed;
-        exit;
-       end;
+    //NOTE: Fedora 40 uses wget symlink to wget2 program. wget2 does not allow prefix "ftp://" on url.
+    //      Fortunately "old" wget works also without it,  so we just drop prefix. 2024-12-09 OH1KH
 
-    if LocalDbg then Writeln('USDBdownLoadInit start');
+     case QuestionDlg ('Caption','Use download address:'+
+                   LineEnding+'ftp.w1nr.net/usdbraw.gz'+ LineEnding
+                   +'  (~9M, fast to download)'+ LineEnding
+                   +'https://data.fcc.gov/download/pub/uls/complete/l_amat.zip' + LineEnding
+                   +'  (~160M, may be more up to date)'
+                   ,mtCustom,[20,'w1nr.net', 21, 'fcc.gov',22,'Manual input','IsDefault'],'') of
+      20: USDB_Address:= 'ftp.w1nr.net/usdbraw.gz';
+      21: USDB_Address:= 'https://data.fcc.gov/download/pub/uls/complete/l_amat.zip';
+      22: if not InputQuery('Download address check','Address suggestions:'+
+                   LineEnding+'ftp.w1nr.net/usdbraw.gz (~9M, fast to download)'+
+                   LineEnding+'https://data.fcc.gov/download/pub/uls/complete/l_amat.zip (~160M, may be more up to date)', USDB_Address) then
+                      begin
+                       USDBProcessFailed;
+                       exit;
+                     end;
+     end;
+
+
+    cqrini.WriteString('MonWsjtx', 'USDB_Addr',USDB_Address);
+    if LocalDbg then
+                begin
+                 Writeln('Saved USDB_Address:',USDB_Address);
+                 Writeln('USDBdownLoadInit start');
+                end;
     frmProgress.Show;
     if pos('l_amat.zip',USDB_Address)>0 then   //FFC data needs different process
                   begin
@@ -2769,20 +2811,32 @@ var
       if LocalDbg then Writeln('Next DProcess run wget');
       DProcess.Executable  := 'wget';
       DProcess.Parameters.Add('-qN');
+      DProcess.Parameters.Add('--connect-timeout=10');
+      DProcess.Parameters.Add('--dns-timeout=10');
+      DProcess.Parameters.Add('--read-timeout=60');
+      DProcess.Parameters.Add('--tries=1');
       DProcess.Parameters.Add('-O');
       DProcess.Parameters.Add(dmData.HomeDir+C_MYZIP);
       DProcess.Parameters.Add(trim(USDB_Address));
       if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
       DProcess.Execute;
       while DProcess.Running do
+         Begin
             Application.ProcessMessages;
-     finally
-      FreeAndNil(Dprocess);
-     end;
+            sleep(1000);
+         end;
     except
     on E :EExternal do
-     writeln('Error Details: ', E.Message);
+     begin
+      ShowMessage('Error Details: '+E.Message);
+      USDBProcessFailed;
+      exit;
+     end;
     end;
+   finally
+    FreeAndNil(Dprocess);
+   end;
+
 
     if not FileExists(dmData.HomeDir+C_MYZIP) then //download failed
       Begin

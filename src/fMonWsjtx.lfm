@@ -7,8 +7,8 @@ object frmMonWsjtx: TfrmMonWsjtx
   Caption = 'Wsjt-x CQ-monitor'
   ClientHeight = 345
   ClientWidth = 582
-  Constraints.MinHeight = 200
-  Constraints.MinWidth = 300
+  Constraints.MinHeight = 100
+  Constraints.MinWidth = 200
   OnClose = FormClose
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
@@ -518,7 +518,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       ParentShowHint = False
       ShowHint = True
       TabOrder = 6
-      OnChange = chkUStateChange
+      OnClick = chkUStateClick
+      OnMouseUp = chkUStateMouseDown
     end
     object chkDx: TCheckBox
       AnchorSideLeft.Control = chkUState

@@ -90,11 +90,12 @@ Top line will show band and mode that is in use.
 </br>Format of usdbraw file is callsign|qth|state. I.E:
 </br>AA0A|SAINT LOUIS|MO
 </br></br> FCC's l_amat.zip has lot of other data too and file size is 17x bigger, but may be better up to date. Cqrlog can use L_amat.zip and convert this to W1NR format.
+</br></br><strong>Note:</strong> If you want to update states before 90 days limit you can do it using <strong>Shift+Right Mouse click </strong> over <strong> USt </strong>checkbox.
 </br></br><strong>Note:</strong> For processing  you need programs wget and gunzip for W1NR data and wget, unzip and wak for FCC data.</br>
 While database table is updating checkbox "USt" is grayed out to prevent restart of database table upgrade. Closing 'Progress' window does
 not stop upgradiong, it continues without indication.
 </br>Closing wsjtx-remote or closing Cqrlog will halt database table upgrading. On next wsjtx-remote opening it will ask should the database table be updated because it has less than 1.5M callsigns.
-</br>Answering 'no' will keep table as is. Answering 'yes' will start upgrade from beginning <strong>not</strong> from point it was interrupted.
+</br>Answering 'no' will keep table as is. Answering 'yes' will start upgrade from beginning, <strong>not</strong> from point it was interrupted.
 </br></br>Checking <strong>"sTX”</strong> (Stop TX) will fix missing Wsjt-x property: If you answer to someone's CQ at same frequency Wsjt-x will stop your TX if CQ-caller answers to someone else than you. How ever Wsjt-x developing team has
  decided that if you anśwer to CQ caller on other frequency (split) your TX remains on even if the answer was directed to someone else.
  To reduce band QRM caused by you, you may check <strong>sTx</strong> to stop your TX if answer was not for you.
