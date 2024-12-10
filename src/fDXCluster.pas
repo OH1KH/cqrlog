@@ -1144,7 +1144,6 @@ var
   cfgOC  : Boolean;
 begin
   sColor  := clWindowText; //cerna
-  writeln(spot);
   EnterCriticalSection(csDXCPref);
   try
     cfgUseBackColor  := gcfgUseBackColor;
