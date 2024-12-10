@@ -14,10 +14,12 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
-    chkSort: TCheckBox;
+    chkCbCQ: TCheckBox;
+    chkdB: TCheckBox;
     chkFlt: TCheckBox;
-    edtFltMap: TEdit;
+    chkSort: TCheckBox;
     cmMapCq: TMenuItem;
+    edtFltMap: TEdit;
     mnuSort1: TMenuItem;
     mnuSort2: TMenuItem;
     mnuSort3: TMenuItem;
@@ -25,13 +27,12 @@ type
     mnuSort5: TMenuItem;
     mnuSort6: TMenuItem;
     mnuSort7: TMenuItem;
+    pnlMap: TPanel;
     popSort: TPopupMenu;
     ShAll: TMenuItem;
     btFtxtName: TButton;
     cbflw: TCheckBox;
     chkDx: TCheckBox;
-    chkCbCQ: TCheckBox;
-    chkdB: TCheckBox;
     chkMap: TCheckBox;
     chknoHistory: TCheckBox;
     chknoTxt: TCheckBox;
@@ -78,6 +79,7 @@ type
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
     procedure chkFltClick(Sender: TObject);
+    procedure chkMapClick(Sender: TObject);
     procedure chkSortClick(Sender: TObject);
     procedure chkSortMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -88,7 +90,6 @@ type
     procedure chkDxMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure chknoHistoryChange(Sender: TObject);
-    procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
     procedure chkUStateClick(Sender: TObject);
     procedure chkUStateMouseDown(Sender: TObject; Button: TMouseButton;
@@ -804,29 +805,25 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.chkMapChange(Sender: TObject);
+procedure TfrmMonWsjtx.chkMapClick(Sender: TObject);
 begin
   sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not sgMonitor.Visible;
-  chkCbCQ.Visible := chkMap.Checked;
-  chkdB.Visible := chkMap.Checked;
-  chkSort.Visible:=chkMap.Checked;
-  chkFlt.Visible:=chkMap.Checked;
-  edtFltMap.Visible:=chkMap.Checked;
-  if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
   begin
     cqrini.WriteBool('MonWsjtx', 'MapMode', chkMap.Checked);
+
     if chkMap.Checked then
     begin   //Map
       //write width/height CQ read width Map
-      if Sender <> frmMonWsjtx then  SaveFormPos('Cq');  //no save from init
+      if not Sender.ClassNameIs('TfrmMonWsjtx') then  SaveFormPos('Cq');  //no save from init
       LoadFormPos('Map');
       LockFlw := True;
       cbflw.Checked := False;
       //drops panel size reservation. Map drops "follow" it does not return ON  when back to monitor mode
       LockFlw := False;
+      pnlMap.Visible := chkMap.Checked;
       frmMonWsjtx.Caption := 'Wsjt-x map';
       pnlFollow.Visible := False;
       pnlAlert.Visible := False;
@@ -849,11 +846,12 @@ begin
     else
     begin   //Cq
       //write width/height Map read width CQ
-      if Sender <> frmMonWsjtx then  SaveFormPos('Map');   //no save from init
+      if  not Sender.ClassNameIs('TfrmMonWsjtx')  then  SaveFormPos('Map');   //no save from init
       LoadFormPos('Cq');
       cbflw.Checked := cqrini.ReadBool('MonWsjtx', 'FollowShow', False);
       tbFollow.Checked := cqrini.ReadBool('MonWsjtx', 'Follow', False);
       frmMonWsjtx.Caption := 'Wsjt-x CQ-monitor';
+      pnlMap.Visible := False;
       pnlAlert.Visible := True;
       cbflw.Visible := True;
       chknoTxt.Visible := True;
@@ -1103,7 +1101,6 @@ begin
   pnlSelects.Visible:=False;
   sgMonitor.BorderSpacing.Top:= 3;
 end;
-
 
 procedure TfrmMonWsjtx.pnlTrigPopMouseEnter(Sender: TObject);
 begin
@@ -1421,7 +1418,7 @@ begin
     tbFollow.Checked := False; //should not happen, chk it here
   LockFlw := False;
   LockMap := False; //last thing to do
-  chkMapChange(frmMonWsjtx);
+  chkMapClick(frmMonWsjtx);
   btFtxtName.Visible := False;
   //DL7OAP
   SetsgMonitorColumnHW;

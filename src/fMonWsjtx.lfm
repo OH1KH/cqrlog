@@ -7,8 +7,6 @@ object frmMonWsjtx: TfrmMonWsjtx
   Caption = 'Wsjt-x CQ-monitor'
   ClientHeight = 345
   ClientWidth = 582
-  Constraints.MinHeight = 100
-  Constraints.MinWidth = 200
   OnClose = FormClose
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
@@ -32,6 +30,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     ClientHeight = 45
     ClientWidth = 578
     TabOrder = 0
+    Visible = False
     object tbmyAll: TToggleBox
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlAlert
@@ -77,6 +76,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       Height = 34
       Top = 5
       Width = 100
+      AutoSize = False
       BorderSpacing.Bottom = 4
       TabOrder = 2
       OnEnter = EditAlertEnter
@@ -151,6 +151,124 @@ object frmMonWsjtx: TfrmMonWsjtx
       OnClick = btFtxtNameClick
     end
   end
+  object pnlMap: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 2
+    Height = 45
+    Top = 298
+    Width = 578
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 2
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 2
+    ClientHeight = 45
+    ClientWidth = 578
+    TabOrder = 5
+    Visible = False
+    object chkSort: TCheckBox
+      AnchorSideLeft.Control = chkdB
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = pnlMap
+      AnchorSideBottom.Side = asrCenter
+      Left = 123
+      Height = 23
+      Hint = 'Sort view by column.'#10'Column can be selected when checkbox is set, or rigth mouse click if already checked.'#10'Columns are:    dB   (  callsign  locator12  locator34  )*  state/cqdir '#10'Corresponding column numbers are 1..7'#10'NOTES:'#10'- Sort happen by dB (col1), if set,  even when it is not visible in monitor'#10'- dB sort output is as ascii sort order, not integer sort.'#10'- Sorting breaks color coding but worked print lowcase letters, never worked bold'
+      Top = 10
+      Width = 52
+      Anchors = [akLeft, akBottom]
+      AutoSize = False
+      BorderSpacing.Left = 3
+      Caption = 'Sort'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = chkSortClick
+      OnMouseUp = chkSortMouseUp
+    end
+    object chkFlt: TCheckBox
+      AnchorSideLeft.Control = chkSort
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = pnlMap
+      AnchorSideBottom.Side = asrCenter
+      Left = 178
+      Height = 23
+      Hint = 'Enable or disable filtering'
+      Top = 10
+      Width = 58
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 3
+      Caption = 'Filter'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnClick = chkFltClick
+    end
+    object edtFltMap: TEdit
+      AnchorSideLeft.Control = chkFlt
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = chkSort
+      AnchorSideTop.Side = asrCenter
+      Left = 239
+      Height = 34
+      Hint = 'Put here a callsign or part of it to see only those in Map when filter is checked.'
+      Top = 4
+      Width = 70
+      AutoSize = False
+      BorderSpacing.Left = 3
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnChange = edtFltMapChange
+      OnEnter = edtFltMapEnter
+      OnExit = edtFltMapExit
+      OnKeyDown = edtFltMapKeyDown
+      OnMouseUp = edtFltMapMouseUp
+    end
+    object chkCbCQ: TCheckBox
+      AnchorSideLeft.Control = pnlMap
+      AnchorSideBottom.Control = pnlMap
+      AnchorSideBottom.Side = asrCenter
+      Left = 4
+      Height = 23
+      Hint = 'Send colors based by your logged qsos back to WSJT-x''s display.'
+      Top = 10
+      Width = 70
+      Anchors = [akLeft, akBottom]
+      AutoSize = False
+      BorderSpacing.Left = 3
+      Caption = 'CBCQs'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnChange = chkCbCQChange
+    end
+    object chkdB: TCheckBox
+      AnchorSideLeft.Control = chkCbCQ
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideBottom.Control = pnlMap
+      AnchorSideBottom.Side = asrCenter
+      Left = 77
+      Height = 23
+      Hint = 'Show decoded signal strength'
+      Top = 10
+      Width = 43
+      Anchors = [akLeft, akBottom]
+      AutoSize = False
+      BorderSpacing.Left = 3
+      Caption = 'dB'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnChange = chkdBChange
+    end
+  end
   object pnlFollow: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
@@ -183,6 +301,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       Width = 419
       Align = alCustom
       Anchors = [akTop, akLeft, akRight]
+      AutoSize = False
       BorderSpacing.Left = 3
       BorderSpacing.Right = 3
       ReadOnly = True
@@ -199,6 +318,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       Height = 34
       Top = 5
       Width = 80
+      AutoSize = False
       BorderSpacing.Left = 3
       TabOrder = 0
       OnEnter = edtFollowCallEnter
@@ -236,50 +356,11 @@ object frmMonWsjtx: TfrmMonWsjtx
     ParentColor = False
     Visible = False
   end
-  object chkCbCQ: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
-    Left = 5
-    Height = 23
-    Hint = 'Send colors based by your logged qsos back to WSJT-x''s display.'
-    Top = 310
-    Width = 70
-    Anchors = [akLeft, akBottom]
-    BorderSpacing.Left = 5
-    BorderSpacing.Bottom = 12
-    Caption = 'CBCQs'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 2
-    Visible = False
-    OnChange = chkCbCQChange
-  end
-  object chkdB: TCheckBox
-    AnchorSideLeft.Control = chkCbCQ
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
-    Left = 78
-    Height = 23
-    Hint = 'Show decoded signal strength'
-    Top = 310
-    Width = 43
-    Anchors = [akLeft, akBottom]
-    BorderSpacing.Left = 3
-    BorderSpacing.Bottom = 12
-    Caption = 'dB'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
-    Visible = False
-    OnChange = chkdBChange
-  end
   object sgMonitor: TStringGrid
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
-    AnchorSideBottom.Control = pnlFollow
+    AnchorSideBottom.Control = Owner
     Left = 2
     Height = 294
     Top = 0
@@ -380,7 +461,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     HeaderPushZones = []
     ParentFont = False
     PopupMenu = popColors
-    TabOrder = 4
+    TabOrder = 2
     OnDblClick = sgMonitorDblClick
     OnDrawCell = sgMonitorDrawCell
     ColWidths = (
@@ -407,7 +488,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     BorderWidth = 3
     ClientHeight = 32
     ClientWidth = 463
-    TabOrder = 5
+    TabOrder = 3
     Visible = False
     OnClick = pnlSelectsClick
     object chknoHistory: TCheckBox
@@ -483,7 +564,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
-      OnChange = chkMapChange
+      OnClick = chkMapClick
     end
     object chkStopTx: TCheckBox
       AnchorSideLeft.Control = chkMap
@@ -582,68 +663,8 @@ object frmMonWsjtx: TfrmMonWsjtx
     Width = 582
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
-    TabOrder = 6
+    TabOrder = 4
     OnMouseEnter = pnlTrigPopMouseEnter
-  end
-  object chkSort: TCheckBox
-    AnchorSideLeft.Control = chkdB
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = chkdB
-    AnchorSideTop.Side = asrCenter
-    AnchorSideBottom.Side = asrCenter
-    Left = 124
-    Height = 23
-    Hint = 'Sort view by column.'#10'Column can be selected when checkbox is set, or rigth mouse click if already checked.'#10'Columns are:    dB   (  callsign  locator12  locator34  )*  state/cqdir '#10'Corresponding column numbers are 1..7'#10'NOTES:'#10'- Sort happen by dB (col1), if set,  even when it is not visible in monitor'#10'- dB sort output is as ascii sort order, not integer sort.'#10'- Sorting breaks color coding but worked print lowcase letters, never worked bold'
-    Top = 310
-    Width = 52
-    BorderSpacing.Left = 3
-    Caption = 'Sort'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 7
-    OnClick = chkSortClick
-    OnMouseUp = chkSortMouseUp
-  end
-  object edtFltMap: TEdit
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = chkSort
-    AnchorSideTop.Side = asrCenter
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 499
-    Height = 34
-    Hint = 'Put here a callsign or part of it to see only those in Map when filter is checked.'
-    Top = 304
-    Width = 80
-    Anchors = [akTop, akRight]
-    AutoSize = False
-    BorderSpacing.Right = 3
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 8
-    OnChange = edtFltMapChange
-    OnEnter = edtFltMapEnter
-    OnExit = edtFltMapExit
-    OnKeyDown = edtFltMapKeyDown
-    OnMouseUp = edtFltMapMouseUp
-  end
-  object chkFlt: TCheckBox
-    AnchorSideLeft.Control = chkSort
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = chkdB
-    AnchorSideTop.Side = asrCenter
-    AnchorSideBottom.Side = asrCenter
-    Left = 179
-    Height = 23
-    Hint = 'Enable or disable filtering'
-    Top = 310
-    Width = 58
-    BorderSpacing.Left = 3
-    Caption = 'Filter'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 9
-    OnClick = chkFltClick
   end
   object popColors: TPopupMenu
     OnPopup = popColorsPopup
