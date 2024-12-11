@@ -39,17 +39,11 @@ object frmChangelog: TfrmChangelog
     end
   end
   object IpHtmlPanel1: TIpHtmlPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Panel1
     Left = 2
     Height = 429
     Top = 2
     Width = 626
-    Align = alCustom
-    Anchors = [akTop, akLeft, akBottom]
+    Align = alClient
     BorderSpacing.Left = 2
     BorderSpacing.Top = 2
     BorderSpacing.Right = 2

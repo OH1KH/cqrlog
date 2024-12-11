@@ -1847,7 +1847,7 @@ begin
     ini.Free
   end;
 
-  if changelog then
+ if changelog then
   begin
     with TfrmChangelog.Create(Application) do
     try
