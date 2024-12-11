@@ -1,11 +1,11 @@
 object frmTRXControl: TfrmTRXControl
   Left = 950
-  Height = 290
+  Height = 270
   Top = 29
   Width = 276
   Anchors = []
   Caption = 'TRX control'
-  ClientHeight = 290
+  ClientHeight = 270
   ClientWidth = 276
   Constraints.MinHeight = 270
   Constraints.MinWidth = 270
@@ -281,7 +281,7 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = gbMode
     Left = 1
-    Height = 260
+    Height = 240
     Top = 0
     Width = 195
     Align = alLeft
@@ -289,7 +289,7 @@ object frmTRXControl: TfrmTRXControl
     BorderSpacing.Left = 1
     BorderSpacing.Right = 1
     BevelOuter = bvNone
-    ClientHeight = 260
+    ClientHeight = 240
     ClientWidth = 195
     TabOrder = 1
     object gbFreq: TGroupBox
@@ -373,7 +373,7 @@ object frmTRXControl: TfrmTRXControl
       AnchorSideTop.Control = gbInfo
       AnchorSideRight.Control = pnlMain
       Left = 1
-      Height = 143
+      Height = 123
       Top = 117
       Width = 193
       Align = alClient
@@ -382,7 +382,7 @@ object frmTRXControl: TfrmTRXControl
       BorderSpacing.Top = 3
       BorderSpacing.Right = 1
       Caption = ' Band '
-      ClientHeight = 125
+      ClientHeight = 105
       ClientWidth = 191
       TabOrder = 1
       object btn160m: TButton
@@ -579,7 +579,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Side = asrBottom
         Left = 0
         Height = 30
-        Top = 92
+        Top = 72
         Width = 191
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Bottom = 3
@@ -639,7 +639,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Control = pnlPower
         Left = 0
         Height = 30
-        Top = 62
+        Top = 42
         Width = 191
         Anchors = [akLeft, akRight, akBottom]
         BevelOuter = bvNone
@@ -779,7 +779,7 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 27
-    Top = 260
+    Top = 240
     Width = 276
     Align = alBottom
     BorderSpacing.Bottom = 3
@@ -791,15 +791,16 @@ object frmTRXControl: TfrmTRXControl
     object cmbRig: TComboBox
       AnchorSideLeft.Control = pnlRig
       AnchorSideTop.Control = pnlRig
-      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = lblHidAnch
       AnchorSideBottom.Control = pnlRig
       AnchorSideBottom.Side = asrBottom
       Left = 12
       Height = 27
       Top = 0
-      Width = 130
-      Anchors = [akTop, akLeft, akBottom]
+      Width = 123
+      Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 12
+      BorderSpacing.Right = 3
       ItemHeight = 0
       ItemIndex = 1
       Items.Strings = (
@@ -819,37 +820,37 @@ object frmTRXControl: TfrmTRXControl
       OnGetItems = cmbRigGetItems
     end
     object lblInitRig: TLabel
-      AnchorSideLeft.Control = cmbRig
-      AnchorSideLeft.Side = asrCenter
+      AnchorSideLeft.Control = pnlRig
       AnchorSideTop.Control = pnlRig
       AnchorSideTop.Side = asrCenter
-      Left = 37
+      Left = 30
       Height = 17
       Top = 5
       Width = 80
       Alignment = taCenter
+      BorderSpacing.Left = 30
       Caption = 'Please wait!'
       ParentColor = False
       Visible = False
     end
     object pnlFreqBar: TPanel
-      AnchorSideLeft.Control = cmbRig
+      AnchorSideLeft.Control = lblHidAnch
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlRig
       AnchorSideRight.Control = pnlRig
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = pnlRig
       AnchorSideBottom.Side = asrBottom
-      Left = 145
+      Left = 142
       Height = 27
       Top = 0
-      Width = 128
+      Width = 131
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
       BorderSpacing.Left = 3
       BorderSpacing.Right = 3
       ClientHeight = 27
-      ClientWidth = 128
+      ClientWidth = 131
       TabOrder = 1
       object pbBand: TProgressBar
         AnchorSideLeft.Control = pnlFreqBar
@@ -861,7 +862,7 @@ object frmTRXControl: TfrmTRXControl
         Left = 4
         Height = 10
         Top = 11
-        Width = 120
+        Width = 123
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 3
         BorderSpacing.Right = 3
@@ -871,7 +872,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideLeft.Control = pnlFreqBar
         AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = pnlFreqBar
-        Left = 63
+        Left = 64
         Height = 10
         Top = 1
         Width = 3
@@ -880,6 +881,17 @@ object frmTRXControl: TfrmTRXControl
         ParentColor = False
         ParentFont = False
       end
+    end
+    object lblHidAnch: TLabel
+      AnchorSideLeft.Control = pnlRig
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = pnlRig
+      AnchorSideTop.Side = asrCenter
+      Left = 138
+      Height = 1
+      Top = 13
+      Width = 1
+      AutoSize = False
     end
   end
   object tmrRadio: TTimer

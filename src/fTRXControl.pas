@@ -65,6 +65,7 @@ type
     gbInfo : TGroupBox;
     gbVfo : TGroupBox;
     GroupBox4 : TGroupBox;
+    lblHidAnch: TLabel;
     lblMode: TLabel;
     lblFreq : TLabel;
     lblInitRig: TLabel;
