@@ -216,6 +216,7 @@ object frmDXCluster: TfrmDXCluster
       Caption = 'Telnet'
       ClientHeight = 394
       ClientWidth = 699
+      OnMouseWheel = tabTelnetMouseWheel
       object Panel1: TPanel
         Left = 0
         Height = 34
@@ -694,5 +695,12 @@ object frmDXCluster: TfrmDXCluster
       Caption = 'acChatSize'
       OnExecute = acChatSizeExecute
     end
+  end
+  object tmrStopScroll: TTimer
+    Enabled = False
+    Interval = 5000
+    OnTimer = tmrStopScrollTimer
+    Left = 440
+    Top = 368
   end
 end
