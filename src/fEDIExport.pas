@@ -263,7 +263,7 @@ begin
     country := dmDXCC.qDXCCRef.FieldByName('name').AsString;
   end;
   myloc  := cqrini.ReadString('Station','LOC','');
-  if length(myloc) = 4 then myloc := myloc +'LL';
+  if length(myloc) = 4 then myloc := myloc +'MM';
   myname := cqrini.ReadString('Station','Name','');
   mailingaddress := cqrini.ReadString('Station','MailingAddress','');
   zipcity := cqrini.ReadString('Station','ZipCity','');
@@ -368,7 +368,7 @@ begin
       if (i = DBRecordCount)
       then
          enddate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
-      if length(loc) = 4 then loc := loc +'LL';
+      if length(loc) = 4 then loc := loc +'MM';
       qrb:='';
       dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(myloc),loc, qrb, qrc);
       sum := sum + StrToInt(qrb);

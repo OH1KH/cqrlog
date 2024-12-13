@@ -2685,8 +2685,8 @@ function TfrmMain.CalcQrb(Myloc,loc:string;showUnits:boolean):string;
   qrb,             //distance
   qrc: String;      //direction
   Begin
-     if length(Myloc) = 4 then Myloc := Myloc +'LL';
-     if length(loc) = 4 then loc := loc +'LL';
+     if length(Myloc) = 4 then Myloc := Myloc +'MM';
+     if length(loc) = 4 then loc := loc +'MM';
      qrb:='';
      dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(Myloc),loc,qrb,qrc);
      if qrb <>'' then

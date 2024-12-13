@@ -1199,8 +1199,8 @@ begin
      if  (Length(loc) mod 2 = 0 ) then
        begin
          case  Length(loc) of
-           2:              loc := loc + '44LL';
-           4:              loc := loc + 'LL';
+           2:              loc := loc + '44XX'; //big 2chr Grid center
+           4:              loc := loc + 'MM';   //mid 4chr grid center
            else
              loc := copy(loc,1,6);
          end;
