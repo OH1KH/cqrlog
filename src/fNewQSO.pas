@@ -4461,7 +4461,7 @@ begin
         f := StrToFloat(cmbFreq.Text);
   dmUtils.GetRealCoordinate(lblLat.Caption,lblLong.Caption,lat,lng);
   frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
-                          lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible)
+                          lng,cqrini.ReadInteger('BandMap', 'NewQSOColor', clBlack),clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible)
 end;
 
 procedure TfrmNewQSO.acCWMessagesExecute(Sender: TObject);
