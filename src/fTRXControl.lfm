@@ -937,10 +937,17 @@ object frmTRXControl: TfrmTRXControl
         Checked = True
         OnClick = mnuShowPwrClick
       end
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
       object mnuShowFreqBar: TMenuItem
         Caption = 'Show Frequency Bar'
         Checked = True
         OnClick = mnuShowFreqBarClick
+      end
+      object mnuShowPwrBar: TMenuItem
+        Caption = 'Show Power Bar'
+        OnClick = mnuShowPwrBarClick
       end
       object Separator1: TMenuItem
         Caption = '-'

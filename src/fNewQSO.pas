@@ -3545,10 +3545,10 @@ begin
     key := 0;
     exit
   end;
-  if key = 13 then
+  if key = 13 then  //enter
   begin
     key := 0;
-    if TryStrToFloat(edtCall.Text,tmp) then
+    if TryStrToFloat(edtCall.Text,tmp) then   //if call is number then set frequency
     begin
       mode := dmUtils.GetModeFromFreq(FloatToStr(tmp/1000));
       frmTRXControl.SetModeFreq(mode,FloatToStr(tmp));

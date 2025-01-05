@@ -69,6 +69,7 @@ type
     lblMode: TLabel;
     lblFreq : TLabel;
     lblInitRig: TLabel;
+    mnuShowPwrBar: TMenuItem;
     mnuShowFreqBar: TMenuItem;
     mnuShowUsr : TMenuItem;
     mnuShowInfo : TMenuItem;
@@ -87,6 +88,7 @@ type
     pnlPower : TPanel;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
+    Separator3: TMenuItem;
     tmrChokeWheel: TTimer;
     tmrSetRigTime: TTimer;
     tmrRadio : TTimer;
@@ -134,6 +136,7 @@ type
     procedure btnDATAClick(Sender : TObject);
     procedure btnSSBClick(Sender : TObject);
     procedure gbFreqClick(Sender : TObject);
+    procedure mnuShowPwrBarClick(Sender: TObject);
     procedure mnuShowFreqBarClick(Sender: TObject);
     procedure mnuShowInfoClick(Sender : TObject);
     procedure mnuShowPwrClick(Sender : TObject);
@@ -452,7 +455,9 @@ begin
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
   gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', False);
-  pnlFreqBar.Visible:=cqrini.ReadBool('TRX','ShowFreqBar', False);
+  pnlFreqBar.Visible:=cqrini.ReadBool('TRX','ShowFreqBar', False) or cqrini.ReadBool('TRX','ShowPwrBar', False);
+   mnuShowPwrBar.Checked:= cqrini.ReadBool('TRX', 'ShowPwrBar', false);
+   mnuShowFreqBar.checked:=cqrini.ReadBool('TRX', 'ShowFreqBar', false);
   mnuShowInfo.Checked := gbInfo.Visible;
   gbVfo.Visible := cqrini.ReadBool('TRX', 'ShowVfo', False);
   pnlUsr.Visible := cqrini.ReadBool('TRX', 'ShowUsr', False);
@@ -667,10 +672,24 @@ begin
 
 end;
 
+procedure TfrmTRXControl.mnuShowPwrBarClick(Sender: TObject);
+begin
+   mnuShowPwrBar.Checked  := not mnuShowPwrBar.Checked;
+   if mnuShowPwrBar.Checked then
+                            mnuShowFreqBar.Checked :=false;
+   cqrini.WriteBool('TRX', 'ShowPwrBar', mnuShowPwrBar.Checked);
+   cqrini.WriteBool('TRX', 'ShowFreqBar', mnuShowFreqBar.checked);
+   pnlFreqBar.Visible:= ( mnuShowPwrBar.Checked or mnuShowFreqBar.Checked);
+end;
+
 procedure TfrmTRXControl.mnuShowFreqBarClick(Sender: TObject);
 begin
-  pnlFreqBar.Visible:= not pnlFreqBar.Visible;
-  cqrini.WriteBool('TRX', 'ShowFreqBar', pnlFreqBar.Visible);
+  mnuShowFreqBar.Checked := not mnuShowFreqBar.Checked ;
+  if mnuShowFreqBar.Checked then
+                            mnuShowPwrBar.Checked :=false;
+  cqrini.WriteBool('TRX', 'ShowFreqBar', mnuShowFreqBar.checked);
+  cqrini.WriteBool('TRX', 'ShowPwrBar', mnuShowPwrBar.Checked);
+  pnlFreqBar.Visible:= ( mnuShowPwrBar.Checked or mnuShowFreqBar.Checked);
 end;
 
 procedure TfrmTRXControl.mnuShowInfoClick(Sender : TObject);
@@ -1709,31 +1728,51 @@ var
  b,m:string;
  f,l: integer;
 Begin
+  if not (mnuShowFreqBar.Checked or mnuShowPwrBar.Checked) then
+                                                               exit;
   if not GetModeBand(m,b) then
                               exit;
-  if b<>'' then
+  if mnuShowFreqBar.Checked then
   begin
-    l:=length( dmUtils.BandFreq);
-    lblMode.Caption:= m;
-    for f:=0 to  l - 1 do
-      if (dmUtils.BandFreq[f].band = b ) then
-       Begin
-            pbBand.Min:=round(dmUtils.BandFreq[f].b_begin*1000);  //kHz
-            pbBand.Max:=round(dmUtils.BandFreq[f].b_end*1000);
-            Break;
-       end;
-    pbBand.Smooth:=True;
-    pbBand.Step:=1;
-    pbBand.Enabled:=True;
+    if b<>'' then
+    begin
+      l:=length( dmUtils.BandFreq);
+      lblMode.Caption:= m;
+      for f:=0 to  l - 1 do
+        if (dmUtils.BandFreq[f].band = b ) then
+         Begin
+              pbBand.Min:=round(dmUtils.BandFreq[f].b_begin*1000);  //kHz
+              pbBand.Max:=round(dmUtils.BandFreq[f].b_end*1000);
+              Break;
+         end;
+      pbBand.Smooth:=True;
+      pbBand.Step:=1;
+      pbBand.Enabled:=True;
 
-    pbBand.Position:=round(StrToFloat(lblFreq.Caption)*1000);
-  end
-  else
+      pbBand.Position:=round(StrToFloat(lblFreq.Caption)*1000);
+    end
+    else
+    begin
+       pbBand.Min:=0;
+       pbBand.Max:= 1;
+       pbBand.Position:=0;
+       lblMode.Caption:='NotHamBand';
+    end;
+ end;
+
+ if mnuShowPwrBar.Checked then
   begin
-     pbBand.Min:=0;
-     pbBand.Max:= 1;
-     pbBand.Position:=0;
-     lblMode.Caption:='NotHamBand';
+    if assigned(radio) then
+     Begin
+       f:=radio.GetPowerPercent;
+       pbBand.Min:=0;
+       pbBand.Max:=100;
+       pbBand.Smooth:=True;
+       pbBand.Step:=1;
+       pbBand.Enabled:=True;
+       pbBand.Position:=f;
+       lblMode.Caption:=IntToStr(Round(radio.GetPowermW / 1000))+'W';
+     end;
   end;
 end;
 end.
