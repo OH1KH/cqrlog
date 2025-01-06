@@ -1129,10 +1129,12 @@ Begin
             end;
   RigCmdChannelBusy :=true;
   RigCmdChannelMsg:='';
-  RigctldCmd.SendMessage(cmd+LineEnding);
-  if DebugMode then
+  try
+    RigctldCmd.SendMessage(cmd+LineEnding);
+    if DebugMode then
      Writeln('Sent rigctld cmd: ',cmd,'(+LineEnding)');
-
+  finally
+  end;
   t:=0;
   repeat     //waiting for response from rigctld
   Begin
@@ -1141,7 +1143,7 @@ Begin
    inc(t);
   end;
   until ( not RigCmdChannelBusy ) or (t>2000);
-  if t>2000 then
+  if t>1000 then
            Begin
                if DebugMode then
                 Writeln('Send cmd: Failed to get response to: ',cmd);
