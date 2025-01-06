@@ -1770,7 +1770,6 @@ procedure  TfrmTRXControl.UpdatePwrBar;
 var
  f: integer;
 Begin
-  writeln(mnuShowPwrBar.Checked, mnuShowPwrBar.Enabled , (not StopPwrUpdate));
  if (mnuShowPwrBar.Checked and mnuShowPwrBar.Enabled and (not StopPwrUpdate)) then
   begin
     if assigned(radio) then
