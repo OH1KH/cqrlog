@@ -92,6 +92,7 @@ type
     tmrChokeWheel: TTimer;
     tmrSetRigTime: TTimer;
     tmrRadio : TTimer;
+    tbPwr: TTrackBar;
     procedure acAddModMemExecute(Sender : TObject);
     procedure btnMemWriClick(Sender : TObject);
     procedure btnMemDwnClick(Sender : TObject);
@@ -143,6 +144,14 @@ type
     procedure mnuProgPrefClick(Sender : TObject);
     procedure mnuShowUsrClick(Sender : TObject);
     procedure mnuShowVfoClick(Sender : TObject);
+    procedure tbPwrMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure tbPwrMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
+      );
+    procedure tbPwrMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure tbPwrMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure tmrChokeWheelTimer(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
     procedure tmrSetRigTimeTimer(Sender: TObject);
@@ -151,6 +160,7 @@ type
     CaretMousePos   : integer;
     radio : TRigControl;
     old_mode : String;
+    StopPwrUpdate:boolean;
 
     btn160MBand : String;
     btn80MBand : String;
@@ -213,6 +223,7 @@ type
     procedure SendVoice(mem : String);
     procedure StopVoice;
     procedure UpdateFreqBar;
+    procedure UpdatePwrBar;
   end;
 
 var
@@ -464,8 +475,20 @@ begin
   mnuShowVfo.Checked := gbVfo.Visible;
   mnuShowUsr.Checked := pnlUsr.Visible;
   MouseWheelUsed := False;
+  if mnuShowPwrBar.Checked then
+                            begin
+                             mnuShowFreqBar.Checked :=false;
+                             pbBand.Visible:=false;
+                             tbPwr.Visible:= true;
+                            end;
+  if mnuShowFreqBar.Checked then
+                            begin
+                             mnuShowPwrBar.Checked :=false;
+                             pbBand.Visible:=true;
+                             tbPwr.Visible:=False;
+                            end;
+  StopPwrUpdate:=false;
 end;
-
 procedure TfrmTRXControl.btn10mClick(Sender : TObject);
 var
   freq : String = '';
@@ -676,20 +699,28 @@ procedure TfrmTRXControl.mnuShowPwrBarClick(Sender: TObject);
 begin
    mnuShowPwrBar.Checked  := not mnuShowPwrBar.Checked;
    if mnuShowPwrBar.Checked then
-                            mnuShowFreqBar.Checked :=false;
+                            begin
+                             mnuShowFreqBar.Checked :=false;
+                             pbBand.Visible:=false;
+                             tbPwr.Visible:= true;
+                             cqrini.WriteBool('TRX', 'ShowFreqBar', mnuShowFreqBar.checked);
+                            end;
    cqrini.WriteBool('TRX', 'ShowPwrBar', mnuShowPwrBar.Checked);
-   cqrini.WriteBool('TRX', 'ShowFreqBar', mnuShowFreqBar.checked);
-   pnlFreqBar.Visible:= ( mnuShowPwrBar.Checked or mnuShowFreqBar.Checked);
+   pnlFreqBar.Visible:=  mnuShowFreqBar.Checked or mnuShowPwrBar.Checked;
 end;
 
 procedure TfrmTRXControl.mnuShowFreqBarClick(Sender: TObject);
 begin
   mnuShowFreqBar.Checked := not mnuShowFreqBar.Checked ;
   if mnuShowFreqBar.Checked then
-                            mnuShowPwrBar.Checked :=false;
+                            begin
+                             mnuShowPwrBar.Checked :=false;
+                             pbBand.Visible:=true;
+                             tbPwr.Visible:=False;
+                             cqrini.WriteBool('TRX', 'ShowPwrBar', mnuShowPwrBar.Checked);
+                            end;
   cqrini.WriteBool('TRX', 'ShowFreqBar', mnuShowFreqBar.checked);
-  cqrini.WriteBool('TRX', 'ShowPwrBar', mnuShowPwrBar.Checked);
-  pnlFreqBar.Visible:= ( mnuShowPwrBar.Checked or mnuShowFreqBar.Checked);
+  pnlFreqBar.Visible:=  mnuShowFreqBar.Checked or mnuShowPwrBar.Checked;
 end;
 
 procedure TfrmTRXControl.mnuShowInfoClick(Sender : TObject);
@@ -751,6 +782,32 @@ begin
   gbVfo.Visible := not gbVfo.Visible;
   mnuShowVfo.Checked := gbVfo.Visible;
   cqrini.WriteBool('TRX', 'ShowVfo', gbVfo.Visible);
+end;
+
+procedure TfrmTRXControl.tbPwrMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  StopPwrUpdate:=true;
+end;
+
+procedure TfrmTRXControl.tbPwrMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  lblMode.Caption:=IntToStr(tbPwr.Position)+'%';
+end;
+
+procedure TfrmTRXControl.tbPwrMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if assigned(radio) then
+     radio.SetPowerPercent(tbPwr.Position);
+  StopPwrUpdate:=false;
+end;
+
+procedure TfrmTRXControl.tbPwrMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+   Handled:=true;
 end;
 
 procedure TfrmTRXControl.tmrChokeWheelTimer(Sender: TObject);
@@ -960,6 +1017,8 @@ begin
   InitializeRig;
   lblInitRig.Visible:=False;
   cmbRig.Visible:=True;
+  lblMode.Caption:='  ';
+  pnlFreqBar.Visible:=True;
 end;
 
 procedure TfrmTRXControl.cmbRigCloseUp(Sender: TObject);
@@ -1142,7 +1201,7 @@ var
   KeyerType : Integer;
 begin
   tmrRadio.Enabled := False;
-
+  pnlFreqBar.Visible:=false;
   if Assigned(radio) then FreeAndNil(radio);
 
   Application.ProcessMessages;
@@ -1210,6 +1269,12 @@ begin
       end
   else  //radio changed, restart CW interface
     begin
+      While not radio.InitDone do
+            begin
+              sleep(5);
+               Application.ProcessMessages;
+            end;
+
       IsNewHamlib:=radio.IsNewHamlib;
       //we check this again although preferences prevent false setting
       if ( cqrini.ReadBool('CW', 'NoReset', False) //is set: user does not want reset
@@ -1234,6 +1299,15 @@ begin
               if ((dmData.DebugLevel >= 1) or ((abs(dmData.DebugLevel) and 8) = 8)) then
                  Writeln('Set UTC to radio' + RigInUse + ' on next full minute');
              end;
+
+     if not (radio.GetRFPower and radio.SetRFPower ) then
+           Begin
+            mnuShowFreqBar.Checked:=false;
+            mnuShowFreqBarClick(nil);
+            mnuShowPwrBar.Enabled:=false;
+           end
+          else
+           mnuShowPwrBar.Enabled:=true;
     end;
 end;
 
@@ -1728,12 +1802,8 @@ var
  b,m:string;
  f,l: integer;
 Begin
-  if not (mnuShowFreqBar.Checked or mnuShowPwrBar.Checked) then
-                                                               exit;
-  if not GetModeBand(m,b) then
-                              exit;
-  if mnuShowFreqBar.Checked then
-  begin
+  if mnuShowFreqBar.Checked and GetModeBand(m,b) then
+   begin
     if b<>'' then
     begin
       l:=length( dmUtils.BandFreq);
@@ -1758,19 +1828,25 @@ Begin
        pbBand.Position:=0;
        lblMode.Caption:='NotHamBand';
     end;
- end;
 
- if mnuShowPwrBar.Checked then
+   end;
+  if mnuShowPwrBar.Checked then
+                           UpdatePwrBar;
+
+ end;
+procedure  TfrmTRXControl.UpdatePwrBar;
+var
+ f: integer;
+Begin
+ if mnuShowPwrBar.Checked and (not StopPwrUpdate) then
   begin
     if assigned(radio) then
      Begin
        f:=radio.GetPowerPercent;
-       pbBand.Min:=0;
-       pbBand.Max:=100;
-       pbBand.Smooth:=True;
-       pbBand.Step:=1;
-       pbBand.Enabled:=True;
-       pbBand.Position:=f;
+       tbPwr.Min:=0;
+       tbPwr.Max:=100;
+       tbPwr.Enabled:=True;
+       tbPwr.Position:=f;
        lblMode.Caption:=IntToStr(Round(radio.GetPowermW / 1000))+'W';
      end;
   end;

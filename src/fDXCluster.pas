@@ -121,6 +121,8 @@ type
     procedure tmrStopScrollTimer(Sender: TObject);
     procedure trChatSizeChange(Sender: TObject);
     procedure trChatSizeClick(Sender: TObject);
+    procedure trChatSizeMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     telDesc    : String;
     telAddr    : String;
@@ -1025,6 +1027,13 @@ begin
       cqrini.WriteInteger('DXCluster','ChatSize',trChatSize.Position);
       pnlChat.Height := trChatSize.Position;
       if dmData.DebugLevel >=1 then Writeln('Chat sizing Click');
+end;
+
+procedure TfrmDXCluster.trChatSizeMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+  Handled:=True;
 end;
 
 function TfrmDXCluster.GetSplit(info : String) : String;

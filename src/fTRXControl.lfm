@@ -881,6 +881,33 @@ object frmTRXControl: TfrmTRXControl
         ParentColor = False
         ParentFont = False
       end
+      object tbPwr: TTrackBar
+        AnchorSideLeft.Control = pnlFreqBar
+        AnchorSideTop.Control = pnlFreqBar
+        AnchorSideRight.Control = pnlFreqBar
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pnlFreqBar
+        AnchorSideBottom.Side = asrBottom
+        Left = 4
+        Height = 30
+        Top = 1
+        Width = 123
+        Max = 100
+        PageSize = 1
+        Position = 0
+        ScalePos = trRight
+        TickMarks = tmTopLeft
+        TickStyle = tsNone
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 3
+        BorderSpacing.Right = 3
+        OnMouseDown = tbPwrMouseDown
+        OnMouseMove = tbPwrMouseMove
+        OnMouseUp = tbPwrMouseUp
+        OnMouseWheel = tbPwrMouseWheel
+        ParentFont = False
+        TabOrder = 1
+      end
     end
     object lblHidAnch: TLabel
       AnchorSideLeft.Control = pnlRig

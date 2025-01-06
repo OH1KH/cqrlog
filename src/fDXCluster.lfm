@@ -5,7 +5,6 @@ object frmDXCluster: TfrmDXCluster
   Width = 709
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
-  ActiveControl = pgDXCluster
   Caption = 'DXCluster'
   ClientHeight = 425
   ClientWidth = 709
@@ -283,6 +282,7 @@ object frmDXCluster: TfrmDXCluster
           Position = 20
           ScalePos = trLeft
           OnClick = trChatSizeClick
+          OnMouseWheel = trChatSizeMouseWheel
           TabOrder = 3
           Visible = False
         end
