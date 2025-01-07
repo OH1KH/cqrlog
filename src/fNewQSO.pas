@@ -5514,6 +5514,8 @@ var
   SearchQRZ  : Boolean = False;
   qsl_via    : String = '';
   i          : integer;
+  tmp        : string;
+  p          : double;
 begin
   mode := '';
   freq := '';
@@ -5624,6 +5626,12 @@ begin
     ShowDXCCInfo(adif)
   else
     ShowDXCCInfo();
+
+  if ((cqrini.ReadBool('NewQSO', 'UseRigPwr', False)) and (frmTRXControl.GetRigPower(tmp)) and (not (fViewQSO or fEditQSO))) then
+    Begin
+     if tryStrToFloat(tmp,p) then
+            edtPWR.Text:=IntToStr(Round(p/1000)*cqrini.ReadInteger('NewQSO', 'PwrFactor', 1));
+    end;
 
   ShowCountryInfo;
   ChangeReports;

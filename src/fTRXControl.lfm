@@ -1,11 +1,11 @@
 object frmTRXControl: TfrmTRXControl
   Left = 950
-  Height = 340
+  Height = 290
   Top = 29
   Width = 278
   Anchors = []
   Caption = 'TRX control'
-  ClientHeight = 340
+  ClientHeight = 290
   ClientWidth = 278
   Constraints.MinHeight = 270
   Constraints.MinWidth = 270
@@ -281,7 +281,7 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = gbMode
     Left = 1
-    Height = 307
+    Height = 257
     Top = 0
     Width = 197
     Align = alLeft
@@ -289,7 +289,7 @@ object frmTRXControl: TfrmTRXControl
     BorderSpacing.Left = 1
     BorderSpacing.Right = 1
     BevelOuter = bvNone
-    ClientHeight = 307
+    ClientHeight = 257
     ClientWidth = 197
     TabOrder = 1
     object gbFreq: TGroupBox
@@ -375,7 +375,7 @@ object frmTRXControl: TfrmTRXControl
       AnchorSideTop.Control = gbInfo
       AnchorSideRight.Control = pnlMain
       Left = 1
-      Height = 190
+      Height = 140
       Top = 117
       Width = 195
       Align = alClient
@@ -384,7 +384,7 @@ object frmTRXControl: TfrmTRXControl
       BorderSpacing.Top = 3
       BorderSpacing.Right = 1
       Caption = ' Band '
-      ClientHeight = 172
+      ClientHeight = 122
       ClientWidth = 193
       TabOrder = 1
       object btn160m: TButton
@@ -581,7 +581,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Side = asrBottom
         Left = 0
         Height = 30
-        Top = 139
+        Top = 89
         Width = 193
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Bottom = 3
@@ -641,7 +641,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Control = pnlPower
         Left = 0
         Height = 30
-        Top = 109
+        Top = 59
         Width = 193
         Anchors = [akLeft, akRight, akBottom]
         BevelOuter = bvNone
@@ -781,7 +781,7 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 30
-    Top = 307
+    Top = 257
     Width = 278
     Align = alBottom
     BorderSpacing.Bottom = 3
@@ -862,8 +862,9 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Control = pnlPwrBar
         Left = 65
         Height = 10
-        Top = 1
+        Top = 2
         Width = 3
+        BorderSpacing.Top = 1
         Caption = ' '
         Font.Height = 8
         ParentColor = False
@@ -878,6 +879,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Side = asrBottom
         Left = 2
         Height = 30
+        Hint = 'If Hamlib supports RFPower adjustment for your rig you can do it by'#10'dragging the slider. When doing this display shows % value of rig''s'#10'maximum power.'#10'Note: '#10'Depending on mode [AM] the RFPower in Watts may differ from % reading.'#10'Watts reading is defined by Hamlib for selected rig model and used mode.'
         Top = 2
         Width = 128
         Max = 100
@@ -896,6 +898,8 @@ object frmTRXControl: TfrmTRXControl
         OnMouseUp = tbPwrMouseUp
         OnMouseWheel = tbPwrMouseWheel
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 0
       end
     end

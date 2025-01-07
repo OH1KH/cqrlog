@@ -157,7 +157,7 @@ type
     CaretMousePos   : integer;
     radio : TRigControl;
     old_mode : String;
-    StopPwrUpdate:boolean;
+    StopPwrUpdate: integer;
 
     btn160MBand : String;
     btn80MBand : String;
@@ -200,6 +200,7 @@ type
     function GetRawMode : String;
     function GetActualMode : String;
     function GetModeNumber(mode : String) : Cardinal;
+    function GetRigPower(var pwr:string): boolean;
 
     procedure SetMode(mode : String; bandwidth : Integer);
     procedure SetModeFreq(mode, freq : String);
@@ -747,13 +748,13 @@ end;
 procedure TfrmTRXControl.tbPwrMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  StopPwrUpdate:=true;
+  StopPwrUpdate:=1;   //true
 end;
 
 procedure TfrmTRXControl.tbPwrMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  lblPwrBar.Font.Size:=8;
+  lblPwrBar.Font.Height:=8;
   lblPwrBar.Repaint;
   lblPwrBar.Caption:=IntToStr(tbPwr.Position)+'%';
 end;
@@ -763,7 +764,7 @@ procedure TfrmTRXControl.tbPwrMouseUp(Sender: TObject; Button: TMouseButton;
 begin
   if assigned(radio) then
      radio.SetPowerPercent(tbPwr.Position);
-  StopPwrUpdate:=false;
+  StopPwrUpdate:=-1; //negative -1 => wait 2 poll rounds before release
 end;
 
 procedure TfrmTRXControl.tbPwrMouseWheel(Sender: TObject; Shift: TShiftState;
@@ -979,7 +980,7 @@ begin
   InitializeRig;
   lblInitRig.Visible:=False;
   cmbRig.Visible:=True;
-  lblPwrBar.Font.Size:=8;
+  lblPwrBar.Font.Height:=8;
   lblPwrBar.Repaint;
   lblPwrBar.Caption:='  ';
 end;
@@ -1165,7 +1166,7 @@ var
 begin
   tmrRadio.Enabled := False;
   pnlPwrBar.Visible:=false;
-  StopPwrUpdate := true;
+  StopPwrUpdate := 1;  //true
   if Assigned(radio) then FreeAndNil(radio);
 
   Application.ProcessMessages;
@@ -1267,7 +1268,7 @@ begin
 
      if (radio.GetRFPower and radio.SetRFPower ) then
             Begin
-              StopPwrUpdate := false;
+              StopPwrUpdate := 0; //false
               mnuShowPwrBar.Enabled:=true;
               pnlPwrBar.Visible:= mnuShowPwrBar.Checked
             end
@@ -1768,22 +1769,39 @@ end;
 
 procedure  TfrmTRXControl.UpdatePwrBar;
 var
- f: integer;
+ f: double;
+ tmp: String;
 Begin
- if (mnuShowPwrBar.Checked and mnuShowPwrBar.Enabled and (not StopPwrUpdate)) then
+ if  (StopPwrUpdate < 0) Then   //if negative should wait abs(n)+1 rounds
+   Begin
+    inc(StopPwrUpdate);
+    exit;
+   end;
+ if (mnuShowPwrBar.Checked and mnuShowPwrBar.Enabled and radio.GetRFPower and (StopPwrUpdate=0)) then
   begin
-    if assigned(radio) then
-     Begin
-       f:=radio.GetPowerPercent;
-       tbPwr.Min:=0;
-       tbPwr.Max:=100;
-       tbPwr.Enabled:=True;
-       tbPwr.Position:=f;
-       lblPwrBar.Font.Size:=8;
-       lblPwrBar.Caption:=IntToStr(Round(radio.GetPowermW / 1000))+'W';
-     end
+       tmp:=radio.PwrPcnt;
+       if tryStrToFloat(tmp,f) then
+        begin
+         tbPwr.Min:=0;
+         tbPwr.Max:=100;
+         tbPwr.Enabled:=True;
+         tbPwr.Position:=round(f*100);
+         lblPwrBar.Font.Height:=8;
+         tmp:=radio.PwrmW;
+         if tryStrToFloat(tmp,f) then
+            lblPwrBar.Caption:=IntToStr(Round(f/ 1000))+'W';
+         pnlPwrBar.Visible:=true;
+        end
     else
      pnlPwrBar.Visible:=false;
   end;
 end;
+
+function TfrmTRXControl.GetRigPower(var pwr:string): boolean;
+Begin
+ Result:=radio.GetRFPower;
+ if radio.GetRFPower then
+    pwr:=radio.PwrmW;
+end;
+
 end.

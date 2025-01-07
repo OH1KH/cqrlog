@@ -658,8 +658,8 @@ begin
     for i:=0 to Length(a)-1 do     //this handles received message line by line
     begin
       Hit:=false;
-      if DebugMode then
-         Writeln('a[i]:',a[i]);
+      //if DebugMode then
+        // Writeln('a[i]:',a[i]);
       if a[i]='' then Continue;
 
       //we send all commands with '+' prefix that makes receiving sort lot easier

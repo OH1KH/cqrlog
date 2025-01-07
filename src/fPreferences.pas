@@ -107,6 +107,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkUseRigPwr: TCheckBox;
     chkHamClock: TCheckBox;
     chkNewAlpha: TCheckBox;
     chkCompressBackup1: TCheckBox;
@@ -570,7 +571,6 @@ type
     edtCWPort: TEdit;
     edtPdfFiles: TEdit;
     edtWinPort: TEdit;
-    edtRecetQSOs: TEdit;
     edtLoTWPass: TEdit;
     edtLoTWName: TEdit;
     edtCWDSpeed: TSpinEdit;
@@ -678,6 +678,7 @@ type
     Label108: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    lblPwrFactor: TLabel;
     lblHamclock: TLabel;
     lblK3NGHex: TLabel;
     lblSpdStep: TLabel;
@@ -963,6 +964,8 @@ type
     seCallWidth: TSpinEdit;
     seFreqWidth: TSpinEdit;
     edtRigCount: TSpinEdit;
+    spePwrFactor: TSpinEdit;
+    speRecentQSOs: TSpinEdit;
     tabExport: TTabSheet;
     tabExport1: TTabSheet;
     tabFont1: TTabSheet;
@@ -1068,7 +1071,6 @@ type
     procedure edtLocKeyPress(Sender: TObject; var Key: char);
     procedure edtOperatorExit(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
-    procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure edtRigCountChange(Sender: TObject);
     procedure edtRigCtldPathChange(Sender: TObject);
     procedure edtRotCtldPathChange(Sender: TObject);
@@ -1206,12 +1208,14 @@ begin
   cqrini.WriteString('NewQSO', 'UsrBtn', edtUsrBtn.Text);
   cqrini.WriteBool('NewQSO', 'UseSpaceBar', chkUseSpaceBar.Checked);
   cqrini.WriteBool('NewQSO', 'RefreshAfterSave', chkRefreshAfterSave.Checked);
+  cqrini.WriteBool('NewQSO', 'UseRigPwr', chkUseRigPwr.Checked);
+  cqrini.WriteInteger('NewQSO', 'PwrFactor', spePwrFactor.Value);
   cqrini.WriteBool('NewQSO', 'SkipModeFreq', chkSkipModeFreq.Checked);
   cqrini.WriteBool('NewQSO', 'AutoSearch', chkAutoSearch.Checked);
   cqrini.WriteBool('NewQSO', 'NFname', chkNFname.Checked);
   cqrini.WriteBool('NewQSO', 'ShowRecentQSOs', chkShowRecentQSOs.Checked);
   cqrini.Writebool('NewQSO', 'ShowB4call', chkShowB4call.Checked);
-  cqrini.WriteString('NewQSO', 'RecQSOsNum', edtRecetQSOs.Text);
+  cqrini.WriteInteger('NewQSO', 'RecQSOsNum', speRecentQSOs.Value);
   cqrini.WriteBool('NewQSO', 'IgnoreQRZ', chkIgnoreQRZQSL.Checked);
   cqrini.WriteBool('NewQSO', 'MvToRem', chkMvToRem.Checked);
   cqrini.WriteBool('NewQSO', 'AutoQSLS', chkAutoQSLS.Checked);
@@ -2884,12 +2888,6 @@ begin
   edtOperator.text:=Trim(Uppercase(edtOperator.text));
 end;
 
-procedure TfrmPreferences.edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
-begin
-  if not (key in ['0'..'9']) then
-    key := #0;
-end;
-
 procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
 begin
   cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
@@ -3042,12 +3040,14 @@ begin
   edtUsrBtn.Text := cqrini.ReadString('NewQSO', 'UsrBtn', 'https://www.qrzcq.com/call/$CALL');
   chkUseSpaceBar.Checked := cqrini.ReadBool('NewQSO', 'UseSpaceBar', False);
   chkRefreshAfterSave.Checked := cqrini.ReadBool('NewQSO', 'RefreshAfterSave', True);
+  chkUseRigPwr.Checked:= cqrini.ReadBool('NewQSO', 'UseRigPwr', False);
+  spePwrFactor.Value:= cqrini.ReadInteger('NewQSO', 'PwrFactor', 1);
   chkSkipModeFreq.Checked := cqrini.ReadBool('NewQSO', 'SkipModeFreq', True);
   chkAutoSearch.Checked := cqrini.ReadBool('NewQSO', 'AutoSearch', False);
   chkNFname.Checked := cqrini.ReadBool('NewQSO', 'NFname', False);
   chkShowRecentQSOs.Checked := cqrini.ReadBool('NewQSO', 'ShowRecentQSOs', False);
   chkShowB4call.Checked := cqrini.ReadBool('NewQSO', 'ShowB4call', False);
-  edtRecetQSOs.Text := cqrini.ReadString('NewQSO', 'RecQSOsNum', '5');
+  speRecentQSOs.Value:= cqrini.ReadInteger('NewQSO', 'RecQSOsNum', 5);
   chkIgnoreQRZQSL.Checked := cqrini.ReadBool('NewQSO', 'IgnoreQRZ', False);
   chkMvToRem.Checked := cqrini.ReadBool('NewQSO', 'MvToRem', True);
   chkAutoQSLS.Checked := cqrini.ReadBool('NewQSO', 'AutoQSLS', True);
