@@ -55,7 +55,7 @@ type TRigControl = class
     fRigSplitActive : Boolean;
     fPollTimeout    : integer;
     fPollCount      : integer;
-    fPwrPcnt        : String;
+    fPwrPcnt        : String;   //not actually %, but value 0.0 .. 1.0
     fPwrmW          : String;
     fGetRFPower     : boolean;
     fSetRFPower     : boolean;
@@ -643,6 +643,8 @@ var
   i   : Integer;
   f   : Double;
   Hit : boolean;
+  tmp : string;
+
 begin
   msg:='';
   while ( aSocket.GetMessage(msg) > 0 ) do
@@ -656,11 +658,13 @@ begin
     for i:=0 to Length(a)-1 do     //this handles received message line by line
     begin
       Hit:=false;
-      //Writeln('a[i]:',a[i]);
+      if DebugMode then
+         Writeln('a[i]:',a[i]);
       if a[i]='' then Continue;
 
       //we send all commands with '+' prefix that makes receiving sort lot easier
       b:= Explode(' ', a[i]);
+
 
       if (b[0]='FREQUENCY:')then
        Begin
@@ -811,6 +815,22 @@ begin
        end;
       //\dump_caps end
 
+       if ((pos('RFPOWER',a[i])>0) and (pos('RPRT 0',a[i+2])>0)) then
+        Begin
+         fPwrPcnt:= a[i+1];
+         tmp:=FloatToStr(fFreq);
+         if fGetRFPower then
+          begin
+           RigctldConnect.SendMessage('+\power2mW '+fPwrPcnt+' '+tmp+' '+fMode.mode+LineEnding);
+          end;
+
+        end;
+
+       if ((pos('POWER MW:',a[i])>0) and (pos('RPRT 0',a[i+1])>0)) then
+        Begin
+          fPwrmW:=b[2];
+        end;
+
        if pos('SET_POWERSTAT:',a[i])>0 then
        Begin
          Hit:=true;
@@ -927,6 +947,10 @@ begin
               sleep(2);
             end;
         end;
+
+  if fGetRFPower then
+    RigctldConnect.SendMessage('+\get_level'+VfoStr+' RFPOWER'+LineEnding);
+
  AllowCommand:=-1; //waiting for reply
  fPollCount :=  fPollTimeout;
 end;
@@ -1051,6 +1075,7 @@ var
 begin
   rigProcess.Terminate(excode);
   tmrRigPoll.Enabled := False;
+  sleep(fRigPoll);
   RigctldConnect.Disconnect();
   RigConnected
 end;
@@ -1095,6 +1120,7 @@ begin
   end;
   if DebugMode then Writeln(2);
   tmrRigPoll.Enabled := False;
+  sleep(fRigPoll);
   if DebugMode then Writeln(3);
   RigctldConnect.Disconnect();
   RigctldCmd.Disconnect();
