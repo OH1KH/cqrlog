@@ -430,7 +430,7 @@ procedure TRigControl.SetSplit(up:integer);
 Begin
   SendCmd('+\set_xit'+VfoStr+' '+IntToStr(up));
   if pos('RPRT 0', RigCmdChannelMsg)>0 then
-    SendCmd( '+\set_pfunc'+VfoStr+' XIT 1');
+    SendCmd( '+\set_func'+VfoStr+' XIT 1');
 end;
 procedure TRigControl.ClearXit;
 begin
