@@ -59,6 +59,9 @@ type TRigControl = class
     fPwrmW          : String;
     fGetRFPower     : boolean;
     fSetRFPower     : boolean;
+    fSetFunc        : boolean; //if can set/get func then test "U currVFO ?" supported functions "fSupFuncs"
+    fGetFunc        : boolean;
+    fSupFuncs       : String;
     AllowCommand    : integer; //for command priority
     ErrorRigctldConnect : Boolean;
     ConnectionDone  : Boolean;
@@ -146,6 +149,9 @@ public
 
     property GetRFPower: boolean read fGetRFPower;
     property SetRFPower: boolean read fSetRFPower;
+    property SetFunc   : boolean read fSetFunc;
+    property GetFunc   : boolean read fGetFunc;
+    property SupFuncs  : String read fSupFuncs;
 
     property PwrPcnt :  String read fPwrPcnt write fPwrPcnt;
     property PwrmW   :  String read fPwrmW   write fPwrmW;
@@ -189,6 +195,8 @@ public
     procedure StopVoice;
     procedure UsrCmd(cmd:String);
     procedure SetPowerPercent(p:integer);
+    procedure SetTuner;
+    procedure ReSetTuner;
 end;
 
 implementation
@@ -222,6 +230,9 @@ begin
   fRigSplitActive      := False;
   fGetRFPower          := false;
   fSetRFPower          := false;
+  fGetFunc             := false;
+  fSetFunc             := false;
+  fSupFuncs            := '';
   if DebugMode then Writeln('All objects created');
   tmrRigPoll.OnTimer       := @OnRigPollTimer;
   RigctldConnect.OnReceive := @OnReceivedRigctldConnect;
@@ -417,6 +428,18 @@ end;
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
   SendCmd('+\set_freq'+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000));
+end;
+
+procedure TRigControl.SetTuner;
+begin
+  if fSetFunc and (Pos('TUNER', fSupFuncs)>0) then
+    SendCmd('+\set_func'+VfoStr+' TUNER 1');
+end;
+
+procedure TRigControl.ReSetTuner;
+begin
+  if fSetFunc and (Pos('TUNER', fSupFuncs)>0) then
+    SendCmd('+\set_func'+VfoStr+' TUNER 0');
 end;
 procedure TRigControl.ClearRit;
 begin
@@ -775,6 +798,15 @@ begin
          fGetVfo:= b[3]='Y';
        end;
 
+      if pos('CAN SET FUNC:',a[i])>0 then
+       Begin
+         fSetFunc:= b[3]='Y';
+       end;
+      if pos('CAN GET FUNC:',a[i])>0 then
+       Begin
+         fGetFunc:= b[3]='Y';
+       end;
+
       if pos('CAN SEND MORSE:',a[i])>0 then
        Begin
          fMorse:= b[3]='Y';
@@ -796,7 +828,7 @@ begin
          RigCommand.Clear;
          Hit:=true;
          if ((fRigId<10) and fPowerON and fPower) then
-               AllowCommand:=8 // if rigctld is remote it can not make auto_power_on as startup paramater
+               AllowCommand:=8 // if rigctld is remote it can not make auto_power_on as startup parameter
                                // then we should send set_powerstat 1 if power up is asked and rig can do it
            else
                AllowCommand:=1; //check pending commands (should not be any)
@@ -805,11 +837,15 @@ begin
                       Writeln(LineEnding,'This is New Hamlib: ',fIsNewHamlib);
                       Writeln('Cqrlog can switch power: ',fPower);
                       Writeln('Cqrlog can get VFO: ',fGetVfo);
+                      Writeln('Cqrlog can get func: ',fGetFunc);
+                      Writeln('Cqrlog can set func: ',fSetFunc);
                       Writeln('Cqrlog can send Morse: ',fMorse);
                       Writeln('Cqrlog can launch voice memories: ',fVoice);
                       Writeln('Cqrlog can get power2mW: ',fGetRFPower);
                       Writeln('Cqrlog can set mW2power: ',fSetRFPower,LineEnding);
                    end;
+         if fSetFunc then
+                 RigctldConnect.SendMessage('+\set_func'+VfoStr+' ?'+LineEnding);
          InitDone:=true;
          Break;  //break searching from \dump_caps reply
        end;
@@ -829,6 +865,11 @@ begin
        if ((pos('POWER MW:',a[i])>0) and (pos('RPRT 0',a[i+1])>0)) then
         Begin
           fPwrmW:=b[2];
+        end;
+
+       if ((pos('SET_FUNC',a[i])>0) and (pos('?',a[i])>0) and (pos('RPRT 0',a[i+2])>0)) then
+        Begin
+          fSupFuncs:=a[i+1];
         end;
 
        if pos('SET_POWERSTAT:',a[i])>0 then

@@ -237,26 +237,48 @@ implementation
 { TfrmTRXControl }
 uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories;
 
+
 procedure TfrmTRXControl.HLTune(start : Boolean);
 begin
   if Assigned(radio) then
   begin
-    if start then
-    begin
-      if not Tuning then
-      begin
-        ModeWas := GetActualMode;
-        BwWas := GetBandWidthForMode(ModeWas);
-        SetMode('AM', 0);
-        radio.PttOn;
-        Tuning := True;
-      end;
-    end
-    else begin
-      radio.PttOff;
-      if Tuning then SetMode(ModeWas, BwWas);
-      Tuning := False;
-    end;
+    if pos('TUNER',radio.SupFuncs)>0 then //tune with rigctld cmds
+     Begin
+         if start then
+          Begin
+           if not Tuning then
+                  Begin
+                       radio.ReSetTuner;   //this reset tuner settings (at least with IC7300)
+                       sleep(300);
+                       radio.SetTuner;     //this initiates tuner that completes by itself no need to stop (at least with IC7300)
+                  end;
+           Tuning := True;
+          end
+         else
+          begin
+           Tuning := False;
+          end;
+     end
+    else  //tune with AM
+     begin
+        if start then
+        begin
+          if not Tuning then
+          begin
+            ModeWas := GetActualMode;
+            BwWas := GetBandWidthForMode(ModeWas);
+            SetMode('AM', 0);
+            radio.PttOn;
+            Tuning := True;
+          end;
+        end
+        else begin
+          radio.PttOff;
+          sleep(500);
+          if Tuning then SetMode(ModeWas, BwWas);
+          Tuning := False;
+        end;
+     end;
   end;
 end;
 
