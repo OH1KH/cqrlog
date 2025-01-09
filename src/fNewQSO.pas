@@ -1272,6 +1272,7 @@ var
   since  : String;
   lat,long : Currency;
 begin
+  btnCancel.Enabled:=True;
   if fViewQSO then
   begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) then
@@ -5713,6 +5714,7 @@ begin
   if (not (fEditQSO or fViewQSO)) then
     FreqBefChange := frmTRXControl.GetFreqMHz;
 
+  btnCancel.Enabled:=False; //prevent click "quit" when should click "save"
   //no need here //dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
   dmUtils.HamClockSetNewDX(lblLat.Caption,lblLong.Caption,edtGrid.Text);
   CheckCallsignClub;
