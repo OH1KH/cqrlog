@@ -99,26 +99,26 @@ type
     cmbPropagation : TComboBox;
     cmbSatellite : TComboBox;
     dbgrdQSOBefore: TDBGrid;
+    edtContestExchangeMessageReceived: TEdit;
+    edtContestExchangeMessageSent: TEdit;
+    edtContestName: TEdit;
+    edtContestSerialReceived: TEdit;
+    edtContestSerialSent: TEdit;
     edtDOK: TEdit;
     edtTXLO: TEdit;
     edtRXLO: TEdit;
-    edtContestExchangeMessageReceived: TEdit;
-    edtContestExchangeMessageSent: TEdit;
-    edtContestSerialReceived: TEdit;
-    edtContestSerialSent: TEdit;
-    edtContestName: TEdit;
     edtRXFreq : TEdit;
     gbContest: TGroupBox;
+    lblContestExchangeMessageReceived: TLabel;
+    lblContestExchangeMessageSent: TLabel;
+    lblContestName: TLabel;
+    lblContestSerialReceived: TLabel;
+    lblContestSerialSent: TLabel;
     lblStimeFormat: TLabel;
     lblEtimeFormat: TLabel;
     lblDateformat: TLabel;
     Label38: TLabel;
     Label37: TLabel;
-    lblContestExchangeMessageReceived: TLabel;
-    lblContestExchangeMessageSent: TLabel;
-    lblContestSerialReceived: TLabel;
-    lblContestSerialSent: TLabel;
-    lblContestName: TLabel;
     lblCallbookInformation : TLabel;
     lblPropagation : TLabel;
     lblDOK: TLabel;
@@ -3517,6 +3517,11 @@ end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
 begin
+  btnCancel.Caption:='Closing...';
+  btnCancel.Font.Color:=clRed;
+  btnCancel.Font.Style:=[fsBold];
+  btnCancel.Repaint;
+  Application.ProcessMessages;
   acClose.Execute
 end;
 
@@ -4103,6 +4108,7 @@ begin
     else
       CreateAutoBackup()
   end;
+  frmTRXControl.StopPwrUpdate:=-254; //prevent rig power polling while Cqrlog is closing
   RunST('stop.sh'); //run "when cqrlog is closing" -script
   sleep(1000); //give scirpt time to use rigctld if that is needed
   if  AnyRemoteOn then DisableRemoteMode;

@@ -1,18 +1,18 @@
 object frmNewQSO: TfrmNewQSO
   Left = 0
-  Height = 600
+  Height = 630
   Top = 0
-  Width = 980
+  Width = 1044
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 974
-  VertScrollBar.Page = 600
+  HorzScrollBar.Page = 1025
+  VertScrollBar.Page = 615
   AutoScroll = True
   Caption = 'New QSO ... (CqrlogAlpha for Linux)'
-  ClientHeight = 600
-  ClientWidth = 980
-  Constraints.MinHeight = 360
-  Constraints.MinWidth = 560
+  ClientHeight = 630
+  ClientWidth = 1044
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 400
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2147,39 +2147,45 @@ object frmNewQSO: TfrmNewQSO
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 588
-    Top = 50
-    Width = 980
+    Height = 565
+    Top = 65
+    Width = 1044
     Align = alBottom
-    ClientHeight = 588
-    ClientWidth = 980
+    ClientHeight = 565
+    ClientWidth = 1044
     TabOrder = 0
     object pnlQsoInfo: TPanel
+      AnchorSideLeft.Control = sbNewQSO
+      AnchorSideTop.Control = pnlProfiles
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Side = asrBottom
+      AnchorSideRight.Control = gbContest
+      AnchorSideBottom.Control = sbNewQSO
       Left = 1
-      Height = 531
+      Height = 506
       Top = 35
-      Width = 707
-      Align = alClient
-      BorderSpacing.Bottom = 2
+      Width = 564
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Bottom = 3
       BevelOuter = bvNone
-      ClientHeight = 531
-      ClientWidth = 707
+      ClientHeight = 506
+      ClientWidth = 564
       TabOrder = 0
       object pnlQSOinput: TPanel
+        AnchorSideLeft.Control = pnlQsoInfo
+        AnchorSideTop.Control = pnlQsoInfo
+        AnchorSideRight.Control = pnlQsoInfo
         AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pnlQsoInfo
         AnchorSideBottom.Side = asrBottom
         Left = 0
-        Height = 531
+        Height = 506
         Top = 0
-        Width = 707
-        Align = alClient
+        Width = 564
+        Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.InnerBorder = 2
         BevelOuter = bvNone
-        ClientHeight = 531
-        ClientWidth = 707
+        ClientHeight = 506
+        ClientWidth = 564
         ParentShowHint = False
         TabOrder = 0
         object lblCommentToCallsign: TLabel
@@ -3101,18 +3107,21 @@ object frmNewQSO: TfrmNewQSO
           ParentShowHint = False
         end
         object pgDetails: TPageControl
+          AnchorSideLeft.Control = lblCall
           AnchorSideTop.Control = pnlSbtn0
           AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = pnlQSOinput
           AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = pnlQSOinput
           AnchorSideBottom.Side = asrBottom
-          Left = 0
-          Height = 163
+          Left = 12
+          Height = 135
           Top = 368
-          Width = 707
+          Width = 552
           ActivePage = tabDXCCStat
-          Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 3
+          BorderSpacing.Bottom = 3
           ParentFont = False
           TabIndex = 0
           TabOrder = 27
@@ -3121,15 +3130,15 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
             Caption = 'DXCC statistic'
-            ClientHeight = 132
-            ClientWidth = 697
+            ClientHeight = 104
+            ClientWidth = 542
             object sgrdStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
               AnchorSideBottom.Side = asrBottom
               Left = 0
-              Height = 132
+              Height = 104
               Top = 0
-              Width = 697
+              Width = 542
               Align = alClient
               AutoFillColumns = True
               ColCount = 2
@@ -3144,22 +3153,22 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                348
-                347
+                270
+                270
               )
             end
           end
           object tabCallStat: TTabSheet
             Caption = 'Call statistic'
-            ClientHeight = 132
-            ClientWidth = 697
+            ClientHeight = 104
+            ClientWidth = 542
             object sgrdCallStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
               AnchorSideBottom.Side = asrBottom
               Left = 0
-              Height = 132
+              Height = 104
               Top = 0
-              Width = 697
+              Width = 542
               Align = alClient
               AutoFillColumns = True
               ColCount = 2
@@ -3174,16 +3183,16 @@ object frmNewQSO: TfrmNewQSO
               TitleStyle = tsNative
               OnPrepareCanvas = sgrdCallStatisticPrepareCanvas
               ColWidths = (
-                347
-                346
+                269
+                269
               )
             end
           end
           object tabSatellite: TTabSheet
             AnchorSideBottom.Side = asrBottom
             Caption = 'Satellite'
-            ClientHeight = 132
-            ClientWidth = 697
+            ClientHeight = 104
+            ClientWidth = 542
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
               AnchorSideTop.Control = lblPropagation
@@ -3312,8 +3321,8 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
             Caption = 'LO Config'
-            ClientHeight = 132
-            ClientWidth = 697
+            ClientHeight = 104
+            ClientWidth = 542
             object cbTxLo: TCheckBox
               Left = 8
               Height = 23
@@ -3400,169 +3409,6 @@ object frmNewQSO: TfrmNewQSO
             end
           end
         end
-        object gbContest: TGroupBox
-          AnchorSideLeft.Control = mComment
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = pnlQSOinput
-          AnchorSideRight.Control = pnlQSOinput
-          AnchorSideRight.Side = asrBottom
-          Left = 555
-          Height = 204
-          Top = 0
-          Width = 152
-          Anchors = [akTop, akLeft, akRight, akBottom]
-          BorderSpacing.Left = 20
-          Caption = 'Contest'
-          ClientHeight = 186
-          ClientWidth = 150
-          TabOrder = 28
-          Visible = False
-          object lblContestName: TLabel
-            AnchorSideLeft.Control = gbContest
-            AnchorSideTop.Control = gbContest
-            Left = 3
-            Height = 17
-            Top = 3
-            Width = 87
-            BorderSpacing.Left = 3
-            BorderSpacing.Top = 3
-            Caption = 'Contestname'
-          end
-          object lblContestSerialSent: TLabel
-            AnchorSideLeft.Control = lblContestName
-            AnchorSideTop.Control = edtContestName
-            AnchorSideTop.Side = asrBottom
-            Left = 3
-            Height = 17
-            Top = 63
-            Width = 69
-            BorderSpacing.Top = 6
-            Caption = 'Serial sent'
-          end
-          object lblContestSerialReceived: TLabel
-            AnchorSideLeft.Control = lblContestName
-            AnchorSideTop.Control = edtContestSerialSent
-            AnchorSideTop.Side = asrBottom
-            Left = 3
-            Height = 17
-            Top = 123
-            Width = 69
-            BorderSpacing.Top = 6
-            Caption = 'Serial rcvd'
-          end
-          object lblContestExchangeMessageSent: TLabel
-            AnchorSideLeft.Control = lblContestSerialSent
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = lblContestSerialSent
-            Left = 81
-            Height = 17
-            Top = 63
-            Width = 59
-            BorderSpacing.Left = 9
-            Caption = 'Msg sent'
-          end
-          object lblContestExchangeMessageReceived: TLabel
-            AnchorSideLeft.Control = lblContestExchangeMessageSent
-            AnchorSideTop.Control = lblContestSerialReceived
-            Left = 81
-            Height = 17
-            Top = 123
-            Width = 59
-            Caption = 'Msg rcvd'
-          end
-          object edtContestName: TEdit
-            AnchorSideLeft.Control = lblContestName
-            AnchorSideTop.Control = lblContestName
-            AnchorSideTop.Side = asrBottom
-            AnchorSideRight.Control = gbContest
-            AnchorSideRight.Side = asrBottom
-            Left = 3
-            Height = 34
-            Hint = 'name of contest, max 40 characters allowed'
-            Top = 23
-            Width = 144
-            Anchors = [akTop, akLeft, akRight]
-            BorderSpacing.Top = 3
-            BorderSpacing.Right = 3
-            MaxLength = 40
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            TextHint = 'max 40 characters'
-            OnChange = edtCountyChange
-          end
-          object edtContestSerialSent: TEdit
-            AnchorSideLeft.Control = lblContestName
-            AnchorSideTop.Control = lblContestSerialSent
-            AnchorSideTop.Side = asrBottom
-            Left = 3
-            Height = 34
-            Hint = 'serial number sent of contest, max 6 characters'
-            Top = 83
-            Width = 64
-            BorderSpacing.Top = 3
-            MaxLength = 6
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 1
-          end
-          object edtContestSerialReceived: TEdit
-            AnchorSideLeft.Control = lblContestName
-            AnchorSideTop.Control = lblContestSerialReceived
-            AnchorSideTop.Side = asrBottom
-            Left = 3
-            Height = 34
-            Hint = 'rserial number received of contest, max 6 characters'
-            Top = 146
-            Width = 64
-            BorderSpacing.Top = 6
-            MaxLength = 6
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 2
-          end
-          object edtContestExchangeMessageSent: TEdit
-            AnchorSideLeft.Control = lblContestExchangeMessageSent
-            AnchorSideTop.Control = edtContestSerialSent
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = gbContest
-            AnchorSideRight.Side = asrBottom
-            Left = 81
-            Height = 34
-            Hint = 'contest exchange message sent, max 50 characters'
-            Top = 83
-            Width = 66
-            Anchors = [akTop, akLeft, akRight]
-            BorderSpacing.Top = 6
-            BorderSpacing.Right = 3
-            MaxLength = 50
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 3
-            TextHint = 'max 50 characters'
-            OnChange = edtCountyChange
-          end
-          object edtContestExchangeMessageReceived: TEdit
-            AnchorSideLeft.Control = lblContestExchangeMessageReceived
-            AnchorSideTop.Control = edtContestSerialReceived
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = gbContest
-            AnchorSideRight.Side = asrBottom
-            Left = 81
-            Height = 34
-            Hint = 'contest exchange message received, max 50 characters'
-            Top = 146
-            Width = 66
-            Anchors = [akTop, akLeft, akRight]
-            BorderSpacing.Right = 3
-            MaxLength = 50
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 4
-            TextHint = 'max 50 characters'
-            OnChange = edtCountyChange
-          end
-        end
         object lblDOK: TLabel
           AnchorSideLeft.Control = cmbIOTA
           AnchorSideLeft.Side = asrBottom
@@ -3592,7 +3438,7 @@ object frmNewQSO: TfrmNewQSO
           MaxLength = 12
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 29
+          TabOrder = 28
           Visible = False
           OnChange = edtCountyChange
           OnEnter = edtStateEnter
@@ -3611,7 +3457,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 91
-          TabOrder = 30
+          TabOrder = 29
           object cbOffline: TCheckBox
             AnchorSideLeft.Control = pnlOffline
             AnchorSideTop.Control = pnlOffline
@@ -3641,7 +3487,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 31
+          TabOrder = 30
           object sbtnLocatorMap: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn0
             AnchorSideLeft.Side = asrCenter
@@ -3706,7 +3552,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 32
+          TabOrder = 31
           object sbtnAttach: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn1
             AnchorSideLeft.Side = asrCenter
@@ -3771,7 +3617,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 33
+          TabOrder = 32
           object sbtnQSL: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn2
             AnchorSideLeft.Side = asrCenter
@@ -3876,7 +3722,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 34
+          TabOrder = 33
           object sbtneQSL: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn3
             AnchorSideLeft.Side = asrCenter
@@ -3940,7 +3786,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 35
+          TabOrder = 34
           object sbtnLoTW: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn4
             AnchorSideLeft.Side = asrCenter
@@ -4004,7 +3850,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 36
+          TabOrder = 35
           object sbtnQRZ: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn5
             AnchorSideLeft.Side = asrCenter
@@ -4071,7 +3917,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 37
+          TabOrder = 36
           object sbtnHamQTH: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn6
             AnchorSideLeft.Side = asrCenter
@@ -4137,7 +3983,7 @@ object frmNewQSO: TfrmNewQSO
           BevelOuter = bvNone
           ClientHeight = 25
           ClientWidth = 25
-          TabOrder = 38
+          TabOrder = 37
           object sbtnUsrbtn: TSpeedButton
             AnchorSideLeft.Control = pnlSbtn7
             AnchorSideLeft.Side = asrCenter
@@ -4220,31 +4066,32 @@ object frmNewQSO: TfrmNewQSO
       end
     end
     object pnlDXCCinfo: TPanel
+      AnchorSideTop.Control = pnlProfiles
       AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = pnlAll
       AnchorSideBottom.Side = asrBottom
-      Left = 708
-      Height = 533
+      Left = 765
+      Height = 509
       Top = 35
-      Width = 271
-      Align = alRight
+      Width = 278
+      Anchors = [akTop, akRight, akBottom]
+      BorderSpacing.Bottom = 20
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 484
-      ClientHeight = 533
-      ClientWidth = 271
+      ClientHeight = 509
+      ClientWidth = 278
       TabOrder = 1
       object gbDXCCdata: TGroupBox
-        AnchorSideLeft.Control = pnlDXCCinfo
-        AnchorSideLeft.Side = asrCenter
-        AnchorSideTop.Control = pnlDXCCinfo
         Left = 6
-        Height = 484
+        Height = 460
         Top = 4
         Width = 258
         BorderSpacing.Top = 4
         BorderSpacing.Bottom = 4
         Caption = 'DXCC info'
-        ClientHeight = 466
+        ClientHeight = 442
         ClientWidth = 256
         ParentFont = False
         TabOrder = 0
@@ -4388,7 +4235,6 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblWAZ
           AnchorSideTop.Control = lblLatCaption
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblLatCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
           Height = 17
@@ -4745,8 +4591,6 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object pnlDXCCCountry: TPanel
-          AnchorSideLeft.Control = gbDXCCdata
-          AnchorSideTop.Control = gbDXCCdata
           Left = 0
           Height = 88
           Top = 0
@@ -4758,30 +4602,27 @@ object frmNewQSO: TfrmNewQSO
           ClientWidth = 256
           TabOrder = 0
           object mCountry: TMemo
-            AnchorSideLeft.Control = pnlDXCCCountry
-            AnchorSideTop.Control = pnlDXCCCountry
             Left = 0
             Height = 88
             Top = 0
             Width = 256
             Align = alClient
             ParentFont = False
+            ReadOnly = True
             TabOrder = 0
           end
         end
         object mCallBook: TMemo
-          AnchorSideLeft.Control = pnlDXCCCountry
-          AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = lblCallbookInformation
           AnchorSideTop.Side = asrBottom
-          AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 145
+          Height = 121
           Top = 321
           Width = 256
           Align = alBottom
-          Anchors = [akTop, akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight, akBottom]
           ParentFont = False
+          ReadOnly = True
           ScrollBars = ssAutoBoth
           TabOrder = 1
         end
@@ -4805,28 +4646,27 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 6
         Height = 35
-        Top = 492
+        Top = 471
         Width = 130
         Anchors = [akLeft, akBottom]
         AutoSize = True
-        BorderSpacing.Bottom = 6
+        BorderSpacing.Bottom = 3
         BorderSpacing.InnerBorder = 1
         Caption = 'Save QSO [enter]'
         TabOrder = 1
         OnClick = btnSaveClick
       end
       object btnCancel: TButton
+        AnchorSideTop.Control = btnSave
         AnchorSideRight.Control = gbDXCCdata
         AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = pnlDXCCinfo
         AnchorSideBottom.Side = asrBottom
         Left = 151
         Height = 35
-        Top = 492
+        Top = 471
         Width = 113
-        Anchors = [akRight, akBottom]
+        Anchors = [akTop, akRight]
         AutoSize = True
-        BorderSpacing.Bottom = 6
         BorderSpacing.InnerBorder = 1
         Caption = 'Quit [CTRL+Q]'
         ModalResult = 2
@@ -4839,12 +4679,12 @@ object frmNewQSO: TfrmNewQSO
       Left = 1
       Height = 34
       Top = 1
-      Width = 978
+      Width = 1042
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 34
-      ClientWidth = 978
+      ClientWidth = 1042
       TabOrder = 2
       object lblQSONr: TLabel
         AnchorSideLeft.Control = lblQSONrDesc
@@ -4945,9 +4785,10 @@ object frmNewQSO: TfrmNewQSO
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
       Left = 1
-      Height = 19
-      Top = 568
-      Width = 978
+      Height = 20
+      Top = 544
+      Width = 1042
+      AutoSize = False
       Panels = <      
         item
           Width = 50
@@ -4966,13 +4807,173 @@ object frmNewQSO: TfrmNewQSO
         end>
       SimplePanel = False
     end
+    object gbContest: TGroupBox
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlDXCCinfo
+      AnchorSideRight.Control = pnlDXCCinfo
+      Left = 565
+      Height = 215
+      Top = 35
+      Width = 200
+      Anchors = [akTop, akRight]
+      Caption = 'Contest'
+      ClientHeight = 197
+      ClientWidth = 198
+      TabOrder = 4
+      Visible = False
+      object lblContestName: TLabel
+        AnchorSideLeft.Control = gbContest
+        AnchorSideTop.Control = gbContest
+        Left = 3
+        Height = 17
+        Top = 3
+        Width = 87
+        BorderSpacing.Left = 3
+        BorderSpacing.Top = 3
+        Caption = 'Contestname'
+      end
+      object lblContestSerialSent: TLabel
+        AnchorSideLeft.Control = lblContestName
+        AnchorSideTop.Control = edtContestName
+        AnchorSideTop.Side = asrBottom
+        Left = 3
+        Height = 17
+        Top = 63
+        Width = 69
+        BorderSpacing.Top = 6
+        Caption = 'Serial sent'
+      end
+      object lblContestSerialReceived: TLabel
+        AnchorSideLeft.Control = lblContestName
+        AnchorSideTop.Control = edtContestSerialSent
+        AnchorSideTop.Side = asrBottom
+        Left = 3
+        Height = 17
+        Top = 123
+        Width = 69
+        BorderSpacing.Top = 6
+        Caption = 'Serial rcvd'
+      end
+      object lblContestExchangeMessageSent: TLabel
+        AnchorSideLeft.Control = lblContestSerialSent
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = lblContestSerialSent
+        Left = 81
+        Height = 17
+        Top = 63
+        Width = 59
+        BorderSpacing.Left = 9
+        Caption = 'Msg sent'
+      end
+      object lblContestExchangeMessageReceived: TLabel
+        AnchorSideLeft.Control = lblContestExchangeMessageSent
+        AnchorSideTop.Control = lblContestSerialReceived
+        Left = 81
+        Height = 17
+        Top = 123
+        Width = 59
+        Caption = 'Msg rcvd'
+      end
+      object edtContestName: TEdit
+        AnchorSideLeft.Control = lblContestName
+        AnchorSideTop.Control = lblContestName
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = gbContest
+        AnchorSideRight.Side = asrBottom
+        Left = 3
+        Height = 34
+        Hint = 'name of contest, max 40 characters allowed'
+        Top = 23
+        Width = 192
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 3
+        BorderSpacing.Right = 3
+        MaxLength = 40
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        TextHint = 'max 40 characters'
+        OnChange = edtCountyChange
+      end
+      object edtContestSerialSent: TEdit
+        AnchorSideLeft.Control = lblContestName
+        AnchorSideTop.Control = lblContestSerialSent
+        AnchorSideTop.Side = asrBottom
+        Left = 3
+        Height = 34
+        Hint = 'serial number sent of contest, max 6 characters'
+        Top = 83
+        Width = 64
+        BorderSpacing.Top = 3
+        MaxLength = 6
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+      end
+      object edtContestSerialReceived: TEdit
+        AnchorSideLeft.Control = lblContestName
+        AnchorSideTop.Control = lblContestSerialReceived
+        AnchorSideTop.Side = asrBottom
+        Left = 3
+        Height = 34
+        Hint = 'rserial number received of contest, max 6 characters'
+        Top = 146
+        Width = 64
+        BorderSpacing.Top = 6
+        MaxLength = 6
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 2
+      end
+      object edtContestExchangeMessageSent: TEdit
+        AnchorSideLeft.Control = lblContestExchangeMessageSent
+        AnchorSideTop.Control = edtContestSerialSent
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = gbContest
+        AnchorSideRight.Side = asrBottom
+        Left = 81
+        Height = 34
+        Hint = 'contest exchange message sent, max 50 characters'
+        Top = 83
+        Width = 114
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 6
+        BorderSpacing.Right = 3
+        MaxLength = 50
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+        TextHint = 'max 50 characters'
+        OnChange = edtCountyChange
+      end
+      object edtContestExchangeMessageReceived: TEdit
+        AnchorSideLeft.Control = lblContestExchangeMessageReceived
+        AnchorSideTop.Control = edtContestSerialReceived
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = gbContest
+        AnchorSideRight.Side = asrBottom
+        Left = 81
+        Height = 34
+        Hint = 'contest exchange message received, max 50 characters'
+        Top = 146
+        Width = 114
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Right = 3
+        MaxLength = 50
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 4
+        TextHint = 'max 50 characters'
+        OnChange = edtCountyChange
+      end
+    end
   end
   object dbgrdQSOBefore: TDBGrid
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 50
+    Height = 65
     Top = 0
-    Width = 980
+    Width = 1044
     Align = alClient
     Color = clWindow
     Columns = <>

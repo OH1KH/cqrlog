@@ -157,7 +157,6 @@ type
     CaretMousePos   : integer;
     radio : TRigControl;
     old_mode : String;
-    StopPwrUpdate: integer;
 
     btn160MBand : String;
     btn80MBand : String;
@@ -179,12 +178,14 @@ type
     procedure UpdateModeButtons(mode : String);
 
     procedure UserButton(r, b : Char);
+
   public
     AutoMode : Boolean;
     infosetstage : Integer;
     infosetfreq : String;
     RigInUse    : String;  //rig in use. Number as string
     IsNewHamlib : Boolean;
+    StopPwrUpdate: integer;
 
     procedure SynTRX;
 
@@ -1799,23 +1800,26 @@ Begin
     inc(StopPwrUpdate);
     exit;
    end;
- if (mnuShowPwrBar.Checked and mnuShowPwrBar.Enabled and radio.GetRFPower and (StopPwrUpdate=0)) then
+ if assigned(radio) then
   begin
-       tmp:=radio.PwrPcnt;
-       if tryStrToFloat(tmp,f) then
-        begin
-         tbPwr.Min:=0;
-         tbPwr.Max:=100;
-         tbPwr.Enabled:=True;
-         tbPwr.Position:=round(f*100);
-         lblPwrBar.Font.Height:=8;
-         tmp:=radio.PwrmW;
-         if tryStrToFloat(tmp,f) then
-            lblPwrBar.Caption:=IntToStr(Round(f/ 1000))+'W';
-         pnlPwrBar.Visible:=true;
-        end
-    else
-     pnlPwrBar.Visible:=false;
+     if (mnuShowPwrBar.Checked and mnuShowPwrBar.Enabled and radio.GetRFPower and (StopPwrUpdate=0)) then
+      begin
+           tmp:=radio.PwrPcnt;
+           if tryStrToFloat(tmp,f) then
+            begin
+             tbPwr.Min:=0;
+             tbPwr.Max:=100;
+             tbPwr.Enabled:=True;
+             tbPwr.Position:=round(f*100);
+             lblPwrBar.Font.Height:=8;
+             tmp:=radio.PwrmW;
+             if tryStrToFloat(tmp,f) then
+                lblPwrBar.Caption:=IntToStr(Round(f/ 1000))+'W';
+             pnlPwrBar.Visible:=true;
+            end
+        else
+         pnlPwrBar.Visible:=false;
+      end;
   end;
 end;
 
