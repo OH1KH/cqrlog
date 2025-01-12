@@ -1190,7 +1190,9 @@ begin
   tmrRadio.Enabled := False;
   pnlPwrBar.Visible:=false;
   StopPwrUpdate := 1;  //true
-  if Assigned(radio) then FreeAndNil(radio);
+
+  if Assigned(radio) then
+                         FreeAndNil(radio);
 
   Application.ProcessMessages;
   Sleep(500);
@@ -1258,11 +1260,19 @@ begin
       end
   else  //radio changed, restart CW interface
     begin
-      While not radio.InitDone do
+      While (not radio.ResponseTimeout) do
             begin
               sleep(5);
                Application.ProcessMessages;
             end;
+      if radio.ResponseTimeout then
+         Begin
+          ShowMessage('Radio did not respond within timeout.'+lineEnding+
+                      'Check cables and that power is on'+lineEnding+
+                      'After that try NewQSO/File/Refresh TRX/ROT control');
+          FreeAndNil(radio);
+          exit;
+         end;
 
       IsNewHamlib:=radio.IsNewHamlib;
       //we check this again although preferences prevent false setting

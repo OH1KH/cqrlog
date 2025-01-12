@@ -62,6 +62,7 @@ type TRigControl = class
     fSetFunc        : boolean; //if can set/get func then test "U currVFO ?" supported functions "fSupFuncs"
     fGetFunc        : boolean;
     fSupFuncs       : String;
+    fResponseTimeout : Boolean;
     AllowCommand    : integer; //for command priority
     ErrorRigctldConnect : Boolean;
     ConnectionDone  : Boolean;
@@ -155,6 +156,8 @@ public
 
     property PwrPcnt :  String read fPwrPcnt write fPwrPcnt;
     property PwrmW   :  String read fPwrmW   write fPwrmW;
+
+    property ResponseTimeout : Boolean read fResponseTimeout;
 
     //Char to use between compound commands. Default is space, can be also LineEnding that breaks compound
     property CompoundPoll : Boolean read fCompoundPoll  write  fCompoundPoll;
@@ -344,13 +347,14 @@ begin
   ErrorRigctldConnect := False;
   ConnectionDone      := False;
   InitDone            :=false;
+  fResponseTimeout    :=false;
 
   if RigctldConnect.Connect(fRigCtldHost,fRigCtldPort) then//this does not work as connection indicator, is always true!!
    Begin
      repeat
          begin
             if fDebugMode then
-                          Writeln('Waiting for rigctld ',RetryCount,' @ ',fRigCtldHost,':',fRigCtldPort);
+                          Writeln('Waiting for rigctld Poll ',RetryCount,' @ ',fRigCtldHost,':',fRigCtldPort);
             if  ErrorRigctldConnect then
                 Begin
                   ErrorRigctldConnect := False;
@@ -362,6 +366,20 @@ begin
           end;
      until (ConnectionDone or (Retrycount > 10)) ;
 
+     if ConnectionDone then
+      Begin
+       if fDebugMode then
+                     Writeln('Connected to rigctld Poll (RigConnected)');
+       result := True
+      end
+    else
+      begin
+       if fDebugMode then
+                     Writeln('RETRY ERROR: *NOT* connected to rigctld Poll @ ',fRigCtldHost,':',fRigCtldPort);
+       fLastError := ERR_MSG;
+       Result     := False
+      end;
+
    //connection 2
    if ConnectionDone then
     Begin
@@ -372,7 +390,7 @@ begin
            repeat
            begin
               if fDebugMode then
-                            Writeln('Waiting for Cmd rigctld ',RetryCount,' @ ',fRigCtldHost,':',fRigCtldPort);
+                            Writeln('Waiting for rigctld Cmd ',RetryCount,' @ ',fRigCtldHost,':',fRigCtldPort);
               if  ErrorRigctldConnect then
                   Begin
                     ErrorRigctldConnect := False;
@@ -389,13 +407,13 @@ begin
     if ConnectionDone then
       Begin
        if fDebugMode then
-                     Writeln('Connected to rigctld!');
+                     Writeln('Connected to rigctld Cmd! (RigConnected)');
        result := True
       end
     else
       begin
        if fDebugMode then
-                     Writeln('RETRY ERROR: *NOT* connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
+                     Writeln('RETRY ERROR: *NOT* connected to rigctld Cmd @ ',fRigCtldHost,':',fRigCtldPort);
        fLastError := ERR_MSG;
        Result     := False
       end;
@@ -682,7 +700,7 @@ begin
     begin
       Hit:=false;
       //if DebugMode then
-        // Writeln('a[i]:',a[i]);
+         Writeln('a[i]:',a[i]);
       if a[i]='' then Continue;
 
       //we send all commands with '+' prefix that makes receiving sort lot easier
@@ -1008,8 +1026,8 @@ begin
                   Begin
                     if DebugMode then
                                 Writeln('Rig/rigctld did not respond to command within timeout!');
-                    fPollCount :=  fPollTimeout;
-                    AllowCommand:=1;
+                    tmrRigPoll.Enabled  := False;
+                    fResponseTimeout := true;
                   end;
                Exit;   //no sending allowed
            end;
@@ -1081,14 +1099,13 @@ end;
 procedure TRigControl.OnConnectRigctldConnect(aSocket: TLSocket);
 Begin
     if DebugMode then
-                   Writeln('Connected to rigctld');
-    ConnectionDone:=true;
+                   Writeln('Connected to rigctld Poll (OnConnect)');
+
     ParmHasVfo:=0;   //default: "--vfo" is not used as start parameter
     AllowCommand:=10;  //start with chk_vfo
     RigCommand.Clear;
     tmrRigPoll.Interval := fRigPoll;
     tmrRigPoll.Enabled  := True;
-
 
     if RigChkVfo then
       Begin
@@ -1100,7 +1117,7 @@ Begin
         AllowCommand:=9;  //otherwise start with dump caps
         ParmVfoChkd:=false;
       end;
-
+    ConnectionDone:=true;
 end;
 procedure TRigControl.OnErrorRigctldConnect(const msg: string; aSocket: TLSocket);
 
@@ -1114,10 +1131,13 @@ procedure TRigControl.Restart;
 var
   excode : Integer = 0;
 begin
-  rigProcess.Terminate(excode);
   tmrRigPoll.Enabled := False;
   sleep(fRigPoll);
-  RigctldConnect.Disconnect();
+  RigctldConnect.Disconnect(true);
+  RigctldCmd.Disconnect(true);
+  sleep(100);
+  rigProcess.Terminate(excode);
+
   RigConnected
 end;
 
@@ -1239,6 +1259,8 @@ Begin
 end;
 procedure TRigControl.OnConnectRigctldCmd(aSocket: TLSocket);
 Begin
+ if DebugMode then
+                   Writeln('Connected to rigctld Cmd! (OnConnect)');
   RigCmdChannelBusy :=false;
   RigCmdChannelMsg  :='';
   ConnectionDone    :=True;
