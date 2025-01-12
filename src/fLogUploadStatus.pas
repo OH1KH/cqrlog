@@ -280,6 +280,16 @@ begin
           else
             ToMainThread(Response,'');
 
+          {*
+           Here could be:
+
+           if (Response='Unable to find QSO') then
+                                             ErrorCode := 0;
+
+           it could work when HRDlog says  'Unable to find QSO' because alreary deleted qso and stuck into deleting loop
+           but who can test this? I can not!
+          *}
+
           if (ErrorCode = 1) then
           begin
             if AlreadyDel then  //if cmd was update, delete was successful but new insert was not

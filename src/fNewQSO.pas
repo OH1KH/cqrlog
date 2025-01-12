@@ -4714,13 +4714,13 @@ begin
   if Assigned(CWint) then
   begin
     CWint.TuneStart;
-    ShowMessage('Tuning started via CW interface... '+LineEnding+LineEnding+'OK to abort');
+    dmUtils.ShowTheMessage('Message','Tuning started... '+LineEnding+LineEnding+'OK to abort',10000);
     CWint.TuneStop
   end
   else
    begin
     frmTRXControl.HLTune(true);
-    ShowMessage('Tuning started via rigctld... '+LineEnding+LineEnding+'OK to abort');
+    dmUtils.ShowTheMessage('Message','Tuning started... '+LineEnding+LineEnding+'OK to abort',10000);
     frmTRXControl.HLTune(false);
   end
 end;

@@ -122,6 +122,7 @@ type
     procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
     procedure ModeConvListsCreate(SetUp:boolean);
     procedure MakeMissingModeFile(num:integer);
+    procedure TheButtonClick(Sender: TObject);
 
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
@@ -245,6 +246,7 @@ type
     procedure DateHoursAgo(hours:integer;var Adate,Atime:string);
     procedure FillNewBandModeLimits; //upgrade new limits to modes table
     procedure GetUserMode(var mode : String);
+    procedure ShowTheMessage(Title:String; Message:String; Time:longint);
 
     function  UTF8UpperFirst(Value:UTF8String):UTF8String;
     function  IsNonAsciiChrs(s:string):Boolean;
@@ -5903,6 +5905,53 @@ Begin
   if hours=0 then exit; //no need to calculate
   ADate := DateTimeToStr(DateOf(UnixTODateTime(DateTimeToUnix(now)-(hours * 3600))));
   ATime := copy(TimeToStr(TimeOf(UnixTODateTime(DateTimeToUnix(now)-(hours * 3600)))),1,5);
+end;
+procedure  TdmUtils.ShowTheMessage(Title:String; Message:String; Time:integer);   //time in milliseconds
+var
+ TheForm: TForm;
+ TheButton: TButton;
+ TheLabel: Tlabel;
+
+Begin
+  TheForm:=TForm.Create(nil);
+  TheForm.SetBounds(100, 100, 220, 150);
+  TheForm.Caption:=Title;
+  TheForm.Position := poScreenCenter;
+  TheForm.FormStyle := fsSystemStayOnTop;
+  TheForm.Position:= poWorkAreaCenter;
+
+  TheButton:=TButton.create(TheForm);
+  TheButton.Caption:='OK    ('+IntToStr(Time div 1000)+')';
+  TheButton.SetBounds(10, 110, 200, 30);
+  TheButton.Parent:=TheForm;
+  TheButton.OnClick:=@TheButtonClick;
+
+  TheLabel:=Tlabel.Create(TheForm);
+  TheLabel.SetBounds(10,10,200,100);
+  TheLabel.Caption:=Message;
+  TheLabel.AutoSize:=true;
+  TheLabel.Anchors := [akLeft, akRight];
+  TheLabel.Parent:=TheForm;
+  TheLabel.WordWrap:=true;
+
+  TheForm.Show;
+
+  While Time>0 do
+   Begin
+    Application.ProcessMessages;
+    sleep(100);
+    Time:=Time-100;
+    TheButton.Caption:='OK    ('+IntToStr(Time div 1000)+')';
+   end;
+  TheButtonClick(TheButton);
+
+  FreeAndNil(TheForm);
+
+end;
+procedure TdmUtils.TheButtonClick(Sender: TObject);
+begin
+  if Sender is TButton then
+    TForm(TButton(Sender).Parent).Close;
 end;
 
 end.
