@@ -76,6 +76,7 @@ type TRigControl = class
     function  StartRigctld   : Boolean;
     function  Explode(const cSeparator, vString: String): TExplodeArray;
     function  SendCmd(cmd:string):boolean;
+    function  SendPoll(msg:string):boolean;
 
     //Connect is for rig initate and fmv polling
     procedure OnReceivedRigctldConnect(aSocket: TLSocket);
@@ -212,7 +213,7 @@ begin
   if DebugMode then Writeln('In create');
   fRigCtldHost         := 'localhost';
   fRigCtldPort         := 4532;
-  fRigPoll             := 500;
+  fRigPoll             := 500;   //Check relationship to fPollTimeout
   fRunRigCtld          := True;
   RigctldConnect       := TLTCPComponent.Create(nil);
   RigctldCmd           := TLTCPComponent.Create(nil);
@@ -228,7 +229,7 @@ begin
   fGetSplitTX          := false;  //poll rig polls also split TX vfo
   PowerOffIssued       := false;
   fCompoundPoll        := True;
-  fPollTimeout         := 15;  //max count of false responses when polled
+  fPollTimeout         := 20;  //max count of false responses when polled. Set_power ON is critical. Must be big enough to allow rig wake up.
   fPollCount           := fPollTimeout;
   fRigSplitActive      := False;
   fGetRFPower          := false;
@@ -424,7 +425,8 @@ begin
                   Writeln('SETTINGS ERROR: *NOT* connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
     fLastError := ERR_MSG;
     Result     := False
-   end
+   end;
+
 end;
 
 
@@ -469,7 +471,8 @@ Begin
 end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
-  SendCmd('+\set_xit'+VfoStr+' '+IntToStr(up));
+  if not SendCmd('+\set_xit'+VfoStr+' '+IntToStr(up)) then
+                                                      exit;
   if pos('RPRT 0', RigCmdChannelMsg)>0 then
     SendCmd( '+\set_func'+VfoStr+' XIT 1');
 end;
@@ -503,13 +506,13 @@ begin
 end;
 procedure TRigControl.PwrOff;
 begin
-  SendCmd('+\set_powerstat 0');
   PowerOffIssued:=true;
+  RigCommand.Add('+\set_powerstat 0');
 end;
 procedure TRigControl.PwrStBy;
 begin
-  SendCmd('+\set_powerstat 2');
-  PowerOffIssued:=true;
+   PowerOffIssued:=true;
+   RigCommand.Add('+\set_powerstat 2');
 end;
 procedure TRigControl.UsrCmd(cmd:String);
 begin
@@ -531,7 +534,10 @@ function TRigControl.GetModePass : TRigMode;
 begin
   result := fMode
 end;
-
+function TRigControl.GetRawMode : String;
+begin
+  Result := fMode.raw
+end;
 function TRigControl.GetModeOnly : String;
 begin
   result := fMode.mode
@@ -568,7 +574,8 @@ begin
   if not fGetRFPower then exit;
   fPwrPcnt:= '';
   Result:=-1; //error or not set
-  SendCmd('+\get_level'+VfoStr+' RFPOWER');
+  if not SendCmd('+\get_level'+VfoStr+' RFPOWER') then
+                                                  exit;
   if pos('RPRT 0', RigCmdChannelMsg)>0 then
    begin
     fPwrPcnt:= ExtractWord(2,RigCmdChannelMsg,['|']);
@@ -591,7 +598,8 @@ begin
     GetPowerPercent;
     if GetPowerPercent >-1 then
        Begin
-        SendCmd('+\power2mW '+fPwrPcnt+' '+f+' '+fMode.mode);
+        if not SendCmd('+\power2mW '+fPwrPcnt+' '+f+' '+fMode.mode) then
+                                                                    exit;
         if pos('RPRT 0', RigCmdChannelMsg)>0 then
          Begin
          f:= ExtractWord(2,RigCmdChannelMsg,['|']);
@@ -685,19 +693,20 @@ var
   f   : Double;
   Hit : boolean;
   tmp : string;
+  MaxArg: integer;
 
 begin
   msg:='';
-  try
-  while ( aSocket.GetMessage(msg) > 0 ) do
+  while (( aSocket.GetMessage(msg) > 0 ) and (not ResponseTimeout)) do
   begin
     msg := StringReplace(upcase(trim(msg)),#$09,' ',[rfReplaceAll]); //note the char case upper for now on! Remove TABs
-
     if DebugMode then
          Writeln('Msg from rig:',StringReplace(msg,LineEnding,'|',[rfReplaceAll]));
 
-    a := Explode(LineEnding,msg);
-    for i:=0 to Length(a)-1 do     //this handles received message line by line
+     a := Explode(LineEnding,msg);
+    MaxArg:=Length(a)-1;
+
+    for i:=0 to MaxArg do     //this handles received message line by line
     begin
       Hit:=false;
       if DebugMode then
@@ -863,33 +872,45 @@ begin
                       Writeln('Cqrlog can get power2mW: ',fGetRFPower);
                       Writeln('Cqrlog can set mW2power: ',fSetRFPower,LineEnding);
                    end;
+
          if fSetFunc then
-                 RigctldConnect.SendMessage('+\set_func'+VfoStr+' ?'+LineEnding);
-         InitDone:=true;
+                 RigCommand.Add('+\set_func'+VfoStr+' ?'+LineEnding)
+          else
+            Begin
+             sleep(1000);
+             InitDone:=true;
+            end;
+
          Break;  //break searching from \dump_caps reply
        end;
       //\dump_caps end
 
-       if ((pos('RFPOWER',a[i])>0) and (pos('RPRT 0',a[i+2])>0)) then
-        Begin
-         fPwrPcnt:= a[i+1];
-         tmp:=FloatToStr(fFreq);
-         if fGetRFPower then
-          begin
-           RigctldConnect.SendMessage('+\power2mW '+fPwrPcnt+' '+tmp+' '+fMode.mode+LineEnding);
+       if ((pos('RFPOWER',a[i])>0) and (i+2 <= MaxArg)) then //must check that array a[] has i+2 members
+         if (pos('RPRT 0',a[i+2])>0) then
+          Begin
+           Hit:=true;
+           fPwrPcnt:= a[i+1];
+           tmp:=FloatToStr(fFreq);
+           if fGetRFPower then
+             RigCommand.Add('+\power2mW '+fPwrPcnt+' '+tmp+' '+fMode.mode+LineEnding);
           end;
 
-        end;
-
-       if ((pos('POWER MW:',a[i])>0) and (pos('RPRT 0',a[i+1])>0)) then
-        Begin
+       if ((pos('POWER MW:',a[i])>0) and (i+1 <= MaxArg)) then
+        if(pos('RPRT 0',a[i+1])>0) then
+         Begin
+          Hit:=true;
           fPwrmW:=b[2];
-        end;
+         end;
 
-       if ((pos('SET_FUNC',a[i])>0) and (pos('?',a[i])>0) and (pos('RPRT 0',a[i+2])>0)) then
-        Begin
-          fSupFuncs:=a[i+1];
-        end;
+       if ((pos('SET_FUNC',a[i])>0) and (pos('?',a[i])>0) and  (i+2 <= MaxArg)) then
+        if (pos('RPRT 0',a[i+2])>0) then
+          Begin
+            Hit:=true;
+            fSupFuncs:=a[i+1];
+            InitDone:=true;
+            AllowCommand:=1;
+            Break;
+          end;
 
        if pos('SET_POWERSTAT:',a[i])>0 then
        Begin
@@ -902,8 +923,9 @@ begin
           end
          else
           Begin
-            if DebugMode then Writeln('Power off, stop polling (0)');
+            if DebugMode then Writeln('Power off, stop poll decode (-2)');
             AllowCommand:=-2; //there is no timeout for this
+            Exit;
           end;
        end;
 
@@ -917,8 +939,7 @@ begin
 
    end;  //line by line loop
   end; //while msg
-  finally
-  end;
+
 end;
 procedure TRigControl.OnRigPollTimer(Sender: TObject);
 var
@@ -931,7 +952,10 @@ var
    s:array[1..5] of string=('','','','','');
 
 begin
- if PowerOffIssued then exit;
+  if   ((not RigctldConnect.Connected)
+         or ResponseTimeout )
+                       then exit;
+
  if  ParmHasVfo=2 then
    begin
      if fGetVfo then
@@ -991,7 +1015,7 @@ begin
        Begin
         if DebugMode then
            Write(LineEnding+'Poll Sending:'+trim(s[1]+' '+s[2]+' '+s[3]+' '+s[4]+' '+s[5])+LineEnding);
-        RigctldConnect.SendMessage(trim(s[1]+' '+s[2]+' '+s[3]+' '+s[4]+' '+s[5])+LineEnding);
+        if not SendPoll(trim(s[1]+' '+s[2]+' '+s[3]+' '+s[4]+' '+s[5])+LineEnding) then exit;
        end
       else
         Begin
@@ -1001,7 +1025,7 @@ begin
                Begin
                   if DebugMode then
                         Write(LineEnding+'Poll Sending:'+s[f]+LineEnding);
-                  RigctldConnect.SendMessage(s[f]+LineEnding);
+                  if not SendPoll(s[f]+LineEnding) then exit;
                end
               else
               break;
@@ -1010,7 +1034,7 @@ begin
         end;
 
   if fGetRFPower then
-    RigctldConnect.SendMessage('+\get_level'+VfoStr+' RFPOWER'+LineEnding);
+    rigCommand.Add('+\get_level'+VfoStr+' RFPOWER'+LineEnding);
 
  AllowCommand:=-1; //waiting for reply
  fPollCount :=  fPollTimeout;
@@ -1050,7 +1074,7 @@ begin
                cmd:='+\chk_vfo'+LineEnding;
                if DebugMode then
                      Write(LineEnding+'Sending: '+cmd);
-               RigctldConnect.SendMessage(cmd);
+               if not SendPoll(cmd) then exit;
                AllowCommand:=-1; //waiting for reply
                fPollCount :=  fPollTimeout;
           end;
@@ -1058,7 +1082,7 @@ begin
                cmd:='+\dump_caps'+LineEnding;
                 if DebugMode then
                      Write(LineEnding+'Sending: '+cmd);
-               RigctldConnect.SendMessage(cmd);
+               if not SendPoll(cmd) then exit;
                AllowCommand:=-1; //waiting for reply
                fPollCount :=  fPollTimeout;
           end;
@@ -1066,7 +1090,7 @@ begin
                cmd:= '+\set_powerstat 1'+LineEnding;
                if DebugMode then
                      Write(LineEnding+'Sending: '+cmd);
-               RigctldConnect.SendMessage(cmd);
+               if not SendPoll(cmd) then exit;
                AllowCommand:=-1; //waiting for reply
                fPollCount :=  fPollTimeout;
           end;
@@ -1085,12 +1109,12 @@ begin
                   RigCommand.Delete(RigCommand.Count-1);
                   if DebugMode then
                      write('Queue out:'+LineEnding,RigCommand.Text);
-                  RigctldConnect.SendMessage(cmd);
+                  if not SendPoll(cmd) then exit;
                   AllowCommand:=-1; //wait answer
                   fPollCount :=  fPollTimeout;
                end
               else
-               DoRigPOll;
+               DoRigPoll;
           end;
 
        //polling has lowest prority, do if there is nothing else to do
@@ -1128,7 +1152,15 @@ begin
   if DebugMode then
                    writeln(msg);
 end;
-
+function TRigControl.SendPoll(msg:string):boolean;
+begin
+  Result:=false;
+  if   ((not RigctldConnect.Connected)
+         or ResponseTimeout )
+                       then exit;
+  RigctldConnect.SendMessage(msg);
+  Result:=true;
+end;
 procedure TRigControl.Restart;
 var
   excode : Integer = 0;
@@ -1160,11 +1192,6 @@ begin
   end;
   SetLength(Result, Length(Result) +1);
   Result[i] := Copy(S, 1, Length(S))
-end;
-
-function TRigControl.GetRawMode : String;
-begin
-  Result := fMode.raw
 end;
 
 destructor TRigControl.Destroy;
@@ -1199,9 +1226,13 @@ function TRigControl.SendCmd(cmd:string):boolean;
 var
    t: integer;
 Begin
- if not RigctldCmd.Connected then exit;
+
  t:=0;
  Result:=false;
+ if   ((not RigctldCmd.Connected)
+         or ResponseTimeout
+         or PowerOffIssued )
+                       then exit;
 
  while (RigCmdChannelBusy and (t<2000)) do //waiting for free channel
   Begin
@@ -1232,7 +1263,7 @@ Begin
    inc(t);
   end;
   until ( not RigCmdChannelBusy ) or (t>2000);
-  if t>1000 then
+  if t>2000 then
            Begin
                if DebugMode then
                 Writeln('Send cmd: Failed to get response to: ',cmd);
@@ -1245,7 +1276,7 @@ var
   s:string;
 Begin
   RigCmdChannelMsg := '';
-  while ( aSocket.GetMessage(s) > 0 ) do
+  while (( aSocket.GetMessage(s) > 0 ) and (not ResponseTimeout)) do
     RigCmdChannelMsg := RigCmdChannelMsg+StringReplace(upcase(trim(s)),#$09,' ',[rfReplaceAll]); //note the char case upper for now on! Remove TABs
 
   RigCmdChannelMsg := StringReplace(RigCmdChannelMsg,LineEnding,'|',[rfReplaceAll]);

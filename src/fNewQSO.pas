@@ -1272,7 +1272,6 @@ var
   since  : String;
   lat,long : Currency;
 begin
-  btnCancel.Enabled:=True;
   if fViewQSO then
   begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) then
@@ -1465,6 +1464,12 @@ begin
   dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
   dmUtils.HamClockSetNewDX('','',CurrentMyloc);   //a way to clear SP/LP line (but draws vertical line instead)
   DetailsCMBColorDone:='';
+
+  btnCancel.Caption:='Quit [CTRL+Q]';
+  btnCancel.Font.Color:=clDefault;
+  btnCancel.Font.Style:=[];
+  btnCancel.Repaint;
+  Application.ProcessMessages;
 
 end;
 
@@ -3517,12 +3522,23 @@ end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
 begin
-  btnCancel.Caption:='Closing...';
-  btnCancel.Font.Color:=clRed;
-  btnCancel.Font.Style:=[fsBold];
-  btnCancel.Repaint;
-  Application.ProcessMessages;
-  acClose.Execute
+  if edtCall.Text<>'' then
+   Begin
+    btnCancel.Caption:='Clear Call!';
+    btnCancel.Font.Color:=clFuchsia;
+    btnCancel.Font.Style:=[fsBold];
+    btnCancel.Repaint;
+    Application.ProcessMessages;
+   end
+  else
+   Begin
+    btnCancel.Caption:=' Closing... ';
+    btnCancel.Font.Color:=clRed;
+    btnCancel.Font.Style:=[fsBold];
+    btnCancel.Repaint;
+    Application.ProcessMessages;
+    acClose.Execute
+   end;
 end;
 
 procedure TfrmNewQSO.edtCallKeyDown(Sender: TObject; var Key: Word;
@@ -5726,7 +5742,6 @@ begin
   if (not (fEditQSO or fViewQSO)) then
     FreqBefChange := frmTRXControl.GetFreqMHz;
 
-  btnCancel.Enabled:=False; //prevent click "quit" when should click "save"
   //no need here //dmUtils.HamClockSetNewDE(CurrentMyloc,'','',UpperCase(cqrini.ReadString('Station', 'Call', '')));
   dmUtils.HamClockSetNewDX(lblLat.Caption,lblLong.Caption,edtGrid.Text);
   CheckCallsignClub;
@@ -5943,9 +5958,9 @@ begin
         acPreferences.Execute;
         key := 0;
       end;
-      if (key = VK_Q) then //why all this didnt work directly in    //VK_Q
-      begin                                            //action
-        acClose.Execute;
+      if (key = VK_Q) then                                          //VK_Q
+      begin
+        btnCancelClick(nil);
         key := 0;
         exit
       end;

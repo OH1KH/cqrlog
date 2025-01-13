@@ -1264,7 +1264,12 @@ begin
 
   if not radio.Connected then
       begin
+        ShowMessage(radio.LastError+LineEnding+
+                    'Start cqrlog from command console as:'+LineEnding+LineEnding+
+                    'cqrlog debug=1'+LineEnding+LineEnding+
+                    'to see more debug information.');
         FreeAndNil(radio);
+        Exit;
       end
   else  //radio changed, restart CW interface
     begin
@@ -1282,6 +1287,14 @@ begin
           FreeAndNil(radio);
           exit;
          end;
+
+    if radio.InitDone then
+                      Begin
+                        btPon.Font.Color := clRed;
+                        btPstby.Font.Color := clDefault;
+                        btPoff.Font.Color := clDefault;
+                      end;
+
 
       IsNewHamlib:=radio.IsNewHamlib;
       //we check this again although preferences prevent false setting
@@ -1844,9 +1857,12 @@ end;
 
 function TfrmTRXControl.GetRigPower(var pwr:string): boolean;
 Begin
- Result:=radio.GetRFPower;
- if radio.GetRFPower then
-    pwr:=radio.PwrmW;
+ if assigned(radio) then
+  Begin
+   Result:=radio.GetRFPower;
+   if radio.GetRFPower then
+      pwr:=radio.PwrmW;
+  end;
 end;
 
 end.
