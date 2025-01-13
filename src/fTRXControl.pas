@@ -295,6 +295,14 @@ var
 begin
   if Assigned(radio) then
   begin
+     if radio.ResponseTimeout then
+         Begin
+          ShowMessage('Radio did not respond within timeout.'+lineEnding+
+                      'Check cables and that Radio power is ON'+lineEnding+
+                      'After that try NewQSO/File/Refresh TRX/ROT control');
+          FreeAndNil(radio);
+          exit;
+         end;
     f := radio.GetFreqMHz;
     if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) then fs:= radio.GetSplitTXFreqMHz;
     m := radio.GetModeOnly;
@@ -1260,12 +1268,13 @@ begin
       end
   else  //radio changed, restart CW interface
     begin
-      While (not radio.ResponseTimeout) do
+      While (not radio.ResponseTimeout) and (not radio.InitDone) do
             begin
               sleep(5);
                Application.ProcessMessages;
             end;
-      if radio.ResponseTimeout then
+
+    if radio.ResponseTimeout then
          Begin
           ShowMessage('Radio did not respond within timeout.'+lineEnding+
                       'Check cables and that Radio power is ON'+lineEnding+

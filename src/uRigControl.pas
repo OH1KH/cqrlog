@@ -688,6 +688,7 @@ var
 
 begin
   msg:='';
+  try
   while ( aSocket.GetMessage(msg) > 0 ) do
   begin
     msg := StringReplace(upcase(trim(msg)),#$09,' ',[rfReplaceAll]); //note the char case upper for now on! Remove TABs
@@ -699,8 +700,8 @@ begin
     for i:=0 to Length(a)-1 do     //this handles received message line by line
     begin
       Hit:=false;
-      //if DebugMode then
-         Writeln('a[i]:',a[i]);
+      if DebugMode then
+         Writeln('a['+IntToStr(i)+']:',a[i]);
       if a[i]='' then Continue;
 
       //we send all commands with '+' prefix that makes receiving sort lot easier
@@ -916,7 +917,8 @@ begin
 
    end;  //line by line loop
   end; //while msg
-
+  finally
+  end;
 end;
 procedure TRigControl.OnRigPollTimer(Sender: TObject);
 var
