@@ -516,7 +516,7 @@ begin
 end;
 procedure TRigControl.UsrCmd(cmd:String);
 begin
-  SendCmd(cmd);
+  if (cmd<>'') then SendCmd(cmd);
 end;
 
 procedure TRigControl.SetPowerPercent(p:integer);

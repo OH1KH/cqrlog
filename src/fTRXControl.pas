@@ -985,6 +985,7 @@ var
   c : String;
 begin
   c := trim(cqrini.ReadString('TRX' + r, 'usr' + b, ''));
+  if (c='') then exit;
   if pos('RUN', uppercase(c)) = 1 then
   begin
     c := trim(copy(c, 4, length(c)));
