@@ -8005,19 +8005,17 @@ begin
 end;
 procedure TfrmNewQSO.CheckForAlphaVersion;
 var
-  p,VerNr,
+  VerNr,
   VerAvailNr : integer;
   data:string;
 Begin
   if not cqrini.ReadBool('Program', 'CheckAlpha', True) then exit;
-  p:=pos('(',cVersionBase)+1;
-  if not (TryStrToInt(ExtractSubstr(cVersionBase,p,[')']),VerNr)) then exit;
+  if not (TryStrToInt(ExtractWord(2,cVersionBase,['(',')']),VerNr)) then exit;
   VerAvailNr:=0;
-   if dmUtils.GetDataFromHttp('https://raw.githubusercontent.com/OH1KH/cqrlog/refs/heads/loc_testing/compiled/version.txt', data) then
+   if dmUtils.GetDataFromHttp('https://raw.githubusercontent.com/OH1KH/CqrlogAlpha/refs/heads/main/compiled/version.txt', data) then
   begin
     if (pos('NOT FOUND',upcase(data))<>0) then exit;
-    p:=pos('(',data)+1;
-    if not (TryStrToInt(ExtractSubstr(data,p,[')']),VerAvailNr)) then exit;
+    if not (TryStrToInt(ExtractWord(2,data,['(',')']),VerAvailNr)) then exit;
     if VerNr < VerAvailNr then
     begin
       try

@@ -1991,7 +1991,6 @@ object frmAbout: TfrmAbout
         Height = 17
         Top = 145
         Width = 94
-        BorderSpacing.Left = 6
         Caption = 'CqrlogAlpha'
         Font.Color = clRed
         Font.Style = [fsBold]
@@ -2017,8 +2016,8 @@ object frmAbout: TfrmAbout
         Left = 62
         Height = 17
         Top = 168
-        Width = 318
-        Caption = 'https://github.com/OH1KH/cqrlog/tree/loc_testing'
+        Width = 319
+        Caption = 'https://github.com/OH1KH/CqrlogAlpha/tree/main'
         Font.Color = clBlue
         Font.Style = [fsUnderline]
         ParentColor = False
@@ -2094,9 +2093,9 @@ object frmAbout: TfrmAbout
         Left = 49
         Height = 17
         Top = 188
-        Width = 382
+        Width = 383
         BorderSpacing.Top = 3
-        Caption = 'https://github.com/OH1KH/cqrlog/tree/loc_testing/compiled'
+        Caption = 'https://github.com/OH1KH/CqrlogAlpha/tree/main/compiled'
         Font.Color = clBlue
         Font.Style = [fsUnderline]
         ParentColor = False
