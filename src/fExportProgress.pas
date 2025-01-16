@@ -573,7 +573,7 @@ begin   //TfrmExportProgress
   finally
     CloseFile(f);
     if ExportType <> 2 then
-      ShowMessage('Export complete.'#13'File: ' + FileName)
+      dmUtils.ShowTheMessage('Export complete!', 'File: ' + FileName,5000)
    else
     begin
       dir      := ExtractFilePath(FileName);
@@ -1363,7 +1363,7 @@ begin
     dmData.Q.Close;
     if dmData.trQ.Active then
       dmData.trQ.Rollback;
-    ShowMessage('Export complete.'#13'File: ' + FileName);
+    dmUtils.ShowTheMessage('Export complete!', 'File: ' + FileName,5000);
     Close
   end
 end;

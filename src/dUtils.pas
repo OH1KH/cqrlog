@@ -5912,27 +5912,36 @@ var
  TheButton: TButton;
  TheLabel: Tlabel;
 
+
 Begin
   TheForm:=TForm.Create(nil);
-  TheForm.SetBounds(100, 100, 220, 150);
-  TheForm.Caption:=Title;
-  TheForm.Position := poScreenCenter;
-  TheForm.FormStyle := fsSystemStayOnTop;
-  TheForm.Position:= poWorkAreaCenter;
-
+  With TheForm do
+  Begin
+   SetBounds(100, 100, 220, 150);
+   TheForm.Caption:=Title;
+   //TheForm.Position := poScreenCenter;
+   TheForm.FormStyle := fsSystemStayOnTop;
+   TheForm.Position:= poWorkAreaCenter;
+  end;
   TheButton:=TButton.create(TheForm);
-  TheButton.Caption:='OK    ('+IntToStr(Time div 1000)+')';
-  TheButton.SetBounds(10, 110, 200, 30);
-  TheButton.Parent:=TheForm;
-  TheButton.OnClick:=@TheButtonClick;
-
+  With TheButton do
+  Begin
+   Caption:='OK    ('+IntToStr(Time div 1000)+')';
+   SetBounds(114, 114, 100, 30);
+   Anchors := [akBottom, akRight];
+   Parent:=TheForm;
+   OnClick:=@TheButtonClick;
+  end;
   TheLabel:=Tlabel.Create(TheForm);
-  TheLabel.SetBounds(10,10,200,100);
-  TheLabel.Caption:=Message;
-  TheLabel.AutoSize:=true;
-  TheLabel.Anchors := [akLeft, akRight];
-  TheLabel.Parent:=TheForm;
-  TheLabel.WordWrap:=true;
+  With TheLabel do
+  Begin
+   SetBounds(50,10,170,100);
+   Caption:=Message;
+   AutoSize:=true;
+   Anchors := [akLeft, akRight];
+   Parent:=TheForm;
+   WordWrap:=true;
+  end;
 
   TheForm.Show;
 
@@ -5948,6 +5957,7 @@ Begin
   FreeAndNil(TheForm);
 
 end;
+
 procedure TdmUtils.TheButtonClick(Sender: TObject);
 begin
   if Sender is TButton then

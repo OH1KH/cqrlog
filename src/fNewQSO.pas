@@ -6187,6 +6187,13 @@ begin
      ReturnToNewQSO;
      key := 0
     end;
+  if (key = VK_RETURN) then
+    Begin
+     mComment.Text:=mComment.Text+LineEnding;
+     mComment.SelStart:=length(mComment.Text);
+     mComment.SelLength:=0;
+     key:=0;
+    end;
 end;
 
 procedure TfrmNewQSO.mCommentKeyUp(Sender: TObject; var Key: Word;
