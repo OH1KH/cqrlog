@@ -483,12 +483,30 @@ tr:nth-child(even){background-color:#d6eeee;}
     
     
     You can add a general long note to your log with the Ctrl-N key (from
-    the logging screen or from the 'File' menu option).<br><br>
-    <img src="img/h2.png" border="0"><br><br>
+    the logging screen or from the 'File' menu option).<br>
     Ctrl-N opens a new dialog window where you can add or edit your note.
     This note is <b>not</b> related to any record, it is just a notepad allowing
     operations with your notes which are stored in your log database.<br><br>
+    <img src="img/h2.png" border="0"> 
     <img src="img/h68.png" border="0"><br><br>
+    
+    If you write <b>Comment to callsign</b> when entering a new qso it does not go to adif.<br>
+    It has separated own database table that has no backup via adif export. Only way to backup these is to copy the ~/.config/cqrlog folder
+   (actually it would be enough to copy just ~/.config/cqrlog/database folder, but I recommend to copy whole ~/.config/cqrlog structure)<br>
+
+    When you enter COMMENT TO CALLSING and save qso you will see the comment when you next time enter a new qso with same callsign.
+    So it does not disappear what you have written down.
+    You can add more comments after the existing text and when you save the second qso all them are again saved.<br>
+
+    <b>NOTE:</b> even when the COMMENT TO CALLSING field is Tmemo type field (like text editor) you can not use RETURN key to separate lines.
+    All must be entered without any line feeds (return keys) in middle. 
+    If you press return key while typing comment the qso will be saved immediately.<br><br>
+
+    If you want to see your comments, edit or delete them without entering a new qso you can do it from main menu of "NewQSO/File/Comment to callsigns"
+    <br><img src="img/h2b.png" border="0">
+    
+    
+    <br><br><br><br>
     If you check <b>Preferences/New QSO/Enable satellite mode</b> you get a new tab where 
     you can enter satellite name, rx frequency and propagation mode.
     There are several propagation modes that you can select, not only "SAT" so this 
