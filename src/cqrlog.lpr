@@ -4,7 +4,7 @@ program cqrlog;
 uses
   cmem,cthreads,uScrollBars,
   Interfaces, // this includes the LCL widgetset
-  Forms, sysutils, Classes, fMain, fPreferences, dUtils, fNewQSO, dialogs,
+  Forms, sysutils, Classes, fMain, fPreferences, dUtils, fNewQSO, dialogs, process, FileUtil, StrUtils,
   fChangeLocator, fChangeOperator, dData, dDXCC, fMarkQSL, fDXCCStat, fSort,
   fFilter, fImportProgress, fImportTest,
   fSelectDXCC, fGrayline, fCallbook, fTRXControl,
@@ -28,14 +28,53 @@ uses
   fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2,
   fDbSqlSel, fProgress, fDbError, fCountyStat;
 var
-  Splash : TfrmSplash;
-  SFL   : integer;
-
-{$IFDEF WINDOWS}{$R cqrlog.rc}{$ENDIF}
+  Splash    : TfrmSplash;
+  SFL       : integer;
+  AProcess  : TProcess;
+  index     : integer;
+  p         : TStringList;
+  c         : integer;
+  s         : string;
+// that is what we never do !!  -> {$IFDEF WINDOWS}{$R cqrlog.rc}{$ENDIF}
 
 {$R *.res}
 
 begin
+  Writeln(LineEnding+'Cqrlog Ver:',cVERSION,' Build:',cBuild,' Date:',cBUILD_DATE+LineEnding);
+  try
+
+    s:=FindDefaultExecutablePath('ps');
+    p := TStringList.Create;
+    p.Clear;
+    p.Delimiter := ' ';
+    p.DelimitedText :=  'ax';
+
+    AProcess := TProcess.Create(nil);
+    AProcess.Executable := s;
+    AProcess.Parameters.Clear;
+
+    for index:=0 to p.Count-1 do
+            AProcess.Parameters.Add(p[index]);
+    //Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+
+    p.Clear;
+    AProcess.Options:=AProcess.Options+[poUsePipes, poWaitonexit];
+    AProcess.Execute;
+    p.LoadFromStream(AProcess.Output);
+
+    c:=0;
+    //writeln(p.text);
+    for index:=0 to p.Count-1 do
+           begin
+            if (pos('cqrlog',p[index]) > 0) then
+                                            inc(c);
+           end;
+  finally
+    p.free;
+    AProcess.Free;
+  end;
+  //writeln(c);
+
   // Fix default BidiMode
   // see http://bugs.freepascal.org/view.php?id=22044
   Application.BidiMode:= bdLeftToRight;
@@ -43,7 +82,6 @@ begin
   Application.CaseSensitiveOptions:=False;
   if ((Application.HasOption('v','version')) or (Application.HasOption('h','help'))) then
      Begin
-        Writeln('Cqrlog Ver:',cVERSION,' Build:',cBuild,' Date:',cBUILD_DATE);
         if Application.HasOption('v','version') then exit;
         Writeln;
         Writeln('-h     --help           Print this help and exit');
@@ -67,6 +105,25 @@ begin
      end;
 
   Application.Initialize;
+
+  if (c > 1) then
+       Begin
+         Writeln();
+         Writeln('Cqrlog is already running !!'+LineEnding);
+
+         Writeln('If you want to run several Cqrlogs at same machine you must make');
+         Writeln('several copies of /usr/bin/cqrlog using different names for all.'+LineEnding);
+
+         Writeln('If you then want to use same log database for all Cqrlogs');
+         Writeln('you need to set common database server for logs and use ');
+         Writeln('"Preferences/program/Configuretion storage settings" to separate');
+         Writeln('each Cqrlog saving their own settings.');
+         ShowMessage('Cqrlog is already running !!');
+         Exit;
+       end;
+
+
+
   if (not Application.HasOption('q','quiet')) then
   Begin
     Splash := TfrmSplash.create(application);
