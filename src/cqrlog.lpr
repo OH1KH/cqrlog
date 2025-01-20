@@ -42,40 +42,26 @@ var
 begin
   Writeln(LineEnding+'Cqrlog Ver:',cVERSION,' Build:',cBuild,' Date:',cBUILD_DATE+LineEnding);
   try
-
-    s:=FindDefaultExecutablePath('ps');
     p := TStringList.Create;
-    p.Clear;
-    p.Delimiter := ' ';
-    p.DelimitedText :=  'ax';
-
     AProcess := TProcess.Create(nil);
+    s:=FindDefaultExecutablePath('pidof');
     AProcess.Executable := s;
     AProcess.Parameters.Clear;
-
-    for index:=0 to p.Count-1 do
-            AProcess.Parameters.Add(p[index]);
+    AProcess.Parameters.Add('cqrlog');
     //Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-
-    p.Clear;
     AProcess.Options:=AProcess.Options+[poUsePipes, poWaitonexit];
     AProcess.Execute;
+    p.clear;
     p.LoadFromStream(AProcess.Output);
-
-    c:=0;
     //writeln(p.text);
-    for index:=0 to p.Count-1 do
-           begin
-            if (pos('cqrlog',p[index]) > 0) then
-                                            inc(c);
-           end;
+    c:=WordCount('Pid: '+ p.text,[' ']); // ensure that WordCount has always non empty string
   finally
     p.free;
     AProcess.Free;
   end;
   //writeln(c);
 
-  // Fix default BidiMode
+  // Fix default BidiMode (this might be ok already in laz 3.x but leaving here makes no harm)
   // see http://bugs.freepascal.org/view.php?id=22044
   Application.BidiMode:= bdLeftToRight;
 
@@ -106,7 +92,7 @@ begin
 
   Application.Initialize;
 
-  if (c > 1) then
+  if (c > 2) then
        Begin
          Writeln();
          Writeln('Cqrlog is already running !!'+LineEnding);

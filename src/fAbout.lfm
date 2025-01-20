@@ -1150,7 +1150,6 @@ object frmAbout: TfrmAbout
       Caption = 'Upgrade'
       ClientHeight = 263
       ClientWidth = 443
-      TabVisible = False
       object Image2: TImage
         AnchorSideLeft.Control = tabUpgrade
         AnchorSideTop.Control = tabUpgrade

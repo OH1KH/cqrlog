@@ -8029,8 +8029,6 @@ Begin
         frmAbout:= TfrmAbout.Create(Application);
         frmAbout.PageControl1.ActivePage := frmAbout.tabUpgrade;
         frmAbout.lblVerze1.Caption := cVERSION + '  ' + cBUILD_DATE;
-        frmAbout.tabAbout.TabVisible:=false;
-        frmAbout.tabUpgrade.TabVisible:=True;
         frmAbout.Label8.Caption:='There is CqrlogAlpha version '+IntToStr(VerAvailNr)+' available!';
         frmAbout.ShowModal
       finally
