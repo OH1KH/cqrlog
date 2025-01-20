@@ -59,7 +59,7 @@ implementation
 {$R *.lfm}
 
 { TfrmAbout }
-uses fChangelog, uVersion;
+uses fChangelog, uVersion, dUtils;
 
 procedure TfrmAbout.lblLinkMouseEnter(Sender: TObject);
 begin
@@ -68,7 +68,7 @@ end;
 
 procedure TfrmAbout.lblLinkClick(Sender: TObject);
 begin
-  openURl((Sender as TLabel).Caption);
+  dmUtils.OpenInApp((Sender as TLabel).Caption);
 end;
 
 procedure TfrmAbout.btnChangelogClick(Sender: TObject);

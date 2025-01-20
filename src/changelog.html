@@ -12,40 +12,41 @@
     What is new:
     <ul style="list-style: square;text-align:left; color: green;" >
     <li>(135)</li><ul>
-    <li>Cqrlog:Add:Detect that only one instance can be started at time</li>
+    <li>About:Fix: Prevent html links opening to stop Cqrlog (open in background)</li>
+    <li>Cqrlog:Add: Detect that only one instance can be started at time</li>
     <li>Export:Add: Adif and html export complete with autoclose (5sec) message</li>
-    <li>NewQSO:COmment to QSO:Add: Return key can now be used when writing (does not save qso there) </li>	
+    <li>NewQSO: Comment to QSO:Add: Return key can now be used when writing (does not save qso there) </li>	
     <li>Help/Operation/NewQSO(online logging):Add: Description how 'Comment to callsign" field works</li>
     <li>VersionCheck: Update links </li>
     <li>RigControl:Fix: More bugfixes</li>
-    <li>RigControl:Fix:Bugfix: When all was OK Cqrlog did not start now fixed</li>
-    <li>RigControl:Fix:Try to recover if rig is swithed off at Cqrlog start</li>
+    <li>RigControl:Fix: Bugfix: When all was OK Cqrlog did not start now fixed</li>
+    <li>RigControl:Fix: Try to recover if rig is swithed off at Cqrlog start</li>
     <li>NewQSO:Tune: Added autoclose ShowMessage to tuning.(Can be used elsewhere too)</li>	
     <li>NewQSO:Fix: Layout, but it is a panel jungle and acts differently with GTK2,QT5 and QT6</li>
-    <li>NewQSO:File:Tune:Fix: Uses rigctld func for tuner (if supported) Can tune now also if no CW interface is defined</li>
+    <li>NewQSO:File: Tune:Fix: Uses rigctld func for tuner (if supported) Can tune now also if no CW interface is defined</li>
     <li>RigControl:Add: Reads now can rig set/get func, and what functions are supported</li>
-    <li>NewQso:Add:Disable 'Quit' button while there is a callsign entered</li>
-    <li>RigControl:Fix:Typo at set XIT</li>
-    <li>NewQso:Add:Set PWR by rig RFPOWER if supported by Hamlib and checked from preferences/NewQSO</li>
-    <li>RigControl:Add:RFpower check (if supported) added to rig polling. Not used yet.(needs more work)</li> 
+    <li>NewQso:Add: Disable 'Quit' button while there is a callsign entered</li>
+    <li>RigControl:Fix: Typo at set XIT</li>
+    <li>NewQso:Add: Set PWR by rig RFPOWER if supported by Hamlib and checked from preferences/NewQSO</li>
+    <li>RigControl:Add: RFpower check (if supported) added to rig polling. Not used yet.(needs more work)</li> 
     <li>TRXControl:Remove: FreqBar that is useless. Now there is only RFPowerBar. (still need testing)</li>
-    <li>TRXControl:Add:RFPower bar changed to slider that can change rig power (if supported by Hamlib)</li>
-    <li>TRXControl:Fix:Frequency/mode bar can now be RFpower bar aternatively</li> 
-    <li>RigControl:Add:Second TCP connection to rigctld for commands.The first one handles now only rig polling.
+    <li>TRXControl:Add: RFPower bar changed to slider that can change rig power (if supported by Hamlib)</li>
+    <li>TRXControl:Fix: Frequency/mode bar can now be RFpower bar aternatively</li> 
+    <li>RigControl:Add: Second TCP connection to rigctld for commands.The first one handles now only rig polling.
 	<br>Faster response to TRXControl buttons also when big rig poll values.</li>
-    <li>Preferences:Fix:Scrollbars were missing</li>
-    <li>BandMap:Fix:NewQSO added (Ctrl+A) spot color selection in preferences did not work</li>
-    <li>Loctor grid:Conversion to 6chr: For 2chr loc add '44XX', for 4chr loc add 'MM'</li>
-    <li>TRXControl:Fix Small change to form layout</li> 
-    <li>Changelog Splash:Fix Small change to form layout</li>
+    <li>Preferences:Fix: Scrollbars were missing</li>
+    <li>BandMap:Fix: NewQSO added (Ctrl+A) spot color selection in preferences did not work</li>
+    <li>Loctor grid: Conversion to 6chr: For 2chr loc add '44XX', for 4chr loc add 'MM'</li>
+    <li>TRXControl: Fix Small change to form layout</li> 
+    <li>Changelog Splash: Fix Small change to form layout</li>
     <li>DXCluster:Add: Mouse wheel movement will pause Telnet DXCluster for 5 secs. Add: After pressing Shift+F1..10 set focus to Telnet Tab.</li> 
-    <li>Wsjtxremote:Fix:Tried to solve form width setting problem when switching CQ/Map and GTK2 compiled. QT works</li>
-    <li>Wsjtxremote:Fix:FCC US-callsign info address has changed. Add:State info update can now be initated by Shift+Right Mode click over USt-checkbox</li>
+    <li>Wsjtxremote:Fix: Tried to solve form width setting problem when switching CQ/Map and GTK2 compiled. QT works</li>
+    <li>Wsjtxremote:Fix: FCC US-callsign info address has changed. Add:State info update can now be initated by Shift+Right Mode click over USt-checkbox</li>
     <li>DXCCStatistics:Fix: 'DIGITALVOICE' was missing from few lines</li>
     <li>DXCCStatistics: Added 'DIGITALVOICE' to DXCC PHONE modes count (by ARRL Basic rules). Renamed NewQSO/DXCCStatistic/SSB to PHO (phone)</li>
-    <li>Preferences:Bands:Frequencies:Fix: Better mode definition with DXClcluster spots</li>
+    <li>Preferences:Bands: Frequencies:Fix: Better mode definition with DXClcluster spots</li>
     <li>New Log:Fix: Use Changelog splash also as New Log splash</li>
-    <li>Contest:Add: checkbox NS. When checked NRs/NRr can contain letters. Fos special use, not ADIF std. compatible</li>	
+    <li>Contest:Add: Checkbox NS. When checked NRs/NRr can contain letters. Fos special use, not ADIF std. compatible</li>	
     </ul><li>(134)</li><ul>
     <li>NewQSO:Fix: This fixes MainMenu's "autoclose" bug when compiled with QT6
     <br>This is not happening with QT5 and GTK2 but fix suits for all compiles and is so important

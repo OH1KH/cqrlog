@@ -4890,16 +4890,22 @@ begin
 end;
 
 procedure TdmUtils.OpenInApp(what: string);
+var
+  b:string;
 begin
-  if ((pos('.HTML',upcase(what))>0) or (pos('.HTM',upcase(what))>0)) //because possible "hashtag in link-problem"
-    then
+  if ((pos('.HTML',upcase(what))>0)
+    or (pos('.HTM',upcase(what))>0)
+    or (pos('HTTP',upcase(what))>0) ) then //because possible "hashtag in link-problem"
      Begin
-      RunOnBackground(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
-     end
-   else
-    begin
-      RunOnBackground('xdg-open ' + what);
-    end;
+      b:= cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+      if (b<>'') then
+        Begin
+          RunOnBackground(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
+          exit;
+        end;
+     end;
+
+  RunOnBackground('xdg-open ' + what);
 end;
 
 function TdmUtils.GetDescKeyFromCode(key: word): string;

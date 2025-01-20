@@ -8,6 +8,7 @@ object frmAbout: TfrmAbout
   ClientHeight = 294
   ClientWidth = 453
   OnShow = FormShow
+  Position = poWorkAreaCenter
   LCLVersion = '3.6.0.0'
   object PageControl1: TPageControl
     AnchorSideLeft.Control = Owner
