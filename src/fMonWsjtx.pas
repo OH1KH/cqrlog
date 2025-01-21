@@ -14,6 +14,7 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
+    chkFFlt: TCheckBox;
     chkCbCQ: TCheckBox;
     chkdB: TCheckBox;
     chkFlt: TCheckBox;
@@ -78,6 +79,9 @@ type
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
+    procedure chkFFltChange(Sender: TObject);
+    procedure chkFFltClick(Sender: TObject);
+    procedure chkFltChange(Sender: TObject);
     procedure chkFltClick(Sender: TObject);
     procedure chkMapClick(Sender: TObject);
     procedure chkSortClick(Sender: TObject);
@@ -108,7 +112,6 @@ type
     procedure edtFollowCallKeyDown(Sender: TObject; var Key: word;
       Shift: TShiftState);
     procedure edtFollowDblClick(Sender: TObject);
-    procedure edtFltMapChange(Sender: TObject);
     procedure edtFltMapEnter(Sender: TObject);
     procedure edtFltMapExit(Sender: TObject);
     procedure edtFltMapKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -146,6 +149,7 @@ type
     tfIn      : TextFile;
     C_MYZIP   : String;
     CqState   : string;  //use in map mode to join state and Cqdir
+    FileFilter  : TStringList;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -466,6 +470,7 @@ end;
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  FileFilter.Free;
   LockMap := True;
   if chkMap.Checked then
     SaveFormPos('Map')
@@ -699,11 +704,6 @@ begin
   SendQsoInit(RepFlw);
 end;
 
-procedure TfrmMonWsjtx.edtFltMapChange(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmMonWsjtx.edtFltMapEnter(Sender: TObject);
 begin
   edtFltMap.Text:='';
@@ -832,9 +832,10 @@ begin
       chknoTxt.Checked := False;
       chknoHistory.Checked := True;
       chkCbCQ.Checked := cqrini.ReadBool('MonWsjtx', 'ColorBacCQkMap', False);
-      chkdB.Checked := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
-      chkFlt.Checked:= cqrini.ReadBool('MonWsjtx', 'MapFilter', False);
-      edtFltMap.Text:= cqrini.ReadString('MonWsjtx', 'MapFilterString', '');
+      chkdB.Checked   := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
+      chkFlt.Checked  := cqrini.ReadBool('MonWsjtx', 'MapFilter', False);
+      chkFFlt.Checked := cqrini.ReadBool('MonWsjtx', 'FileFilter', False);
+      edtFltMap.Text  := cqrini.ReadString('MonWsjtx', 'MapFilterString', '');
       //map mode allows text printing. Printing stays on when return to monitor mode.
       chknoHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
@@ -1049,6 +1050,44 @@ begin
     else
     btFtxtName.Visible:=false;
   end;
+end;
+
+procedure TfrmMonWsjtx.chkFFltChange(Sender: TObject);
+var
+  s:String;
+  f:integer;
+begin
+  if chkFFlt.Checked then
+  chkFlt.Checked := false;
+   Begin
+      FileFilter.Clear;
+      s:= FileSearch('filefilter.txt',dmData.HomeDir + 'ctyfiles' + PathDelim,[]);
+
+      if (s <> '') then
+                     Begin
+                      FileFilter.LoadFromFile(s);
+                      for f:=0 to FileFilter.Count-1 do
+                         FileFilter[f]:=UpperCase(FileFilter[f]);
+                     end
+                 else
+                     Begin
+                      cqrini.WriteBool('MonWsjtx', 'FileFilter',false);
+                      ShowMessage(dmData.HomeDir + 'ctyfiles' + PathDelim+'filefilter.txt'+
+                      LineEnding+'Not found!');
+                      chkFFlt.Checked:=False;
+                     end;
+   end;
+end;
+
+procedure TfrmMonWsjtx.chkFFltClick(Sender: TObject);
+begin
+  cqrini.WriteBool('MonWsjtx', 'FileFilter', chkFFlt.Checked);
+end;
+
+procedure TfrmMonWsjtx.chkFltChange(Sender: TObject);
+begin
+  if chkFlt.Checked then
+                         chkFFlt.Checked:=false;
 end;
 
 procedure TfrmMonWsjtx.chkFltClick(Sender: TObject);
@@ -1352,6 +1391,7 @@ begin
   cmCqDX.Bitmap := TBitmap.Create;
   CanCloseUSDBProcess := True;  //there is no process yet
   UsedBkgCqCol :=clWhite;
+  FileFilter:= TStringList.Create;
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
@@ -1595,6 +1635,7 @@ begin
           if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
           //print filter callsign drops here
           if chkFlt.Checked and (pos(edtFltMap.Text,msgCall)=0) then exit;
+          if cqrini.ReadBool('MonWsjtx', 'FileFilter', False) and (FileFilter.IndexOf(msgCall)=-1) then exit;
 
           if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
                   msgLocator := '';
@@ -2259,11 +2300,15 @@ begin
          exit;
        end;
     //print filter callsign drops here
-    if chkFlt.Checked and chkMap.Checked and (pos(edtFltMap.Text,msgCall)=0) then
-       Begin
-         UsedBkgCqCol :=clWhite;
-         exit;
-       end;
+    if chkMap.Checked then
+     Begin
+       if ( (chkFlt.Checked and (pos(edtFltMap.Text,msgCall)=0))
+        or (cqrini.ReadBool('MonWsjtx', 'FileFilter', False) and (FileFilter.IndexOf(msgCall)=-1)) ) then
+           Begin
+             UsedBkgCqCol :=clWhite;
+             exit;
+           end;
+     end;
 
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);
@@ -2943,6 +2988,6 @@ begin
   sgMonitor.Repaint;
 end;
 
-initialization
+//initialization
 
 end.
