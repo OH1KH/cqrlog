@@ -124,6 +124,10 @@ uses uMyIni, dUtils, dData, fImportProgress;
       begin
         ClubFileName := ExtractFileName(ClubFileNames.Strings[i]);
         ClubFileNameUrl := Format(C_MEMBERSHIP_VERSION_CHECK_URL, [ClubFileName]);
+
+        if pos('file=cqr.txt',ClubFileNameUrl)>0 then continue; //OH1KH: this is my own member list file name not found from Petr's server
+                                                                //This should be solved somehow because all personal list dates are requested from his server
+
         if dmUtils.GetDataFromHttp(ClubFileNameUrl, data) then
         begin
           if (Pos('ERR', data) = 1) then

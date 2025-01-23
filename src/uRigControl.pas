@@ -697,7 +697,7 @@ var
 
 begin
   msg:='';
-  while (( aSocket.GetMessage(msg) > 0 ) and (not ResponseTimeout)) do
+  while (( aSocket.GetMessage(msg) > 0 ) and (not fResponseTimeout)) do
   begin
     msg := StringReplace(upcase(trim(msg)),#$09,' ',[rfReplaceAll]); //note the char case upper for now on! Remove TABs
     if DebugMode then
@@ -953,7 +953,7 @@ var
 
 begin
   if   ((not RigctldConnect.Connected)
-         or ResponseTimeout )
+         or fResponseTimeout )
                        then exit;
 
  if  ParmHasVfo=2 then
@@ -1044,6 +1044,7 @@ end;
 begin
  if DebugMode then
                Writeln('Polling - allowcommand:',AllowCommand);
+
  case AllowCommand of
      -2:  Exit;
      -1:  Begin
@@ -1150,13 +1151,18 @@ procedure TRigControl.OnErrorRigctldConnect(const msg: string; aSocket: TLSocket
 begin
   ErrorRigctldConnect:= True;
   if DebugMode then
-                   writeln(msg);
+                   writeln('Error with rigctld: ' ,msg);
+   if (pos('[107]',msg)>0) or (pos('[104]',msg)>0) then
+   Begin
+     tmrRigPoll.Enabled  := False;
+     fResponseTimeout := true;
+   end;
 end;
 function TRigControl.SendPoll(msg:string):boolean;
 begin
   Result:=false;
   if   ((not RigctldConnect.Connected)
-         or ResponseTimeout )
+         or fResponseTimeout )
                        then exit;
   RigctldConnect.SendMessage(msg);
   Result:=true;
@@ -1230,7 +1236,7 @@ Begin
  t:=0;
  Result:=false;
  if   ((not RigctldCmd.Connected)
-         or ResponseTimeout
+         or fResponseTimeout
          or PowerOffIssued )
                        then exit;
 
@@ -1276,7 +1282,7 @@ var
   s:string;
 Begin
   RigCmdChannelMsg := '';
-  while (( aSocket.GetMessage(s) > 0 ) and (not ResponseTimeout)) do
+  while (( aSocket.GetMessage(s) > 0 ) and (not fResponseTimeout)) do
     RigCmdChannelMsg := RigCmdChannelMsg+StringReplace(upcase(trim(s)),#$09,' ',[rfReplaceAll]); //note the char case upper for now on! Remove TABs
 
   RigCmdChannelMsg := StringReplace(RigCmdChannelMsg,LineEnding,'|',[rfReplaceAll]);
@@ -1302,7 +1308,12 @@ procedure TRigControl.OnErrorRigctldCmd(const msg: string; aSocket: TLSocket);
 Begin
   ErrorRigctldConnect:= True;
   if DebugMode then
-                   writeln(msg);
+                   writeln('Error with rigctld: ',msg);
+  if (pos('[107]',msg)>0) or (pos('[104]',msg)>0) then
+   Begin
+     tmrRigPoll.Enabled  := False;
+     fResponseTimeout := true;
+   end;
 end;
 procedure TRigControl.HamlibErrors(e:string);
 Begin

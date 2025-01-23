@@ -1282,10 +1282,10 @@ begin
 
     if radio.ResponseTimeout then
          Begin
+          FreeAndNil(radio);
           ShowMessage('Radio did not respond within timeout.'+lineEnding+
                       'Check cables and that Radio power is ON'+lineEnding+
                       'After that try NewQSO/File/Refresh TRX/ROT control');
-          FreeAndNil(radio);
           exit;
          end;
 
