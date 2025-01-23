@@ -295,14 +295,15 @@ var
 begin
   if Assigned(radio) then
   begin
-     if radio.ResponseTimeout then
+    if (radio.ResponseTimeout ) then
          Begin
+          FreeAndNil(radio);
           ShowMessage('Radio did not respond within timeout.'+lineEnding+
                       'Check cables and that Radio power is ON'+lineEnding+
                       'After that try NewQSO/File/Refresh TRX/ROT control');
-          FreeAndNil(radio);
           exit;
          end;
+
     f := radio.GetFreqMHz;
     if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) then fs:= radio.GetSplitTXFreqMHz;
     m := radio.GetModeOnly;
@@ -320,14 +321,15 @@ begin
           frmNewQSO.edtRXFreq.Text := FloatToStr((f + rxlo));
     end;
      if  cqrini.ReadBool('NewQSO', 'UseSplitTX', False) and radio.RigSplitActive then
-         f:=fs
+         f:=fs;
+
+    UpdatePwrBar;
   end
   else
     f := 0;
 
   f := f + txlo;
   lblFreq.Caption := FormatFloat(empty_freq, f);
-  UpdatePwrBar;
 
   UpdateModeButtons(m);
   ClearBandButtonsColor;
@@ -371,7 +373,8 @@ begin
     exit;
   end;
 
-  m := radio.GetRawMode;
+  if Assigned(radio) then
+     m := radio.GetRawMode;
 
   //user changed settings
   if MemRelated <> cqrini.ReadBool('TRX', 'MemModeRelated', False) then
@@ -434,6 +437,7 @@ begin
   frmBandMap.CurrentBand := b;
   frmBandMap.CurrentFreq := f * 1000;
   frmBandMap.CurrentMode := m;
+
   if Assigned(radio) then
      begin
           btPon.Enabled:=radio.Power;
@@ -1551,7 +1555,7 @@ var
   bandwidth : Integer = 0;
   f : Double = 0;
 begin
-  if (lblFreq.Caption = empty_freq) then  //no rig freq received
+  if (lblFreq.Caption = empty_freq) or (not Assigned(radio)) then  //no rig freq received
     exit;
   if mode='' then        //if mode is empty change freq using existing mode
      mode:=GetActualMode;
@@ -1620,15 +1624,15 @@ function TfrmTRXControl.GetModeBand(var mode, band : String) : Boolean;
 var
   freq : String;
 begin
+  Result := False;
   mode := '';
   band := '';
-  Result := True;
   freq := lblFreq.Caption;
-  mode := GetActualMode;
   if (freq = empty_freq) or (freq = '') or (not Assigned(radio)) then
-    Result := False
-  else
-    band := dmUtils.GetBandFromFreq(freq);
+                                                                     exit;
+  mode := GetActualMode;
+  band := dmUtils.GetBandFromFreq(freq);
+  Result := True
 end;
 
 procedure TfrmTRXControl.CloseRigs;
@@ -1690,19 +1694,19 @@ procedure TfrmTRXControl.Split(Up : Integer);
 begin
   //we do split with XIT, no need to play with 2 VFOs
   if Assigned(radio) then
-  begin
-    radio.SetSplit(up);
-  end;
+         radio.SetSplit(up);
 end;
 
 procedure TfrmTRXControl.DisableSplit;
 begin
-  if Assigned(radio) then  radio.DisableSplit;
+  if Assigned(radio) then
+        radio.DisableSplit;
 end;
 
 procedure TfrmTRXControl.SetSplitTXRead(b:boolean);
 begin
-  if Assigned(radio) then  radio.GetSplitTX:=b;
+  if Assigned(radio) then
+       radio.GetSplitTX:=b;
 end;
 
 function TfrmTRXControl.GetFreqHz : Double;
@@ -1739,7 +1743,7 @@ end;
 
 procedure TfrmTRXControl.ClearRIT;
 begin
-  if (lblFreq.Caption = empty_freq) then
+  if (lblFreq.Caption = empty_freq) or (not Assigned(radio)) then
     exit;
   radio.ClearRit;
   radio.ClearXit;   //this clears Xit too
@@ -1828,13 +1832,14 @@ var
  f: double;
  tmp: String;
 Begin
- if  (StopPwrUpdate < 0) Then   //if negative should wait abs(n)+1 rounds
-   Begin
-    inc(StopPwrUpdate);
-    exit;
-   end;
  if assigned(radio) then
   begin
+     if  (StopPwrUpdate < 0) Then   //if negative should wait abs(n)+1 rounds
+       Begin
+        inc(StopPwrUpdate);
+        exit;
+       end;
+
      if (mnuShowPwrBar.Checked and mnuShowPwrBar.Enabled and radio.GetRFPower and (StopPwrUpdate=0)) then
       begin
            tmp:=radio.PwrPcnt;

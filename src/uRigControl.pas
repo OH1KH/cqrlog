@@ -229,7 +229,7 @@ begin
   fGetSplitTX          := false;  //poll rig polls also split TX vfo
   PowerOffIssued       := false;
   fCompoundPoll        := True;
-  fPollTimeout         := 20;  //max count of false responses when polled. Set_power ON is critical. Must be big enough to allow rig wake up.
+  fPollTimeout         := 15;  //max count of false responses when polled. Set_power ON is critical. Must be big enough to allow rig wake up.
   fPollCount           := fPollTimeout;
   fRigSplitActive      := False;
   fGetRFPower          := false;
