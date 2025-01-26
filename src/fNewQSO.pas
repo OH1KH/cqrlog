@@ -1465,6 +1465,9 @@ begin
   dmUtils.HamClockSetNewDX('','',CurrentMyloc);   //a way to clear SP/LP line (but draws vertical line instead)
   DetailsCMBColorDone:='';
 
+  btnCancel.Hint:='';
+  btnCancel.ShowHint:=False;
+
   btnCancel.Caption:='Quit [CTRL+Q]';
   btnCancel.Font.Color:=clDefault;
   btnCancel.Font.Style:=[];
@@ -3525,6 +3528,8 @@ begin
   if edtCall.Text<>'' then
    Begin
     btnCancel.Caption:='Clear Call!';
+    btnCancel.Hint:='Do you have unsaved qso?';
+    btnCancel.ShowHint:=True;
     btnCancel.Font.Color:=clFuchsia;
     btnCancel.Font.Style:=[fsBold];
     btnCancel.Repaint;

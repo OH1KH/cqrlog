@@ -31,7 +31,7 @@ object frmNewLog: TfrmNewLog
     AnchorSideTop.Side = asrBottom
     Left = 12
     Height = 34
-    Hint = 'GIve unused log number, or use suggested.'
+    Hint = 'Give unused log number, or use suggested.'
     Top = 23
     Width = 46
     MaxLength = 3
@@ -112,7 +112,7 @@ object frmNewLog: TfrmNewLog
     AnchorSideTop.Side = asrBottom
     Left = 111
     Height = 34
-    Hint = 'GIve existing log number to copy new log configuration from.'#10'(Configurations are log based)'
+    Hint = 'Give existing log number to copy new log configuration from.'#10'(Configurations are log based)'
     Top = 23
     Width = 46
     MaxLength = 3
