@@ -5,7 +5,6 @@ object frmRbnMonitor: TfrmRbnMonitor
   Width = 665
   HelpType = htKeyword
   HelpKeyword = 'help/h31.html'
-  ActiveControl = btnEatFocus
   Caption = 'RBN Monitor'
   ClientHeight = 602
   ClientWidth = 665
@@ -20,99 +19,6 @@ object frmRbnMonitor: TfrmRbnMonitor
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   LCLVersion = '3.6.0.0'
-  object ToolBar1: TToolBar
-    Left = 0
-    Height = 25
-    Top = 0
-    Width = 665
-    Caption = 'ToolBar1'
-    Images = imgRbnMonitor
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 0
-    object tbtnConnect: TToolButton
-      Left = 1
-      Top = 2
-      Action = acConnect
-      AutoSize = True
-    end
-    object ToolButton2: TToolButton
-      Left = 24
-      Height = 22
-      Top = 2
-      Caption = 'ToolButton2'
-      Style = tbsDivider
-    end
-    object tbtnServer: TToolButton
-      Left = 29
-      Top = 2
-      Action = acRbnServer
-    end
-    object ToolButton4: TToolButton
-      Left = 52
-      Height = 22
-      Top = 2
-      Caption = 'ToolButton4'
-      Style = tbsDivider
-    end
-    object tbtnFilter: TToolButton
-      Left = 57
-      Top = 2
-      Action = acFilter
-    end
-    object tbtnFont: TToolButton
-      Left = 85
-      Top = 2
-      Action = acFontSettings
-    end
-    object ToolButton7: TToolButton
-      Left = 80
-      Height = 22
-      Top = 2
-      Caption = 'ToolButton7'
-      Style = tbsDivider
-    end
-    object ToolButton1: TToolButton
-      Left = 108
-      Height = 22
-      Top = 2
-      Caption = 'ToolButton1'
-      Style = tbsDivider
-    end
-    object tbtnLastLine: TToolButton
-      Left = 113
-      Hint = 'Go to last line'
-      Top = 2
-      Action = acScrollDown
-    end
-    object tbtnClear: TToolButton
-      Left = 136
-      Hint = 'Clean grid'
-      Top = 2
-      Action = acClear
-    end
-    object tbtnHelp: TToolButton
-      Left = 164
-      Hint = 'Open help in web browser'
-      Top = 2
-      Action = acHelp
-    end
-    object ToolButton11: TToolButton
-      Left = 159
-      Height = 22
-      Top = 2
-      Caption = 'ToolButton11'
-      Style = tbsDivider
-    end
-    object btnEatFocus: TButton
-      Left = 187
-      Height = 22
-      Top = 2
-      Width = 2
-      Caption = 'btnEatFocus'
-      TabOrder = 0
-    end
-  end
   object sbRbn: TStatusBar
     Left = 0
     Height = 19
@@ -126,14 +32,14 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object sgRbn: TStringGrid
     Left = 0
-    Height = 558
-    Top = 25
+    Height = 583
+    Top = 0
     Width = 665
     Align = alClient
     ColCount = 7
     FixedCols = 0
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goSmoothScroll, goScrollKeepVisible]
-    TabOrder = 2
+    TabOrder = 1
     OnDblClick = sgRbnDblClick
     OnDrawCell = sgRbnDrawCell
     OnEnter = sgRbnEnter
@@ -193,6 +99,147 @@ object frmRbnMonitor: TfrmRbnMonitor
       1
       'N'
     )
+  end
+  object pnlTools: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 28
+    Top = 0
+    Width = 665
+    Anchors = [akTop, akLeft, akRight]
+    ClientHeight = 28
+    ClientWidth = 665
+    TabOrder = 2
+    object ToolBar1: TToolBar
+      AnchorSideLeft.Control = pnlTools
+      AnchorSideTop.Control = pnlTools
+      AnchorSideBottom.Control = pnlTools
+      AnchorSideBottom.Side = asrBottom
+      Left = 1
+      Height = 26
+      Top = 1
+      Width = 200
+      Align = alCustom
+      Anchors = [akTop, akLeft, akBottom]
+      Caption = 'ToolBar1'
+      Images = imgRbnMonitor
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      object tbtnConnect: TToolButton
+        Left = 1
+        Top = 2
+        Action = acConnect
+        AutoSize = True
+      end
+      object ToolButton2: TToolButton
+        Left = 24
+        Height = 22
+        Top = 2
+        Caption = 'ToolButton2'
+        Style = tbsDivider
+      end
+      object tbtnServer: TToolButton
+        Left = 29
+        Top = 2
+        Action = acRbnServer
+      end
+      object ToolButton4: TToolButton
+        Left = 52
+        Height = 22
+        Top = 2
+        Caption = 'ToolButton4'
+        Style = tbsDivider
+      end
+      object tbtnFilter: TToolButton
+        Left = 57
+        Top = 2
+        Action = acFilter
+      end
+      object tbtnFont: TToolButton
+        Left = 85
+        Top = 2
+        Action = acFontSettings
+      end
+      object ToolButton7: TToolButton
+        Left = 80
+        Height = 22
+        Top = 2
+        Caption = 'ToolButton7'
+        Style = tbsDivider
+      end
+      object ToolButton1: TToolButton
+        Left = 108
+        Height = 22
+        Top = 2
+        Caption = 'ToolButton1'
+        Style = tbsDivider
+      end
+      object tbtnLastLine: TToolButton
+        Left = 113
+        Top = 2
+        Action = acScrollDown
+      end
+      object tbtnClear: TToolButton
+        Left = 136
+        Top = 2
+        Action = acClear
+      end
+      object tbtnHelp: TToolButton
+        Left = 164
+        Top = 2
+        Action = acHelp
+      end
+      object ToolButton11: TToolButton
+        Left = 159
+        Height = 22
+        Top = 2
+        Caption = 'ToolButton11'
+        Style = tbsDivider
+      end
+      object btnEatFocus: TButton
+        Left = 187
+        Height = 22
+        Top = 2
+        Width = 2
+        Caption = 'btnEatFocus'
+        TabOrder = 0
+      end
+    end
+    object lblRcvd: TLabel
+      AnchorSideLeft.Control = ToolBar1
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlTools
+      AnchorSideBottom.Control = pnlTools
+      AnchorSideBottom.Side = asrBottom
+      Left = 201
+      Height = 26
+      Top = 1
+      Width = 24
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akBottom]
+      AutoSize = False
+      Layout = tlCenter
+    end
+    object lblSPM: TLabel
+      AnchorSideLeft.Control = lblRcvd
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlTools
+      AnchorSideBottom.Control = pnlTools
+      AnchorSideBottom.Side = asrBottom
+      Left = 231
+      Height = 26
+      Top = 1
+      Width = 65
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akBottom]
+      AutoSize = False
+      BorderSpacing.Left = 6
+      Layout = tlCenter
+    end
   end
   object acRbnMonitor: TActionList
     Images = imgRbnMonitor
@@ -338,5 +385,12 @@ object frmRbnMonitor: TfrmRbnMonitor
     OnTimer = tmrUnfocusTimer
     Left = 484
     Top = 85
+  end
+  object tmrSpotsPMin: TTimer
+    Enabled = False
+    Interval = 60000
+    OnTimer = tmrSpotsPMinTimer
+    Left = 102
+    Top = 170
   end
 end

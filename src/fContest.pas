@@ -2334,6 +2334,7 @@ procedure  TfrmContest.Rates;
 Begin
   if AllQsos>0 then
     Begin
+      try
     //last qso since
     //--------------------------------------------------------------
       dmData.CQ.Close;
@@ -2367,8 +2368,12 @@ Begin
     dmData.CQ.Open();
     lblRate60.Caption:=dmData.CQ.FieldByName('rate').AsString+'/60';
 
+
+    finally
+      dmData.CQ.Close;
+    end;
     end;   // AllQsos>0
-    dmData.CQ.Close;
+
 end;
 
 end.
