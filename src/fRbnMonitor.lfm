@@ -216,37 +216,6 @@ object frmRbnMonitor: TfrmRbnMonitor
         TabOrder = 0
       end
     end
-    object lblRcvd: TLabel
-      AnchorSideLeft.Control = ToolBar1
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlTools
-      AnchorSideBottom.Control = pnlTools
-      AnchorSideBottom.Side = asrBottom
-      Left = 201
-      Height = 26
-      Top = 1
-      Width = 24
-      Alignment = taCenter
-      Anchors = [akTop, akLeft, akBottom]
-      AutoSize = False
-      Layout = tlCenter
-    end
-    object lblSPM: TLabel
-      AnchorSideLeft.Control = lblRcvd
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlTools
-      AnchorSideBottom.Control = pnlTools
-      AnchorSideBottom.Side = asrBottom
-      Left = 231
-      Height = 26
-      Top = 1
-      Width = 65
-      Alignment = taCenter
-      Anchors = [akTop, akLeft, akBottom]
-      AutoSize = False
-      BorderSpacing.Left = 6
-      Layout = tlCenter
-    end
   end
   object acRbnMonitor: TActionList
     Images = imgRbnMonitor
@@ -392,12 +361,5 @@ object frmRbnMonitor: TfrmRbnMonitor
     OnTimer = tmrUnfocusTimer
     Left = 104
     Top = 208
-  end
-  object tmrSpotsPMin: TTimer
-    Enabled = False
-    Interval = 60000
-    OnTimer = tmrSpotsPMinTimer
-    Left = 16
-    Top = 144
   end
 end

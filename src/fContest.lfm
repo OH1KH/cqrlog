@@ -266,7 +266,7 @@ object frmContest: TfrmContest
     Caption = 'SPACE is TAB'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 19
+    TabOrder = 18
     TabStop = False
     OnChange = chkSpaceChange
   end
@@ -635,7 +635,7 @@ object frmContest: TfrmContest
     Caption = 'Qsp'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 17
+    TabOrder = 19
     TabStop = False
     OnChange = chkQspChange
   end
@@ -652,7 +652,7 @@ object frmContest: TfrmContest
     Caption = 'TAB in order'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 18
+    TabOrder = 17
     TabStop = False
     OnChange = chkTabAllChange
   end
@@ -715,7 +715,7 @@ object frmContest: TfrmContest
     Checked = True
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 23
+    TabOrder = 25
     TabStop = True
   end
   object rbNoMode4Dupe: TRadioButton
@@ -779,7 +779,7 @@ object frmContest: TfrmContest
     Constraints.MaxWidth = 180
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 24
+    TabOrder = 23
     TabStop = False
     OnClick = btDupChkStartClick
   end
@@ -796,7 +796,7 @@ object frmContest: TfrmContest
     Caption = 'S&&P'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 25
+    TabOrder = 24
     TabStop = False
     OnClick = chkSPClick
   end
@@ -817,7 +817,7 @@ object frmContest: TfrmContest
     Caption = 'Status'
     ClientHeight = 361
     ClientWidth = 765
-    TabOrder = 26
+    TabOrder = 28
     object mStatus: TMemo
       AnchorSideLeft.Control = gbStatus
       AnchorSideRight.Control = gbStatus
@@ -908,7 +908,7 @@ object frmContest: TfrmContest
     Caption = 'Mark dupe'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 27
+    TabOrder = 26
     TabStop = False
   end
   object chkHint: TCheckBox
@@ -927,7 +927,7 @@ object frmContest: TfrmContest
     ParentShowHint = False
     ShowHint = True
     State = cbChecked
-    TabOrder = 28
+    TabOrder = 27
     TabStop = False
     OnChange = chkHintChange
   end

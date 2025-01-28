@@ -1807,7 +1807,8 @@ Begin
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
          dmData.CQ.Open();
-         QSOc[band]:= dmData.CQ.FieldByName('QSOCount').AsInteger;
+         if (dmData.CQ.FieldCount > 0) then
+               QSOc[band]:= dmData.CQ.FieldByName('QSOCount').AsInteger;
          //duplicate count
          dmData.CQ.Close;
          if dmData.trCQ.Active then dmData.trCQ.Rollback;
@@ -1818,7 +1819,8 @@ Begin
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
          dmData.CQ.Open();
-         DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
+         if (dmData.CQ.FieldCount > 0) then
+               DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
 
          //multipliers
           Mlist[band]:='....................................' ; //A-Z0-9
@@ -1913,7 +1915,8 @@ Begin
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
-    QSOs:= dmData.CQ.FieldByName('QSOCount').AsInteger;
+    if (dmData.CQ.FieldCount > 0) then
+               QSOs:= dmData.CQ.FieldByName('QSOCount').AsInteger;
 
     //Dupe count  (28MHz and up)
     //--------------------------------------------------------------
@@ -1925,7 +1928,8 @@ Begin
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
-    DUPEs:= dmData.CQ.FieldByName('QSOCount').AsInteger;
+    if (dmData.CQ.FieldCount > 0) then
+               DUPEs:= dmData.CQ.FieldByName('QSOCount').AsInteger;
 
 
     //Points count  (up to 47GHz)
@@ -2037,7 +2041,8 @@ Begin
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
          dmData.CQ.Open();
-         QSOc[band]:= dmData.CQ.FieldByName('QSOCount').AsInteger;
+         if (dmData.CQ.FieldCount > 0) then
+               QSOc[band]:= dmData.CQ.FieldByName('QSOCount').AsInteger;
          //duplicate count
          dmData.CQ.Close;
          if dmData.trCQ.Active then dmData.trCQ.Rollback;
@@ -2048,7 +2053,8 @@ Begin
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
          dmData.CQ.Open();
-         DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
+         if (dmData.CQ.FieldCount > 0) then
+               DUPEc[band]:= dmData.CQ.FieldByName('Dcount').AsInteger;
 
 
          //list of different 4chr locators (locator multipliers) in srx_string
@@ -2118,7 +2124,8 @@ var
               if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
               dmData.CQ.Open();
-              sgStatus.Cells[f+2,UseRow]:=dmData.CQ.FieldByName(SqlColumn).AsString;
+              if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[f+2,UseRow]:=dmData.CQ.FieldByName(SqlColumn).AsString;
            end;
         end;
   end;
@@ -2145,7 +2152,8 @@ var
              if dmData.DebugLevel >=1 then
                                          Writeln(dmData.CQ.SQL.Text);
              dmData.CQ.Open();
-             AllQsos:= dmData.CQ.FieldByName('QSOs').AsInteger;
+             if (dmData.CQ.FieldCount > 0) then
+               AllQsos:= dmData.CQ.FieldByName('QSOs').AsInteger;
              sgStatus.Cells[1,1]:=dmData.CQ.FieldByName('QSOs').AsString;
              ByBandsStatus(1,dmData.CQ.SQL.Text,'QSOs');
 
@@ -2158,7 +2166,8 @@ var
              if dmData.DebugLevel >=1 then
                                          Writeln(dmData.CQ.SQL.Text);
              dmData.CQ.Open();
-             sgStatus.Cells[1,7]:=dmData.CQ.FieldByName('DUPEs').AsString;
+             if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[1,7]:=dmData.CQ.FieldByName('DUPEs').AsString;
              ByBandsStatus(7,dmData.CQ.SQL.Text,'DUPEs');
            end;
 
@@ -2173,7 +2182,8 @@ var
             if dmData.DebugLevel >=1 then
                                          Writeln(dmData.CQ.SQL.Text);
              dmData.CQ.Open();
-             sgStatus.Cells[1,3]:=dmData.CQ.FieldByName('Countries').AsString;
+             if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[1,3]:=dmData.CQ.FieldByName('Countries').AsString;
              ByBandsStatus(3,dmData.CQ.SQL.Text,'Countries');
             end
       end;
@@ -2190,7 +2200,8 @@ var
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      sgStatus.Cells[1,2]:=dmData.CQ.FieldByName('DXs').AsString;
+      if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[1,2]:=dmData.CQ.FieldByName('DXs').AsString;
       ByBandsStatus(2,dmData.CQ.SQL.Text,'DXs');
     end;
 
@@ -2206,7 +2217,8 @@ var
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      sgStatus.Cells[1,4]:=dmData.CQ.FieldByName('DXCntrs').AsString;
+      if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[1,4]:=dmData.CQ.FieldByName('DXCntrs').AsString;
       ByBandsStatus(4,dmData.CQ.SQL.Text,'DXCntrs');
     end;
 
@@ -2249,7 +2261,8 @@ var
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
       sgStatus.Cells[0,5]:= mycont+'Ctrys';
-      sgStatus.Cells[1,5]:= dmData.CQ.FieldByName('MYCntrs').AsString;
+      if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[1,5]:= dmData.CQ.FieldByName('MYCntrs').AsString;
       ByBandsStatus(5,dmData.CQ.SQL.Text,'MYCntrs');
     end;
 
@@ -2284,20 +2297,19 @@ var
     if popCommonStatus.Items[7].Checked then
      begin
       SRXSList:='';
-        begin
-            dmData.CQ.Close;
-              if dmData.trCQ.Active then dmData.trCQ.Rollback;
-              dmData.CQ.SQL.Text :=
-                 'SELECT COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
-                   QuotedStr(cmbContestName.Text)+' AND srx_string<>""';
+      dmData.CQ.Close;
+        if dmData.trCQ.Active then dmData.trCQ.Rollback;
+        dmData.CQ.SQL.Text :=
+           'SELECT COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
+             QuotedStr(cmbContestName.Text)+' AND srx_string<>""';
 
-              if dmData.DebugLevel >=1 then
-                                           Writeln(dmData.CQ.SQL.Text);
-            dmData.CQ.Open();
-           end;
-         sgStatus.Cells[1,6]:=dmData.CQ.FieldByName('Msgs').AsString;
-         ByBandsStatus(6,dmData.CQ.SQL.Text,'Msgs');
-        end;
+        if dmData.DebugLevel >=1 then
+                                     Writeln(dmData.CQ.SQL.Text);
+      dmData.CQ.Open();
+      if (dmData.CQ.FieldCount > 0) then
+               sgStatus.Cells[1,6]:=dmData.CQ.FieldByName('Msgs').AsString;
+      ByBandsStatus(6,dmData.CQ.SQL.Text,'Msgs');
+     end;
 
     //list of different srx_strings (msg multipliers)
     //--------------------------------------------------------------
@@ -2346,7 +2358,8 @@ Begin
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      lblQsoSince.Caption:='QS:'+dmData.CQ.FieldByName('last').AsString;
+      if (dmData.CQ.FieldCount > 0) then
+               lblQsoSince.Caption:='QS:'+dmData.CQ.FieldByName('last').AsString;
 
     //qso rate 10min
     //--------------------------------------------------------------
@@ -2357,7 +2370,8 @@ Begin
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
-      lblRate10.Caption:=dmData.CQ.FieldByName('rate').AsString+'/10';
+      if (dmData.CQ.FieldCount > 0) then
+               lblRate10.Caption:=dmData.CQ.FieldByName('rate').AsString+'/10';
 
     //qso rate 1h
     //--------------------------------------------------------------
@@ -2368,7 +2382,8 @@ Begin
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
-    lblRate60.Caption:=dmData.CQ.FieldByName('rate').AsString+'/60';
+    if (dmData.CQ.FieldCount > 0) then
+               lblRate60.Caption:=dmData.CQ.FieldByName('rate').AsString+'/60';
 
 
     finally
