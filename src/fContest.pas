@@ -193,6 +193,7 @@ type
       AllCountries,
       QsoRate10,
       QsoRate60    : integer;
+      CQcount : integer;
 
     procedure SetActualReportForModeFromRadio;
     procedure InitInput;
@@ -241,7 +242,8 @@ var
 
   FmemorySent: Boolean;  //for semiAuto sending
 
-  CQcount   : integer;
+  C
+  : integer;
   ContestBandPtr  : array[0..10] of byte =
    // contest bands 160M to 23cm  Points to dUtils.cBands [0..30]
    // 160M  80M  40M  20M  15M  10M   6M    4M    2M    0,7M   0,23M
@@ -1800,12 +1802,12 @@ Begin
         //total qso count
         if dmData.trCQ.Active then dmData.trCQ.Rollback;
           dmData.CQ.SQL.Text :=
-               'SELECT COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+
+               'SELECT COUNT(callsign) AS QSOCount FROM cqrlog_main WHERE contestname='+
                QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('CW');
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
          dmData.CQ.Open();
-         QSOc[band]:= dmData.CQ.FieldByName('Qcount').AsInteger;
+         QSOc[band]:= dmData.CQ.FieldByName('QSOCount').AsInteger;
          //duplicate count
          dmData.CQ.Close;
          if dmData.trCQ.Active then dmData.trCQ.Rollback;
@@ -1906,24 +1908,24 @@ Begin
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
-        'SELECT  COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
+        'SELECT  COUNT(callsign) AS QSOCount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
          ' AND freq > 27.99999';
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
-    QSOs:= dmData.CQ.FieldByName('Qcount').AsInteger;
+    QSOs:= dmData.CQ.FieldByName('QSOCount').AsInteger;
 
     //Dupe count  (28MHz and up)
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
     dmData.CQ.SQL.Text :=
-        'SELECT  COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
+        'SELECT  COUNT(callsign) AS QSOCount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
          ' AND freq > 27.99999 AND rst_s LIKE '+ QuotedStr('%Dupe%');
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
-    DUPEs:= dmData.CQ.FieldByName('Qcount').AsInteger;
+    DUPEs:= dmData.CQ.FieldByName('QSOCount').AsInteger;
 
 
     //Points count  (up to 47GHz)
@@ -2030,12 +2032,12 @@ Begin
         //total qso count
         if dmData.trCQ.Active then dmData.trCQ.Rollback;
           dmData.CQ.SQL.Text :=
-               'SELECT COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+
+               'SELECT COUNT(callsign) AS QSOCount FROM cqrlog_main WHERE contestname='+
                QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('FT8');
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
          dmData.CQ.Open();
-         QSOc[band]:= dmData.CQ.FieldByName('Qcount').AsInteger;
+         QSOc[band]:= dmData.CQ.FieldByName('QSOCount').AsInteger;
          //duplicate count
          dmData.CQ.Close;
          if dmData.trCQ.Active then dmData.trCQ.Rollback;
