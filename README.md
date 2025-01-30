@@ -3,11 +3,10 @@
 ### I am maintaining this software mainly for my own use, but feel free to use/modify it for your own needs by the rules of Open software licence and HamSprit rules.
 ----------------------------------------------------------------------------------------------------
 
-From folder "compiled" you find ready compiled binary files against official Cqrlog and for this "local_testing" source.
-There is also "newupdate.zip" that includes "newupdate.sh", a script that does Cqrlog backup and update for you with selected binary file.
-Same folder has also README.md that holds further informations.
-Ready compiled version (subversion) number may be one step behind of the source here. I'll test source for some time before releasing it as ready compiled.
-Source here is "daily snapshot" and may contain bugs and update several times during day.
+###  CqrlogAlpha has moved to https://github.com/OH1KH/CqrlogAlpha/tree/main  see you there !
+
+Corresponding branch to "loc_testing" there is "devel"
+Use of this "loc_testing" for development will end.
 
 
 
