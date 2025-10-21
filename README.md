@@ -1,3 +1,7 @@
+# THIS PAGE IS OUT OF ORDER !! LOOK AT CqrlogAlpha INSTEAD
+
+
+
 What is CQRLOG?
 ---------------
 
