@@ -1,3 +1,7 @@
+# THIS PAGE IS OUT OF ORDER !! LOOK AT CqrlogAlpha INSTEAD
+
+
+
 # CqrlogAlpha is a clone based on the work of OK2CQR & OK1RR.
 ## This repository is obsolete  !!!
 ----------------------------------------------------------------------------------------------------
